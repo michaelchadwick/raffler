@@ -1,0 +1,199 @@
+.button {
+  -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  background-color: #e44d26;
+  color: #fff;
+  font-size: 2.75em;
+  padding: 12px 32px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+.button:active {
+  position: relative;
+  top: 3px;
+  -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+  -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+}
+.button:hover {
+  background-color: #f16529;
+}
+.button:active:after {
+  content: "";
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+}
+.button.vertical {
+  border-radius: 25px !important;
+  position: relative;
+  padding: 20px 20px;
+  text-transform: uppercase;
+  width: 127px;
+  display: block;
+}
+.button.vertical.bottom {
+  top: -17px;
+  padding-top: 25px;
+  padding-bottom: 20px;
+}
+.wrapper {
+  width: 95%;
+  margin: 0 2%;
+}
+#wrapper {
+  min-height: 100%;
+  position: relative;
+}
+.header-container {
+  border-bottom: 2px solid #c44d26;
+  box-shadow: none;
+  margin-bottom: 0;
+  padding: 0 0 5px;
+}
+h1 {
+  font-size: 1.5em;
+  margin: 0.3em 0;
+}
+.header-container #add-picker {
+  clear: left;
+}
+.header-container #add-picker input,
+.header-container #add-picker button,
+.header-container #add-picker div {
+  float: left;
+  position: relative;
+}
+.header-container #add-picker input {
+  width: 140px;
+}
+.header-container #user-picks {
+  clear: left;
+  color: #64290F;
+  font-weight: bold;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.main-container {
+  margin: 0;
+  overflow: auto;
+  padding: 0 5px 10px;
+  padding-bottom: 50px;
+}
+
+.footer-container {
+  border-top: 2px solid #c44d26;
+  color: white;
+  font-size: 0.8em;
+  height: 2vw;
+  min-height: 11px;
+  line-height: 1.4em;
+  padding: 7px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  bottom: 0;
+  left: -10px;
+}
+.footer-container footer {
+  padding: 20px;
+  position: relative;
+  top: -40px;
+}
+.footer-container footer a {
+  color: #E4DE5E;
+  text-decoration: none;
+}
+.footer-container footer a:hover {
+  color: #FFFD89;
+}
+
+.heading {
+  color: #222;
+  font-weight: bold;
+}
+.undecided {
+  color: #ccc;
+  font-size: 2.5em;
+}
+.decided {
+  color: black;
+  font-size: 3.5em;
+}
+
+div#pick-status-bubble {
+  background: #FFF3BB;
+  border: 2px solid #000;
+  border-top: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  display: none;
+  font-size: 1.1em;
+  margin: 0 auto;
+  max-width: 240px;
+  min-width: 40px;
+  min-height: 30px;
+  padding: 5px 3px;
+  position: relative;
+  text-align: center;
+  top: -33px;
+}
+div#pick-status-bubble span {
+  color: #fff;
+}
+section {
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+section#big-button {
+  margin-bottom: 7px;
+}
+section#the-pick-place {
+  font-weight: bold;
+  line-height: 1em;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding: 10px;
+  text-transform: uppercase;
+  word-wrap: break-word;
+}
+section#the-pick-place a {
+  color: #e44d26;
+  text-decoration: none;
+}
+section#search-or-directions {
+  display: none;
+  font-size: 1.3em;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+section#search-or-directions a {
+  background: #FAC4AC;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  color: #e44d26;
+  font-size: 1.05em;
+  font-weight: bold;
+  margin: 8px 10px;
+  padding: 5px;
+  text-decoration: none;
+  width: 100px;
+}
+.success {
+  background-color: #008800;
+}
+.failure {
+  background-color: #880000;
+}
