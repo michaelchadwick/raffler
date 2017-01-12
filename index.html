@@ -26,41 +26,39 @@
 
   <div id="wrapper">
 
+		<!-- title, user item adder -->
     <div class="header-container">
       <header class="wrapper clearfix">
         <h1 class="title">Raffler</h1>
 
-        <div id="add-picker">
-          <input id="text-add-pick" type="text" placeholder="add new pick(s)" />
-          <button id="button-add-pick">+</button>
+        <div id="add-item">
+          <input id="text-add-item" type="text" placeholder="add new item(s)" />
+          <button id="button-add-item">+</button>
           <button id="button-clear-localstorage">Clear</button>
-
-          <div id="user-picks" />
-
+          <div id="user-items" />
         </div>
       </header>
     </div> <!-- header-container -->
 
+		<!-- status messages, button, item results -->
     <div class="main-container">
       <div class="main wrapper clearfix">
 
-        <div id="pick-status-bubble"></div>
+        <div id="item-status-bubble"></div>
 
-        <section id="big-button">
-          <a href="#" class="button" id="button-just-pick-one">PUSH IT</a>
+				<section id="the-results" class="undecided"></section>
+
+        <section id="button-and-items">
+          <a href="#" class="button" id="button-to-push">RAFFLE!</a>
         </section>
-
-        <section id="the-pick-place" class="undecided">...thinking...</section>
-        <section id="search-or-directions"></section>
 
       </div> <!-- #main -->
     </div> <!-- #main-container -->
 
+		<!-- credits -->
     <div class="footer-container">
       <footer>
-        <h3>
-          a <a href="http://fun.codana.me">fun.codana.me</a> web app -- 
-          by <a href="http://codana.me">codana.me</a> -- <a href="http://github.com/michaelchadwick/fun.codana.me">source</a></h3>
+        <h3>by <a href="http://codana.me">codana.me</a>
       </footer>
     </div> <!-- #footer-container -->
 

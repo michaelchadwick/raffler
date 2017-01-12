@@ -1,135 +1,84 @@
-.button {
-  -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-  -webkit-border-radius: 50px;
-  -moz-border-radius: 50px;
-  border-radius: 50px;
-  background-color: #e44d26;
-  color: #fff;
-  font-size: 2.75em;
-  padding: 12px 32px;
-  text-decoration: none;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
-}
-.button:active {
-  position: relative;
-  top: 3px;
-  -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
-  -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
-  box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
-}
-.button:hover {
-  background-color: #f16529;
-}
-.button:active:after {
-  content: "";
-  width: 100%;
-  height: 3px;
-  background: #fff;
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-}
-.button.vertical {
-  border-radius: 25px !important;
-  position: relative;
-  padding: 20px 20px;
-  text-transform: uppercase;
-  width: 127px;
-  display: block;
-}
-.button.vertical.bottom {
-  top: -17px;
-  padding-top: 25px;
-  padding-bottom: 20px;
-}
-.wrapper {
-  width: 95%;
-  margin: 0 2%;
-}
 #wrapper {
   min-height: 100%;
   position: relative;
 }
-.header-container {
-  border-bottom: 2px solid #c44d26;
-  box-shadow: none;
-  margin-bottom: 0;
-  padding: 0 0 5px;
-}
-h1 {
-  font-size: 1.5em;
-  margin: 0.3em 0;
-}
-.header-container #add-picker {
-  clear: left;
-}
-.header-container #add-picker input,
-.header-container #add-picker button,
-.header-container #add-picker div {
-  float: left;
-  position: relative;
-}
-.header-container #add-picker input {
-  width: 140px;
-}
-.header-container #user-picks {
-  clear: left;
-  color: #64290F;
-  font-weight: bold;
-  margin: 4px 0 0;
-  padding: 0;
-}
+	.header-container {
+		background: #7f3bc0;
+		border-bottom: 2px solid #222;
+		box-shadow: none;
+		color: #fff;
+		margin: 0 auto;
+		padding: 0 0 5px;
+		width: 100%;
+	}
+	.header-container h1 {
+		font-size: 2.5em;
+		margin: 0.3em 0;
+	}
+	.header-container #add-item {
+		clear: left;
+	}
+	.header-container #add-item input,
+	.header-container #add-item button,
+	.header-container #add-item div {
+		float: left;
+		position: relative;
+	}
+	.header-container #add-item input {
+		width: 140px;
+	}
+	.header-container #user-items {
+		clear: left;
+		color: #fff;
+		font-weight: bold;
+		margin: 4px 0 0;
+		padding: 0;
+	}
+	header {
+		width: 95%;
+		margin: 0 2%;
+	}
 
-.main-container {
-  margin: 0;
-  overflow: auto;
-  padding: 0 5px 10px;
-  padding-bottom: 50px;
-}
+	.main-container {
+		clear: both;
+	  margin: 0;
+	  overflow: auto;
+	  padding: 0 5px 50px 10px;
+	}
 
-.footer-container {
-  border-top: 2px solid #c44d26;
-  color: white;
-  font-size: 0.8em;
-  height: 2vw;
-  min-height: 11px;
-  line-height: 1.4em;
-  padding: 7px;
-  position: fixed;
-  text-align: center;
-  width: 100%;
-  bottom: 0;
-  left: -10px;
-}
-.footer-container footer {
-  padding: 20px;
-  position: relative;
-  top: -40px;
-}
-.footer-container footer a {
-  color: #E4DE5E;
-  text-decoration: none;
-}
-.footer-container footer a:hover {
-  color: #FFFD89;
-}
+	.footer-container {
+		background: #7f3bc0;
+	  border-top: 2px solid #222;
+	  color: white;
+	  font-size: 0.8em;
+	  height: 2vw;
+	  min-height: 11px;
+	  line-height: 1.4em;
+	  padding: 7px;
+	  position: fixed;
+	  text-align: center;
+	  width: 100%;
+	  bottom: 0;
+	  left: -10px;
+	}
+	.footer-container footer {
+	  padding: 20px;
+	  position: relative;
+	  top: -40px;
+	}
+	.footer-container footer a {
+	  color: #E4DE5E;
+	  text-decoration: none;
+	}
+	.footer-container footer a:hover {
+	  color: #FFFD89;
+	}
 
-.heading {
-  color: #222;
-  font-weight: bold;
-}
-.undecided {
-  color: #ccc;
-  font-size: 2.5em;
-}
-.decided {
-  color: black;
-  font-size: 3.5em;
-}
+/******************/
+/* specific parts */
+/******************/
 
-div#pick-status-bubble {
+div#item-status-bubble {
   background: #FFF3BB;
   border: 2px solid #000;
   border-top: none;
@@ -147,7 +96,7 @@ div#pick-status-bubble {
   text-align: center;
   top: -33px;
 }
-div#pick-status-bubble span {
+div#item-status-bubble span {
   color: #fff;
 }
 section {
@@ -155,41 +104,89 @@ section {
   position: relative;
   text-align: center;
 }
-section#big-button {
+section#button-and-items {
   margin-bottom: 7px;
 }
-section#the-pick-place {
+	.button {
+	  -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+	  -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+	  box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+	  -webkit-border-radius: 15px;
+	  -moz-border-radius: 15px;
+	  border-radius: 15px;
+	  background-color: #7f3bc0;
+	  color: #fff;
+		display: block;
+	  font-size: 3.75em;
+	  padding: 24px 32px;
+	  text-decoration: none;
+	  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+	}
+	.button:active {
+	  position: relative;
+	  top: 3px;
+	  -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+	  -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+	  box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+	}
+	.button:hover {
+	  background-color: #a655f5;
+	}
+	.button:active:after {
+	  content: "";
+	  width: 100%;
+	  height: 3px;
+	  background: #fff;
+	  position: absolute;
+	  bottom: -1px;
+	  left: 0;
+	}
+	.button.vertical {
+	  border-radius: 25px !important;
+	  position: relative;
+	  padding: 20px 20px;
+	  text-transform: uppercase;
+	  width: 127px;
+	  display: block;
+	}
+	.button.vertical.bottom {
+	  top: -17px;
+	  padding-top: 25px;
+	  padding-bottom: 20px;
+	}
+	section#the-results {
+	  font-weight: bold;
+	  line-height: 1em;
+	  margin-bottom: 0;
+	  margin-top: 0;
+	  padding: 10px;
+	  text-transform: uppercase;
+	  word-wrap: break-word;
+	}
+	section#the-results a {
+	  color: #e44d26;
+	  text-decoration: none;
+	}
+
+.heading {
+  color: #ccc;
   font-weight: bold;
-  line-height: 1em;
-  margin-bottom: 0;
-  margin-top: 0;
-  padding: 10px;
-  text-transform: uppercase;
-  word-wrap: break-word;
 }
-section#the-pick-place a {
-  color: #e44d26;
-  text-decoration: none;
+.undecided {
+  color: #ccc;
+  font-size: 2.5em;
 }
-section#search-or-directions {
-  display: none;
-  font-size: 1.3em;
-  margin: 0 auto;
-  text-align: center;
-  width: 100%;
+.decided1 {
+  color: #999;
+  font-size: 3.5em;
 }
-section#search-or-directions a {
-  background: #FAC4AC;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  color: #e44d26;
-  font-size: 1.05em;
-  font-weight: bold;
-  margin: 8px 10px;
-  padding: 5px;
-  text-decoration: none;
-  width: 100px;
+.decided2 {
+  color: #555;
+  font-size: 4.5em;
+}
+.decided3 {
+  color: #000;
+  font-size: 5.5em;
 }
 .success {
   background-color: #008800;

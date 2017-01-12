@@ -7,31 +7,33 @@ $(function() {
   }
 
   // global variables
-  var $pickPlace = $("section#the-pick-place");
-  var $linkChoicesDiv = $("section#search-or-directions");
+  var $resultsDiv = $("section#the-results");
+	var $bigButton = $("a#button-to-push");
+	
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
-  var lastPick = "";
-  var picksArr = [];
-  var initUserPicksObj = { "names": [] }
+  var itemsArr = [];
+	var animFast = "";
+	var i = 0;
+  var initUserPicksObj = { "items": [] }
 
-  // if we got LS or SS, then set up the user picks UI
+  // if we got LS or SS, then set up the user items UI
   var LSsupport = !(typeof window.localStorage == 'undefined');
   var SSsupport = !(typeof window.sessionStorage == 'undefined');
   if (LSsupport && SSsupport) {
     // if our specific key doesn't exist, then init
-    if (!localStorage.getItem("userPicks")) {
-      setLocalStorage("userPicks", initUserPicksObj);
+    if (!localStorage.getItem("rafflerUserItems")) {
+      setLocalStorage("rafflerUserItems", initUserPicksObj);
     }
-    // event handlers
-    $("#text-add-pick").keyup(function(e) {
+    //// event handlers
+    $("#text-add-item").keyup(function(e) {
       var code = e.which;
       if (code == 13) {
         e.preventDefault();
-        $("#button-add-pick").click();
+        $("#button-add-item").click();
       }
     });
-    $("#button-add-pick").click(function() {
-      var $newUserPick = $("#text-add-pick").val().trim();
+    $("#button-add-item").click(function() {
+      var $newUserPick = $("#text-add-item").val().trim();
 
       if ($newUserPick !== "") {
         var tempUserPickObj = getLocalStorage();
@@ -41,28 +43,28 @@ $(function() {
         if ($newUserPick.indexOf(',') > -1) {
           $.each($newUserPick.split(','), function(key, val) {
             if (!isDuplicateValue(val)) {
-              tempUserPickObj.picks.push(sanitize(val));
+              tempUserPickObj.items.push(sanitize(val));
               newPickAdded = true;
             } else {
-              $("#pick-status-bubble").css("background-color", "#880000").statusShow("<span><strong>" + val + "</strong> not added: duplicate.</span>");
+              $("#item-status-bubble").css("background-color", "#880000").statusShow("<span><strong>" + val + "</strong> not added: duplicate.</span>", 5000);
             }
           });
         } else {
-          // else push single new pick onto temp tempUserPickObj
+          // else push single new item onto temp tempUserPickObj
           if (!isDuplicateValue($newUserPick)) {
-            tempUserPickObj.picks.push(sanitize($newUserPick));
+            tempUserPickObj.items.push(sanitize($newUserPick));
             newPickAdded = true
           } else {
-            $("#pick-status-bubble").css("background-color", "#880000").statusShow("<span><strong>" + $newUserPick + "</strong> not added: duplicate.</span>");
+            $("#item-status-bubble").css("background-color", "#880000").statusShow("<span><strong>" + $newUserPick + "</strong> not added: duplicate.</span>", 5000);
           }
         }
 
         if (newPickAdded) {
           // update localStorage with temp tempUserPickObj
-          setLocalStorage("userPicks", tempUserPickObj);
+          setLocalStorage("rafflerUserItems", tempUserPickObj);
 
           // show status bubble
-          $("#pick-status-bubble").css("background-color", "#008800").statusShow("<span><strong>" + $newUserPick + "</strong> added!</span>");
+          $("#item-status-bubble").css("background-color", "#008800").statusShow("<span><strong>" + $newUserPick + "</strong> added!</span>");
 
           updateUserPicksDisplay();
         }
@@ -70,10 +72,10 @@ $(function() {
     });
     $("#button-clear-localstorage").click(function() {
       localStorage.clear();
-      setLocalStorage("userPicks", initUserPicksObj);
+      setLocalStorage("rafflerUserItems", initUserPicksObj);
       initPicksArr();
       updateUserPicksDisplay();
-      $("#pick-status-bubble").css("background-color", "#847E04").statusShow("<span>User picks cleared</span>", 2000);
+      $("#item-status-bubble").css("background-color", "#847E04").statusShow("<span>User items cleared</span>", 3000);
     });
   }
 
@@ -81,29 +83,39 @@ $(function() {
     initPicksArr();
     syncUserPicksToPicksArr();
     updateUserPicksDisplay();
-    $("#button-just-pick-one").click(function(e) {
+    $bigButton.click(function(e) {
       e.preventDefault();
       pickOne();
     });
+		animateText();
   }
 
-  // init/reset picksArr with server json
+  // init/reset itemsArr with server json
   function initPicksArr() {
-    picksArr.length = 0;
+    itemsArr.length = 0;
     $.getJSON("json/raffler-data.json", function(jsonServerData) {
-      $.each(jsonServerData.picks, function(key, val) {
-        picksArr.push(val);
+      $.each(jsonServerData.items, function(key, val) {
+        itemsArr.push(val);
       });
     });
   };
+	
+	// get main items array synced with current user items
+  function syncUserPicksToPicksArr() {
+    $.each(getLocalStorage().items, function(key, val) {
+      if (itemsArr.indexOf(val) < 0) {
+        itemsArr.push(val);
+      }
+    });
+  }
 
-  // update user picks div
+  // update user items div
   function updateUserPicksDisplay() {
-    var $userPickDiv = $("#user-picks");
+    var $userPickDiv = $("#user-items");
     if (getLocalStorage()) {
-      if(getLocalStorage().picks.length > 0) {
-        $userPickDiv.html("<span class='heading'>user picks</span>: ");
-        $userPickDiv.append(getLocalStorage().picks.join(', '));
+      if(getLocalStorage().items.length > 0) {
+        $userPickDiv.html("<span class='heading'>user items</span>: ");
+        $userPickDiv.append(getLocalStorage().items.join(', '));
       } else {
         $userPickDiv.html("");
       }
@@ -112,17 +124,16 @@ $(function() {
     }
   }
 
-  // get main picks array synced with current user picks
-  function syncUserPicksToPicksArr() {
-    $.each(getLocalStorage().picks, function(key, val) {
-      if (picksArr.indexOf(val) < 0) {
-        picksArr.push(val);
-      }
-    });
-  }
+	function animateText() {
+		animFast = setInterval(function() {
+			$resultsDiv.html(itemsArr[i]);
+			i++;
+			if (i > itemsArr.length) i = 0;
+		},50);
+	}
 
   function getLocalStorage() {
-    return JSON.parse(localStorage.getItem("userPicks"));
+    return JSON.parse(localStorage.getItem("rafflerUserItems"));
   }
 
   function setLocalStorage(lsKey, obj) {
@@ -132,32 +143,54 @@ $(function() {
 
   // you hit the big button
   function pickOne() {
-    var curPick = "";
+		// stop cycling
+		clearInterval(animFast);
+		console.log("countAnimMed started");
 
-    // keep grabbing new picks from our array
-    // until it doesn't match the last one
-    while ((curPick = picksArr[Math.floor(Math.random() * picksArr.length)]) === lastPick) {}
+		var countAnimMed = 3;
+		var animMed = setInterval(function() {
+			$resultsDiv.html(itemsArr[i]);
+			i++;
+			if (i > itemsArr.length) {
+				i = 0;
+				countAnimMed--;
+				if (countAnimMed == 0) {
+					clearInterval(animMed);
+					$resultsDiv.addClass("decided1");
+					console.log("countAnimSlow started");
+				}
+			}
+		},100);
 
-    // remember last pick
-    lastPick = curPick;
-
-    // replace choice with curPick
-    $pickPlace.fadeOut(100, function() {
-      $(this).addClass("decided")
-      $(this).html(curPick + "!")
-      .fadeIn(50);
-
-      // show
-      if ($linkChoicesDiv.css("display", "none")) {
-        $linkChoicesDiv.show();
-      }
-
-      // clear it before adding new links
-      $linkChoicesDiv.html("");
-
-      // clean up the search term
-      curPick = curPick.replace(" ","+").replace("'","");
-    });
+		var countAnimSlow = 2;
+		var animSlow = setInterval(function() {
+			$resultsDiv.html(itemsArr[i]);
+			i++;
+			if (i > itemsArr.length) {
+				i = 0;
+				countAnimSlow--;
+				if (countAnimSlow == 0) {
+					clearInterval(animSlow);
+					$resultsDiv.addClass("decided2");
+					console.log("countAnimOMG started");
+				}
+			}
+		},200);
+		
+		var countAnimOMG = 1;
+		var animOMG = setInterval(function() {
+			$resultsDiv.html(itemsArr[i]);
+			i++;
+			if (i > itemsArr.length) {
+				i = 0;
+				countAnimOMG--;
+				if (countAnimOMG == 0) {
+					clearInterval(animOMG);
+					$resultsDiv.addClass("decided3");
+				}
+			}
+		},300);
+		
   };
 
   // encode html
@@ -173,7 +206,7 @@ $(function() {
     $curPicks = getLocalStorage();
     var dupeFound = false;
 
-    $.each($curPicks.picks, function(key, val) {
+    $.each($curPicks.items, function(key, val) {
       console.log("newUserPick", newUserPick);
       console.log("val", val);
       if (newUserPick == val) {
