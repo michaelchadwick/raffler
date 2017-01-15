@@ -139,7 +139,6 @@ section#items {
   line-height: 1em;
   margin-bottom: 10px;
   margin-top: 0;
-  padding: 10px;
   text-transform: uppercase;
   width: 100%;
   word-wrap: break-word;
@@ -174,7 +173,7 @@ font-size: 8.5vw;
 section#items.level4 { background: #fff; }
 section#items.level4 span {
 color: #f00;
-font-size: 12vw;
+font-size: 11vw;
 }
 section#controls {
   margin-bottom: 7px;
@@ -257,6 +256,11 @@ section#controls {
   }
   .button.raffle:hover {
     background-color: #a655f5;
+  }
+  .button.disabled, .button.disabled:hover {
+    background-color: #555;
+    border: 1px solid #ccc;
+    color: #999;
   }
 
 section#resultsTitle {

@@ -7,6 +7,8 @@ $(function() {
   }
 
   // global variables
+  var itemsArr = [];
+  var initUserPicksObj = { "items": [] }
   var initInterval = 25;
   var initMult = 1;
   var lastItemChosen = "";
@@ -21,8 +23,6 @@ $(function() {
   $btnRaffle.focus();
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
-  var itemsArr = [];
-  var initUserPicksObj = { "items": [] }
 
   // if we got LS or SS, then set up the user items UI
   var LSsupport = !(typeof window.localStorage == 'undefined');
@@ -105,7 +105,9 @@ $(function() {
     // event handlers
     $btnRaffle.click(function(e) {
       e.preventDefault();
-      pickOne();
+      if (!$btnRaffle.prop("disabled")) {
+        pickOne();
+      }
     });
     $btnStart.click(function(e) {
       e.preventDefault();
@@ -211,10 +213,13 @@ $(function() {
     // this is the variableInterval - so we can change/get the interval here:
     var interval = this.interval;
 
-    // print it for the hell of it
+    // debug vars
+    //
+    console.log('i', this.i);
     console.log('interval', this.interval);
     console.log('interval mult', this.mult);
     console.log('countdown stage', this.stage);
+    //
 
     // slow down at a certain point
     if (this.interval > 150 &&
@@ -222,7 +227,7 @@ $(function() {
       this.stage = 2;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level2');
-      console.log("level2");
+      //console.log("level2");
     }
 
     // slow down more at a certain point
@@ -231,28 +236,29 @@ $(function() {
       this.stage = 3;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level3');
-      console.log("level3");
+      //console.log("level3");
     }
 
     // stop and pick an item
     if (this.interval > 325) {
       this.mult = initMult;
-      if (this.interval > 350)
-      this.mult = this.mult++;
-      console.log($itemsDiv.text());
-      if (this.interval >= 359) {
+      if (this.interval > 350) this.mult = this.mult++;
+      //console.log($itemsDiv.text());
+      if (this.interval == 359) {
         this.stage = 4;
         lastItemChosen = $itemsDiv.text();
         this.stop();
         this.startCountdown = false;
         $itemsDiv.removeClass();
         $itemsDiv.addClass('level4');
-        console.log("item picked!", lastItemChosen);
+        //console.log("item picked!", lastItemChosen);
         // play victory sound
         if ($ckOptSound.is(":checked")) {
           var victory = document.getElementById("victory");
           victory.play();
         }
+        // re-enable raffle button
+        enableRaffle();
         // add to results
         $resultsDiv.append(lastItemChosen + "<br />");
       } else {
@@ -269,11 +275,10 @@ $(function() {
 
       // play beep boop as items cycle
       if ($ckOptSound.is(":checked")) {
-        console.log("playing beepboop");
         var beep = document.getElementById("beep");
         beep.play();
       }
-      console.log("level1");
+      //console.log("level1");
     }
     // if we've started countdown
     // and we haven't reached end
@@ -285,16 +290,24 @@ $(function() {
 
   // you hit the big button
   function pickOne() {
+    // disable button until countdown done
+    disableRaffle();
     // remove last chosen item from itemsArr if anything picked
     if (lastItemChosen !== "") {
-      itemsArr.splice(itemsArr.indexOf(lastItemChosen), 1);
+      var i = itemsArr.indexOf(lastItemChosen);
+      if (i != -1) {
+        itemsArr.splice(i, 1);
+      }
     }
+    //console.log("itemsArr", itemsArr);
     // if we got more than 1 item,
     // then we can raffle
     if (itemsArr.length > 1) {
       $itemsDiv.removeClass();
       countdownTimer.startCountdown = true;
       countdownTimer.interval = initInterval;
+      // start new cycle at random spot
+      countdownTimer.i = Math.floor(Math.random() * itemsArr.length);
       countdownTimer.mult = 1;
       countdownTimer.stage = 1;
       countdownTimer.start();
@@ -319,6 +332,15 @@ $(function() {
     countdownTimer.stage = 0;
     countdownTimer.start();
     console.log('countdown reset');
+  }
+
+  function disableRaffle() {
+    $btnRaffle.addClass("disabled");
+    $btnRaffle.prop("disabled", true);
+  }
+  function enableRaffle() {
+    $btnRaffle.removeClass("disabled");
+    $btnRaffle.prop("disabled", false);
   }
 
   // encode user entries html
