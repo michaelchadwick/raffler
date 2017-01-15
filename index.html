@@ -46,10 +46,21 @@
 
         <div id="item-status-bubble"></div>
 
-				<section id="the-results" class="undecided"></section>
+        <audio id="beep" src="assets/beepboop1.wav" preload="auto" volume="0.5"></audio>
+        <audio id="victory" src="assets/victory.wav" preload="auto" volume="0.5"></audio>
 
-        <section id="button-and-items">
-          <a href="#" class="button" id="button-to-push">RAFFLE!</a>
+				<section id="results"></section>
+
+        <section id="controls">
+          <label for="optSound">Play sound?</label>
+          <input type="checkbox" id="ckOptSound" />
+          <a href="#" class="button raffle" id="btnRaffle">RAFFLE!</a>
+
+          <div id="timerControls">
+            <a href="#" class="button start" id="btnStart">start</a>
+            <a href="#" class="button reset" id="btnReset">reset</a>
+            <a href="#" class="button stop" id="btnStop">stop</a>
+          </div>
         </section>
 
       </div> <!-- #main -->

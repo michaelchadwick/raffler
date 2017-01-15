@@ -104,35 +104,61 @@ section {
   position: relative;
   text-align: center;
 }
-section#button-and-items {
+section#controls {
   margin-bottom: 7px;
 }
-	.button {
-	  -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+div#timerControls {
+  float: right;
+  left: -50%;
+  margin: 0 auto;
+  position: relative;
+  text-align: left;
+}
+div#timerControls > * {
+  position: relative;
+  left: 50%;
+  text-align: center;
+}
+  .button {
+    -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
 	  -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
 	  box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-	  -webkit-border-radius: 15px;
-	  -moz-border-radius: 15px;
-	  border-radius: 15px;
-	  background-color: #7f3bc0;
+    background-color: #6d2bac;
 	  color: #fff;
-		display: block;
+    display: block;
+    float: left;
+    font-size: 24px;
+    margin: 10px;
+    padding: 10px;
+    text-decoration: none;
+    width: 100px;
+  }
+  .button.start { background-color: #428d4b; }
+  .button.start:hover { background-color: #429d4b; }
+  .button.reset { background-color: #a7b65a; }
+  .button.reset:hover { background-color: #a7c65a; }
+  .button.stop { background-color: #8d4254; }
+  .button.stop:hover { background-color: #9d4254; }
+  .button.raffle {
+    -webkit-border-radius: 10px;
+	  -moz-border-radius: 10px;
+	  border-radius: 10px;
+	  background-color: #7f3bc0;
+    clear: left;
+    float: none;
 	  font-size: 3.75em;
 	  padding: 24px 32px;
-	  text-decoration: none;
 	  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+    width: auto;
 	}
-	.button:active {
+	.button.raffle:active {
 	  position: relative;
 	  top: 3px;
 	  -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
 	  -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
 	  box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
 	}
-	.button:hover {
-	  background-color: #a655f5;
-	}
-	.button:active:after {
+	.button.raffle:active:after {
 	  content: "";
 	  width: 100%;
 	  height: 3px;
@@ -141,7 +167,7 @@ section#button-and-items {
 	  bottom: -1px;
 	  left: 0;
 	}
-	.button.vertical {
+	.button.raffle.vertical {
 	  border-radius: 25px !important;
 	  position: relative;
 	  padding: 20px 20px;
@@ -149,13 +175,23 @@ section#button-and-items {
 	  width: 127px;
 	  display: block;
 	}
-	.button.vertical.bottom {
+	.button.raffle.vertical.bottom {
 	  top: -17px;
 	  padding-top: 25px;
 	  padding-bottom: 20px;
 	}
-	section#the-results {
+  .button.raffle:hover {
+	  background-color: #a655f5;
+	}
+	section#results {
+    background: #333;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
 	  font-weight: bold;
+    height: 170px;
 	  line-height: 1em;
 	  margin-bottom: 0;
 	  margin-top: 0;
@@ -163,30 +199,42 @@ section#button-and-items {
 	  text-transform: uppercase;
 	  word-wrap: break-word;
 	}
-	section#the-results a {
-	  color: #e44d26;
-	  text-decoration: none;
-	}
+  section#results span {
+    font-size: 1em;
+    text-transform: uppercase;
+  }
 
 .heading {
   color: #ccc;
   font-weight: bold;
 }
-.undecided {
-  color: #ccc;
-  font-size: 2.5em;
+
+section#results, section#results span {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
 }
-.decided1 {
-  color: #999;
-  font-size: 3.5em;
-}
-.decided2 {
-  color: #555;
-  font-size: 4.5em;
-}
-.decided3 {
+section#results.level1 { background: #777; }
+section#results.level1 span {
   color: #000;
-  font-size: 5.5em;
+  font-size: 1.25em;
+}
+section#results.level2 { background: #999; }
+section#results.level2 span {
+  color: #00f;
+  font-size: 1.5em;
+}
+section#results.level3 { background: #bbb; }
+section#results.level3 span {
+  color: #090;
+  font-size: 2em;
+}
+section#results.level4 { background: #fff; }
+section#results.level4 span {
+  color: #f00;
+  font-size: 2.5em;
 }
 .success {
   background-color: #008800;

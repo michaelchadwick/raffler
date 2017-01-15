@@ -7,13 +7,16 @@ $(function() {
   }
 
   // global variables
-  var $resultsDiv = $("section#the-results");
-	var $bigButton = $("a#button-to-push");
-	
+  var initInterval = 25;
+  var $resultsDiv = $("section#results");
+  var $ckOptSound = $("input#ckOptSound");
+	var $btnRaffle = $("a#btnRaffle");
+  var $btnStart = $("a#btnStart");
+  var $btnReset = $("a#btnReset");
+  var $btnStop = $("a#btnStop");
+
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
   var itemsArr = [];
-	var animFast = "";
-	var i = 0;
   var initUserPicksObj = { "items": [] }
 
   // if we got LS or SS, then set up the user items UI
@@ -79,15 +82,39 @@ $(function() {
     });
   }
 
+	function getLocalStorage() {
+    return JSON.parse(localStorage.getItem("rafflerUserItems"));
+  }
+  function setLocalStorage(lsKey, obj) {
+    localStorage.setItem(lsKey, JSON.stringify(obj));
+    syncUserPicksToPicksArr();
+  }
+
+	/*
+	  app entry point
+		                */
   function initApp() {
     initPicksArr();
     syncUserPicksToPicksArr();
     updateUserPicksDisplay();
-    $bigButton.click(function(e) {
+
+    // event handlers
+    $btnRaffle.click(function(e) {
       e.preventDefault();
       pickOne();
     });
-		animateText();
+    $btnStart.click(function(e) {
+      e.preventDefault();
+      countdownTimer.start();
+    });
+    $btnReset.click(function(e) {
+      e.preventDefault();
+      resetCountdown();
+    });
+    $btnStop.click(function(e) {
+      e.preventDefault();
+      countdownTimer.stop();
+    });
   }
 
   // init/reset itemsArr with server json
@@ -99,7 +126,7 @@ $(function() {
       });
     });
   };
-	
+
 	// get main items array synced with current user items
   function syncUserPicksToPicksArr() {
     $.each(getLocalStorage().items, function(key, val) {
@@ -124,76 +151,122 @@ $(function() {
     }
   }
 
-	function animateText() {
-		animFast = setInterval(function() {
-			$resultsDiv.html(itemsArr[i]);
-			i++;
-			if (i > itemsArr.length) i = 0;
-		},50);
-	}
+  // timer object to keep track of countdown
+  window.setVariableInterval = function(callbackFunc, timing) {
+		var variableInterval = {
+			i: 0,
+			mult: 1,
+      stage: 0,
+			names: itemsArr,
+			interval: timing,
+			callback: callbackFunc,
+			stopped: false,
+			startCountdown: false,
+			runLoop: function() {
+				if (variableInterval.stopped) return;
+				var result = variableInterval.callback.call(variableInterval);
+				if (typeof result == 'number')
+				{
+					if (result === 0) return;
+					variableInterval.interval = result;
+				}
+				// do something
+				$resultsDiv.html("<span>" + variableInterval.names[variableInterval.i++] + "</span>");
+				if (variableInterval.i == variableInterval.names.length) variableInterval.i = 0;
+				// loop
+				variableInterval.loop();
+			},
+			stop: function() {
+				this.stopped = true;
+				window.clearTimeout(this.timeout);
+			},
+			start: function() {
+				this.stopped = false;
+				return this.loop();
+			},
+			loop: function() {
+				this.timeout = window.setTimeout(this.runLoop, this.interval);
+				return this;
+			}
+		};
 
-  function getLocalStorage() {
-    return JSON.parse(localStorage.getItem("rafflerUserItems"));
-  }
+		return variableInterval.start();
+	};
 
-  function setLocalStorage(lsKey, obj) {
-    localStorage.setItem(lsKey, JSON.stringify(obj));
-    syncUserPicksToPicksArr();
-  }
+  // main timer for raffler cycler
+	var countdownTimer = setVariableInterval(function() {
+		// this is the variableInterval - so we can change/get the interval here:
+		var interval = this.interval;
+
+		// print it for the hell of it
+		//console.log('interval', interval);
+		//console.log('interval mult', this.mult);
+
+		// slow down at a certain point
+		if (this.interval > 150) {
+      this.stage = 2;
+			$resultsDiv.removeClass();
+			$resultsDiv.addClass('level2');
+      console.log("level2");
+		}
+
+		// slow down more at a certain point
+		if (this.interval > 250) {
+      this.stage = 3;
+			$resultsDiv.removeClass();
+			$resultsDiv.addClass('level3');
+      console.log("level3");
+		}
+
+		// stop at a certain point
+		if (this.interval > 325) {
+      this.stage = 4;
+			$resultsDiv.removeClass();
+			$resultsDiv.addClass('level4');
+			console.log("name picked!");
+      this.startCountdown = false;
+			this.stop();
+      if ($ckOptSound.is(":checked")) {
+        var victory = document.getElementsByTagName("audio")[1];
+        victory.play();
+      }
+		}
+
+		// slow countdown over time
+		if (this.startCountdown && this.stage == 0) {
+      this.stage = 1;
+      if (!$resultsDiv.hasClass('level1'))
+        $resultsDiv.addClass('level1');
+
+      if ($ckOptSound.is(":checked")) {
+        var beep = document.getElementsByTagName("audio")[0];
+			  beep.play();
+      }
+      console.log("level1");
+		}
+    if (this.stage > 0) {
+      return interval + (1.5 ^ this.mult++);
+    }
+	}, 25);
 
   // you hit the big button
   function pickOne() {
-		// stop cycling
-		clearInterval(animFast);
-		console.log("countAnimMed started");
-
-		var countAnimMed = 3;
-		var animMed = setInterval(function() {
-			$resultsDiv.html(itemsArr[i]);
-			i++;
-			if (i > itemsArr.length) {
-				i = 0;
-				countAnimMed--;
-				if (countAnimMed == 0) {
-					clearInterval(animMed);
-					$resultsDiv.addClass("decided1");
-					console.log("countAnimSlow started");
-				}
-			}
-		},100);
-
-		var countAnimSlow = 2;
-		var animSlow = setInterval(function() {
-			$resultsDiv.html(itemsArr[i]);
-			i++;
-			if (i > itemsArr.length) {
-				i = 0;
-				countAnimSlow--;
-				if (countAnimSlow == 0) {
-					clearInterval(animSlow);
-					$resultsDiv.addClass("decided2");
-					console.log("countAnimOMG started");
-				}
-			}
-		},200);
-		
-		var countAnimOMG = 1;
-		var animOMG = setInterval(function() {
-			$resultsDiv.html(itemsArr[i]);
-			i++;
-			if (i > itemsArr.length) {
-				i = 0;
-				countAnimOMG--;
-				if (countAnimOMG == 0) {
-					clearInterval(animOMG);
-					$resultsDiv.addClass("decided3");
-				}
-			}
-		},300);
-		
+    countdownTimer.startCountdown = true;
+		console.log('countdown started');
   };
 
-  // encode html
+  // you hit the reset button
+  function resetCountdown() {
+    $resultsDiv.removeClass();
+    countdownTimer.startCountdown = false;
+    countdownTimer.interval = initInterval;
+    countdownTimer.mult = 1;
+    countdownTimer.stage = 0;
+    countdownTimer.start();
+    console.log('countdown reset');
+  }
+
+  // encode user entries html
   function sanitize(s) {
     return s.replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -201,7 +274,7 @@ $(function() {
             .replace(/"/g, '&quot;');
   }
 
-  // check for duplicate entries
+  // check for duplicate user entries
   function isDuplicateValue(newUserPick) {
     $curPicks = getLocalStorage();
     var dupeFound = false;
