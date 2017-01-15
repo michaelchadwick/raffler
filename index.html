@@ -26,7 +26,7 @@
 
   <div id="wrapper">
 
-		<!-- title, user item adder -->
+    <!-- title, user item adder -->
     <div class="header-container">
       <header class="wrapper clearfix">
         <h1 class="title">Raffler</h1>
@@ -40,7 +40,7 @@
       </header>
     </div> <!-- header-container -->
 
-		<!-- status messages, button, item results -->
+    <!-- status messages, button, item results -->
     <div class="main-container">
       <div class="main wrapper clearfix">
 
@@ -49,11 +49,11 @@
         <audio id="beep" src="assets/beepboop1.wav" preload="auto" volume="0.5"></audio>
         <audio id="victory" src="assets/victory.wav" preload="auto" volume="0.5"></audio>
 
-				<section id="results"></section>
+        <section id="items"></section>
 
         <section id="controls">
           <label for="optSound">Play sound?</label>
-          <input type="checkbox" id="ckOptSound" />
+          <input type="checkbox" id="ckOptSound" checked="checked" />
           <a href="#" class="button raffle" id="btnRaffle">RAFFLE!</a>
 
           <div id="timerControls">
@@ -63,10 +63,14 @@
           </div>
         </section>
 
+        <br />
+
+        <section id="results"></section>
+
       </div> <!-- #main -->
     </div> <!-- #main-container -->
 
-		<!-- credits -->
+    <!-- credits -->
     <div class="footer-container">
       <footer>
         <h3>by <a href="http://codana.me">codana.me</a>

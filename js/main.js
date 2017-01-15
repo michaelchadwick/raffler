@@ -8,9 +8,13 @@ $(function() {
 
   // global variables
   var initInterval = 25;
+  var initMult = 1;
+  var lastItemChosen = "";
+  var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
   var $ckOptSound = $("input#ckOptSound");
-	var $btnRaffle = $("a#btnRaffle");
+  var $infoBubble = $("#item-status-bubble");
+  var $btnRaffle = $("a#btnRaffle");
   var $btnStart = $("a#btnStart");
   var $btnReset = $("a#btnReset");
   var $btnStop = $("a#btnStop");
@@ -49,7 +53,7 @@ $(function() {
               tempUserPickObj.items.push(sanitize(val));
               newPickAdded = true;
             } else {
-              $("#item-status-bubble").css("background-color", "#880000").statusShow("<span><strong>" + val + "</strong> not added: duplicate.</span>", 5000);
+              $infoBubble.css("background-color", "#880000").statusShow("<span><strong>" + val + "</strong> not added: duplicate.</span>", 5000);
             }
           });
         } else {
@@ -58,7 +62,7 @@ $(function() {
             tempUserPickObj.items.push(sanitize($newUserPick));
             newPickAdded = true
           } else {
-            $("#item-status-bubble").css("background-color", "#880000").statusShow("<span><strong>" + $newUserPick + "</strong> not added: duplicate.</span>", 5000);
+            $infoBubble.css("background-color", "#880000").statusShow("<span><strong>" + $newUserPick + "</strong> not added: duplicate.</span>", 5000);
           }
         }
 
@@ -67,36 +71,35 @@ $(function() {
           setLocalStorage("rafflerUserItems", tempUserPickObj);
 
           // show status bubble
-          $("#item-status-bubble").css("background-color", "#008800").statusShow("<span><strong>" + $newUserPick + "</strong> added!</span>");
+          $infoBubble.css("background-color", "#008800").statusShow("<span><strong>" + $newUserPick + "</strong> added!</span>");
 
-          updateUserPicksDisplay();
+          updateUserItemsDisplay();
         }
       }
     });
     $("#button-clear-localstorage").click(function() {
       localStorage.clear();
       setLocalStorage("rafflerUserItems", initUserPicksObj);
-      initPicksArr();
-      updateUserPicksDisplay();
-      $("#item-status-bubble").css("background-color", "#847E04").statusShow("<span>User items cleared</span>", 3000);
+      initItemsArr();
+      updateUserItemsDisplay();
+      $("#text-add-item").val("");
+      $infoBubble.css("background-color", "#847E04").statusShow("<span>User items cleared</span>", 1500);
     });
   }
 
-	function getLocalStorage() {
+  function getLocalStorage() {
     return JSON.parse(localStorage.getItem("rafflerUserItems"));
   }
   function setLocalStorage(lsKey, obj) {
     localStorage.setItem(lsKey, JSON.stringify(obj));
-    syncUserPicksToPicksArr();
+    syncUserItemsToItemsArr();
   }
 
-	/*
-	  app entry point
-		                */
+  /*
+    app entry point
+                    */
   function initApp() {
-    initPicksArr();
-    syncUserPicksToPicksArr();
-    updateUserPicksDisplay();
+    resetApp();
 
     // event handlers
     $btnRaffle.click(function(e) {
@@ -117,9 +120,16 @@ $(function() {
     });
   }
 
+  function resetApp() {
+    initItemsArr();
+    syncUserItemsToItemsArr();
+    updateUserItemsDisplay();
+    lastItemChosen = "";
+  }
+
   // init/reset itemsArr with server json
-  function initPicksArr() {
-    itemsArr.length = 0;
+  function initItemsArr() {
+    itemsArr.length = 0; // clear global itemsArr
     $.getJSON("json/raffler-data.json", function(jsonServerData) {
       $.each(jsonServerData.items, function(key, val) {
         itemsArr.push(val);
@@ -127,8 +137,8 @@ $(function() {
     });
   };
 
-	// get main items array synced with current user items
-  function syncUserPicksToPicksArr() {
+  // get main items array synced with current user items
+  function syncUserItemsToItemsArr() {
     $.each(getLocalStorage().items, function(key, val) {
       if (itemsArr.indexOf(val) < 0) {
         itemsArr.push(val);
@@ -137,7 +147,7 @@ $(function() {
   }
 
   // update user items div
-  function updateUserPicksDisplay() {
+  function updateUserItemsDisplay() {
     var $userPickDiv = $("#user-items");
     if (getLocalStorage()) {
       if(getLocalStorage().items.length > 0) {
@@ -153,114 +163,158 @@ $(function() {
 
   // timer object to keep track of countdown
   window.setVariableInterval = function(callbackFunc, timing) {
-		var variableInterval = {
-			i: 0,
-			mult: 1,
+    var variableInterval = {
+      i: 0,
+      mult: initMult,
       stage: 0,
-			names: itemsArr,
-			interval: timing,
-			callback: callbackFunc,
-			stopped: false,
-			startCountdown: false,
-			runLoop: function() {
-				if (variableInterval.stopped) return;
-				var result = variableInterval.callback.call(variableInterval);
-				if (typeof result == 'number')
-				{
-					if (result === 0) return;
-					variableInterval.interval = result;
-				}
-				// do something
-				$resultsDiv.html("<span>" + variableInterval.names[variableInterval.i++] + "</span>");
-				if (variableInterval.i == variableInterval.names.length) variableInterval.i = 0;
-				// loop
-				variableInterval.loop();
-			},
-			stop: function() {
-				this.stopped = true;
-				window.clearTimeout(this.timeout);
-			},
-			start: function() {
-				this.stopped = false;
-				return this.loop();
-			},
-			loop: function() {
-				this.timeout = window.setTimeout(this.runLoop, this.interval);
-				return this;
-			}
-		};
+      items: itemsArr,
+      interval: timing,
+      callback: callbackFunc,
+      stopped: false,
+      startCountdown: false,
+      runLoop: function() {
+        if (variableInterval.stopped) return;
+        var result = variableInterval.callback.call(variableInterval);
+        if (typeof result == 'number')
+        {
+          if (result === 0) return;
+          variableInterval.interval = result;
+        }
+        // switch to next item if countdown not done
+        if (variableInterval.stage != 4)
+          $itemsDiv.html("<span>" + variableInterval.items[variableInterval.i++] + "</span>");
+        if (variableInterval.i == variableInterval.items.length) variableInterval.i = 0;
+        // loop
+        if (variableInterval.stage != 4)
+          variableInterval.loop();
+      },
+      stop: function() {
+        this.stopped = true;
+        window.clearTimeout(this.timeout);
+      },
+      start: function() {
+        this.stopped = false;
+        return this.loop();
+      },
+      loop: function() {
+        this.timeout = window.setTimeout(this.runLoop, this.interval);
+        return this;
+      }
+    };
 
-		return variableInterval.start();
-	};
+    return variableInterval.start();
+  };
 
   // main timer for raffler cycler
-	var countdownTimer = setVariableInterval(function() {
-		// this is the variableInterval - so we can change/get the interval here:
-		var interval = this.interval;
+  var countdownTimer = setVariableInterval(function() {
+    // this is the variableInterval - so we can change/get the interval here:
+    var interval = this.interval;
 
-		// print it for the hell of it
-		//console.log('interval', interval);
-		//console.log('interval mult', this.mult);
+    // print it for the hell of it
+    console.log('interval', this.interval);
+    console.log('interval mult', this.mult);
+    console.log('countdown stage', this.stage);
 
-		// slow down at a certain point
-		if (this.interval > 150) {
+    // slow down at a certain point
+    if (this.interval > 150 &&
+        this.interval <= 250) {
       this.stage = 2;
-			$resultsDiv.removeClass();
-			$resultsDiv.addClass('level2');
+      $itemsDiv.removeClass();
+      $itemsDiv.addClass('level2');
       console.log("level2");
-		}
+    }
 
-		// slow down more at a certain point
-		if (this.interval > 250) {
+    // slow down more at a certain point
+    if (this.interval > 250 &&
+        this.interval <= 325) {
       this.stage = 3;
-			$resultsDiv.removeClass();
-			$resultsDiv.addClass('level3');
+      $itemsDiv.removeClass();
+      $itemsDiv.addClass('level3');
       console.log("level3");
-		}
+    }
 
-		// stop at a certain point
-		if (this.interval > 325) {
-      this.stage = 4;
-			$resultsDiv.removeClass();
-			$resultsDiv.addClass('level4');
-			console.log("name picked!");
-      this.startCountdown = false;
-			this.stop();
-      if ($ckOptSound.is(":checked")) {
-        var victory = document.getElementsByTagName("audio")[1];
-        victory.play();
+    // stop and pick an item
+    if (this.interval > 325) {
+      this.mult = initMult;
+      if (this.interval > 350)
+      this.mult = this.mult++;
+      console.log($itemsDiv.text());
+      if (this.interval >= 359) {
+        this.stage = 4;
+        lastItemChosen = $itemsDiv.text();
+        this.stop();
+        this.startCountdown = false;
+        $itemsDiv.removeClass();
+        $itemsDiv.addClass('level4');
+        console.log("item picked!", lastItemChosen);
+        // play victory sound
+        if ($ckOptSound.is(":checked")) {
+          var victory = document.getElementById("victory");
+          victory.play();
+        }
+        // add to results
+        $resultsDiv.append(lastItemChosen + "<br />");
+      } else {
+        return interval + this.mult;
       }
-		}
+    }
 
-		// slow countdown over time
-		if (this.startCountdown && this.stage == 0) {
+    // start countdown!
+    if (this.startCountdown &&
+        (this.stage == 0 || this.stage == 1)) {
       this.stage = 1;
-      if (!$resultsDiv.hasClass('level1'))
-        $resultsDiv.addClass('level1');
+      if (!$itemsDiv.hasClass('level1'))
+        $itemsDiv.addClass('level1');
 
+      // play beep boop as items cycle
       if ($ckOptSound.is(":checked")) {
-        var beep = document.getElementsByTagName("audio")[0];
-			  beep.play();
+        console.log("playing beepboop");
+        var beep = document.getElementById("beep");
+        beep.play();
       }
       console.log("level1");
-		}
-    if (this.stage > 0) {
+    }
+    // if we've started countdown
+    // and we haven't reached end
+    // then keep cycling with increased multiplier
+    if (this.stage > 0 && this.stage != 4) {
       return interval + (1.5 ^ this.mult++);
     }
-	}, 25);
+  }, 25);
 
   // you hit the big button
   function pickOne() {
-    countdownTimer.startCountdown = true;
-		console.log('countdown started');
+    // remove last chosen item from itemsArr if anything picked
+    if (lastItemChosen !== "") {
+      itemsArr.splice(itemsArr.indexOf(lastItemChosen), 1);
+    }
+    // if we got more than 1 item,
+    // then we can raffle
+    if (itemsArr.length > 1) {
+      $itemsDiv.removeClass();
+      countdownTimer.startCountdown = true;
+      countdownTimer.interval = initInterval;
+      countdownTimer.mult = 1;
+      countdownTimer.stage = 1;
+      countdownTimer.start();
+      console.log('countdown started');
+    } else if (itemsArr.length == 1) {
+      $itemsDiv.html("<span>" + itemsArr[0] + "</span>");
+      $resultsDiv.append($itemsDiv.text());
+      $infoBubble.css("background-color", "#880000").statusShow("<span>only one item to raffle!<br /><strong>instant winner!</strong></span>", 5000);
+    } else {
+      $itemsDiv.html("<span>:'(</span>");
+      $infoBubble.css("background-color", "#880000").statusShow("<span>nothing to raffle!<br /><strong>please advise the admin!</strong></span>", 5000);
+    }
   };
 
   // you hit the reset button
   function resetCountdown() {
-    $resultsDiv.removeClass();
+    resetApp();
+    $itemsDiv.removeClass();
     countdownTimer.startCountdown = false;
     countdownTimer.interval = initInterval;
-    countdownTimer.mult = 1;
+    countdownTimer.mult = initMult;
     countdownTimer.stage = 0;
     countdownTimer.start();
     console.log('countdown reset');
