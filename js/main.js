@@ -18,6 +18,7 @@ $(function() {
   var $btnStart = $("a#btnStart");
   var $btnReset = $("a#btnReset");
   var $btnStop = $("a#btnStop");
+  $btnRaffle.focus();
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
   var itemsArr = [];

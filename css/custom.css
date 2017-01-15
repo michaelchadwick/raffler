@@ -1,3 +1,26 @@
+button {
+  box-sizing: border-box;
+  height: 26px;
+  width: 64px;
+}
+input {
+  box-sizing: border-box;
+  height: 26px;
+}
+.checkbox {
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+.checkbox label {
+
+}
+.checkbox input {
+  vertical-align: middle;
+}
+.checkbox span {
+  vertical-align: middle;
+}
 #wrapper {
   min-height: 100%;
   position: relative;
@@ -64,7 +87,7 @@
   .footer-container footer {
     padding: 20px;
     position: relative;
-    top: -40px;
+    top: -35px;
   }
   .footer-container footer a {
     color: #E4DE5E;
@@ -110,7 +133,7 @@ section#items {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: 5vw;
   font-weight: bold;
   height: 100px;
   line-height: 1em;
@@ -118,6 +141,7 @@ section#items {
   margin-top: 0;
   padding: 10px;
   text-transform: uppercase;
+  width: 100%;
   word-wrap: break-word;
 }
 section#items span {
@@ -126,31 +150,31 @@ section#items span {
 }
 
 section#items, section#items span {
--webkit-transition: all 1s ease;
--moz-transition: all 1s ease;
--o-transition: all 1s ease;
--ms-transition: all 1s ease;
-transition: all 1s ease;
+-webkit-transition: all 0.5s ease;
+-moz-transition: all 0.5s ease;
+-o-transition: all 0.5s ease;
+-ms-transition: all 0.5s ease;
+transition: all 0.5s ease;
 }
 section#items.level1 { background: #777; }
 section#items.level1 span {
 color: #000;
-font-size: 1.25em;
+font-size: 6vw;
 }
 section#items.level2 { background: #999; }
 section#items.level2 span {
 color: #00f;
-font-size: 1.5em;
+font-size: 7vw;
 }
 section#items.level3 { background: #bbb; }
 section#items.level3 span {
 color: #090;
-font-size: 2em;
+font-size: 8.5vw;
 }
 section#items.level4 { background: #fff; }
 section#items.level4 span {
 color: #f00;
-font-size: 2.5em;
+font-size: 12vw;
 }
 section#controls {
   margin-bottom: 7px;
@@ -171,14 +195,15 @@ section#controls {
     -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
     box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
     background-color: #6d2bac;
+    box-sizing: border-box;
     color: #fff;
     display: block;
     float: left;
-    font-size: 24px;
-    margin: 10px;
-    padding: 10px;
+    font-size: 36px;
+    margin: 0 1px;
+    padding: 15px;
     text-decoration: none;
-    width: 100px;
+    width: 125px;
   }
   .button.start { background-color: #428d4b; }
   .button.start:hover { background-color: #429d4b; }
@@ -186,6 +211,8 @@ section#controls {
   .button.reset:hover { background-color: #a7c65a; }
   .button.stop { background-color: #8d4254; }
   .button.stop:hover { background-color: #9d4254; }
+
+  /* main raffle! button */
   .button.raffle {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -204,6 +231,7 @@ section#controls {
     -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
     -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
     box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+    background-color: #a655f5;
   }
   .button.raffle:active:after {
     content: "";
@@ -231,18 +259,28 @@ section#controls {
     background-color: #a655f5;
   }
 
+section#resultsTitle {
+  background-color: #7f3bc0;
+  color: #fff;
+  margin: 30px 0 0;
+  padding: 5px 0 0 5px;
+  text-align: left;
+}
+section#resultsTitle h3 {
+  margin: 0;
+  text-transform: uppercase;
+}
 section#results {
-  -webkit-box-shadow: 0px -3px 1px rgba(255, 255, 255, 1), 0 0px 3px rgba(0, 0, 0, 0.9);
-  -moz-box-shadow: 0px -3px 1px rgba(255, 255, 255, 1), 0 0px 3px rgba(0, 0, 0, 0.9);
-  box-shadow: 0px -3px 1px rgba(255, 255, 255, 1), 0 0px 3px rgba(0, 0, 0, 0.9);
   background: #ddd;
   border: 1px solid #555;
+  border-top: none;
   clear: all;
   color: #222;
   float: none;
   font-size: 1em;
-  height: 200px;
-  margin-top: 50px;
+  max-height: 100px;
+  min-height: 25px;
+  margin-top: 0;
   overflow-y: auto;
 }
 
