@@ -167,7 +167,6 @@ $(function() {
   // timer object to keep track of countdown
   window.setVariableInterval = function(callbackFunc, timing) {
     var variableInterval = {
-      i: 0,
       mult: initMult,
       stage: 0,
       items: itemsArr,
@@ -175,6 +174,7 @@ $(function() {
       callback: callbackFunc,
       stopped: false,
       startCountdown: false,
+      itemsIndex: Math.floor(Math.random() * itemsArr.length),
       runLoop: function() {
         if (variableInterval.stopped) return;
         var result = variableInterval.callback.call(variableInterval);
@@ -185,8 +185,8 @@ $(function() {
         }
         // switch to next item if countdown not done
         if (variableInterval.stage != 4)
-          $itemsDiv.html("<span>" + variableInterval.items[variableInterval.i++] + "</span>");
-        if (variableInterval.i == variableInterval.items.length) variableInterval.i = 0;
+          $itemsDiv.html("<span>" + variableInterval.items[variableInterval.itemsIndex++] + "</span>");
+        if (variableInterval.itemsIndex == variableInterval.items.length) variableInterval.itemsIndex = 0;
         // loop
         if (variableInterval.stage != 4)
           variableInterval.loop();
@@ -214,11 +214,11 @@ $(function() {
     var interval = this.interval;
 
     // debug vars
+    //console.log('i', this.i);
     //
-    console.log('i', this.i);
     console.log('interval', this.interval);
     console.log('interval mult', this.mult);
-    console.log('countdown stage', this.stage);
+    //console.log('countdown stage', this.stage);
     //
 
     // slow down at a certain point
@@ -227,7 +227,7 @@ $(function() {
       this.stage = 2;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level2');
-      //console.log("level2");
+      console.log("level2");
     }
 
     // slow down more at a certain point
@@ -236,7 +236,7 @@ $(function() {
       this.stage = 3;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level3');
-      //console.log("level3");
+      console.log("level3");
     }
 
     // stop and pick an item
@@ -262,6 +262,7 @@ $(function() {
         // add to results
         $resultsDiv.append(lastItemChosen + "<br />");
       } else {
+        console.log("return2");
         return interval + this.mult;
       }
     }
@@ -284,9 +285,10 @@ $(function() {
     // and we haven't reached end
     // then keep cycling with increased multiplier
     if (this.stage > 0 && this.stage != 4) {
+      console.log("return1");
       return interval + (1.5 ^ this.mult++);
     }
-  }, 25);
+  }, this.initInterval);
 
   // you hit the big button
   function pickOne() {
@@ -307,7 +309,7 @@ $(function() {
       countdownTimer.startCountdown = true;
       countdownTimer.interval = initInterval;
       // start new cycle at random spot
-      countdownTimer.i = Math.floor(Math.random() * itemsArr.length);
+      countdownTimer.itemsIndex = Math.floor(Math.random() * itemsArr.length);
       countdownTimer.mult = 1;
       countdownTimer.stage = 1;
       countdownTimer.start();
