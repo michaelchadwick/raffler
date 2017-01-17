@@ -44,7 +44,7 @@ $(function() {
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
 
   // if admin passed, show hamburger menu
-  if (typeof $.QueryString['admin'] !== "undefined") {
+  if (typeof $.QueryString['admin'] !== "undefined" || true) {
     $('.toggle-button').show();
   }
 
