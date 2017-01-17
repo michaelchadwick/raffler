@@ -179,6 +179,9 @@ div#wrapper {
 .menu {
 	text-align: left;
 }
+.menu section {
+	text-align: left;
+}
 .menu-wrap {
   background-color: #715191;
 	border-left: 1px solid #000;
@@ -194,16 +197,17 @@ div#wrapper {
   transition: .25s;
   z-index: 10;
 	display: block;
-	padding-top: 49px;
+	padding-top: 47px;
 	color: #fff;
 }
 .menu-show {
   margin-right: 0;
   box-shadow: 4px 2px 15px 1px #B9ADAD;
 }
-.menu div.title {
+.menu-wrap .menu div.title {
 	background: #5f2497;
 	border-bottom: 2px solid #222;
+	border-top: 2px solid #444;
 	font-size: 1.3em;
 	padding: 5px 5px 5px 7px;
 	width: 100%;
@@ -211,7 +215,6 @@ div#wrapper {
 }
 section#fancyOptions {
 	float: left;
-	text-align: left;
 	width: 100%;
 }
 .checkbox {
@@ -236,11 +239,18 @@ section#timerControls {
 	float: none;
 	display: block;
 	width: 100%;
-	text-align: left;
 }
 section#timerControls > a {
 	margin: 0;
 	width: 100%;
+}
+section#serverItems,
+section#winners {
+
+}
+section#serverItems textarea,
+section#winners textarea {
+	height: 200px;
 }
 
 div#add-item input#text-add-item {
@@ -310,53 +320,6 @@ section#items {
 section#items span {
   font-size: 1em;
   text-transform: uppercase;
-}
-
-section#items,
-section#items.level1,
-section#items.level2,
-section#items.level3,
-section#items.level4 {
-  -webkit-transition: border 2s ease,
-											border-color 2s ease,
-											border-top 2s ease,
-											border-right 2s ease,
-											border-bottom 2s ease,
-											border-left 2s ease,
-                      box-shadow 0.25s ease,
-                      background: 1s ease;
-  -moz-transition: border 2s ease,
-									 border-color 2s ease,
-									 border-top 2s ease,
-									 border-right 2s ease,
-									 border-bottom 2s ease,
-									 border-left 2s ease,
-                   box-shadow 0.25s ease,
-                   background: 1s ease;
-  -o-transition: border 2s ease,
-								 border-color 2s ease,
-								 border-top 2s ease,
-								 border-right 2s ease,
-								 border-bottom 2s ease,
-								 border-left 2s ease,
-                 box-shadow 0.25s ease,
-                 background: 1s ease;
-  -ms-transition: border 2s ease,
-									border-color 2s ease,
-									border-top 2s ease,
-									border-right 2s ease,
-									border-bottom 2s ease,
-									border-left 2s ease,
-                  box-shadow 0.25s ease,
-                  background: 1s ease;
-  transition: border 2s ease,
-							border-color 2s ease,
-							border-top 2s ease,
-							border-right 2s ease,
-							border-bottom 2s ease,
-							border-left 2s ease,
-              box-shadow 0.25s ease,
-              background: 1s ease;
 }
 section#items,
 section#items.level1,

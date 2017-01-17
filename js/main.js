@@ -178,6 +178,7 @@ $(function() {
     $.getJSON("json/raffler-data.json", function(jsonServerData) {
       $.each(jsonServerData.items, function(key, val) {
         itemsArr.push(val);
+				$("#serverItems textarea").append(val + "\n");
       });
     });
   };
@@ -259,11 +260,9 @@ $(function() {
 
     // debug vars
     //console.log('i', this.i);
-    //
     //console.log('interval', this.interval);
     //console.log('interval mult', this.mult);
     //console.log('countdown stage', this.stage);
-    //
 
     // slow down at a certain point
     if (this.interval > 150 &&
@@ -313,6 +312,20 @@ $(function() {
           displayFireworks();
         }
         timesRun++;
+				// add to admin list of winners
+				$("#winners textarea").append(lastItemChosen + "\n");
+				// remove last chosen item from itemsArr if anything picked
+		    if (lastItemChosen !== "") {
+		      var i = itemsArr.indexOf(lastItemChosen);
+		      if (i != -1) {
+		        itemsArr.splice(i, 1);
+		      }
+		    }
+				// update admin serverItems
+				$("#serverItems textarea").text("");
+				itemsArr.forEach(function(item) {
+					$("#serverItems textarea").append(item + "\n");
+				});
       } else {
         //console.log("return2");
         return interval + this.mult;
@@ -346,13 +359,7 @@ $(function() {
     hideFireworks();
     // disable button until countdown done
     disableRaffle();
-    // remove last chosen item from itemsArr if anything picked
-    if (lastItemChosen !== "") {
-      var i = itemsArr.indexOf(lastItemChosen);
-      if (i != -1) {
-        itemsArr.splice(i, 1);
-      }
-    }
+
     //console.log("itemsArr", itemsArr);
     // if we got more than 1 item,
     // then we can raffle
