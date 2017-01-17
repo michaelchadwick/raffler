@@ -32,7 +32,7 @@ $(function() {
   var $canvasFireworks = $("canvas");
   var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
-  var $resultsTitle = $("section#resultsTitle");
+	var $resultsContent = $("section#results div ul");
   var $ckOptSound = $("input#ckOptSound");
   var $ckOptFireworks = $("input#ckOptFireworks");
   var $infoBubble = $("#item-status-bubble");
@@ -306,8 +306,7 @@ $(function() {
         // re-enable raffle button
         enableRaffle();
         // add to results
-        $resultsDiv.append(lastItemChosen + "<br />");
-        $resultsTitle.show();
+        $resultsContent.append("<li>" + lastItemChosen + "</li>");
         $resultsDiv.show();
         // show fireworks
         if ($ckOptFireworks.is(":checked")) {
@@ -369,7 +368,7 @@ $(function() {
       //console.log('countdown started');
     } else if (itemsArr.length == 1) {
       $itemsDiv.html("<span>" + itemsArr[0] + "</span>");
-      $resultsDiv.append($itemsDiv.text());
+      $resultsContent.append($itemsDiv.text());
       $infoBubble.css("background-color", "#880000").statusShow("<span>only one item to raffle!<br /><strong>instant winner!</strong></span>", 5000);
     } else {
       $itemsDiv.html("<span>:'(</span>");
@@ -383,8 +382,7 @@ $(function() {
   function resetCountdown() {
     resetApp();
     $itemsDiv.removeClass();
-    $resultsDiv.text("");
-    $resultsTitle.hide();
+    $resultsContent.text("");
     $resultsDiv.hide();
     countdownTimer.startCountdown = false;
     countdownTimer.interval = initInterval;
