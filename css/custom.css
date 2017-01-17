@@ -14,6 +14,10 @@ input {
   height: 26px;
 }
 
+#resetDialog {
+  display: none;
+}
+
 .ui-draggable .ui-dialog-titlebar {
   background-color: #8d4254;
   color: #eee;
