@@ -21,6 +21,9 @@
   <link rel="stylesheet" href="css/normalize.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
+  <link rel="stylesheet" href="css/vendor/jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="css/vendor/jquery-ui.theme.min.css">
 </head>
 <body>
   <!--[if lt IE 7]>
@@ -28,6 +31,10 @@
   <![endif]-->
 
   <canvas id="canvas">Canvas is not supported by your browser.</canvas>
+
+  <div id="resetDialog" title="Confirmation Required">
+    Are you sure you want to reset Raffler?
+  </div>
 
   <div id="wrapper">
 
@@ -69,7 +76,7 @@
 
           <div id="timerControls">
             <a href="#" class="button start" id="btnStart">start</a>
-            <a href="#" class="button reset" id="btnReset">reset</a>
+            <a href="#" class="button reset confirmLink" id="btnReset">reset</a>
             <a href="#" class="button stop" id="btnStop">stop</a>
           </div>
         </section>
@@ -96,6 +103,7 @@
   <!-- scripts -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+  <script src="js/vendor/jquery-ui.min.js"></script>
   <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
   <script src="js/main.js"></script>
   <script src="js/fireworks.js"></script>

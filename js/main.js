@@ -116,7 +116,23 @@ $(function() {
     });
     $btnReset.click(function(e) {
       e.preventDefault();
-      resetCountdown();
+      $("#resetDialog").dialog({
+        autoOpen: false,
+        modal: true,
+        resizeable: false,
+        height: "auto",
+        buttons: {
+          "Reset it!" : function() {
+            resetCountdown();
+            $(this).dialog("close");
+          },
+          "Nevermind." : function() {
+            $(this).dialog("close");
+          }
+        }
+      });
+
+      $("#resetDialog").dialog("open");
     });
     $btnStop.click(function(e) {
       e.preventDefault();
@@ -336,9 +352,14 @@ $(function() {
   };
 
   // you hit the reset button
+  // puts everyone back in raffle
+  // resets stuff, as if you reloaded page
   function resetCountdown() {
     resetApp();
     $itemsDiv.removeClass();
+    $resultsDiv.text("");
+    $resultsTitle.hide();
+    $resultsDiv.hide();
     countdownTimer.startCountdown = false;
     countdownTimer.interval = initInterval;
     countdownTimer.mult = initMult;

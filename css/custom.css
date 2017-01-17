@@ -14,6 +14,19 @@ input {
   height: 26px;
 }
 
+.ui-draggable .ui-dialog-titlebar {
+  background-color: #8d4254;
+  color: #eee;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+  width: 100px;
+  padding: 4px;
+}
+.ui-dialog .ui-dialog-buttonpane button:first-of-type {
+  background-color: #8d4254;
+  color: #eee;
+}
+
 canvas {
   background: rgba(33,128,33,0.8);
   display: none;
