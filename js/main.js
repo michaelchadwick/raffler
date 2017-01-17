@@ -14,6 +14,7 @@ $(function() {
   var lastItemChosen = "";
   var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
+  var $resultsTitle = $("section#resultsTitle");
   var $ckOptSound = $("input#ckOptSound");
   var $infoBubble = $("#item-status-bubble");
   var $btnRaffle = $("a#btnRaffle");
@@ -37,10 +38,10 @@ $(function() {
       var code = e.which;
       if (code == 13) {
         e.preventDefault();
-        $("#button-add-item").click();
+        $("#btnAddItem").click();
       }
     });
-    $("#button-add-item").click(function() {
+    $("#btnAddItem").click(function() {
       var $newUserPick = $("#text-add-item").val().trim();
 
       if ($newUserPick !== "") {
@@ -78,7 +79,7 @@ $(function() {
         }
       }
     });
-    $("#button-clear-localstorage").click(function() {
+    $("#btnClearLocalStorage").click(function() {
       localStorage.clear();
       setLocalStorage("rafflerUserItems", initUserPicksObj);
       initItemsArr();
@@ -96,9 +97,7 @@ $(function() {
     syncUserItemsToItemsArr();
   }
 
-  /*
-    app entry point
-                    */
+  // app entry point
   function initApp() {
     resetApp();
 
@@ -122,7 +121,6 @@ $(function() {
       countdownTimer.stop();
     });
   }
-
   function resetApp() {
     initItemsArr();
     syncUserItemsToItemsArr();
@@ -142,11 +140,13 @@ $(function() {
 
   // get main items array synced with current user items
   function syncUserItemsToItemsArr() {
-    $.each(getLocalStorage().items, function(key, val) {
-      if (itemsArr.indexOf(val) < 0) {
-        itemsArr.push(val);
-      }
-    });
+    if(getLocalStorage().items.length > 0) {
+      $.each(getLocalStorage().items, function(key, val) {
+        if (itemsArr.indexOf(val) < 0) {
+          itemsArr.push(val);
+        }
+      });
+    }
   }
 
   // update user items div
@@ -216,8 +216,8 @@ $(function() {
     // debug vars
     //console.log('i', this.i);
     //
-    console.log('interval', this.interval);
-    console.log('interval mult', this.mult);
+    //console.log('interval', this.interval);
+    //console.log('interval mult', this.mult);
     //console.log('countdown stage', this.stage);
     //
 
@@ -239,7 +239,7 @@ $(function() {
       console.log("level3");
     }
 
-    // stop and pick an item
+    // stop and pick an item!
     if (this.interval > 325) {
       this.mult = initMult;
       if (this.interval > 350) this.mult = this.mult++;
@@ -261,6 +261,14 @@ $(function() {
         enableRaffle();
         // add to results
         $resultsDiv.append(lastItemChosen + "<br />");
+        $resultsTitle.show();
+        $resultsDiv.show();
+        // show fireworks
+        //$("#wrapper").prop("z-index", -1);
+        $("section#items").prop("z-index", 1000);
+        $("#btnRaffle").prop("z-index", 1000);
+        $("canvas").prop("z-index", 999);
+        $("canvas").show();
       } else {
         console.log("return2");
         return interval + this.mult;
@@ -290,8 +298,12 @@ $(function() {
     }
   }, this.initInterval);
 
-  // you hit the big button
+  // you hit the big raffle button
   function pickOne() {
+    $("#wrapper").prop("z-index", 0);
+    $("section#items").prop("z-index", 0);
+    $("#btnRaffle").prop("z-index", 0);
+    $("canvas").hide();
     // disable button until countdown done
     disableRaffle();
     // remove last chosen item from itemsArr if anything picked

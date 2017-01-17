@@ -14,6 +14,9 @@
   <link rel="favicon" href="favicon.ico">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+  <!-- font -->
+  <link href="https://fonts.googleapis.com/css?family=Bungee|Cabin|Inconsolata" rel="stylesheet">
+
   <!-- stylesheets -->
   <link rel="stylesheet" href="css/normalize.min.css">
   <link rel="stylesheet" href="css/main.css">
@@ -24,17 +27,25 @@
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
+  <canvas id="canvas">Canvas is not supported by your browser.</canvas>
+
   <div id="wrapper">
 
     <!-- title, user item adder -->
     <div class="header-container">
       <header class="wrapper clearfix">
         <h1 class="title">Raffler</h1>
+        <section id="options">
+          <section class="checkbox">
+            <label for="ckOptSound">sound?</label>
+            <input type="checkbox" id="ckOptSound" checked="checked" />
+          </section>
+        </section>
 
         <div id="add-item">
           <input id="text-add-item" type="text" placeholder="add new item(s)" />
-          <button id="button-add-item">+</button>
-          <button id="button-clear-localstorage">Clear</button>
+          <button id="btnAddItem">ADD</button>
+          <button id="btnClearLocalStorage">CLEAR</button>
           <div id="user-items" />
         </div>
       </header>
@@ -52,10 +63,6 @@
         <section id="items"></section>
 
         <section id="controls">
-          <section class="checkbox">
-            <label for="ckOptSound">Play sound?</label>
-            <input type="checkbox" id="ckOptSound" checked="checked" />
-          </section>
           <a href="#" class="button raffle" id="btnRaffle">RAFFLE!</a>
 
           <div id="timerControls">
@@ -89,6 +96,7 @@
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
   <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/fireworks.js"></script>
 
 </body>
 </html>
