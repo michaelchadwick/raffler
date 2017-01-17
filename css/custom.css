@@ -186,8 +186,8 @@ div#wrapper {
   top: 0;
 	right: 0;
   height: 100%;
-  width: 150px;
-  margin-right: -150px;
+  width: 180px;
+  margin-right: -180px;
   font-size: 1em;
   font-weight: 700;
   overflow: auto;
@@ -212,6 +212,7 @@ div#wrapper {
 section#fancyOptions {
 	float: left;
 	text-align: left;
+	width: 100%;
 }
 .checkbox {
 	clear: both;
