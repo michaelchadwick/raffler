@@ -307,6 +307,7 @@ section#controls {
   margin-bottom: 7px;
 }
   div#timerControls {
+    display: none;
     width: 100%;
   }
   div#timerControls > a {

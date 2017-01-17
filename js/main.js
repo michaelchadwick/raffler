@@ -5,6 +5,17 @@ $(function() {
     this.hide();
     this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
   }
+  $.QueryString = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+      var p=a[i].split('=', 2);
+      if (p.length != 2) continue;
+      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+  })(window.location.search.substr(1).split('&'));
 
   // global variables
   var itemsArr = [];
@@ -27,9 +38,13 @@ $(function() {
   var $btnStart = $("a#btnStart");
   var $btnReset = $("a#btnReset");
   var $btnStop = $("a#btnStop");
-  $btnRaffle.focus();
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
+
+  // if debug passed, show timerControls
+  if (typeof $.QueryString["debug"] !== "undefined") {
+    $("#timerControls").show();
+  }
 
   // if we got LS or SS, then set up the user items UI
   var LSsupport = !(typeof window.localStorage == 'undefined');
@@ -142,6 +157,7 @@ $(function() {
       e.preventDefault();
       countdownTimer.stop();
     });
+    $btnRaffle.focus();
   }
   function resetApp() {
     initItemsArr();
@@ -400,7 +416,6 @@ $(function() {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;');
   }
-
   // check for duplicate user entries
   function isDuplicateValue(newUserPick) {
     $curPicks = getLocalStorage();
@@ -418,6 +433,19 @@ $(function() {
 
     return dupeFound;
   }
+  // get querystring
+  function getUrlVars() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  }
 
+  // start it all up
   initApp();
 });
