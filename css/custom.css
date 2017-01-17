@@ -14,10 +14,6 @@ input {
   height: 26px;
 }
 
-#resetDialog {
-  display: none;
-}
-
 .ui-draggable .ui-dialog-titlebar {
   background-color: #8d4254;
   color: #eee;
@@ -39,7 +35,7 @@ canvas {
   position: absolute;
 }
 
-#wrapper {
+div#wrapper {
   min-height: 100%;
   position: relative;
 }
@@ -56,29 +52,6 @@ canvas {
     float: left;
     font-size: 2.5em;
     margin: 0.3em 0;
-  }
-  section#options {
-    background: rgba(157,59,192,0.7);
-    color: #fff;
-    float: left;
-    font-size: 0.86em;
-    margin: 5px 10px;
-    padding: 5px;
-    text-transform: uppercase;
-  }
-  .checkbox {
-
-  }
-  .checkbox label {
-
-  }
-  .checkbox input {
-    position: relative;
-    top: -1px;
-    vertical-align: middle;
-  }
-  .checkbox span {
-    vertical-align: middle;
   }
   .header-container #add-item {
     clear: left;
@@ -111,8 +84,13 @@ canvas {
     padding: 0 0 50px;
   }
   .main-container .wrapper {
-    margin: 0 5%;
+    /*margin: 0 5%;*/
   }
+	section {
+	  margin: 0 auto;
+	  position: relative;
+	  text-align: center;
+	}
 
   .footer-container {
     background: #7f3bc0;
@@ -146,9 +124,127 @@ canvas {
 /* specific parts */
 /******************/
 
+.toggle-button {
+  position: fixed;
+  width: 30px;
+  height: 32px;
+  padding: 4px;
+  transition: .25s;
+	right: 13px;
+	top: 13px;
+  z-index: 15;
+	display: none;
+}
+.toggle-button:hover {
+  cursor: pointer;
+}
+.toggle-button .menu-bar {
+  position: absolute;
+  border-radius: 2px;
+  width: 80%;
+  transition: .5s;
+}
+.toggle-button .menu-bar-top {
+  border: 4px solid #fff;
+  border-bottom: none;
+  top: 0;
+}
+.toggle-button .menu-bar-middle {
+  height: 4px;
+  background-color: #fff;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  top: 4px;
+	width: 38px;
+}
+.toggle-button .menu-bar-bottom {
+  border: 4px solid #fff;
+  border-top: none;
+  top: 22px;
+}
+.button-open .menu-bar-top {
+  transform: rotate(45deg) translate(8px, 8px);
+  transition: .5s;
+}
+.button-open .menu-bar-middle {
+  transform: translate(-230px);
+  transition: .1s ease-in;
+  opacity: 0;
+}
+.button-open .menu-bar-bottom {
+  transform: rotate(-45deg) translate(8px, -7px);
+  transition: .5s;
+}
+
+.menu {
+	text-align: left;
+}
+.menu-wrap {
+  background-color: #715191;
+	border-left: 1px solid #000;
+  position: fixed;
+  top: 0;
+	right: 0;
+  height: 100%;
+  width: 150px;
+  margin-right: -150px;
+  font-size: 1em;
+  font-weight: 700;
+  overflow: auto;
+  transition: .25s;
+  z-index: 10;
+	display: block;
+	padding-top: 49px;
+	color: #fff;
+}
+.menu-show {
+  margin-right: 0;
+  box-shadow: 4px 2px 15px 1px #B9ADAD;
+}
+.menu div.title {
+	background: #5f2497;
+	border-bottom: 2px solid #222;
+	font-size: 1.3em;
+	padding: 5px 5px 5px 7px;
+	width: 100%;
+	float: none;
+}
+section#fancyOptions {
+	float: left;
+	text-align: left;
+}
+.checkbox {
+	clear: both;
+	padding: 5px 5px 5px 15px;
+	width: 100%;
+}
+.checkbox label {
+	clear: both;
+ 	float: left;
+	text-transform: uppercase;
+}
+.checkbox input {
+	float: left;
+	margin-left: 6px;
+	padding: 20px;
+	position: relative;
+	top: -1px;
+}
+section#timerControls {
+	clear: both;
+	float: none;
+	display: block;
+	width: 100%;
+	text-align: left;
+}
+section#timerControls > a {
+	margin: 0;
+	width: 100%;
+}
+
 div#add-item input#text-add-item {
   padding: 3px;
-  width: 50%;
+  width: 40%;
 }
 div#add-item button {
   border: 2px solid #ccc;
@@ -183,11 +279,7 @@ div#item-status-bubble {
 div#item-status-bubble span {
   color: #fff;
 }
-section {
-  margin: 0 auto;
-  position: relative;
-  text-align: center;
-}
+
 section#items {
   background: #b5bdc8; /* Old browsers */
   background: -moz-linear-gradient(top,  #b5bdc8 0%, #828c95 14%, #28343b 100%); /* FF3.6-15 */
@@ -306,13 +398,6 @@ section#items.level4 span {
 section#controls {
   margin-bottom: 7px;
 }
-  div#timerControls {
-    display: none;
-    width: 100%;
-  }
-  div#timerControls > a {
-    margin: 0;
-  }
   .button {
     -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
     -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
@@ -321,20 +406,19 @@ section#controls {
     box-sizing: border-box;
     color: #fff;
     display: block;
-    float: left;
-    font-size: 36px;
+    font-size: 24px;
     margin: 0;
     padding: 15px;
     text-decoration: none;
-    width: 125px;
+    width: 100%;
   }
 
   /* timer control buttons */
-  .button.start { background-color: #428d4b; width: 33%; }
+  .button.start { background-color: #428d4b; }
   .button.start:hover { background-color: #429d4b; }
-  .button.reset { background-color: #a7b65a; width: 33%; }
+  .button.reset { background-color: #a7b65a; }
   .button.reset:hover { background-color: #a7c65a; }
-  .button.stop { background-color: #8d4254; width: 33%; }
+  .button.stop { background-color: #8d4254; }
   .button.stop:hover { background-color: #9d4254; }
 
   /* main raffle! button */
@@ -421,4 +505,7 @@ section#results {
 }
 .failure {
   background-color: #880000;
+}
+#resetDialog {
+  display: none;
 }

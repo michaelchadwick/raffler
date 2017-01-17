@@ -36,20 +36,42 @@
     Are you sure you want to reset Raffler?
   </div>
 
-  <div id="wrapper">
+	<div class="menu-wrap">
+    <div class="menu-sidebar">
+      <div class="menu">
+        <section id="fancyOptions">
+					<div class="title">Fancy Options</div>
+					<div class="checkbox">
+          	<label for="ckOptSound">sound?</label>
+          	<input type="checkbox" id="ckOptSound" checked="checked" />
+					</div>
+					<div class="checkbox">
+          	<label for="ckOptFireworks">fireworks?</label>
+          	<input type="checkbox" id="ckOptFireworks" />
+					</div>
+        </section>
+				<section id="timerControls">
+					<div class="title">Timer Controls</div>
+					<a href="#" class="button start" id="btnStart">start</a>
+					<a href="#" class="button stop" id="btnStop">stop</a>
+					<div class="title">App Controls</div>
+					<a href="#" class="button reset confirmLink" id="btnReset">reset</a>
+				</section>
+      </div>
+		</div>
+	</div>
+
+  <div id="wrapper" role="main">
 
     <!-- title, user item adder -->
     <div class="header-container">
+			<span class="toggle-button">
+     		<div class="menu-bar menu-bar-top"></div>
+     		<div class="menu-bar menu-bar-middle"></div>
+     		<div class="menu-bar menu-bar-bottom"></div>
+			</span>
       <header class="wrapper clearfix">
         <h1 class="title">Raffler</h1>
-        <section id="options">
-          <section class="checkbox">
-            <label for="ckOptSound">sound?</label>
-            <input type="checkbox" id="ckOptSound" checked="checked" />
-            <label for="ckOptFireworks">fireworks?</label>
-            <input type="checkbox" id="ckOptFireworks" />
-          </section>
-        </section>
 
         <div id="add-item">
           <input id="text-add-item" type="text" placeholder="add new item(s)" />
@@ -74,11 +96,7 @@
         <section id="controls">
           <a href="#" class="button raffle" id="btnRaffle">RAFFLE!</a>
 
-          <div id="timerControls">
-            <a href="#" class="button start" id="btnStart">start</a>
-            <a href="#" class="button reset confirmLink" id="btnReset">reset</a>
-            <a href="#" class="button stop" id="btnStop">stop</a>
-          </div>
+          
         </section>
 
         <br />
@@ -98,7 +116,7 @@
       </footer>
     </div> <!-- #footer-container -->
 
-  </div> <!-- #wrapper -->
+  </div> <!-- main#wrapper -->
 
   <!-- scripts -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

@@ -27,6 +27,8 @@ $(function() {
   var lastInterval = 359;
 
   // elements to mangle
+	var $toggleButton = $('.toggle-button');
+	var $menuWrap = $('.menu-wrap');
   var $canvasFireworks = $("canvas");
   var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
@@ -41,9 +43,9 @@ $(function() {
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
 
-  // if debug passed, show timerControls
-  if (typeof $.QueryString["debug"] !== "undefined") {
-    $("#timerControls").show();
+  // if admin passed, show hamburger menu
+  if (typeof $.QueryString['admin'] !== "undefined") {
+    $('.toggle-button').show();
   }
 
   // if we got LS or SS, then set up the user items UI
@@ -123,6 +125,10 @@ $(function() {
     resetApp();
 
     // event handlers
+		$toggleButton.on('click', function() {
+			$(this).toggleClass('button-open');
+      $menuWrap.toggleClass('menu-show');
+	  });
     $btnRaffle.click(function(e) {
       e.preventDefault();
       if (!$btnRaffle.prop("disabled")) {
