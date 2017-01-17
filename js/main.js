@@ -12,6 +12,10 @@ $(function() {
   var initInterval = 25;
   var initMult = 1;
   var lastItemChosen = "";
+  var timesRun = 0;
+  var lastInterval = 359;
+
+  // elements to mangle
   var $canvasFireworks = $("canvas");
   var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
@@ -245,7 +249,7 @@ $(function() {
       this.stage = 2;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level2');
-      console.log("level2");
+      //console.log("level2");
     }
 
     // slow down more at a certain point
@@ -254,7 +258,7 @@ $(function() {
       this.stage = 3;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level3');
-      console.log("level3");
+      //console.log("level3");
     }
 
     // stop and pick an item!
@@ -262,7 +266,9 @@ $(function() {
       this.mult = initMult;
       if (this.interval > 350) this.mult = this.mult++;
       //console.log($itemsDiv.text());
-      if (this.interval == 359) {
+      // adjust for odd time drift
+      if (timesRun > 0) lastInterval = 349;
+      if (this.interval >= lastInterval) {
         this.stage = 4;
         lastItemChosen = $itemsDiv.text();
         this.stop();
@@ -285,8 +291,9 @@ $(function() {
         if ($ckOptFireworks.is(":checked")) {
           displayFireworks();
         }
+        timesRun++;
       } else {
-        console.log("return2");
+        //console.log("return2");
         return interval + this.mult;
       }
     }
@@ -309,16 +316,13 @@ $(function() {
     // and we haven't reached end
     // then keep cycling with increased multiplier
     if (this.stage > 0 && this.stage != 4) {
-      console.log("return1");
       return interval + (1.5 ^ this.mult++);
     }
-  }, this.initInterval);
+  }, initInterval);
 
   // you hit the big raffle button
   function pickOne() {
-    if ($ckOptFireworks.is(":checked")) {
-      hideFireworks();
-    }
+    hideFireworks();
     // disable button until countdown done
     disableRaffle();
     // remove last chosen item from itemsArr if anything picked
@@ -340,7 +344,7 @@ $(function() {
       countdownTimer.mult = 1;
       countdownTimer.stage = 1;
       countdownTimer.start();
-      console.log('countdown started');
+      //console.log('countdown started');
     } else if (itemsArr.length == 1) {
       $itemsDiv.html("<span>" + itemsArr[0] + "</span>");
       $resultsDiv.append($itemsDiv.text());
@@ -365,7 +369,7 @@ $(function() {
     countdownTimer.mult = initMult;
     countdownTimer.stage = 0;
     countdownTimer.start();
-    console.log('countdown reset');
+    //console.log('countdown reset');
   }
 
   function disableRaffle() {
@@ -403,10 +407,10 @@ $(function() {
     var dupeFound = false;
 
     $.each($curPicks.items, function(key, val) {
-      console.log("newUserPick", newUserPick);
-      console.log("val", val);
+      //console.log("newUserPick", newUserPick);
+      //console.log("val", val);
       if (newUserPick == val) {
-        console.log("found a dupe");
+        //console.log("found a dupe");
         dupeFound = true;
         return false;
       }
