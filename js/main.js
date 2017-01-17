@@ -12,10 +12,12 @@ $(function() {
   var initInterval = 25;
   var initMult = 1;
   var lastItemChosen = "";
+  var $canvasFireworks = $("canvas");
   var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
   var $resultsTitle = $("section#resultsTitle");
   var $ckOptSound = $("input#ckOptSound");
+  var $ckOptFireworks = $("input#ckOptFireworks");
   var $infoBubble = $("#item-status-bubble");
   var $btnRaffle = $("a#btnRaffle");
   var $btnStart = $("a#btnStart");
@@ -264,11 +266,9 @@ $(function() {
         $resultsTitle.show();
         $resultsDiv.show();
         // show fireworks
-        //$("#wrapper").prop("z-index", -1);
-        $("section#items").prop("z-index", 1000);
-        $("#btnRaffle").prop("z-index", 1000);
-        $("canvas").prop("z-index", 999);
-        $("canvas").show();
+        if ($ckOptFireworks.is(":checked")) {
+          displayFireworks();
+        }
       } else {
         console.log("return2");
         return interval + this.mult;
@@ -300,10 +300,9 @@ $(function() {
 
   // you hit the big raffle button
   function pickOne() {
-    $("#wrapper").prop("z-index", 0);
-    $("section#items").prop("z-index", 0);
-    $("#btnRaffle").prop("z-index", 0);
-    $("canvas").hide();
+    if ($ckOptFireworks.is(":checked")) {
+      hideFireworks();
+    }
     // disable button until countdown done
     disableRaffle();
     // remove last chosen item from itemsArr if anything picked
@@ -355,6 +354,18 @@ $(function() {
   function enableRaffle() {
     $btnRaffle.removeClass("disabled");
     $btnRaffle.prop("disabled", false);
+  }
+  function hideFireworks() {
+    $("#wrapper").prop("z-index", 0);
+    $itemsDiv.prop("z-index", 0);
+    $btnRaffle.prop("z-index", 0);
+    $canvasFireworks.hide();
+  }
+  function displayFireworks() {
+    $itemsDiv.prop("z-index", 1000);
+    $btnRaffle.prop("z-index", 1000);
+    $canvasFireworks.prop("z-index", 999);
+    $canvasFireworks.show();
   }
 
   // encode user entries html

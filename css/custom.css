@@ -14,7 +14,7 @@ input {
   height: 26px;
 }
 
-canvas#canvas {
+canvas {
   background: rgba(33,128,33,0.8);
   display: none;
   height: 100%;
