@@ -27,12 +27,12 @@ $(function() {
   var lastInterval = 359;
 
   // elements to mangle
-	var $toggleButton = $('.toggle-button');
-	var $menuWrap = $('.menu-wrap');
+  var $toggleButton = $('.toggle-button');
+  var $menuWrap = $('.menu-wrap');
   var $canvasFireworks = $("canvas");
   var $itemsDiv = $("section#items");
   var $resultsDiv = $("section#results");
-	var $resultsContent = $("section#results div ul");
+  var $resultsContent = $("section#results div ul");
   var $ckOptSound = $("input#ckOptSound");
   var $ckOptFireworks = $("input#ckOptFireworks");
   var $infoBubble = $("#item-status-bubble");
@@ -125,10 +125,10 @@ $(function() {
     resetApp();
 
     // event handlers
-		$toggleButton.on('click', function() {
-			$(this).toggleClass('button-open');
+    $toggleButton.on('click', function() {
+      $(this).toggleClass('button-open');
       $menuWrap.toggleClass('menu-show');
-	  });
+    });
     $btnRaffle.click(function(e) {
       e.preventDefault();
       if (!$btnRaffle.prop("disabled")) {
@@ -178,7 +178,7 @@ $(function() {
     $.getJSON("json/raffler-data.json", function(jsonServerData) {
       $.each(jsonServerData.items, function(key, val) {
         itemsArr.push(val);
-				$("#serverItems textarea").append(val + "\n");
+        $("#serverItems textarea").append(val + "\n");
       });
     });
   };
@@ -312,20 +312,20 @@ $(function() {
           displayFireworks();
         }
         timesRun++;
-				// add to admin list of winners
-				$("#winners textarea").append(lastItemChosen + "\n");
-				// remove last chosen item from itemsArr if anything picked
-		    if (lastItemChosen !== "") {
-		      var i = itemsArr.indexOf(lastItemChosen);
-		      if (i != -1) {
-		        itemsArr.splice(i, 1);
-		      }
-		    }
-				// update admin serverItems
-				$("#serverItems textarea").text("");
-				itemsArr.forEach(function(item) {
-					$("#serverItems textarea").append(item + "\n");
-				});
+        // add to admin list of winners
+        $("#winners textarea").append(lastItemChosen + "\n");
+        // remove last chosen item from itemsArr if anything picked
+        if (lastItemChosen !== "") {
+          var i = itemsArr.indexOf(lastItemChosen);
+          if (i != -1) {
+            itemsArr.splice(i, 1);
+          }
+        }
+        // update admin serverItems
+        $("#serverItems textarea").text("");
+        itemsArr.forEach(function(item) {
+          $("#serverItems textarea").append(item + "\n");
+        });
       } else {
         //console.log("return2");
         return interval + this.mult;
