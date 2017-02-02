@@ -10,25 +10,28 @@ $(function() {
   var hasLSSupport = true;
 
   // elements to mangle
+  var $mainWrapper = $('#wrapper');
   var $btnToggleAdminMenu = $('.toggle-button');
   var $menuWrap = $('.menu-wrap');
-  var $canvasFireworks = $("canvas");
-  var $itemsDiv = $("section#items");
-  var $resultsDiv = $("section#results");
-  var $resultsContent = $("section#results div ul");
-  var $ckOptSound = $("input#ckOptSound");
-  var $ckOptFireworks = $("input#ckOptFireworks");
-  var $infoBubble = $("#item-status-bubble");
-  var $btnRaffle = $("a#btnRaffle");
-  var $btnStartTimer = $("a#btnStartTimer");
-  var $btnStopTimer = $("a#btnStopTimer");
-  var $btnResetData = $("a#btnResetData");
-  var $inputAddUserItem = $("#text-add-user-item");
-  var $btnAddUserItem = $("#btnAddUserItem");
-  var $btnClearUserItems = $("#btnClearUserItems");
-  var $textAvailableItems = $("#availableItems textarea");
-  var $textChosenItems = $("#chosenItems textarea");
-  var $divUserItems = $("#user-items");
+  var $canvasFireworks = $('canvas');
+  var $itemsCycleDiv = $('section#items');
+  var $resultsDiv = $('section#results');
+  var $resultsContent = $('section#results div ul');
+  var $ckOptSound = $('input#ckOptSound');
+  var $ckOptFireworks = $('input#ckOptFireworks');
+  var $infoBubble = $('#item-status-bubble');
+  var $btnRaffle = $('a#btnRaffle');
+  var $btnStartTimer = $('a#btnStartTimer');
+  var $btnStopTimer = $('a#btnStopTimer');
+  var $btnResetData = $('a#btnResetData');
+  var $inputAddUserItem = $('#text-add-user-item');
+  var $btnAddUserItem = $('#btnAddUserItem');
+  var $btnClearUserItems = $('#btnClearUserItems');
+  var $textAvailableItems = $('#availableItems textarea');
+  var $textChosenItems = $('#chosenItems textarea');
+  var $divUserItems = $('#user-items');
+  var $divResetDataDialog = $('#resetDataDialog');
+  var $divClearUserItemsDialog = $('#clearUserItemsDialog');
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
 
@@ -52,7 +55,7 @@ $(function() {
   })(window.location.search.substr(1).split('&'));
   // if admin passed, show hamburger menu
   if (typeof $.QueryString['admin'] !== "undefined" || true) {
-    $('.toggle-button').show();
+    $btnToggleAdminMenu.show();
   }
 
   // app entry point
@@ -108,7 +111,7 @@ $(function() {
     });
     $btnResetData.click(function(e) {
       e.preventDefault();
-      $("#resetDataDialog").dialog({
+      $divResetDataDialog.dialog({
         autoOpen: false,
         modal: true,
         resizeable: false,
@@ -124,7 +127,7 @@ $(function() {
         }
       });
 
-      $("#resetDataDialog").dialog("open");
+      $divResetDataDialog.dialog("open");
     });
     $inputAddUserItem.keyup(function(e) {
       var code = e.which;
@@ -181,7 +184,7 @@ $(function() {
         $btnClearUserItems.prop("disabled", false);
         $btnClearUserItems.removeClass();
 
-        $("#clearUserItemsDialog").dialog({
+        $divClearUserItemsDialog.dialog({
           autoOpen: false,
           modal: true,
           resizeable: false,
@@ -206,7 +209,7 @@ $(function() {
           }
         });
 
-        $("#clearUserItemsDialog").dialog("open");
+        $divClearUserItemsDialog.dialog("open");
       }
     });
   }
@@ -342,7 +345,7 @@ $(function() {
         }
         // switch to next item if countdown not done
         if (variableInterval.stage != 4)
-          $itemsDiv.html("<span>" + variableInterval.items[variableInterval.itemsIndex++] + "</span>");
+          $itemsCycleDiv.html("<span>" + variableInterval.items[variableInterval.itemsIndex++] + "</span>");
         if (variableInterval.itemsIndex == variableInterval.items.length) variableInterval.itemsIndex = 0;
         // loop
         if (variableInterval.stage != 4)
@@ -374,16 +377,16 @@ $(function() {
     if (this.interval > 150 &&
         this.interval <= 250) {
       this.stage = 2;
-      $itemsDiv.removeClass();
-      $itemsDiv.addClass('level2');
+      $itemsCycleDiv.removeClass();
+      $itemsCycleDiv.addClass('level2');
     }
 
     // slow down more at a certain point
     if (this.interval > 250 &&
         this.interval <= 325) {
       this.stage = 3;
-      $itemsDiv.removeClass();
-      $itemsDiv.addClass('level3');
+      $itemsCycleDiv.removeClass();
+      $itemsCycleDiv.addClass('level3');
     }
 
     // stop and pick an item!
@@ -397,9 +400,9 @@ $(function() {
         this.stop();
         this.startCountdown = false;
 
-        lastItemChosen = $itemsDiv.text();
-        $itemsDiv.removeClass();
-        $itemsDiv.addClass('level4');
+        lastItemChosen = $itemsCycleDiv.text();
+        $itemsCycleDiv.removeClass();
+        $itemsCycleDiv.addClass('level4');
 
         playSound("victory");
 
@@ -437,8 +440,8 @@ $(function() {
     if (this.startCountdown &&
         (this.stage == 0 || this.stage == 1)) {
       this.stage = 1;
-      if (!$itemsDiv.hasClass('level1'))
-        $itemsDiv.addClass('level1');
+      if (!$itemsCycleDiv.hasClass('level1'))
+        $itemsCycleDiv.addClass('level1');
 
       playSound("beep");
     }
@@ -459,7 +462,7 @@ $(function() {
     // if we got more than 1 item,
     // then we can raffle
     if (itemsArr.length > 1) {
-      $itemsDiv.removeClass();
+      $itemsCycleDiv.removeClass();
       countdownTimer.startCountdown = true;
       countdownTimer.interval = initInterval;
       // start new cycle at random spot
@@ -468,11 +471,11 @@ $(function() {
       countdownTimer.stage = 1;
       countdownTimer.start();
     } else if (itemsArr.length == 1) {
-      $itemsDiv.html("<span>" + itemsArr[0] + "</span>");
-      $resultsContent.append($itemsDiv.text());
+      $itemsCycleDiv.html("<span>" + itemsArr[0] + "</span>");
+      $resultsContent.append($itemsCycleDiv.text());
       notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning");
     } else {
-      $itemsDiv.html("<span>:'(</span>");
+      $itemsCycleDiv.html("<span>:'(</span>");
       notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "failure");
     }
   };
@@ -483,7 +486,7 @@ $(function() {
   function resetCountdown() {
     resetApp();
     resetChosenItems();
-    $itemsDiv.removeClass();
+    $itemsCycleDiv.removeClass();
     $resultsContent.text("");
     $textAvailableItems.text("");
     $resultsDiv.hide();
@@ -503,14 +506,14 @@ $(function() {
     $btnRaffle.prop("disabled", false);
   }
   function hideFireworks() {
-    $("#wrapper").prop("z-index", 0);
-    $itemsDiv.prop("z-index", 0);
+    $mainWrapper.prop("z-index", 0);
+    $itemsCycleDiv.prop("z-index", 0);
     $btnRaffle.prop("z-index", 0);
     $canvasFireworks.hide();
   }
   function displayFireworks() {
     if ($ckOptFireworks.is(":checked")) {
-      $itemsDiv.prop("z-index", 1000);
+      $itemsCycleDiv.prop("z-index", 1000);
       $btnRaffle.prop("z-index", 1000);
       $canvasFireworks.prop("z-index", 999);
       $canvasFireworks.show();
