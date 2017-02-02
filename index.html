@@ -34,8 +34,11 @@
 
   <canvas id="canvas">Canvas is not supported by your browser.</canvas>
 
-  <div id="resetDialog" title="Confirmation Required">
-    Are you sure you want to reset Raffler?
+  <div id="resetUserItemsDialog" title="Confirmation Required">
+    Are you sure you want to reset Raffler? <em>(Note: all chosen items will be lost)</em>
+  </div>
+  <div id="resetDataDialog" title="Confirmation Required">
+    Are you sure you want to clear user-entered items?
   </div>
 
   <div class="menu-wrap">
@@ -57,7 +60,14 @@
           <a href="#" class="button start" id="btnStart">start</a>
           <a href="#" class="button stop" id="btnStop">stop</a>
           <div class="title">App Controls</div>
-          <a href="#" class="button reset confirmLink" id="btnReset">reset</a>
+          <a href="#" class="button reset confirmLink" id="btnResetData">reset data</a>
+        </section>
+        <section id="add-user-item">
+          <div class="title">User Items</div>
+          <input id="text-add-item" type="text" placeholder="add new item(s)" />
+          <button id="btnAddUserItem">ADD</button>
+          <button id="btnClearUserItems">CLEAR</button>
+          <div id="user-items" />
         </section>
         <section id="serverItems">
           <div class="title">Server Items</div>
@@ -82,13 +92,6 @@
       </span>
       <header class="wrapper clearfix">
         <h1 class="title">Raffler</h1>
-
-        <div id="add-item">
-          <input id="text-add-item" type="text" placeholder="add new item(s)" />
-          <button id="btnAddItem">ADD</button>
-          <button id="btnClearLocalStorage">CLEAR</button>
-          <div id="user-items" />
-        </div>
       </header>
     </div> <!-- header-container -->
 

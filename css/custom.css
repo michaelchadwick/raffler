@@ -51,26 +51,7 @@ div#wrapper {
   .header-container h1 {
     float: left;
     font-size: 2.5em;
-    margin: 0.3em 0;
-  }
-  .header-container #add-item {
-    clear: left;
-  }
-  .header-container #add-item input,
-  .header-container #add-item button,
-  .header-container #add-item div {
-    float: left;
-    position: relative;
-  }
-  .header-container #add-item input {
-    width: 140px;
-  }
-  .header-container #user-items {
-    clear: left;
-    color: #fff;
-    font-weight: bold;
-    margin: 4px 0 0;
-    padding: 0;
+    margin: 0.3em 0 0.15em;
   }
   header {
     width: 100%;
@@ -253,21 +234,38 @@ section#winners textarea {
   height: 200px;
 }
 
-div#add-item input#text-add-item {
-  padding: 3px;
-  width: 40%;
+#add-user-item {
+  clear: left;
 }
-div#add-item button {
+#add-user-item input,
+#add-user-item button,
+#add-user-item div {
+  position: relative;
+}
+#add-user-item input {
+  width: auto;
+}
+#add-user-item #user-items {
+  clear: left;
+  color: #fff;
+  font-weight: bold;
+  margin: 4px 0 0;
+  padding: 0;
+}
+#add-user-item input#text-add-item {
+  padding: 3px;
+}
+#add-user-item button {
   border: 2px solid #ccc;
   color: #eee;
   font-weight: bold;
   margin: 0 1px;
   width: 75px;
 }
-div#add-item button#btnAddItem {
+#add-user-item button#btnAddUserItem {
   background-color: #428d4b;
 }
-div#add-item button#btnClearLocalStorage {
+#add-user-item button#btnClearUserItems {
   background-color: #8d4254;
 }
 div#item-status-bubble {
@@ -523,6 +521,7 @@ section#results div ul li {
 .failure {
   background-color: #880000;
 }
-#resetDialog {
+#resetDataDialog,
+#resetUserItemsDialog {
   display: none;
 }

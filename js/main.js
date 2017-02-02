@@ -19,15 +19,16 @@ $(function() {
 
   // global variables
   var itemsArr = [];
-  var initUserPicksObj = { "items": [] }
+  var initItemsObj = { "items": [] }
   var initInterval = 25;
   var initMult = 1;
   var lastItemChosen = "";
   var timesRun = 0;
   var lastInterval = 359;
+  var hasLSSupport = true;
 
   // elements to mangle
-  var $toggleButton = $('.toggle-button');
+  var $btnToggleAdminMenu = $('.toggle-button');
   var $menuWrap = $('.menu-wrap');
   var $canvasFireworks = $("canvas");
   var $itemsDiv = $("section#items");
@@ -37,9 +38,13 @@ $(function() {
   var $ckOptFireworks = $("input#ckOptFireworks");
   var $infoBubble = $("#item-status-bubble");
   var $btnRaffle = $("a#btnRaffle");
-  var $btnStart = $("a#btnStart");
-  var $btnReset = $("a#btnReset");
-  var $btnStop = $("a#btnStop");
+  var $btnStartTimer = $("a#btnStart");
+  var $btnResetData = $("a#btnResetData");
+  var $inputAddUserItem = $("#text-add-user-item");
+  var $btnAddUserItem = $("#btnAddUserItem");
+  var $btnClearUserItems = $("#btnClearUserItems");
+  var $textServerItems = $("#serverItems textarea");
+  var $btnStopTimer = $("a#btnStop");
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
 
@@ -48,27 +53,101 @@ $(function() {
     $('.toggle-button').show();
   }
 
-  // if we got LS or SS, then set up the user items UI
-  var LSsupport = !(typeof window.localStorage == 'undefined');
-  var SSsupport = !(typeof window.sessionStorage == 'undefined');
-  if (LSsupport && SSsupport) {
-    // if our specific key doesn't exist, then init
-    if (!localStorage.getItem("rafflerUserItems")) {
-      setLocalStorage("rafflerUserItems", initUserPicksObj);
+  function getLocalStorage(lsKey) {
+    return JSON.parse(localStorage.getItem(lsKey));
+  }
+  function setLocalStorage(lsKey, obj) {
+    localStorage.setItem(lsKey, JSON.stringify(obj));
+    syncUserItemsToItemsArr();
+  }
+
+  // app entry point
+  function initApp() {
+    checkForLS();
+    resetApp();
+    setEventHandlers();
+    $inputAddUserItem.text("");
+    $btnRaffle.focus();
+  }
+  // check for localStorage support
+  function checkForLS() {
+    // if we got LS or SS, then set up the user items UI
+    var LSsupport = !(typeof window.localStorage == 'undefined');
+    var SSsupport = !(typeof window.sessionStorage == 'undefined');
+    if (!LSsupport && !SSsupport) {
+      hasLSSupport = false;
+      $infoBubble.css("background-color", "#880000")
+        .statusShow("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", 5000);
+    } else {
+      // if our specific keys don't exist, then init
+      if (!localStorage.getItem("rafflerUserItems")) {
+        setLocalStorage("rafflerUserItems", initItemsObj);
+      }
+      if (!localStorage.getItem("rafflerChosenItems")) {
+        setLocalStorage("rafflerChosenItems", initItemsObj);
+      } else {
+        
+      }
     }
-    //// event handlers
-    $("#text-add-item").keyup(function(e) {
+  }
+  function resetApp() {
+    initItemsArr();
+    syncUserItemsToItemsArr();
+    syncChosenItemsToItemsArr();
+    updateUserItemsDisplay();
+    lastItemChosen = "";
+  }
+  function setEventHandlers() {
+    $btnToggleAdminMenu.on('click', function() {
+      $(this).toggleClass('button-open');
+      $menuWrap.toggleClass('menu-show');
+    });
+    $btnRaffle.click(function(e) {
+      e.preventDefault();
+      if (!$btnRaffle.prop("disabled")) {
+        pickOne();
+      }
+    });
+    $btnStartTimer.click(function(e) {
+      e.preventDefault();
+      countdownTimer.start();
+    });
+    $btnStopTimer.click(function(e) {
+      e.preventDefault();
+      countdownTimer.stop();
+    });
+    $btnResetData.click(function(e) {
+      e.preventDefault();
+      $("#resetDataDialog").dialog({
+        autoOpen: false,
+        modal: true,
+        resizeable: false,
+        height: "auto",
+        buttons: {
+          "Reset it!" : function() {
+            resetCountdown();
+            $(this).dialog("close");
+          },
+          "Nevermind." : function() {
+            $(this).dialog("close");
+          }
+        }
+      });
+
+      $("#resetDataDialog").dialog("open");
+    });
+    $inputAddUserItem.keyup(function(e) {
       var code = e.which;
       if (code == 13) {
         e.preventDefault();
-        $("#btnAddItem").click();
+        $btnAddUserItem.click();
       }
     });
-    $("#btnAddItem").click(function() {
-      var $newUserPick = $("#text-add-item").val().trim();
+    $btnAddUserItem.click(function() {
+      var $newUserPick = $inputAddUserItem.val().trim();
 
       if ($newUserPick !== "") {
-        var tempUserPickObj = getLocalStorage();
+        var tempUserPickObj = getLocalStorage("rafflerUserItems");
         var newPickAdded = false;
 
         // if someone adds a list of things, turn into array and then push
@@ -102,53 +181,21 @@ $(function() {
         }
       }
     });
-    $("#btnClearLocalStorage").click(function() {
-      localStorage.clear();
-      setLocalStorage("rafflerUserItems", initUserPicksObj);
-      initItemsArr();
-      updateUserItemsDisplay();
-      $("#text-add-item").val("");
-      $infoBubble.css("background-color", "#847E04").statusShow("<span>User items cleared</span>", 1500);
-    });
-  }
-
-  function getLocalStorage() {
-    return JSON.parse(localStorage.getItem("rafflerUserItems"));
-  }
-  function setLocalStorage(lsKey, obj) {
-    localStorage.setItem(lsKey, JSON.stringify(obj));
-    syncUserItemsToItemsArr();
-  }
-
-  // app entry point
-  function initApp() {
-    resetApp();
-
-    // event handlers
-    $toggleButton.on('click', function() {
-      $(this).toggleClass('button-open');
-      $menuWrap.toggleClass('menu-show');
-    });
-    $btnRaffle.click(function(e) {
+    $btnClearUserItems.click(function(e) {
       e.preventDefault();
-      if (!$btnRaffle.prop("disabled")) {
-        pickOne();
-      }
-    });
-    $btnStart.click(function(e) {
-      e.preventDefault();
-      countdownTimer.start();
-    });
-    $btnReset.click(function(e) {
-      e.preventDefault();
-      $("#resetDialog").dialog({
+      $("#clearUserItemsDialog").dialog({
         autoOpen: false,
         modal: true,
         resizeable: false,
         height: "auto",
         buttons: {
-          "Reset it!" : function() {
-            resetCountdown();
+          "Clear them!" : function() {
+            localStorage.removeItem("rafflerUserItems");
+            setLocalStorage("rafflerUserItems", initItemsObj);
+            initItemsArr();
+            updateUserItemsDisplay();
+            $inputAddUserItem.val("");
+            $infoBubble.css("background-color", "#847E04").statusShow("<span>User items cleared</span>", 1500);
             $(this).dialog("close");
           },
           "Nevermind." : function() {
@@ -157,56 +204,76 @@ $(function() {
         }
       });
 
-      $("#resetDialog").dialog("open");
+      $("#clearUserItemsDialog").dialog("open");
     });
-    $btnStop.click(function(e) {
-      e.preventDefault();
-      countdownTimer.stop();
-    });
-    $btnRaffle.focus();
   }
-  function resetApp() {
-    initItemsArr();
-    syncUserItemsToItemsArr();
-    updateUserItemsDisplay();
-    lastItemChosen = "";
-  }
-
+  
   // init/reset itemsArr with server json
   function initItemsArr() {
     itemsArr.length = 0; // clear global itemsArr
-    $.getJSON("json/raffler-data.json", function(jsonServerData) {
-      $.each(jsonServerData.items, function(key, val) {
+    $.getJSON("json/raffler-initial.json", function(data) {
+      $.each(data.items, function(key, val) {
         itemsArr.push(val);
-        $("#serverItems textarea").append(val + "\n");
+        $textServerItems.append(val + "\n");
       });
     });
   };
 
-  // get main items array synced with current user items
+  // add user items to main items array
   function syncUserItemsToItemsArr() {
-    if(getLocalStorage().items.length > 0) {
-      $.each(getLocalStorage().items, function(key, val) {
+    if(getLocalStorage("rafflerUserItems").items.length > 0) {
+      $.each(getLocalStorage("rafflerUserItems").items, function(key, val) {
         if (itemsArr.indexOf(val) < 0) {
           itemsArr.push(val);
         }
       });
     }
   }
+  // remove chosen items from main items array if we've already used raffler
+  function syncChosenItemsToItemsArr() {
+    var chosenItemIndex = 0;
+    if(getLocalStorage("rafflerChosenItems").items.length > 0) {
+      $.each(getLocalStorage("rafflerChosenItems").items, function(key, val) {
+        console.log("val", val);
+        console.log(itemsArr);
+        chosenItemIndex = itemsArr.indexOf(val);
+        console.log("index", chosenItemIndex);
+        if (chosenItemIndex >= 0) {
+          itemsArr.splice(chosenItemIndex, 1);
+          $textServerItems.append(val + "\n");
+          $resultsContent.append("<li>" + lastItemChosen + "</li>");
+          $resultsDiv.show();
+        }
+        console.log(itemsArr);
+      });
+    }
+  }
+  
+  // reset chosen items back to none
+  function resetChosenItems() {
+    setLocalStorage("rafflerChosenItems", initItemsObj);
+  }
 
   // update user items div
   function updateUserItemsDisplay() {
     var $userPickDiv = $("#user-items");
-    if (getLocalStorage()) {
-      if(getLocalStorage().items.length > 0) {
+    if (getLocalStorage("rafflerUserItems")) {
+      if(getLocalStorage("rafflerUserItems").items.length > 0) {
         $userPickDiv.html("<span class='heading'>user items</span>: ");
-        $userPickDiv.append(getLocalStorage().items.join(', '));
+        $userPickDiv.append(getLocalStorage("rafflerUserItems").items.join(', '));
       } else {
         $userPickDiv.html("");
       }
     } else {
       $userPickDiv.html("");
     }
+  }
+  
+  // update LS chosen items
+  function updateChosenItemsLS(item) {
+    var tempChosenPicksObj = getLocalStorage("rafflerChosenItems");
+    tempChosenPicksObj.items.push(sanitize(item));
+    setLocalStorage("rafflerChosenItems", tempChosenPicksObj);
   }
 
   // timer object to keep track of countdown
@@ -258,19 +325,13 @@ $(function() {
     // this is the variableInterval - so we can change/get the interval here:
     var interval = this.interval;
 
-    // debug vars
-    //console.log('i', this.i);
-    //console.log('interval', this.interval);
-    //console.log('interval mult', this.mult);
-    //console.log('countdown stage', this.stage);
-
     // slow down at a certain point
     if (this.interval > 150 &&
         this.interval <= 250) {
       this.stage = 2;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level2');
-      //console.log("level2");
+
     }
 
     // slow down more at a certain point
@@ -279,14 +340,13 @@ $(function() {
       this.stage = 3;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level3');
-      //console.log("level3");
+
     }
 
     // stop and pick an item!
     if (this.interval > 325) {
       this.mult = initMult;
       if (this.interval > 350) this.mult = this.mult++;
-      //console.log($itemsDiv.text());
       // adjust for odd time drift
       if (timesRun > 0) lastInterval = 349;
       if (this.interval >= lastInterval) {
@@ -296,7 +356,7 @@ $(function() {
         this.startCountdown = false;
         $itemsDiv.removeClass();
         $itemsDiv.addClass('level4');
-        //console.log("item picked!", lastItemChosen);
+
         // play victory sound
         if ($ckOptSound.is(":checked")) {
           var victory = document.getElementById("victory");
@@ -306,6 +366,7 @@ $(function() {
         enableRaffle();
         // add to results
         $resultsContent.append("<li>" + lastItemChosen + "</li>");
+        updateChosenItemsLS(lastItemChosen);
         $resultsDiv.show();
         // show fireworks
         if ($ckOptFireworks.is(":checked")) {
@@ -322,12 +383,12 @@ $(function() {
           }
         }
         // update admin serverItems
-        $("#serverItems textarea").text("");
+        $textServerItems.text("");
         itemsArr.forEach(function(item) {
-          $("#serverItems textarea").append(item + "\n");
+          $textServerItems.append(item + "\n");
         });
       } else {
-        //console.log("return2");
+
         return interval + this.mult;
       }
     }
@@ -344,7 +405,7 @@ $(function() {
         var beep = document.getElementById("beep");
         beep.play();
       }
-      //console.log("level1");
+
     }
     // if we've started countdown
     // and we haven't reached end
@@ -360,7 +421,7 @@ $(function() {
     // disable button until countdown done
     disableRaffle();
 
-    //console.log("itemsArr", itemsArr);
+
     // if we got more than 1 item,
     // then we can raffle
     if (itemsArr.length > 1) {
@@ -372,7 +433,7 @@ $(function() {
       countdownTimer.mult = 1;
       countdownTimer.stage = 1;
       countdownTimer.start();
-      //console.log('countdown started');
+
     } else if (itemsArr.length == 1) {
       $itemsDiv.html("<span>" + itemsArr[0] + "</span>");
       $resultsContent.append($itemsDiv.text());
@@ -388,15 +449,16 @@ $(function() {
   // resets stuff, as if you reloaded page
   function resetCountdown() {
     resetApp();
+    resetChosenItems();
     $itemsDiv.removeClass();
     $resultsContent.text("");
+    $textServerItems.text("");
     $resultsDiv.hide();
     countdownTimer.startCountdown = false;
     countdownTimer.interval = initInterval;
     countdownTimer.mult = initMult;
     countdownTimer.stage = 0;
     countdownTimer.start();
-    //console.log('countdown reset');
   }
 
   function disableRaffle() {
@@ -429,14 +491,14 @@ $(function() {
   }
   // check for duplicate user entries
   function isDuplicateValue(newUserPick) {
-    $curPicks = getLocalStorage();
+    $curPicks = getLocalStorage("rafflerUserItems");
     var dupeFound = false;
 
     $.each($curPicks.items, function(key, val) {
-      //console.log("newUserPick", newUserPick);
-      //console.log("val", val);
+
+
       if (newUserPick == val) {
-        //console.log("found a dupe");
+
         dupeFound = true;
         return false;
       }
