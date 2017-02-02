@@ -1,22 +1,4 @@
 $(function() {
-  // jQuery extension to show status messages
-  $.fn.statusShow = function(msg, msDelay) {
-    if (!msDelay) msDelay = 1000;
-    this.hide();
-    this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
-  }
-  $.QueryString = (function(a) {
-    if (a == "") return {};
-    var b = {};
-    for (var i = 0; i < a.length; ++i)
-    {
-      var p=a[i].split('=', 2);
-      if (p.length != 2) continue;
-      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-    }
-    return b;
-  })(window.location.search.substr(1).split('&'));
-
   // global variables
   var itemsArr = [];
   var initItemsObj = { "items": [] }
@@ -38,35 +20,51 @@ $(function() {
   var $ckOptFireworks = $("input#ckOptFireworks");
   var $infoBubble = $("#item-status-bubble");
   var $btnRaffle = $("a#btnRaffle");
-  var $btnStartTimer = $("a#btnStart");
+  var $btnStartTimer = $("a#btnStartTimer");
+  var $btnStopTimer = $("a#btnStopTimer");
   var $btnResetData = $("a#btnResetData");
   var $inputAddUserItem = $("#text-add-user-item");
   var $btnAddUserItem = $("#btnAddUserItem");
   var $btnClearUserItems = $("#btnClearUserItems");
-  var $textServerItems = $("#serverItems textarea");
-  var $btnStopTimer = $("a#btnStop");
+  var $textAvailableItems = $("#availableItems textarea");
+  var $textChosenItems = $("#chosenItems textarea");
+  var $divUserItems = $("#user-items");
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
 
+  // jQuery extension to show status messages
+  $.fn.statusShow = function(msg, msDelay) {
+    if (!msDelay) msDelay = 1000;
+    this.hide();
+    this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
+  }
+  // jQuery extension to parse url querystring
+  $.QueryString = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+      var p=a[i].split('=', 2);
+      if (p.length != 2) continue;
+      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+  })(window.location.search.substr(1).split('&'));
   // if admin passed, show hamburger menu
   if (typeof $.QueryString['admin'] !== "undefined" || true) {
     $('.toggle-button').show();
   }
 
-  function getLocalStorage(lsKey) {
-    return JSON.parse(localStorage.getItem(lsKey));
-  }
-  function setLocalStorage(lsKey, obj) {
-    localStorage.setItem(lsKey, JSON.stringify(obj));
-    syncUserItemsToItemsArr();
-  }
-
   // app entry point
   function initApp() {
     checkForLS();
-    resetApp();
     setEventHandlers();
-    $inputAddUserItem.text("");
+    resetApp();
+    
+    if (getLSItem("rafflerUserItems").items.length > 0 && hasLSSupport) {
+      $btnClearUserItems.prop("disabled", false);
+      $btnClearUserItems.removeClass();
+    }
     $btnRaffle.focus();
   }
   // check for localStorage support
@@ -76,26 +74,18 @@ $(function() {
     var SSsupport = !(typeof window.sessionStorage == 'undefined');
     if (!LSsupport && !SSsupport) {
       hasLSSupport = false;
-      $infoBubble.css("background-color", "#880000")
-        .statusShow("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", 5000);
+      notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure");
     } else {
       // if our specific keys don't exist, then init
       if (!localStorage.getItem("rafflerUserItems")) {
-        setLocalStorage("rafflerUserItems", initItemsObj);
+        setLSItem("rafflerUserItems", initItemsObj);
       }
       if (!localStorage.getItem("rafflerChosenItems")) {
-        setLocalStorage("rafflerChosenItems", initItemsObj);
+        setLSItem("rafflerChosenItems", initItemsObj);
       } else {
-        
+        syncChosenItemsToItemsArr();
       }
     }
-  }
-  function resetApp() {
-    initItemsArr();
-    syncUserItemsToItemsArr();
-    syncChosenItemsToItemsArr();
-    updateUserItemsDisplay();
-    lastItemChosen = "";
   }
   function setEventHandlers() {
     $btnToggleAdminMenu.on('click', function() {
@@ -144,85 +134,106 @@ $(function() {
       }
     });
     $btnAddUserItem.click(function() {
-      var $newUserPick = $inputAddUserItem.val().trim();
+      if ($inputAddUserItem.val() !== "" || $inputAddUserItem.val() !== undefined) {
+        var $newUserItem = $inputAddUserItem.val().trim();
 
-      if ($newUserPick !== "") {
-        var tempUserPickObj = getLocalStorage("rafflerUserItems");
-        var newPickAdded = false;
+        if ($newUserItem !== "") {
+          var tempUserItemObj = getLSItem("rafflerUserItems");
+          var newPickAdded = false;
 
-        // if someone adds a list of things, turn into array and then push
-        if ($newUserPick.indexOf(',') > -1) {
-          $.each($newUserPick.split(','), function(key, val) {
-            if (!isDuplicateValue(val)) {
-              tempUserPickObj.items.push(sanitize(val));
-              newPickAdded = true;
-            } else {
-              $infoBubble.css("background-color", "#880000").statusShow("<span><strong>" + val + "</strong> not added: duplicate.</span>", 5000);
-            }
-          });
-        } else {
-          // else push single new item onto temp tempUserPickObj
-          if (!isDuplicateValue($newUserPick)) {
-            tempUserPickObj.items.push(sanitize($newUserPick));
-            newPickAdded = true
+          // if someone adds a list of things, turn into array and then push
+          if ($newUserItem.indexOf(',') > -1) {
+            $.each($newUserItem.split(','), function(key, val) {
+              if (!isDuplicateValue(val)) {
+                tempUserItemObj.items.push(sanitize(val));
+                newPickAdded = true;
+                $btnClearUserItems.prop("disabled", false);
+                $btnClearUserItems.removeClass();
+              } else {
+                notify("<strong>" + val + "</strong> not added: duplicate.", "failure");
+              }
+            });
           } else {
-            $infoBubble.css("background-color", "#880000").statusShow("<span><strong>" + $newUserPick + "</strong> not added: duplicate.</span>", 5000);
+            // else push single new item onto temp tempUserItemObj
+            if (!isDuplicateValue($newUserItem)) {
+              tempUserItemObj.items.push(sanitize($newUserItem));
+              newPickAdded = true
+              $btnClearUserItems.prop("disabled", false);
+              $btnClearUserItems.removeClass();
+            } else {
+              notify("<strong>" + $newUserItem + "</strong> not added: duplicate.", "failure");
+            }
           }
-        }
 
-        if (newPickAdded) {
-          // update localStorage with temp tempUserPickObj
-          setLocalStorage("rafflerUserItems", tempUserPickObj);
-
-          // show status bubble
-          $infoBubble.css("background-color", "#008800").statusShow("<span><strong>" + $newUserPick + "</strong> added!</span>");
-
-          updateUserItemsDisplay();
+          if (newPickAdded) {
+            // update localStorage with temp tempUserItemObj
+            setLSItem("rafflerUserItems", tempUserItemObj);
+            // show status bubble
+            notify("<strong>" + $newUserItem + "</strong> added!", "success");
+            updateUserItemsDisplay();
+          }
         }
       }
     });
     $btnClearUserItems.click(function(e) {
       e.preventDefault();
-      $("#clearUserItemsDialog").dialog({
-        autoOpen: false,
-        modal: true,
-        resizeable: false,
-        height: "auto",
-        buttons: {
-          "Clear them!" : function() {
-            localStorage.removeItem("rafflerUserItems");
-            setLocalStorage("rafflerUserItems", initItemsObj);
-            initItemsArr();
-            updateUserItemsDisplay();
-            $inputAddUserItem.val("");
-            $infoBubble.css("background-color", "#847E04").statusShow("<span>User items cleared</span>", 1500);
-            $(this).dialog("close");
-          },
-          "Nevermind." : function() {
-            $(this).dialog("close");
-          }
-        }
-      });
+      if (getLSItem("rafflerUserItems").items.length > 0) {
+        $btnClearUserItems.prop("disabled", false);
+        $btnClearUserItems.removeClass();
 
-      $("#clearUserItemsDialog").dialog("open");
+        $("#clearUserItemsDialog").dialog({
+          autoOpen: false,
+          modal: true,
+          resizeable: false,
+          height: "auto",
+          buttons: {
+            "Clear them!" : function() {
+              resetUserItems();
+              initItemsArr();
+              
+              $inputAddUserItem.val("");
+              
+              $btnClearUserItems.prop("disabled", true);
+              $btnClearUserItems.addClass("disabled");
+
+              notify("User items cleared", "success");
+
+              $(this).dialog("close");
+            },
+            "Nevermind." : function() {
+              $(this).dialog("close");
+            }
+          }
+        });
+
+        $("#clearUserItemsDialog").dialog("open");
+      }
     });
   }
+  function resetApp() {
+    initItemsArr();
+    syncUserItemsToItemsArr();
+    syncChosenItemsToItemsArr();
+    updateUserItemsDisplay();
+    lastItemChosen = "";
+  }
   
+
   // init/reset itemsArr with server json
   function initItemsArr() {
     itemsArr.length = 0; // clear global itemsArr
     $.getJSON("json/raffler-initial.json", function(data) {
       $.each(data.items, function(key, val) {
         itemsArr.push(val);
-        $textServerItems.append(val + "\n");
+        $textAvailableItems.append(val + "\n");
       });
     });
   };
-
   // add user items to main items array
   function syncUserItemsToItemsArr() {
-    if(getLocalStorage("rafflerUserItems").items.length > 0) {
-      $.each(getLocalStorage("rafflerUserItems").items, function(key, val) {
+    $inputAddUserItem.text("");
+    if(getLSItem("rafflerUserItems").items.length > 0 && hasLSSupport) {
+      $.each(getLSItem("rafflerUserItems").items, function(key, val) {
         if (itemsArr.indexOf(val) < 0) {
           itemsArr.push(val);
         }
@@ -231,49 +242,83 @@ $(function() {
   }
   // remove chosen items from main items array if we've already used raffler
   function syncChosenItemsToItemsArr() {
-    var chosenItemIndex = 0;
-    if(getLocalStorage("rafflerChosenItems").items.length > 0) {
-      $.each(getLocalStorage("rafflerChosenItems").items, function(key, val) {
-        console.log("val", val);
-        console.log(itemsArr);
-        chosenItemIndex = itemsArr.indexOf(val);
-        console.log("index", chosenItemIndex);
+    var chosenItemIndex = -1;
+    var chosenItems = getLSItem("rafflerChosenItems").items;
+
+    if(chosenItems.length > 0) {
+
+      console.log("itemsArr.length", itemsArr.length);
+
+      $.each(chosenItems, function(chosenItemKey, chosenItemVal) {
+        // iterate over itemsArr as array
+        for(var i=0; i<itemsArr.length; i++) {
+          console.log("itemsArr[]", itemsArr[i]);
+        }
+        // iterate over itemsArr as object
+        for(var itemsArrKey in itemsArr) {
+          console.log("itemsArrKey", itemsArrKey);
+          if (itemsArr.hasOwnProperty(itemsArrKey)) {
+            console.log(itemsArrKey + " -> " + itemsArr(itemsArrKey));
+          } else {
+            console.log("no itemsArr key by that name");
+          }
+        }
         if (chosenItemIndex >= 0) {
           itemsArr.splice(chosenItemIndex, 1);
-          $textServerItems.append(val + "\n");
+          $textAvailableItems.append(chosenItemVal + "\n");
           $resultsContent.append("<li>" + lastItemChosen + "</li>");
           $resultsDiv.show();
         }
-        console.log(itemsArr);
+        console.log("itemsArr post", itemsArr);
       });
+
     }
   }
-  
-  // reset chosen items back to none
+
   function resetChosenItems() {
-    setLocalStorage("rafflerChosenItems", initItemsObj);
+    setLSItem("rafflerChosenItems", initItemsObj);
+    updateChosenItemsDisplay();
+  }
+  function resetUserItems() {
+    setLSItem("rafflerUserItems", initItemsObj);
+    updateUserItemsDisplay();
   }
 
   // update user items div
   function updateUserItemsDisplay() {
-    var $userPickDiv = $("#user-items");
-    if (getLocalStorage("rafflerUserItems")) {
-      if(getLocalStorage("rafflerUserItems").items.length > 0) {
-        $userPickDiv.html("<span class='heading'>user items</span>: ");
-        $userPickDiv.append(getLocalStorage("rafflerUserItems").items.join(', '));
+    var lsUserItems = getLSItem("rafflerUserItems").items;
+    if (lsUserItems) {
+      if(lsUserItems.length > 0) {
+        $divUserItems.html("<span class='heading'>user items</span>: ");
+        $divUserItems.append(lsUserItems.join(', '));
       } else {
-        $userPickDiv.html("");
+        $divUserItems.html("");
       }
     } else {
-      $userPickDiv.html("");
+      $divUserItems.html("");
     }
   }
-  
+  // update chosen items public div and admin textarea
+  function updateChosenItemsDisplay() {
+    var lsChosenItems = getLSItem("rafflerChosenItems").items;
+    if (lsChosenItems) {
+      if(lsChosenItems.length > 0) {
+        $textChosenItems.text("");
+        for(var item in lsChosenItems) {
+          $textChosenItems.append(item + "\n");
+        }
+      } else {
+        $textChosenItems.text("");
+      }
+    } else {
+      $textChosenItems.text("");
+    }
+  }
   // update LS chosen items
   function updateChosenItemsLS(item) {
-    var tempChosenPicksObj = getLocalStorage("rafflerChosenItems");
-    tempChosenPicksObj.items.push(sanitize(item));
-    setLocalStorage("rafflerChosenItems", tempChosenPicksObj);
+    var tempChosenItemsObj = getLSItem("rafflerChosenItems");
+    tempChosenItemsObj.items.push(sanitize(item));
+    setLSItem("rafflerChosenItems", tempChosenItemsObj);
   }
 
   // timer object to keep track of countdown
@@ -331,7 +376,6 @@ $(function() {
       this.stage = 2;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level2');
-
     }
 
     // slow down more at a certain point
@@ -340,7 +384,6 @@ $(function() {
       this.stage = 3;
       $itemsDiv.removeClass();
       $itemsDiv.addClass('level3');
-
     }
 
     // stop and pick an item!
@@ -351,30 +394,25 @@ $(function() {
       if (timesRun > 0) lastInterval = 349;
       if (this.interval >= lastInterval) {
         this.stage = 4;
-        lastItemChosen = $itemsDiv.text();
         this.stop();
         this.startCountdown = false;
+
+        lastItemChosen = $itemsDiv.text();
         $itemsDiv.removeClass();
         $itemsDiv.addClass('level4');
 
-        // play victory sound
-        if ($ckOptSound.is(":checked")) {
-          var victory = document.getElementById("victory");
-          victory.play();
-        }
-        // re-enable raffle button
-        enableRaffle();
-        // add to results
+        playSound("victory");
+
+        // add to results div
         $resultsContent.append("<li>" + lastItemChosen + "</li>");
         updateChosenItemsLS(lastItemChosen);
         $resultsDiv.show();
         // show fireworks
-        if ($ckOptFireworks.is(":checked")) {
-          displayFireworks();
-        }
+        displayFireworks();
+
         timesRun++;
-        // add to admin list of winners
-        $("#winners textarea").append(lastItemChosen + "\n");
+        // add to admin list of chosen items
+        $textChosenItems.append(lastItemChosen + "\n");
         // remove last chosen item from itemsArr if anything picked
         if (lastItemChosen !== "") {
           var i = itemsArr.indexOf(lastItemChosen);
@@ -383,12 +421,14 @@ $(function() {
           }
         }
         // update admin serverItems
-        $textServerItems.text("");
+        $textAvailableItems.text("");
         itemsArr.forEach(function(item) {
-          $textServerItems.append(item + "\n");
+          $textAvailableItems.append(item + "\n");
         });
+        
+        // re-enable raffle button
+        enableRaffle();
       } else {
-
         return interval + this.mult;
       }
     }
@@ -400,12 +440,7 @@ $(function() {
       if (!$itemsDiv.hasClass('level1'))
         $itemsDiv.addClass('level1');
 
-      // play beep boop as items cycle
-      if ($ckOptSound.is(":checked")) {
-        var beep = document.getElementById("beep");
-        beep.play();
-      }
-
+      playSound("beep");
     }
     // if we've started countdown
     // and we haven't reached end
@@ -421,7 +456,6 @@ $(function() {
     // disable button until countdown done
     disableRaffle();
 
-
     // if we got more than 1 item,
     // then we can raffle
     if (itemsArr.length > 1) {
@@ -433,14 +467,13 @@ $(function() {
       countdownTimer.mult = 1;
       countdownTimer.stage = 1;
       countdownTimer.start();
-
     } else if (itemsArr.length == 1) {
       $itemsDiv.html("<span>" + itemsArr[0] + "</span>");
       $resultsContent.append($itemsDiv.text());
-      $infoBubble.css("background-color", "#880000").statusShow("<span>only one item to raffle!<br /><strong>instant winner!</strong></span>", 5000);
+      notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning");
     } else {
       $itemsDiv.html("<span>:'(</span>");
-      $infoBubble.css("background-color", "#880000").statusShow("<span>nothing to raffle!<br /><strong>please advise the admin!</strong></span>", 5000);
+      notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "failure");
     }
   };
 
@@ -452,7 +485,7 @@ $(function() {
     resetChosenItems();
     $itemsDiv.removeClass();
     $resultsContent.text("");
-    $textServerItems.text("");
+    $textAvailableItems.text("");
     $resultsDiv.hide();
     countdownTimer.startCountdown = false;
     countdownTimer.interval = initInterval;
@@ -476,10 +509,12 @@ $(function() {
     $canvasFireworks.hide();
   }
   function displayFireworks() {
-    $itemsDiv.prop("z-index", 1000);
-    $btnRaffle.prop("z-index", 1000);
-    $canvasFireworks.prop("z-index", 999);
-    $canvasFireworks.show();
+    if ($ckOptFireworks.is(":checked")) {
+      $itemsDiv.prop("z-index", 1000);
+      $btnRaffle.prop("z-index", 1000);
+      $canvasFireworks.prop("z-index", 999);
+      $canvasFireworks.show();
+    }
   }
 
   // encode user entries html
@@ -490,19 +525,16 @@ $(function() {
             .replace(/"/g, '&quot;');
   }
   // check for duplicate user entries
-  function isDuplicateValue(newUserPick) {
-    $curPicks = getLocalStorage("rafflerUserItems");
+  function isDuplicateValue(newUserItem) {
+    $curPicks = getLSItem("rafflerUserItems");
     var dupeFound = false;
 
     $.each($curPicks.items, function(key, val) {
-
-
-      if (newUserPick == val) {
-
+      if (newUserItem == val) {
         dupeFound = true;
         return false;
       }
-    })
+    });
 
     return dupeFound;
   }
@@ -518,7 +550,44 @@ $(function() {
     }
     return vars;
   }
+  // localStorage getter/setter
+  function getLSItem(lsKey) {
+    return JSON.parse(localStorage.getItem(lsKey));
+  }
+  function setLSItem(lsKey, obj) {
+    localStorage.setItem(lsKey, JSON.stringify(obj));
+  }
+  // app notifications
+  function notify(msg, type) {
+    var bgColor = "#fff";
+    var speed = 1500;
+    switch ($type) {
+      case "success":
+        bgColor = "#847E04";
+        speed = 1500;
+        break;
+      case "warning":
+        bgColor = "";
+        speed = 3000;
+        break;
+      case "failure":
+        bgColor = "#880000";
+        speed = 5000;
+        break;
+      default:
+        bgColor = "#fff";
+        speed = 1500;
+        break;
+    }
+    $infoBubble.css("background-color", bgColor).statusShow("<span>" + msg + "</span>", speed);
+  }
+  function playSound(soundId) {
+    if ($ckOptSound.is(":checked"))
+      document.getElementById(soundId).play();
+  }
 
-  // start it all up
+  /***********************
+    START IT UP!!!!!!!!
+  ************************/
   initApp();
 });

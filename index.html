@@ -34,10 +34,10 @@
 
   <canvas id="canvas">Canvas is not supported by your browser.</canvas>
 
-  <div id="resetUserItemsDialog" title="Confirmation Required">
+  <div id="resetDataDialog" class="dialog" title="Confirmation Required">
     Are you sure you want to reset Raffler? <em>(Note: all chosen items will be lost)</em>
   </div>
-  <div id="resetDataDialog" title="Confirmation Required">
+  <div id="clearUserItemsDialog" class="dialog" title="Confirmation Required">
     Are you sure you want to clear user-entered items?
   </div>
 
@@ -57,25 +57,25 @@
         </section>
         <section id="timerControls">
           <div class="title">Timer Controls</div>
-          <a href="#" class="button start" id="btnStart">start</a>
-          <a href="#" class="button stop" id="btnStop">stop</a>
+          <a href="#" class="button start" id="btnStartTimer">start</a>
+          <a href="#" class="button stop" id="btnStopTimer">stop</a>
           <div class="title">App Controls</div>
           <a href="#" class="button reset confirmLink" id="btnResetData">reset data</a>
         </section>
         <section id="add-user-item">
           <div class="title">User Items</div>
-          <input id="text-add-item" type="text" placeholder="add new item(s)" />
+          <input id="text-add-user-item" type="text" placeholder="add new item(s)" />
           <button id="btnAddUserItem">ADD</button>
-          <button id="btnClearUserItems">CLEAR</button>
+          <button id="btnClearUserItems" disabled="true" class="disabled">CLEAR</button>
           <div id="user-items" />
         </section>
-        <section id="serverItems">
-          <div class="title">Server Items</div>
-          <textarea id="serverItemsContents"></textarea>
+        <section id="availableItems">
+          <div class="title">Available Items</div>
+          <textarea id="availableItemsContents"></textarea>
         </section>
-        <section id="winners">
-          <div class="title">Raffler Winners</div>
-          <textarea id="winnersContents"></textarea>
+        <section id="chosenItems">
+          <div class="title">Chosen Items</div>
+          <textarea id="chosenItemsContents"></textarea>
         </section>
       </div>
     </div>
@@ -83,7 +83,7 @@
 
   <div id="wrapper" role="main">
 
-    <!-- title, user item adder -->
+    <!-- title -->
     <div class="header-container">
       <span class="toggle-button">
          <div class="menu-bar menu-bar-top"></div>
