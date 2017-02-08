@@ -1,4 +1,30 @@
 $(function() {
+  Array.prototype.clear = function() {
+    while (this.length) { this.pop(); }
+  };
+  // jQuery extension to show status messages
+  $.fn.statusShow = function(msg, msDelay) {
+    if (!msDelay) msDelay = 1000;
+    this.hide();
+    this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
+  }
+  // jQuery extension to parse url querystring
+  $.QueryString = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+      var p=a[i].split('=', 2);
+      if (p.length != 2) continue;
+      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+  })(window.location.search.substr(1).split('&'));
+  // if admin passed, show hamburger menu
+  if (typeof $.QueryString['admin'] !== "undefined" || true) {
+    $btnToggleAdminMenu.show();
+  }
+
   // global variables
   var itemsArr = [];
   var initItemsObj = { "items": [] }
@@ -35,39 +61,12 @@ $(function() {
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
 
-  // jQuery extension to show status messages
-  $.fn.statusShow = function(msg, msDelay) {
-    if (!msDelay) msDelay = 1000;
-    this.hide();
-    this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
-  }
-  // jQuery extension to parse url querystring
-  $.QueryString = (function(a) {
-    if (a == "") return {};
-    var b = {};
-    for (var i = 0; i < a.length; ++i)
-    {
-      var p=a[i].split('=', 2);
-      if (p.length != 2) continue;
-      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-    }
-    return b;
-  })(window.location.search.substr(1).split('&'));
-  // if admin passed, show hamburger menu
-  if (typeof $.QueryString['admin'] !== "undefined" || true) {
-    $btnToggleAdminMenu.show();
-  }
-
   // app entry point
   function initApp() {
     checkForLS();
     setEventHandlers();
     resetApp();
-    
-    if (getLSItem("rafflerUserItems").items.length > 0 && hasLSSupport) {
-      $btnClearUserItems.prop("disabled", false);
-      $btnClearUserItems.removeClass();
-    }
+
     $btnRaffle.focus();
   }
   // check for localStorage support
@@ -193,9 +192,9 @@ $(function() {
             "Clear them!" : function() {
               resetUserItems();
               initItemsArr();
-              
+
               $inputAddUserItem.val("");
-              
+
               $btnClearUserItems.prop("disabled", true);
               $btnClearUserItems.addClass("disabled");
 
@@ -216,66 +215,67 @@ $(function() {
   function resetApp() {
     initItemsArr();
     syncUserItemsToItemsArr();
-    syncChosenItemsToItemsArr();
+
     updateUserItemsDisplay();
     lastItemChosen = "";
   }
-  
 
   // init/reset itemsArr with server json
   function initItemsArr() {
-    itemsArr.length = 0; // clear global itemsArr
+    console.log("initItemsArr before getJSON", itemsArr);
     $.getJSON("json/raffler-initial.json", function(data) {
+      itemsArr.clear(); // clear global itemsArr
+      itemsArr.length = 0;
+      console.log("initItemsArr getJSON top", itemsArr);
       $.each(data.items, function(key, val) {
-        itemsArr.push(val);
+        itemsArr[itemsArr.length] = val;
+        console.log("itemsArr length (in each loop)", itemsArr.length);
         $textAvailableItems.append(val + "\n");
       });
+      console.log("itemsArr length (post-each)", itemsArr.length);
     });
+    console.log("itemsArr length (post getJSON)", itemsArr.length);
+    syncChosenItemsToItemsArr();
   };
   // add user items to main items array
   function syncUserItemsToItemsArr() {
+    var userItems = getLSItem("rafflerUserItems").items;
     $inputAddUserItem.text("");
-    if(getLSItem("rafflerUserItems").items.length > 0 && hasLSSupport) {
-      $.each(getLSItem("rafflerUserItems").items, function(key, val) {
+    if(userItems.length > 0 && hasLSSupport) {
+      $btnClearUserItems.prop("disabled", false);
+      $btnClearUserItems.removeClass();
+      $.each(userItems.items, function(key, val) {
         if (itemsArr.indexOf(val) < 0) {
           itemsArr.push(val);
         }
       });
     }
   }
-  // remove chosen items from main items array if we've already used raffler
+  // remove chosen items from main items array
+  // if we've already used raffler
+  // and add names to results div
   function syncChosenItemsToItemsArr() {
     var chosenItemIndex = -1;
     var chosenItems = getLSItem("rafflerChosenItems").items;
 
     if(chosenItems.length > 0) {
-
-      console.log("itemsArr.length", itemsArr.length);
-
+      //console.log("syncCI itemsArr", itemsArr);
+      console.log("syncCI itemsArr length", itemsArr.length);
+      itemsArr.forEach(logArrayElems);
       $.each(chosenItems, function(chosenItemKey, chosenItemVal) {
-        // iterate over itemsArr as array
-        for(var i=0; i<itemsArr.length; i++) {
-          console.log("itemsArr[]", itemsArr[i]);
-        }
-        // iterate over itemsArr as object
-        for(var itemsArrKey in itemsArr) {
-          console.log("itemsArrKey", itemsArrKey);
-          if (itemsArr.hasOwnProperty(itemsArrKey)) {
-            console.log(itemsArrKey + " -> " + itemsArr(itemsArrKey));
-          } else {
-            console.log("no itemsArr key by that name");
-          }
-        }
         if (chosenItemIndex >= 0) {
           itemsArr.splice(chosenItemIndex, 1);
-          $textAvailableItems.append(chosenItemVal + "\n");
+          $textChosenItems.append(chosenItemVal + "\n");
           $resultsContent.append("<li>" + lastItemChosen + "</li>");
           $resultsDiv.show();
         }
-        console.log("itemsArr post", itemsArr);
       });
-
     }
+  }
+
+  function logArrayElems(elem, index, array) {
+    console.log("hello");
+    console.log('a[' + index + '] = ' + elem);
   }
 
   function resetChosenItems() {
@@ -428,7 +428,7 @@ $(function() {
         itemsArr.forEach(function(item) {
           $textAvailableItems.append(item + "\n");
         });
-        
+
         // re-enable raffle button
         enableRaffle();
       } else {
