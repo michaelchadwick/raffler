@@ -34,49 +34,49 @@
 
   <canvas id="canvas">Canvas is not supported by your browser.</canvas>
 
-  <div id="resetDataDialog" class="dialog" title="Confirmation Required">
+  <div id="data-reset-dialog" class="dialog" title="Confirmation Required">
     Are you sure you want to reset Raffler? <em>(Note: all chosen items will be lost)</em>
   </div>
-  <div id="clearUserItemsDialog" class="dialog" title="Confirmation Required">
+  <div id="user-items-clear-dialog" class="dialog" title="Confirmation Required">
     Are you sure you want to clear user-entered items?
   </div>
 
-  <div class="menu-wrap">
+  <div id="menu-wrap">
     <div class="menu-sidebar">
       <div class="menu">
-        <section id="fancyOptions">
+        <div id="fancy-options">
           <div class="title">Fancy Options</div>
           <div class="checkbox">
-            <label for="ckOptSound">sound?</label>
-            <input type="checkbox" id="ckOptSound" checked="checked" />
+            <label for="check-option-sound">sound?</label>
+            <input type="checkbox" id="check-option-sound" checked="checked" />
           </div>
           <div class="checkbox">
-            <label for="ckOptFireworks">fireworks?</label>
-            <input type="checkbox" id="ckOptFireworks" />
+            <label for="check-option-fireworks">fireworks?</label>
+            <input type="checkbox" id="check-option-fireworks" />
           </div>
-        </section>
-        <section id="timerControls">
+        </div>
+        <div id="timer-controls">
           <div class="title">Timer Controls</div>
-          <a href="#" class="button start" id="btnStartTimer">start</a>
-          <a href="#" class="button stop" id="btnStopTimer">stop</a>
+          <a href="#" class="button start" id="button-timer-start">start</a>
+          <a href="#" class="button stop" id="button-timer-stop">stop</a>
           <div class="title">App Controls</div>
-          <a href="#" class="button reset confirmLink" id="btnResetData">reset data</a>
-        </section>
-        <section id="add-user-item">
+          <a href="#" class="button reset confirmLink" id="button-reset-data">reset data</a>
+        </div>
+        <div id="user-items-add">
           <div class="title">User Items</div>
-          <input id="text-add-user-item" type="text" placeholder="add new item(s)" />
-          <button id="btnAddUserItem">ADD</button>
-          <button id="btnClearUserItems" disabled="true" class="disabled">CLEAR</button>
-          <div id="user-items" />
-        </section>
-        <section id="availableItems">
-          <div class="title">Available Items</div>
-          <textarea id="availableItemsContents"></textarea>
-        </section>
-        <section id="chosenItems">
-          <div class="title">Chosen Items</div>
-          <textarea id="chosenItemsContents"></textarea>
-        </section>
+          <input id="text-user-items-add" type="text" placeholder="add new item(s)" />
+          <button id="button-user-items-add">ADD</button>
+          <button id="button-user-items-clear" disabled="true" class="disabled">CLEAR</button>
+          <div id="user-items"></div>
+        </div>
+        <div id="items-available">
+          <div class="title">Items Available</div>
+          <textarea></textarea>
+        </div>
+        <div id="items-chosen">
+          <div class="title">Items Chosen</div>
+          <textarea></textarea>
+        </div>
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
 
     <!-- title -->
     <div class="header-container">
-      <span class="toggle-button">
+      <span class="button-admin-menu-toggle">
          <div class="menu-bar menu-bar-top"></div>
          <div class="menu-bar menu-bar-middle"></div>
          <div class="menu-bar menu-bar-bottom"></div>
@@ -104,18 +104,18 @@
         <audio id="beep" src="assets/beepboop1.wav" preload="auto" volume="0.5"></audio>
         <audio id="victory" src="assets/victory.wav" preload="auto" volume="0.5"></audio>
 
-        <section id="items"></section>
+        <div id="items-cycle"></div>
 
-        <section id="the-button">
-          <a href="#" class="button raffle" id="btnRaffle">RAFFLE!</a>
-        </section>
+        <div id="the-button">
+          <a href="#" class="button raffle" id="button-raffle">RAFFLE!</a>
+        </div>
 
-        <section id="results">
+        <div id="results-wrapper">
           <h3>Results</h3>
           <div id="inner-results">
             <ul></ul>
           </div>
-        </section>
+        </div>
 
       </div> <!-- #main -->
     </div> <!-- #main-container -->

@@ -67,7 +67,7 @@ div#wrapper {
   .main-container .wrapper {
     /*margin: 0 5%;*/
   }
-  section {
+  div {
     margin: 0 auto;
     position: relative;
     text-align: center;
@@ -105,7 +105,7 @@ div#wrapper {
 /* specific parts */
 /******************/
 
-.toggle-button {
+.button-admin-menu-toggle {
   position: fixed;
   width: 30px;
   height: 32px;
@@ -116,21 +116,21 @@ div#wrapper {
   z-index: 15;
   display: none;
 }
-.toggle-button:hover {
+.button-admin-menu-toggle:hover {
   cursor: pointer;
 }
-.toggle-button .menu-bar {
+.button-admin-menu-toggle .menu-bar {
   position: absolute;
   border-radius: 2px;
   width: 80%;
   transition: .5s;
 }
-.toggle-button .menu-bar-top {
+.button-admin-menu-toggle .menu-bar-top {
   border: 4px solid #fff;
   border-bottom: none;
   top: 0;
 }
-.toggle-button .menu-bar-middle {
+.button-admin-menu-toggle .menu-bar-middle {
   height: 4px;
   background-color: #fff;
   margin-top: 7px;
@@ -138,7 +138,7 @@ div#wrapper {
   top: 4px;
   width: 38px;
 }
-.toggle-button .menu-bar-bottom {
+.button-admin-menu-toggle .menu-bar-bottom {
   border: 4px solid #fff;
   border-top: none;
   top: 22px;
@@ -160,10 +160,10 @@ div#wrapper {
 .menu {
   text-align: left;
 }
-.menu section {
+.menu div {
   text-align: left;
 }
-.menu-wrap {
+div#menu-wrap {
   background-color: #715191;
   border-left: 1px solid #000;
   position: fixed;
@@ -185,7 +185,7 @@ div#wrapper {
   margin-right: 0;
   box-shadow: 4px 2px 15px 1px #B9ADAD;
 }
-.menu-wrap .menu div.title {
+div#menu-wrap .menu div.title {
   background: #5f2497;
   border-bottom: 2px solid #222;
   border-top: 2px solid #444;
@@ -194,7 +194,7 @@ div#wrapper {
   width: 100%;
   float: none;
 }
-section#fancyOptions {
+div#fancy-options {
   float: left;
   width: 100%;
 }
@@ -205,7 +205,7 @@ section#fancyOptions {
 }
 .checkbox label {
   clear: both;
-   float: left;
+  float: left;
   text-transform: uppercase;
 }
 .checkbox input {
@@ -215,56 +215,52 @@ section#fancyOptions {
   position: relative;
   top: -1px;
 }
-section#timerControls {
+div#timer-controls {
   clear: both;
   float: none;
   display: block;
   width: 100%;
 }
-section#timerControls > a {
+div#timer-controls > a {
   margin: 0;
   width: 100%;
 }
-section#availableItems,
-section#chosenItems {
-
-}
-section#availableItems textarea,
-section#chosenItems textarea {
+div#items-available textarea,
+div#items-chosen textarea {
   height: 200px;
 }
 
-#add-user-item {
+div#user-items-add {
   clear: left;
 }
-#add-user-item input,
-#add-user-item button,
-#add-user-item div {
+div#user-items-add input,
+div#user-items-add button,
+div#user-items-add div {
   position: relative;
 }
-#add-user-item input {
+div#user-items-add input {
   width: auto;
 }
-#add-user-item input#text-add-user-item {
+div#user-items-add input#text-user-items-add {
   padding: 3px;
 }
-#add-user-item button {
+div#user-items-add button {
   border: 2px solid #ccc;
   color: #eee;
   font-weight: bold;
   margin: 0 1px;
   width: 75px;
 }
-#add-user-item button#btnAddUserItem {
+div#user-items-add button#button-user-items-add {
   background-color: #428d4b;
 }
-#add-user-item button#btnClearUserItems {
+div#user-items-add button#button-user-items-clear {
   background-color: #8d4254;
 }
-#add-user-item button#btnClearUserItems.disabled {
+div#user-items-add button#button-user-items-clear.disabled {
   background-color: #999;
 }
-#add-user-item div#user-items {
+div#user-items-add div#user-items {
   clear: left;
   color: #fff;
   font-weight: bold;
@@ -292,7 +288,7 @@ div#item-status-bubble span {
   color: #fff;
 }
 
-section#items {
+div#items-cycle {
   background: #b5bdc8; /* Old browsers */
   background: -moz-linear-gradient(top,  #b5bdc8 0%, #828c95 14%, #28343b 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(top,  #b5bdc8 0%,#828c95 14%,#28343b 100%); /* Chrome10-25,Safari5.1-6 */
@@ -318,29 +314,29 @@ section#items {
   text-transform: uppercase;
   word-wrap: break-word;
 }
-section#items span {
+div#items-cycle span {
   font-size: 1em;
   text-transform: uppercase;
 }
-section#items,
-section#items.level1,
-section#items.level2,
-section#items.level3,
-section#items.level4 {
+div#items-cycle,
+div#items-cycle.level1,
+div#items-cycle.level2,
+div#items-cycle.level3,
+div#items-cycle.level4 {
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
   -ms-transition: all 1s ease;
   transition: all 1s ease;
 }
-section#items span {
+div#items-cycle span {
   -webkit-transition: all 750ms ease;
   -moz-transition: all 750ms ease;
   -ms-transition: all 750ms ease;
   -o-transition: all 750ms ease;
   transition: all 750ms ease;
 }
-section#items.level1 {
+div#items-cycle.level1 {
   background: #d7dbe1; /* Old browsers */
   background: -moz-linear-gradient(top,  #d7dbe1 0%, #bcc1c6 14%, #7b96a5 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(top,  #d7dbe1 0%,#bcc1c6 14%,#7b96a5 100%); /* Chrome10-25,Safari5.1-6 */
@@ -349,11 +345,11 @@ section#items.level1 {
 
   border-top: 5px solid #000;
 }
-section#items.level1 span {
+div#items-cycle.level1 span {
   color: #000;
   font-size: 1em;
 }
-section#items.level2 {
+div#items-cycle.level2 {
   background: #e8ebee; /* Old browsers */
   background: -moz-linear-gradient(top,  #e8ebee 0%, #d8dbde 14%, #b3c2cb 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(top,  #e8ebee 0%,#d8dbde 14%,#b3c2cb 100%); /* Chrome10-25,Safari5.1-6 */
@@ -363,11 +359,11 @@ section#items.level2 {
   border-top: 5px solid #000;
   border-bottom: 5px solid #000;
 }
-section#items.level2 span {
+div#items-cycle.level2 span {
   color: #c03b66;
   font-size: 1.25em;
 }
-section#items.level3 {
+div#items-cycle.level3 {
   background: #f4f5f6; /* Old browsers */
   background: -moz-linear-gradient(top,  #f4f5f6 0%, #ecedee 14%, #d8e0e4 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(top,  #f4f5f6 0%,#ecedee 14%,#d8e0e4 100%); /* Chrome10-25,Safari5.1-6 */
@@ -379,11 +375,11 @@ section#items.level3 {
   border-right: 5px solid #000;
   border-left: 5px solid #000;
 }
-section#items.level3 span {
+div#items-cycle.level3 span {
   color: #3b56c0;
   font-size: 1.5em;
 }
-section#items.level4 {
+div#items-cycle.level4 {
   background: #fcfcfc; /* Old browsers */
   background: -moz-linear-gradient(top,  #fcfcfc 0%, #f9f9f9 14%, #f3f6f7 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(top,  #fcfcfc 0%,#f9f9f9 14%,#f3f6f7 100%); /* Chrome10-25,Safari5.1-6 */
@@ -398,12 +394,12 @@ section#items.level4 {
   -moz-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
 }
-section#items.level4 span {
+div#items-cycle.level4 span {
   color: #46c03b;
   font-size: 1.8em;
 }
 
-section#the-button {
+div#the-button {
 
 }
   .button {
@@ -481,7 +477,7 @@ section#the-button {
     color: #999;
   }
 
-section#results {
+div#results-wrapper {
   background: #fff;
   border: 1px solid #555;
   border-top: none;
@@ -489,13 +485,12 @@ section#results {
   color: #222;
   display: none;
   float: none;
-  max-height: 100px;
   min-height: 25px;
   margin-top: 20px;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding: 0;
 }
-section#results h3 {
+div#results-wrapper h3 {
   background-color: #7f3bc0;
   color: #fff;
   font-size: 1.5em;
@@ -504,16 +499,16 @@ section#results h3 {
   margin: 0;
   text-transform: uppercase;
 }
-section#results div {
+div#results-wrapper div {
   margin-bottom: 15px;
   padding: 10px 10px 20px;
 }
-section#results div ul {
+div#results-wrapper div ul {
   font-size: 1.3em;
   margin: 0;
   padding: 0;
 }
-section#results div ul li {
+div#results-wrapper div ul li {
   list-style-type: none;
   margin-right: 10px;
 }

@@ -1,39 +1,45 @@
+var Raffler = {};
+
 $(function() {
   // global variables
-  var itemsArr = [];
-  var initItemsObj = { "items": [] }
-  var initInterval = 25;
-  var initMult = 1;
-  var lastItemChosen = "";
-  var timesRun = 0;
-  var lastInterval = 359;
-  var hasLSSupport = true;
+  Raffler.itemsArr =        [];
+  Raffler.initItemsObj =    { "items": [] }
+  Raffler.initInterval =    25;
+  Raffler.initMult =        1;
+  Raffler.lastItemChosen =  "";
+  Raffler.timesRun =        0;
+  Raffler.lastInterval =    359;
+  Raffler.hasLSSupport =    true;
 
-  // elements to mangle
-  var $mainWrapper = $('#wrapper');
-  var $btnToggleAdminMenu = $('.toggle-button');
-  var $menuWrap = $('.menu-wrap');
-  var $canvasFireworks = $('canvas');
-  var $itemsCycleDiv = $('section#items');
-  var $resultsDiv = $('section#results');
-  var $resultsContent = $('section#results div ul');
-  var $ckOptSound = $('input#ckOptSound');
-  var $ckOptFireworks = $('input#ckOptFireworks');
-  var $infoBubble = $('#item-status-bubble');
-  var $btnRaffle = $('a#btnRaffle');
-  var $btnStartTimer = $('a#btnStartTimer');
-  var $btnStopTimer = $('a#btnStopTimer');
-  var $btnResetData = $('a#btnResetData');
-  var $inputAddUserItem = $('#text-add-user-item');
-  var $btnAddUserItem = $('#btnAddUserItem');
-  var $btnClearUserItems = $('#btnClearUserItems');
-  var $textAvailableItems = $('#availableItems textarea');
-  var $textChosenItems = $('#chosenItems textarea');
-  var $divUserItems = $('#user-items');
-  var $divResetDataDialog = $('#resetDataDialog');
-  var $divClearUserItemsDialog = $('#clearUserItemsDialog');
+  // main divs/elements
+  Raffler.divMenuWrap =             $('div#menu-wrap');
+  Raffler.divMainWrapper =          $('div#wrapper');
+  Raffler.divItemsCycle =           $('div#items-cycle');
+  Raffler.divResultsWrapper =       $('div#results-wrapper');
+  Raffler.divResultsContent =       $('div#results-wrapper div ul');
+  Raffler.divUserItems =            $('div#user-items');
+  Raffler.divDataResetDialog =      $('div#data-reset-dialog');
+  Raffler.divUserItemsClearDialog = $('div#user-items-clear-dialog');
+  Raffler.divItemStatusBubble =     $('div#item-status-bubble');
+  Raffler.canvasFireworks =         $('canvas');
 
-  var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
+  // clicky things
+  Raffler.btnAdminMenuToggle =      $('span#button-admin-menu-toggle');
+  Raffler.btnRaffle =               $('a#button-raffle');
+  Raffler.btnTimerStart =           $('a#button-timer-start');
+  Raffler.btnTimerStop =            $('a#button-timer-stop');
+  Raffler.btnDataReset =            $('a#button-data-reset');
+  Raffler.btnUserItemsAdd =         $('button#button-user-items-add');
+  Raffler.btnUserItemsClear =       $('button#button-user-items-clear');
+
+  // optiony things
+  Raffler.ckOptSound = $('input#check-option-sound');
+  Raffler.ckOptFireworks = $('input#check-option-fireworks');
+  
+  // textual input things
+  Raffler.inputUserItemsAdd = $('input#text-user-items-add');
+  Raffler.textAvailableItems = $('div#items-available textarea');
+  Raffler.textChosenItems = $('div#items-chosen textarea');
 
   Array.prototype.clear = function() {
     while (this.length) { this.pop(); }
@@ -58,59 +64,60 @@ $(function() {
   })(window.location.search.substr(1).split('&'));
   // if admin passed, show hamburger menu
   if (typeof $.QueryString['admin'] !== "undefined" || true) {
-    $btnToggleAdminMenu.show();
+    Raffler.btnAdminMenuToggle.show();
   }
 
   // app entry point
-  function initApp() {
-    checkForLS();
-    setEventHandlers();
-    resetApp();
+  Raffler.initApp = function() {
+    console.log("Started app");
+    Raffler.checkForLS();
+    Raffler.setEventHandlers();
+    Raffler.resetApp();
 
-    $btnRaffle.focus();
+    Raffler.btnRaffle.focus();
   }
   // check for localStorage support
-  function checkForLS() {
+  Raffler.checkForLS = function() {
     // if we got LS or SS, then set up the user items UI
     var LSsupport = !(typeof window.localStorage == 'undefined');
     var SSsupport = !(typeof window.sessionStorage == 'undefined');
     if (!LSsupport && !SSsupport) {
-      hasLSSupport = false;
-      notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure");
+      Raffler.hasLSSupport = false;
+      Raffler.notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure");
     } else {
       // if our specific keys don't exist, then init
       if (!localStorage.getItem("rafflerUserItems")) {
-        setLSItem("rafflerUserItems", initItemsObj);
+        Raffler.setLSItem("rafflerUserItems", Raffler.initItemsObj);
       }
       if (!localStorage.getItem("rafflerChosenItems")) {
-        setLSItem("rafflerChosenItems", initItemsObj);
+        Raffler.setLSItem("rafflerChosenItems", Raffler.initItemsObj);
       } else {
-        syncChosenItemsToItemsArr();
+        Raffler.syncChosenItemsToItemsArr();
       }
     }
   }
-  function setEventHandlers() {
-    $btnToggleAdminMenu.on('click', function() {
+  Raffler.setEventHandlers = function() {
+    Raffler.btnAdminMenuToggle.on('click', function() {
       $(this).toggleClass('button-open');
-      $menuWrap.toggleClass('menu-show');
+      Raffler.divMenuWrap.toggleClass('menu-show');
     });
-    $btnRaffle.click(function(e) {
+    Raffler.btnRaffle.click(function(e) {
       e.preventDefault();
-      if (!$btnRaffle.prop("disabled")) {
-        pickOne();
+      if (!Raffler.btnRaffle.prop("disabled")) {
+        Raffler.pickOne();
       }
     });
-    $btnStartTimer.click(function(e) {
+    Raffler.btnTimerStart.click(function(e) {
       e.preventDefault();
       countdownTimer.start();
     });
-    $btnStopTimer.click(function(e) {
+    Raffler.btnTimerStop.click(function(e) {
       e.preventDefault();
       countdownTimer.stop();
     });
-    $btnResetData.click(function(e) {
+    Raffler.btnDataReset.click(function(e) {
       e.preventDefault();
-      $divResetDataDialog.dialog({
+      Raffler.divDataResetDialog.dialog({
         autoOpen: false,
         modal: true,
         resizeable: false,
@@ -126,18 +133,18 @@ $(function() {
         }
       });
 
-      $divResetDataDialog.dialog("open");
+      Raffler.divDataResetDialog.dialog("open");
     });
-    $inputAddUserItem.keyup(function(e) {
+    Raffler.inputUserItemsAdd.keyup(function(e) {
       var code = e.which;
       if (code == 13) {
         e.preventDefault();
-        $btnAddUserItem.click();
+        Raffler.btnUserItemsAdd.click();
       }
     });
-    $btnAddUserItem.click(function() {
-      if ($inputAddUserItem.val() !== "" || $inputAddUserItem.val() !== undefined) {
-        var $newUserItem = $inputAddUserItem.val().trim();
+    Raffler.btnUserItemsAdd.click(function() {
+      if (Raffler.inputUserItemsAdd.val() !== "" || Raffler.inputUserItemsAdd.val() !== undefined) {
+        var $newUserItem = Raffler.inputUserItemsAdd.val().trim();
 
         if ($newUserItem !== "") {
           var tempUserItemObj = getLSItem("rafflerUserItems");
@@ -149,10 +156,10 @@ $(function() {
               if (!isDuplicateValue(val)) {
                 tempUserItemObj.items.push(sanitize(val));
                 newPickAdded = true;
-                $btnClearUserItems.prop("disabled", false);
-                $btnClearUserItems.removeClass();
+                Raffler.btnUserItemsClear.prop("disabled", false);
+                Raffler.btnUserItemsClear.removeClass();
               } else {
-                notify("<strong>" + val + "</strong> not added: duplicate.", "failure");
+                Raffler.notify("<strong>" + val + "</strong> not added: duplicate.", "failure");
               }
             });
           } else {
@@ -160,10 +167,10 @@ $(function() {
             if (!isDuplicateValue($newUserItem)) {
               tempUserItemObj.items.push(sanitize($newUserItem));
               newPickAdded = true
-              $btnClearUserItems.prop("disabled", false);
-              $btnClearUserItems.removeClass();
+              Raffler.btnUserItemsClear.prop("disabled", false);
+              Raffler.btnUserItemsClear.removeClass();
             } else {
-              notify("<strong>" + $newUserItem + "</strong> not added: duplicate.", "failure");
+              Raffler.notify("<strong>" + $newUserItem + "</strong> not added: duplicate.", "failure");
             }
           }
 
@@ -171,19 +178,19 @@ $(function() {
             // update localStorage with temp tempUserItemObj
             setLSItem("rafflerUserItems", tempUserItemObj);
             // show status bubble
-            notify("<strong>" + $newUserItem + "</strong> added!", "success");
+            Raffler.notify("<strong>" + $newUserItem + "</strong> added!", "success");
             updateUserItemsDisplay();
           }
         }
       }
     });
-    $btnClearUserItems.click(function(e) {
+    Raffler.btnUserItemsClear.click(function(e) {
       e.preventDefault();
       if (getLSItem("rafflerUserItems").items.length > 0) {
-        $btnClearUserItems.prop("disabled", false);
-        $btnClearUserItems.removeClass();
+        Raffler.btnUserItemsClear.prop("disabled", false);
+        Raffler.btnUserItemsClear.removeClass();
 
-        $divClearUserItemsDialog.dialog({
+        Raffler.divUserItemsClearDialog.dialog({
           autoOpen: false,
           modal: true,
           resizeable: false,
@@ -193,12 +200,12 @@ $(function() {
               resetUserItems();
               initItemsArr();
 
-              $inputAddUserItem.val("");
+              Raffler.inputUserItemsAdd.val("");
 
-              $btnClearUserItems.prop("disabled", true);
-              $btnClearUserItems.addClass("disabled");
+              Raffler.btnUserItemsClear.prop("disabled", true);
+              Raffler.btnUserItemsClear.addClass("disabled");
 
-              notify("User items cleared", "success");
+              Raffler.notify("User items cleared", "success");
 
               $(this).dialog("close");
             },
@@ -208,45 +215,45 @@ $(function() {
           }
         });
 
-        $divClearUserItemsDialog.dialog("open");
+        Raffler.divUserItemsClearDialog.dialog("open");
       }
     });
   }
-  function resetApp() {
-    initItemsArr();
-    syncUserItemsToItemsArr();
+  Raffler.resetApp = function() {
+    Raffler.initItemsArr();
+    Raffler.syncUserItemsToItemsArr();
 
-    updateUserItemsDisplay();
-    lastItemChosen = "";
+    Raffler.updateUserItemsDisplay();
+    Raffler.lastItemChosen = "";
   }
 
-  // init/reset itemsArr with server json
-  function initItemsArr() {
-    console.log("initItemsArr before getJSON", itemsArr);
+  // init/reset Raffler.itemsArr with server json
+  Raffler.initItemsArr = function() {
+    console.log("initItemsArr before getJSON", Raffler.itemsArr);
     $.getJSON("json/raffler-initial.json", function(data) {
-      itemsArr.clear(); // clear global itemsArr
-      itemsArr.length = 0;
-      console.log("initItemsArr getJSON top", itemsArr);
+      Raffler.itemsArr.clear(); // clear global Raffler.itemsArr
+      Raffler.itemsArr.length = 0;
+      console.log("initItemsArr getJSON top", Raffler.itemsArr);
       $.each(data.items, function(key, val) {
-        itemsArr[itemsArr.length] = val;
-        console.log("itemsArr length (in each loop)", itemsArr.length);
-        $textAvailableItems.append(val + "\n");
+        Raffler.itemsArr[Raffler.itemsArr.length] = val;
+        console.log("Raffler.itemsArr length (in each loop)", Raffler.itemsArr.length);
+        Raffler.textAvailableItems.append(val + "\n");
       });
-      console.log("itemsArr length (post-each)", itemsArr.length);
+      console.log("Raffler.itemsArr length (post-each)", Raffler.itemsArr.length);
     });
-    console.log("itemsArr length (post getJSON)", itemsArr.length);
-    syncChosenItemsToItemsArr();
+    console.log("Raffler.itemsArr length (post getJSON)", Raffler.itemsArr.length);
+    Raffler.syncChosenItemsToItemsArr();
   };
   // add user items to main items array
-  function syncUserItemsToItemsArr() {
-    var userItems = getLSItem("rafflerUserItems").items;
-    $inputAddUserItem.text("");
-    if(userItems.length > 0 && hasLSSupport) {
-      $btnClearUserItems.prop("disabled", false);
-      $btnClearUserItems.removeClass();
+  Raffler.syncUserItemsToItemsArr = function() {
+    var userItems = Raffler.getLSItem("rafflerUserItems").items;
+    Raffler.inputUserItemsAdd.text("");
+    if(userItems.length > 0 && Raffler.hasLSSupport) {
+      Raffler.btnUserItemsClear.prop("disabled", false);
+      Raffler.btnUserItemsClear.removeClass();
       $.each(userItems.items, function(key, val) {
-        if (itemsArr.indexOf(val) < 0) {
-          itemsArr.push(val);
+        if (Raffler.itemsArr.indexOf(val) < 0) {
+          Raffler.itemsArr.push(val);
         }
       });
     }
@@ -254,87 +261,87 @@ $(function() {
   // remove chosen items from main items array
   // if we've already used raffler
   // and add names to results div
-  function syncChosenItemsToItemsArr() {
+  Raffler.syncChosenItemsToItemsArr = function() {
     var chosenItemIndex = -1;
-    var chosenItems = getLSItem("rafflerChosenItems").items;
+    var chosenItems = Raffler.getLSItem("rafflerChosenItems").items;
 
     if(chosenItems.length > 0) {
-      //console.log("syncCI itemsArr", itemsArr);
-      console.log("syncCI itemsArr length", itemsArr.length);
-      itemsArr.forEach(logArrayElems);
+      //console.log("syncCI Raffler.itemsArr", Raffler.itemsArr);
+      console.log("syncCI Raffler.itemsArr length", Raffler.itemsArr.length);
+      Raffler.itemsArr.forEach(Raffler.logArrayElems);
       $.each(chosenItems, function(chosenItemKey, chosenItemVal) {
         if (chosenItemIndex >= 0) {
-          itemsArr.splice(chosenItemIndex, 1);
-          $textChosenItems.append(chosenItemVal + "\n");
-          $resultsContent.append("<li>" + lastItemChosen + "</li>");
-          $resultsDiv.show();
+          Raffler.itemsArr.splice(chosenItemIndex, 1);
+          Raffler.textChosenItems.append(chosenItemVal + "\n");
+          Raffler.divResultsContent.append("<li>" + Raffler.lastItemChosen + "</li>");
+          Raffler.divResultsWrapper.show();
         }
       });
     }
   }
 
-  function logArrayElems(elem, index, array) {
+  Raffler.logArrayElems = function(elem, index, array) {
     console.log("hello");
     console.log('a[' + index + '] = ' + elem);
   }
 
-  function resetChosenItems() {
-    setLSItem("rafflerChosenItems", initItemsObj);
+  Raffler.resetChosenItems = function() {
+    setLSItem("rafflerChosenItems", Raffler.initItemsObj);
     updateChosenItemsDisplay();
   }
-  function resetUserItems() {
-    setLSItem("rafflerUserItems", initItemsObj);
+  Raffler.resetUserItems = function() {
+    setLSItem("rafflerUserItems", Raffler.initItemsObj);
     updateUserItemsDisplay();
   }
 
   // update user items div
-  function updateUserItemsDisplay() {
-    var lsUserItems = getLSItem("rafflerUserItems").items;
+  Raffler.updateUserItemsDisplay = function() {
+    var lsUserItems = Raffler.getLSItem("rafflerUserItems").items;
     if (lsUserItems) {
       if(lsUserItems.length > 0) {
-        $divUserItems.html("<span class='heading'>user items</span>: ");
-        $divUserItems.append(lsUserItems.join(', '));
+        Raffler.divUserItems.html("<span class='heading'>user items</span>: ");
+        Raffler.divUserItems.append(lsUserItems.join(', '));
       } else {
-        $divUserItems.html("");
+        Raffler.divUserItems.html("");
       }
     } else {
-      $divUserItems.html("");
+      Raffler.divUserItems.html("");
     }
   }
   // update chosen items public div and admin textarea
-  function updateChosenItemsDisplay() {
+  Raffler.updateChosenItemsDisplay = function() {
     var lsChosenItems = getLSItem("rafflerChosenItems").items;
     if (lsChosenItems) {
       if(lsChosenItems.length > 0) {
-        $textChosenItems.text("");
+        Raffler.textChosenItems.text("");
         for(var item in lsChosenItems) {
-          $textChosenItems.append(item + "\n");
+          Raffler.textChosenItems.append(item + "\n");
         }
       } else {
-        $textChosenItems.text("");
+        Raffler.textChosenItems.text("");
       }
     } else {
-      $textChosenItems.text("");
+      Raffler.textChosenItems.text("");
     }
   }
   // update LS chosen items
-  function updateChosenItemsLS(item) {
-    var tempChosenItemsObj = getLSItem("rafflerChosenItems");
-    tempChosenItemsObj.items.push(sanitize(item));
-    setLSItem("rafflerChosenItems", tempChosenItemsObj);
+  Raffler.updateChosenItemsLS = function(item) {
+    var tempChosenItemsObj = Raffler.getLSItem("rafflerChosenItems");
+    tempChosenItemsObj.items.push(Raffler.sanitize(item));
+    Raffler.setLSItem("rafflerChosenItems", tempChosenItemsObj);
   }
 
   // timer object to keep track of countdown
   window.setVariableInterval = function(callbackFunc, timing) {
     var variableInterval = {
-      mult: initMult,
+      mult: Raffler.initMult,
       stage: 0,
-      items: itemsArr,
+      items: Raffler.itemsArr,
       interval: timing,
       callback: callbackFunc,
       stopped: false,
       startCountdown: false,
-      itemsIndex: Math.floor(Math.random() * itemsArr.length),
+      itemsIndex: Math.floor(Math.random() * Raffler.itemsArr.length),
       runLoop: function() {
         if (variableInterval.stopped) return;
         var result = variableInterval.callback.call(variableInterval);
@@ -345,7 +352,7 @@ $(function() {
         }
         // switch to next item if countdown not done
         if (variableInterval.stage != 4)
-          $itemsCycleDiv.html("<span>" + variableInterval.items[variableInterval.itemsIndex++] + "</span>");
+          Raffler.divItemsCycle.html("<span>" + variableInterval.items[variableInterval.itemsIndex++] + "</span>");
         if (variableInterval.itemsIndex == variableInterval.items.length) variableInterval.itemsIndex = 0;
         // loop
         if (variableInterval.stage != 4)
@@ -377,60 +384,60 @@ $(function() {
     if (this.interval > 150 &&
         this.interval <= 250) {
       this.stage = 2;
-      $itemsCycleDiv.removeClass();
-      $itemsCycleDiv.addClass('level2');
+      Raffler.divItemsCycle.removeClass();
+      Raffler.divItemsCycle.addClass('level2');
     }
 
     // slow down more at a certain point
     if (this.interval > 250 &&
         this.interval <= 325) {
       this.stage = 3;
-      $itemsCycleDiv.removeClass();
-      $itemsCycleDiv.addClass('level3');
+      Raffler.divItemsCycle.removeClass();
+      Raffler.divItemsCycle.addClass('level3');
     }
 
     // stop and pick an item!
     if (this.interval > 325) {
-      this.mult = initMult;
+      this.mult = Raffler.initMult;
       if (this.interval > 350) this.mult = this.mult++;
       // adjust for odd time drift
-      if (timesRun > 0) lastInterval = 349;
-      if (this.interval >= lastInterval) {
+      if (Raffler.timesRun > 0) Raffler.lastInterval = 349;
+      if (this.interval >= Raffler.lastInterval) {
         this.stage = 4;
         this.stop();
         this.startCountdown = false;
 
-        lastItemChosen = $itemsCycleDiv.text();
-        $itemsCycleDiv.removeClass();
-        $itemsCycleDiv.addClass('level4');
+        Raffler.lastItemChosen = Raffler.divItemsCycle.text();
+        Raffler.divItemsCycle.removeClass();
+        Raffler.divItemsCycle.addClass('level4');
 
-        playSound("victory");
+        Raffler.playSound("victory");
 
         // add to results div
-        $resultsContent.append("<li>" + lastItemChosen + "</li>");
-        updateChosenItemsLS(lastItemChosen);
-        $resultsDiv.show();
+        Raffler.divResultsContent.append("<li>" + Raffler.lastItemChosen + "</li>");
+        Raffler.updateChosenItemsLS(Raffler.lastItemChosen);
+        Raffler.divResultsWrapper.show();
         // show fireworks
-        displayFireworks();
+        Raffler.displayFireworks();
 
-        timesRun++;
+        Raffler.timesRun++;
         // add to admin list of chosen items
-        $textChosenItems.append(lastItemChosen + "\n");
-        // remove last chosen item from itemsArr if anything picked
-        if (lastItemChosen !== "") {
-          var i = itemsArr.indexOf(lastItemChosen);
+        Raffler.textChosenItems.append(Raffler.lastItemChosen + "\n");
+        // remove last chosen item from Raffler.itemsArr if anything picked
+        if (Raffler.lastItemChosen !== "") {
+          var i = Raffler.itemsArr.indexOf(Raffler.lastItemChosen);
           if (i != -1) {
-            itemsArr.splice(i, 1);
+            Raffler.itemsArr.splice(i, 1);
           }
         }
         // update admin serverItems
-        $textAvailableItems.text("");
-        itemsArr.forEach(function(item) {
-          $textAvailableItems.append(item + "\n");
+        Raffler.textAvailableItems.text("");
+        Raffler.itemsArr.forEach(function(item) {
+          Raffler.textAvailableItems.append(item + "\n");
         });
 
         // re-enable raffle button
-        enableRaffle();
+        Raffler.enableRaffle();
       } else {
         return interval + this.mult;
       }
@@ -440,10 +447,10 @@ $(function() {
     if (this.startCountdown &&
         (this.stage == 0 || this.stage == 1)) {
       this.stage = 1;
-      if (!$itemsCycleDiv.hasClass('level1'))
-        $itemsCycleDiv.addClass('level1');
+      if (!Raffler.divItemsCycle.hasClass('level1'))
+        Raffler.divItemsCycle.addClass('level1');
 
-      playSound("beep");
+      Raffler.playSound("beep");
     }
     // if we've started countdown
     // and we haven't reached end
@@ -451,84 +458,81 @@ $(function() {
     if (this.stage > 0 && this.stage != 4) {
       return interval + (1.5 ^ this.mult++);
     }
-  }, initInterval);
+  }, Raffler.initInterval);
 
   // you hit the big raffle button
-  function pickOne() {
-    hideFireworks();
+  Raffler.pickOne = function() {
+    Raffler.hideFireworks();
     // disable button until countdown done
-    disableRaffle();
+    Raffler.disableRaffle();
 
     // if we got more than 1 item,
     // then we can raffle
-    if (itemsArr.length > 1) {
-      $itemsCycleDiv.removeClass();
+    if (Raffler.itemsArr.length > 1) {
+      Raffler.divItemsCycle.removeClass();
       countdownTimer.startCountdown = true;
-      countdownTimer.interval = initInterval;
+      countdownTimer.interval = Raffler.initInterval;
       // start new cycle at random spot
-      countdownTimer.itemsIndex = Math.floor(Math.random() * itemsArr.length);
+      countdownTimer.itemsIndex = Math.floor(Math.random() * Raffler.itemsArr.length);
       countdownTimer.mult = 1;
       countdownTimer.stage = 1;
       countdownTimer.start();
-    } else if (itemsArr.length == 1) {
-      $itemsCycleDiv.html("<span>" + itemsArr[0] + "</span>");
-      $resultsContent.append($itemsCycleDiv.text());
-      notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning");
+    } else if (Raffler.itemsArr.length == 1) {
+      Raffler.divItemsCycle.html("<span>" + Raffler.itemsArr[0] + "</span>");
+      Raffler.divResultsContent.append(Raffler.divItemsCycle.text());
+      Raffler.notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning");
     } else {
-      $itemsCycleDiv.html("<span>:'(</span>");
-      notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "failure");
+      Raffler.divItemsCycle.html("<span>:'(</span>");
+      Raffler.notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "failure");
     }
   };
 
   // you hit the reset button
   // puts everyone back in raffle
   // resets stuff, as if you reloaded page
-  function resetCountdown() {
+  Raffler.resetCountdown = function() {
     resetApp();
     resetChosenItems();
-    $itemsCycleDiv.removeClass();
-    $resultsContent.text("");
-    $textAvailableItems.text("");
-    $resultsDiv.hide();
+    Raffler.divItemsCycle.removeClass();
+    Raffler.divResultsContent.text("");
+    Raffler.textAvailableItems.text("");
+    Raffler.divResultsWrapper.hide();
     countdownTimer.startCountdown = false;
-    countdownTimer.interval = initInterval;
-    countdownTimer.mult = initMult;
+    countdownTimer.interval = Raffler.initInterval;
+    countdownTimer.mult = Raffler.initMult;
     countdownTimer.stage = 0;
     countdownTimer.start();
   }
 
-  function disableRaffle() {
-    $btnRaffle.addClass("disabled");
-    $btnRaffle.prop("disabled", true);
+  Raffler.disableRaffle = function() {
+    Raffler.btnRaffle.addClass("disabled");
+    Raffler.btnRaffle.prop("disabled", true);
   }
-  function enableRaffle() {
-    $btnRaffle.removeClass("disabled");
-    $btnRaffle.prop("disabled", false);
+  Raffler.enableRaffle = function() {
+    Raffler.btnRaffle.removeClass("disabled");
+    Raffler.btnRaffle.prop("disabled", false);
   }
-  function hideFireworks() {
-    $mainWrapper.prop("z-index", 0);
-    $itemsCycleDiv.prop("z-index", 0);
-    $btnRaffle.prop("z-index", 0);
-    $canvasFireworks.hide();
+  Raffler.hideFireworks = function() {
+    Raffler.divMainWrapper.prop("z-index", 0);
+    Raffler.divItemsCycle.prop("z-index", 0);
+    Raffler.btnRaffle.prop("z-index", 0);
+    Raffler.canvasFireworks.hide();
   }
-  function displayFireworks() {
-    if ($ckOptFireworks.is(":checked")) {
-      $itemsCycleDiv.prop("z-index", 1000);
-      $btnRaffle.prop("z-index", 1000);
-      $canvasFireworks.prop("z-index", 999);
-      $canvasFireworks.show();
+  Raffler.displayFireworks = function() {
+    if (Raffler.ckOptFireworks.is(":checked")) {
+      Raffler.divItemsCycle.prop("z-index", 1000);
+      Raffler.btnRaffle.prop("z-index", 1000);
+      Raffler.canvasFireworks.prop("z-index", 999);
+      Raffler.canvasFireworks.show();
     }
   }
 
   // encode user entries html
-  function sanitize(s) {
-    return s.replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+  Raffler.sanitize = function(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/""/g, '&quot;');
   }
   // check for duplicate user entries
-  function isDuplicateValue(newUserItem) {
+  Raffler.isDuplicateValue = function(newUserItem) {
     $curPicks = getLSItem("rafflerUserItems");
     var dupeFound = false;
 
@@ -542,7 +546,7 @@ $(function() {
     return dupeFound;
   }
   // get querystring
-  function getUrlVars() {
+  Raffler.getUrlVars = function() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
     for(var i = 0; i < hashes.length; i++)
@@ -554,14 +558,14 @@ $(function() {
     return vars;
   }
   // localStorage getter/setter
-  function getLSItem(lsKey) {
+  Raffler.getLSItem = function(lsKey) {
     return JSON.parse(localStorage.getItem(lsKey));
   }
-  function setLSItem(lsKey, obj) {
+  Raffler.setLSItem = function(lsKey, obj) {
     localStorage.setItem(lsKey, JSON.stringify(obj));
   }
   // app notifications
-  function notify(msg, type) {
+  Raffler.notify = function(msg, type) {
     var bgColor = "#fff";
     var speed = 1500;
     switch ($type) {
@@ -582,15 +586,12 @@ $(function() {
         speed = 1500;
         break;
     }
-    $infoBubble.css("background-color", bgColor).statusShow("<span>" + msg + "</span>", speed);
+    Raffler.divItemStatusBubble.css("background-color", bgColor).statusShow("<span>" + msg + "</span>", speed);
   }
-  function playSound(soundId) {
-    if ($ckOptSound.is(":checked"))
+  Raffler.playSound = function(soundId) {
+    if (Raffler.ckOptSound.is(":checked"))
       document.getElementById(soundId).play();
   }
 
-  /***********************
-    START IT UP!!!!!!!!
-  ************************/
-  initApp();
+  Raffler.initApp();
 });
