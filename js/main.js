@@ -1,30 +1,4 @@
 $(function() {
-  Array.prototype.clear = function() {
-    while (this.length) { this.pop(); }
-  };
-  // jQuery extension to show status messages
-  $.fn.statusShow = function(msg, msDelay) {
-    if (!msDelay) msDelay = 1000;
-    this.hide();
-    this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
-  }
-  // jQuery extension to parse url querystring
-  $.QueryString = (function(a) {
-    if (a == "") return {};
-    var b = {};
-    for (var i = 0; i < a.length; ++i)
-    {
-      var p=a[i].split('=', 2);
-      if (p.length != 2) continue;
-      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-    }
-    return b;
-  })(window.location.search.substr(1).split('&'));
-  // if admin passed, show hamburger menu
-  if (typeof $.QueryString['admin'] !== "undefined" || true) {
-    $btnToggleAdminMenu.show();
-  }
-
   // global variables
   var itemsArr = [];
   var initItemsObj = { "items": [] }
@@ -60,6 +34,32 @@ $(function() {
   var $divClearUserItemsDialog = $('#clearUserItemsDialog');
 
   var deviceDomain = navigator.userAgent.indexOf("Android") > 1 ? "google" : "apple";
+
+  Array.prototype.clear = function() {
+    while (this.length) { this.pop(); }
+  };
+  // jQuery extension to show status messages
+  $.fn.statusShow = function(msg, msDelay) {
+    if (!msDelay) msDelay = 1000;
+    this.hide();
+    this.html(msg).slideDown(100).delay(msDelay).slideUp(100);
+  }
+  // jQuery extension to parse url querystring
+  $.QueryString = (function(a) {
+    if (a == "") return {};
+    var b = {};
+    for (var i = 0; i < a.length; ++i)
+    {
+      var p=a[i].split('=', 2);
+      if (p.length != 2) continue;
+      b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+    }
+    return b;
+  })(window.location.search.substr(1).split('&'));
+  // if admin passed, show hamburger menu
+  if (typeof $.QueryString['admin'] !== "undefined" || true) {
+    $btnToggleAdminMenu.show();
+  }
 
   // app entry point
   function initApp() {
