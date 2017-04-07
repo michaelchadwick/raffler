@@ -1,4 +1,4 @@
-require(['jquery', 'jquery-ui'], function($) {
+require(['jquery', 'jquery-ui', 'app/fx'], function($) {
 
   var Raffler = {};
 
@@ -35,13 +35,13 @@ require(['jquery', 'jquery-ui'], function($) {
     Raffler.btnUserItemsClear =       $('button#button-user-items-clear');
 
     // optiony things
-    Raffler.ckOptSound = $('input#check-option-sound');
-    Raffler.ckOptFireworks = $('input#check-option-fireworks');
+    Raffler.ckOptSound =              $('input#check-option-sound');
+    Raffler.ckOptFireworks =          $('input#check-option-fireworks');
     
     // textual input things
-    Raffler.inputUserItemsAdd = $('input#text-user-items-add');
-    Raffler.textAvailableItems = $('div#items-available textarea');
-    Raffler.textChosenItems = $('div#items-chosen textarea');
+    Raffler.inputUserItemsAdd =       $('input#text-user-items-add');
+    Raffler.textAvailableItems =      $('div#items-available textarea');
+    Raffler.textChosenItems =         $('div#items-chosen textarea');
 
     Array.prototype.clear = function() {
       while (this.length) { this.pop(); }
@@ -420,8 +420,7 @@ require(['jquery', 'jquery-ui'], function($) {
           Raffler.divResultsContent.append("<li>" + Raffler.lastItemChosen + "</li>");
           Raffler.updateChosenItemsLS(Raffler.lastItemChosen);
           Raffler.divResultsWrapper.show();
-          // show fireworks
-          Raffler.displayFireworks();
+          //Raffler.displayFireworks();
 
           Raffler.timesRun++;
           // add to admin list of chosen items
@@ -465,7 +464,7 @@ require(['jquery', 'jquery-ui'], function($) {
 
     // you hit the big raffle button
     Raffler.pickOne = function() {
-      Raffler.hideFireworks();
+      //Raffler.hideFireworks();
       // disable button until countdown done
       Raffler.disableRaffle();
 
@@ -514,20 +513,6 @@ require(['jquery', 'jquery-ui'], function($) {
     Raffler.enableRaffle = function() {
       Raffler.btnRaffle.removeClass("disabled");
       Raffler.btnRaffle.prop("disabled", false);
-    }
-    Raffler.hideFireworks = function() {
-      Raffler.divMainWrapper.prop("z-index", 0);
-      Raffler.divItemsCycle.prop("z-index", 0);
-      Raffler.btnRaffle.prop("z-index", 0);
-      Raffler.canvasFireworks.hide();
-    }
-    Raffler.displayFireworks = function() {
-      if (Raffler.ckOptFireworks.is(":checked")) {
-        Raffler.divItemsCycle.prop("z-index", 1000);
-        Raffler.btnRaffle.prop("z-index", 1000);
-        Raffler.canvasFireworks.prop("z-index", 999);
-        Raffler.canvasFireworks.show();
-      }
     }
 
     // encode user entries html

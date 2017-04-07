@@ -1,7 +1,7 @@
 require.config({
-  'baseUrl': 'js/lib',
-  'paths': {
-    'app': '../app'
+  baseUrl: 'js/lib',
+  paths: {
+    app: '../app'
   },
   'shim': {
     'jquery': { exports: '$' },
@@ -10,4 +10,4 @@ require.config({
 });
 
 // Load main app module to start the app
-require(['app/main']);
+require(['jquery', 'jquery-ui', 'app/main', 'app/fx']);

@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/vendor/jquery-ui.theme.min.css">
   
   <!-- requirejs -->
-  <script data-main="js/app" src="js/lib/require.js"></script>
+  <script data-main="js/app" src="js/require.js"></script>
 </head>
 <body>
   <!--[if lt IE 7]>
@@ -44,6 +44,7 @@
     Are you sure you want to clear user-entered items?
   </div>
 
+  <!-- admin menu -->
   <div id="menu-wrap">
     <div class="menu-sidebar">
       <div class="menu">
@@ -88,7 +89,7 @@
 
     <!-- title -->
     <div class="header-container">
-      <span class="button-admin-menu-toggle">
+      <span id="button-admin-menu-toggle">
          <div class="menu-bar menu-bar-top"></div>
          <div class="menu-bar menu-bar-middle"></div>
          <div class="menu-bar menu-bar-bottom"></div>
@@ -133,7 +134,7 @@
   </div> <!-- main#wrapper -->
 
   <!-- scripts -->
-  <script src="js/fireworks.js"></script>
+  <script src="js/lib/fireworks.js"></script>
 
 </body>
 </html>
