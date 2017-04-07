@@ -284,9 +284,6 @@ div#item-status-bubble {
   position: fixed;
   top: 0;
 }
-div#item-status-bubble span {
-  color: #fff;
-}
 
 div#items-cycle {
   background: #b5bdc8; /* Old browsers */
