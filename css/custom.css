@@ -35,9 +35,16 @@ canvas {
   position: absolute;
 }
 
-div#wrapper {
+.wrapper {
+  margin: 0;
   min-height: 100%;
   position: relative;
+  width: 100%;
+}
+@media only screen and (min-width: 1140px) {
+  .wrapper {
+    width: 100%;
+  }
 }
   .header-container {
     background: #7f3bc0;
@@ -52,10 +59,11 @@ div#wrapper {
     float: left;
     font-size: 2.5em;
     margin: 0.3em 0 0.15em;
+    padding-left: 5px;
   }
   header {
     width: 100%;
-    margin: 0 2%;
+    margin: 0;
   }
 
   .main-container {
@@ -163,7 +171,7 @@ span#button-admin-menu-toggle .menu-bar-bottom {
 .menu div {
   text-align: left;
 }
-div#menu-wrap {
+div#admin-menu {
   background-color: #715191;
   border-left: 1px solid #000;
   position: fixed;
@@ -181,11 +189,11 @@ div#menu-wrap {
   padding-top: 47px;
   color: #fff;
 }
-.menu-show {
+div#admin-menu.menu-show {
   margin-right: 0;
   box-shadow: 4px 2px 15px 1px #B9ADAD;
 }
-div#menu-wrap .menu div.title {
+div#admin-menu .menu div.title {
   background: #5f2497;
   border-bottom: 2px solid #222;
   border-top: 2px solid #444;
@@ -230,59 +238,61 @@ div#items-chosen textarea {
   height: 200px;
 }
 
-div#user-items-add {
+div#user-items-manager {
   clear: left;
 }
-div#user-items-add input,
-div#user-items-add button,
-div#user-items-add div {
+div#user-items-manager input,
+div#user-items-manager button,
+div#user-items-manager div {
   position: relative;
 }
-div#user-items-add input {
+div#user-items-manager input {
   width: auto;
 }
-div#user-items-add input#text-user-items-add {
+div#user-items-manager input#text-user-items-add {
   padding: 3px;
 }
-div#user-items-add button {
+div#user-items-manager button {
   border: 2px solid #ccc;
   color: #eee;
   font-weight: bold;
   margin: 0 1px;
   width: 75px;
 }
-div#user-items-add button#button-user-items-add {
+div#user-items-manager button#button-user-items-add {
   background-color: #428d4b;
 }
-div#user-items-add button#button-user-items-clear {
+div#user-items-manager button#button-user-items-clear {
   background-color: #8d4254;
 }
-div#user-items-add button#button-user-items-clear.disabled {
+div#user-items-manager button#button-user-items-clear.disabled {
   background-color: #999;
 }
-div#user-items-add div#user-items {
+div#user-items-manager div#user-items-display {
   clear: left;
   color: #fff;
   font-weight: bold;
   margin: 4px 0 0;
   padding: 2px 4px;
 }
-div#item-status-bubble {
+.item-status {
   background: #FFF3BB;
   border: 2px solid #000;
   border-top: none;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  display: none;
   font-size: 1.1em;
-  left: 40%;
-  max-width: 240px;
+  left: 25%;
+  margin: 0 auto;
+  max-width: 50vw;
   min-width: 40px;
   min-height: 30px;
   padding: 5px;
-  position: fixed;
+  position: static;
+  text-align: center;
   top: 0;
+  z-index: 10000;
 }
 
 div#items-cycle {
@@ -292,24 +302,25 @@ div#items-cycle {
   background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 14%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#28343b',GradientType=0 ); /* IE6-9 */
 
-  border-top: 1px solid #fff;
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  border-left: 1px solid #fff;
-  color: #fff;
+  border-top: 5px solid #fff;
+  border-right: 5px solid #fff;
+  border-bottom: 5px solid #fff;
+  border-left: 5px solid #fff;
+  color: #888;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Bungee';
   font-size: 5vw;
   font-weight: bold;
-  height: 100px;
   line-height: 1em;
   margin-bottom: 20px;
   margin-top: 0;
   padding: 10px;
   text-transform: uppercase;
   word-wrap: break-word;
+  height: 10vw;
+  width: 60vw;
 }
 div#items-cycle span {
   font-size: 1em;
@@ -341,9 +352,12 @@ div#items-cycle.level1 {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d7dbe1', endColorstr='#7b96a5',GradientType=0 ); /* IE6-9 */
 
   border-top: 5px solid #000;
+  font-size: 6vw;
+  height: 13vw;
+  width: 70vw;
 }
 div#items-cycle.level1 span {
-  color: #000;
+  color: #444;
   font-size: 1em;
 }
 div#items-cycle.level2 {
@@ -355,6 +369,9 @@ div#items-cycle.level2 {
 
   border-top: 5px solid #000;
   border-bottom: 5px solid #000;
+  font-size: 7vw;
+  height: 17vw;
+  width: 75vw;
 }
 div#items-cycle.level2 span {
   color: #c03b66;
@@ -371,6 +388,9 @@ div#items-cycle.level3 {
   border-bottom: 5px solid #000;
   border-right: 5px solid #000;
   border-left: 5px solid #000;
+  font-size: 8vw;
+  height: 21vw;
+  width: 80vw;
 }
 div#items-cycle.level3 span {
   color: #3b56c0;
@@ -390,6 +410,9 @@ div#items-cycle.level4 {
   -webkit-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   -moz-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
+  font-size: 7vw;
+  height: 27vw;
+  width: 80vw;
 }
 div#items-cycle.level4 span {
   color: #46c03b;
@@ -431,9 +454,10 @@ div#the-button {
     clear: left;
     float: none;
     font-size: 3.75em;
+    margin: 0 auto;
     padding: 24px 32px;
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
-    width: 100%;
+    width: 80%;
   }
   .button.raffle:active {
     position: relative;
@@ -486,6 +510,7 @@ div#results-wrapper {
   margin-top: 20px;
   overflow-y: hidden;
   padding: 0;
+  width: 80%;
 }
 div#results-wrapper h3 {
   background-color: #7f3bc0;
@@ -497,7 +522,6 @@ div#results-wrapper h3 {
   text-transform: uppercase;
 }
 div#results-wrapper div {
-  margin-bottom: 15px;
   padding: 10px 10px 20px;
 }
 div#results-wrapper div ul {

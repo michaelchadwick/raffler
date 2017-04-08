@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="css/vendor/jquery-ui.min.css">
   <link rel="stylesheet" href="css/vendor/jquery-ui.structure.min.css">
   <link rel="stylesheet" href="css/vendor/jquery-ui.theme.min.css">
-  
+
   <!-- requirejs -->
   <script data-main="js/app" src="js/require.js"></script>
 </head>
@@ -45,7 +45,7 @@
   </div>
 
   <!-- admin menu -->
-  <div id="menu-wrap">
+  <div id="admin-menu">
     <div class="menu-sidebar">
       <div class="menu">
         <div id="fancy-options">
@@ -64,14 +64,14 @@
           <a href="#" class="button start" id="button-timer-start">start</a>
           <a href="#" class="button stop" id="button-timer-stop">stop</a>
           <div class="title">App Controls</div>
-          <a href="#" class="button reset confirmLink" id="button-reset-data">reset data</a>
+          <a href="#" class="button reset confirmLink" id="button-data-reset">reset data</a>
         </div>
-        <div id="user-items-add">
+        <div id="user-items-manager">
           <div class="title">User Items</div>
           <input id="text-user-items-add" type="text" placeholder="add new item(s)" />
           <button id="button-user-items-add">ADD</button>
           <button id="button-user-items-clear" disabled="true" class="disabled">CLEAR</button>
-          <div id="user-items"></div>
+          <div id="user-items-display"></div>
         </div>
         <div id="items-available">
           <div class="title">Items Available</div>
@@ -85,7 +85,7 @@
     </div>
   </div>
 
-  <div id="wrapper" role="main">
+  <div class="wrapper" role="main">
 
     <!-- title -->
     <div class="header-container">
@@ -103,10 +103,8 @@
     <div class="main-container">
       <div class="main wrapper clearfix">
 
-        <div id="item-status-bubble"></div>
-
-        <audio id="beep" src="assets/beepboop1.wav" preload="auto" volume="0.5"></audio>
-        <audio id="victory" src="assets/victory.wav" preload="auto" volume="0.5"></audio>
+        <audio id="beep" src="assets/beepboop1.mp3" preload="auto" volume="0.5" type="audio/mp3"></audio>
+        <audio id="victory" src="assets/victory.mp3" preload="auto" volume="0.5" type="audio/mp3"></audio>
 
         <div id="items-cycle"></div>
 
