@@ -239,19 +239,19 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
 
     // init/reset Raffler.itemsArr with server json
     Raffler.initItemsArr = function() {
-      console.log("initItemsArr before getJSON", Raffler.itemsArr);
+      //console.log("initItemsArr before getJSON", Raffler.itemsArr);
       $.getJSON("json/raffler-initial.json", function(data) {
         Raffler.itemsArr.clear(); // clear global Raffler.itemsArr
         Raffler.itemsArr.length = 0;
-        console.log("initItemsArr getJSON top", Raffler.itemsArr);
+        //console.log("initItemsArr getJSON top", Raffler.itemsArr);
         $.each(data.items, function(key, val) {
           Raffler.itemsArr[Raffler.itemsArr.length] = val;
-          console.log("Raffler.itemsArr length (in each loop)", Raffler.itemsArr.length);
+          //console.log("Raffler.itemsArr length (in each loop)", Raffler.itemsArr.length);
           Raffler.textAvailableItems.append(val + "\n");
         });
-        console.log("Raffler.itemsArr length (post-each)", Raffler.itemsArr.length);
+        //console.log("Raffler.itemsArr length (post-each)", Raffler.itemsArr.length);
       });
-      console.log("Raffler.itemsArr length (post getJSON)", Raffler.itemsArr.length);
+      //console.log("Raffler.itemsArr length (post getJSON)", Raffler.itemsArr.length);
       Raffler.syncChosenItemsToItemsArr();
     };
     // add user items to main items array
@@ -281,7 +281,7 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
         var chosenItems = Raffler._getLocalStorageItem("rafflerChosenItems").items;
 
         if(chosenItems.length > 0) {
-          console.log("syncCI Raffler.itemsArr length", Raffler.itemsArr.length);
+          //console.log("syncCI Raffler.itemsArr length", Raffler.itemsArr.length);
           Raffler.itemsArr.forEach(Raffler.logArrayElems);
           $.each(chosenItems, function(chosenItemKey, chosenItemVal) {
             if (chosenItemIndex >= 0) {
@@ -364,7 +364,7 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
         tempChosenItemsObj.items.push(Raffler._sanitize(item));
         Raffler._setLocalStorageItem("rafflerChosenItems", tempChosenItemsObj);
       } catch (e) {
-        console.log("can't update local storage");
+        console.log("can't access localStorage");
       }
     }
 
@@ -585,14 +585,14 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
       try {
         return JSON.parse(localStorage.getItem(lsKey));
       } catch (e) {
-        console.log("can't update local storage");
+        console.log("can't access localStorage");
       }
     }
     Raffler._setLocalStorageItem = function(lsKey, obj) {
       try {
         localStorage.setItem(lsKey, JSON.stringify(obj));
       } catch (e) {
-        console.log("can't update local storage");
+        console.log("can't access localStorage");
       }
     }
     // app notifications
@@ -645,7 +645,6 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
     }
     Raffler._playSound = function(soundId) {
       if (Raffler.ckOptSound.is(":checked")) {
-        console.log("playing " + soundId);
         document.getElementById(soundId).play();
       } else {
         console.log("can't play sound: " + soundId);

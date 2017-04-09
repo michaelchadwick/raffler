@@ -9,5 +9,4 @@ require.config({
   }
 });
 
-// Load main app module to start the app
 require(['jquery', 'jquery-ui', 'app/main', 'app/fx']);
