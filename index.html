@@ -129,10 +129,16 @@
   </div> <!-- main#wrapper -->
 
   <!-- scripts -->
-  <script src="js/lib/jquery.js"></script>
-  <script src="js/lib/jquery-ui.js"></script>
-  <script src="js/lib/fireworks.js"></script>
-  <script src="js/app/main.js"></script>
+  <script src="/js/lib/systemjs/dist/system.js"></script>
+  <script>
+    SystemJS.import('/js/lib/jquery.js');
+    SystemJS.import('/js/lib/jquery-ui.js');
+    SystemJS.import('/js/lib/fireworks.js');
+    SystemJS.import('/js/app/bootstrap.js')
+      .then(helper => SystemJS.import('/js/app/helper.js'))
+      .then(main => SystemJS.import('/js/app/main.js'))
+      .then(fx => SystemJS.import('/js/app/fx.js'));
+  </script>
 
 </body>
 </html>
