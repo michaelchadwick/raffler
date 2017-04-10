@@ -165,33 +165,28 @@ span#button-admin-menu-toggle .menu-bar-bottom {
   transition: .5s;
 }
 
-.menu {
-  text-align: left;
-}
-.menu div {
+.menu, .menu div {
   text-align: left;
 }
 div#admin-menu {
   background-color: #715191;
   border-left: 1px solid #000;
   position: fixed;
-  top: 0;
+  top: 49px;
   right: 0;
   height: 100%;
-  width: 180px;
-  margin-right: -180px;
+  width: 200px;
+  margin-right: -200px;
   font-size: 1em;
   font-weight: 700;
   overflow: auto;
   transition: .25s;
   z-index: 10;
   display: block;
-  padding-top: 47px;
   color: #fff;
 }
 div#admin-menu.menu-show {
   margin-right: 0;
-  box-shadow: 4px 2px 15px 1px #B9ADAD;
 }
 div#admin-menu .menu div.title {
   background: #5f2497;
@@ -236,6 +231,7 @@ div#timer-controls > a {
 div#items-available textarea,
 div#items-chosen textarea {
   height: 200px;
+  width: 100%;
 }
 
 div#user-items-manager {
@@ -306,7 +302,7 @@ div#items-cycle {
   border-right: 5px solid #fff;
   border-bottom: 5px solid #fff;
   border-left: 5px solid #fff;
-  color: #888;
+  color: #555;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -320,7 +316,7 @@ div#items-cycle {
   text-transform: uppercase;
   word-wrap: break-word;
   height: 10vw;
-  width: 60vw;
+  width: 55vw;
 }
 div#items-cycle span {
   font-size: 1em;
@@ -354,7 +350,7 @@ div#items-cycle.level1 {
   border-top: 5px solid #000;
   font-size: 6vw;
   height: 13vw;
-  width: 70vw;
+  width: 60vw;
 }
 div#items-cycle.level1 span {
   color: #444;
@@ -371,7 +367,7 @@ div#items-cycle.level2 {
   border-bottom: 5px solid #000;
   font-size: 7vw;
   height: 17vw;
-  width: 75vw;
+  width: 70vw;
 }
 div#items-cycle.level2 span {
   color: #c03b66;
@@ -390,7 +386,7 @@ div#items-cycle.level3 {
   border-left: 5px solid #000;
   font-size: 8vw;
   height: 21vw;
-  width: 80vw;
+  width: 75vw;
 }
 div#items-cycle.level3 span {
   color: #3b56c0;
@@ -410,7 +406,7 @@ div#items-cycle.level4 {
   -webkit-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   -moz-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
-  font-size: 7vw;
+  font-size: 9vw;
   height: 27vw;
   width: 80vw;
 }
