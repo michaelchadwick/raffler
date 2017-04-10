@@ -260,7 +260,7 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
       try {
         var userItems = Raffler._getLocalStorageItem("rafflerUserItems");
         Raffler.inputUserItemsAdd.text("");
-        if(userItems.items.length > 0 && Raffler.hasLocalStorage) {
+        if(userItems.items && userItems.items.length > 0) {
           Raffler.btnUserItemsClear.prop("disabled", false);
           Raffler.btnUserItemsClear.removeClass();
           $.each(userItems.items, function(key, val) {
@@ -318,8 +318,8 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
     }
     Raffler.updateUserItemsDisplay = function() {
       try {
-        var lsUserItems = Raffler._getLocalStorageItem("rafflerUserItems").items;
-        if (lsUserItems && lsUserItems.length > 0) {
+        var lsUserItems = Raffler._getLocalStorageItem("rafflerUserItems");
+        if (lsUserItems.items && lsUserItems.items.length > 0) {
           Raffler.divUserItemsDisplay.html("<span class='heading'>user items</span>: ");
           Raffler.divUserItemsDisplay.append(lsUserItems.join(', '));
         } else {
@@ -331,7 +331,7 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
     }
     Raffler.updateChosenItemsDisplay = function() {
       try {
-        var lsChosenItems = Raffler._getLocalStorageItem("rafflerChosenItems").items;
+        var lsChosenItems = Raffler._getLocalStorageItem("rafflerChosenItems");
         if (lsChosenItems && lsChosenItems.length > 0) {
           Raffler.textChosenItems.text("");
           for(var item in lsChosenItems) {
@@ -457,8 +457,8 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
               Raffler.itemsArr.splice(i, 1);
             }
           }
-          // update admin items available
           Raffler.updateAdminItemsAvailable();
+          console.log("Raffled successfully!");
 
           Raffler._enableRaffle();
         } else {
@@ -629,8 +629,6 @@ require(['jquery', 'jquery-ui', 'app/fx'], function($) {
     Raffler._playSound = function(soundId) {
       if (Raffler.ckOptSound.is(":checked")) {
         document.getElementById(soundId).play();
-      } else {
-        console.log("can't play sound: " + soundId);
       }
     }
 

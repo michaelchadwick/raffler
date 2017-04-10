@@ -348,7 +348,6 @@ div#items-cycle.level1 {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d7dbe1', endColorstr='#7b96a5',GradientType=0 ); /* IE6-9 */
 
   border-top: 5px solid #000;
-  font-size: 6vw;
   height: 13vw;
   width: 60vw;
 }
@@ -365,13 +364,12 @@ div#items-cycle.level2 {
 
   border-top: 5px solid #000;
   border-bottom: 5px solid #000;
-  font-size: 7vw;
   height: 17vw;
   width: 70vw;
 }
 div#items-cycle.level2 span {
   color: #c03b66;
-  font-size: 1.25em;
+  font-size: 1.5em;
 }
 div#items-cycle.level3 {
   background: #f4f5f6; /* Old browsers */
@@ -384,13 +382,12 @@ div#items-cycle.level3 {
   border-bottom: 5px solid #000;
   border-right: 5px solid #000;
   border-left: 5px solid #000;
-  font-size: 8vw;
   height: 21vw;
   width: 75vw;
 }
 div#items-cycle.level3 span {
   color: #3b56c0;
-  font-size: 1.5em;
+  font-size: 1.75em;
 }
 div#items-cycle.level4 {
   background: #fcfcfc; /* Old browsers */
@@ -406,13 +403,12 @@ div#items-cycle.level4 {
   -webkit-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   -moz-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
-  font-size: 9vw;
   height: 27vw;
   width: 80vw;
 }
 div#items-cycle.level4 span {
   color: #46c03b;
-  font-size: 1.8em;
+  font-size: 2em;
 }
 
 div#the-button {
@@ -502,7 +498,7 @@ div#results-wrapper {
   color: #222;
   display: none;
   float: none;
-  min-height: 25px;
+  min-height: 40px;
   margin-top: 20px;
   overflow-y: hidden;
   padding: 0;
@@ -511,14 +507,23 @@ div#results-wrapper {
 div#results-wrapper h3 {
   background-color: #7f3bc0;
   color: #fff;
-  font-size: 1.5em;
-  padding: 5px 0 0 5px;
-  text-align: left;
+  font-size: 1.7em;
+  padding: 2px 0 3px 5px;
+  text-align: center;
   margin: 0;
   text-transform: uppercase;
 }
 div#results-wrapper div {
-  padding: 10px 10px 20px;
+  background: #c1bfea; /* Old browsers */
+  background: -moz-linear-gradient(top, #c1bfea 0%, #cec7ec 49%, #d8d0ef 63%, #ebe9f9 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #c1bfea 0%,#cec7ec 49%,#d8d0ef 63%,#ebe9f9 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #c1bfea 0%,#cec7ec 49%,#d8d0ef 63%,#ebe9f9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c1bfea', endColorstr='#ebe9f9',GradientType=0 ); /* IE6-9 */
+
+  height: 110px;
+  overflow: scroll;
+  padding: 5px 0 20px;
+  text-transform: uppercase;
 }
 div#results-wrapper div ul {
   font-size: 1.3em;

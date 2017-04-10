@@ -1,5 +1,4 @@
-requirejs(['jquery', 'app/main'], function($, Raffler) {
-
+require(['jquery', 'app/main'], function($, Raffler) {
   if (typeof Raffler !== "undefined") {
     Raffler.hideFireworks = function() {
       Raffler.divMainWrapper.prop("z-index", 0);
@@ -18,5 +17,4 @@ requirejs(['jquery', 'app/main'], function($, Raffler) {
   } else {
     console.log("fx.js: Raffler object undefined");
   }
-
 });
