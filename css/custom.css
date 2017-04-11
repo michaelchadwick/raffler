@@ -4,17 +4,17 @@ body {
   -o-transition: all 300ms ease;
   -ms-transition: all 300ms ease;
   transition: all 300ms ease;
-  background: #000;
+  background: #320858;
   font-family: 'Cabin';
 }
 body.level2 {
-  background: #666;
+  background: #561692;
 }
 body.level3 {
-  background: #aaa;
+  background: #7b3ab8;
 }
 body.level4 {
-  background: #fff;
+  background: #ac79dd;
 }
 button, input {
   font-family: 'Inconsolata', monospace;
