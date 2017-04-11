@@ -14,7 +14,7 @@ $(function() {
     Raffler.checkForLocalStorage();
     Raffler.btnRaffle.focus();
 
-    Raffler._notify("App init");
+    Raffler._notify("App init", "notice");
   }
 
   Raffler.checkForLocalStorage = function() {
@@ -25,24 +25,24 @@ $(function() {
       if (!LSsupport && !SSsupport) {
         Raffler.hasLocalStorage = false;
         Raffler.divUserItemsManager.hide();
-        Raffler._notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure");
+        Raffler._notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure", true);
       } else {
         // if our specific keys don't exist, then init
         if (!localStorage.getItem("rafflerUserItems")) {
           Raffler._setLocalStorageItem("rafflerUserItems", Raffler.initItemsObj);
         } else {
-          console.log("localStorage: rafflerUserItems already exists");
+          Raffler._notify("localStorage: rafflerUserItems already exists");
         }
         if (!localStorage.getItem("rafflerChosenItems")) {
           Raffler._setLocalStorageItem("rafflerChosenItems", Raffler.initItemsObj);
         } else {
-          console.log("localStorage: rafflerChosenItems already exists");
+          Raffler._notify("localStorage: rafflerChosenItems already exists");
         }
       }
     } catch (e) {
       Raffler.hasLocalStorage = false;
       Raffler.divUserItemsManager.hide();
-      Raffler._notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure");
+      Raffler._notify("No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don't reload!", "failure", true);
     }
   }
   Raffler.setEventHandlers = function() {
@@ -110,7 +110,7 @@ $(function() {
                 Raffler.btnUserItemsClear.prop("disabled", false);
                 Raffler.btnUserItemsClear.removeClass();
               } else {
-                Raffler._notify("<strong>" + val + "</strong> not added: duplicate.", "failure");
+                Raffler._notify("<strong>" + val + "</strong> not added: duplicate.", "failure", true);
               }
             });
           } else {
@@ -121,7 +121,7 @@ $(function() {
               Raffler.btnUserItemsClear.prop("disabled", false);
               Raffler.btnUserItemsClear.removeClass();
             } else {
-              Raffler._notify("<strong>" + newUserItem + "</strong> not added: duplicate.", "failure");
+              Raffler._notify("<strong>" + newUserItem + "</strong> not added: duplicate.", "failure", true);
             }
           }
 
@@ -129,7 +129,7 @@ $(function() {
             // update localStorage with temp tempUserItemObj
             Raffler._setLocalStorageItem("rafflerUserItems", tempUserItemObj);
             // show status bubble
-            Raffler._notify("<strong>" + newUserItem + "</strong> added!", "success");
+            Raffler._notify("<strong>" + newUserItem + "</strong> added!", "success", true);
             Raffler.syncUserItemsToItemsArr();
             Raffler.updateUserItemsDisplay();
           }
@@ -158,7 +158,7 @@ $(function() {
                 Raffler.btnUserItemsClear.prop("disabled", true);
                 Raffler.btnUserItemsClear.addClass("disabled");
 
-                Raffler._notify("User items cleared", "success");
+                Raffler._notify("User items cleared", "success", true);
 
                 $(this).dialog("close");
               },
@@ -171,7 +171,7 @@ $(function() {
           Raffler.divUserItemsClearDialog.dialog("open");
         }
       } catch (e) {
-        console.log("btnUserItemsClear: can't access localStorage", e);
+        Raffler._notify("btnUserItemsClear: can't access localStorage", e);
       }
     });
   }
@@ -210,11 +210,11 @@ $(function() {
             Raffler.itemsArr.push(val);
           }
         });
-        console.log("syncUserItemsToItemsArr: Raffler.itemsArr", Raffler.itemsArr);
+        Raffler._notify("syncUserItemsToItemsArr: " + Raffler.itemsArr);
         Raffler.updateAdminItemsAvailable();
       }
     } catch (e) {
-      console.log("syncUserItemsToItemsArr: ", e);
+      Raffler._notify("syncUserItemsToItemsArr: ", e);
     }
   }
   // remove chosen items from main items array
@@ -235,10 +235,10 @@ $(function() {
           chosenItemIndex++;
         });
       } else {
-        console.log("no pre-existing chosen items");
+        Raffler._notify("no pre-existing chosen items");
       }
     } catch (e) {
-      console.log("syncChosenItemsToItemsArr: can't access localStorage", e);
+      Raffler._notify("syncChosenItemsToItemsArr: can't access localStorage", e);
     }
   }
 
@@ -247,7 +247,7 @@ $(function() {
       Raffler._setLocalStorageItem("rafflerChosenItems", Raffler.initItemsObj);
       Raffler.updateChosenItemsDisplay();
     } catch (e) {
-      console.log("resetChosenItems: can't access localStorage", e);
+      Raffler._notify("resetChosenItems: " + e);
     }
   }
   Raffler.resetUserItems = function() {
@@ -255,7 +255,7 @@ $(function() {
       Raffler._setLocalStorageItem("rafflerUserItems", Raffler.initItemsObj);
       Raffler.updateUserItemsDisplay();
     } catch (e) {
-      console.log("resetUserItems: can't access localStorage", e);
+      Raffler._notify("resetUserItems: " + e);
     }
   }
   Raffler.updateUserItemsDisplay = function() {
@@ -268,7 +268,7 @@ $(function() {
         Raffler.divUserItemsDisplay.html("");
       }
     } catch (e) {
-      console.log("updateUserItemsDisplay: ", e);
+      Raffler._notify("updateUserItemsDisplay: " + e);
     }
   }
   Raffler.updateChosenItemsDisplay = function() {
@@ -283,7 +283,7 @@ $(function() {
         Raffler.textChosenItems.text("");
       }
     } catch (e) {
-      console.log("updateChosenItemsDisplay: can't access localStorage", e);
+      Raffler._notify("updateChosenItemsDisplay: can't access localStorage", e);
     }
   }
   Raffler.updateChosenItemsLocalStorage = function(item) {
@@ -292,7 +292,7 @@ $(function() {
       tempChosenItemsObj.items.push(Raffler._sanitize(item));
       Raffler._setLocalStorageItem("rafflerChosenItems", tempChosenItemsObj);
     } catch (e) {
-      console.log("updateChosenItemsLocalStorage: ", e);
+      Raffler._notify("updateChosenItemsLocalStorage: " + e);
     }
   }
   Raffler.updateAdminItemsAvailable = function() {
@@ -400,7 +400,7 @@ $(function() {
           }
         }
         Raffler.updateAdminItemsAvailable();
-        console.log("Raffled successfully!");
+        Raffler._notify("Raffled successfully!");
 
         Raffler._enableRaffle();
       } else {
@@ -445,10 +445,10 @@ $(function() {
     } else if (Raffler.itemsArr.length == 1) {
       Raffler.divItemsCycle.html("<span>" + Raffler.itemsArr[0] + "</span>");
       Raffler.divResultsContent.prepend(Raffler.divItemsCycle.text());
-      Raffler._notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning");
+      Raffler._notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning", true);
     } else {
       Raffler.divItemsCycle.html("<span>:'(</span>");
-      Raffler._notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "failure");
+      Raffler._notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "failure", true);
     }
   };
 

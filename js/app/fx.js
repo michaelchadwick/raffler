@@ -2,7 +2,7 @@
 /* extra fluff to make it look and sound cool */
 
 if (typeof Raffler !== "undefined") {
-  console.log("fx.js: Loaded!");
+  Raffler._notify("fx.js: Loaded!");
 
   Raffler.hideFireworks = function() {
     Raffler.divMainWrapper.prop("z-index", 0);
@@ -24,5 +24,5 @@ if (typeof Raffler !== "undefined") {
     }
   }
 } else {
-  console.log("fx.js: Could not load. Raffler object undefined");
+  Raffler._notify("fx.js: Could not load. Raffler object undefined");
 }

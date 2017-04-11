@@ -3,7 +3,7 @@
 
 if (typeof Raffler !== "undefined") {
   console.log("helper.js: Loaded!");
-  
+
   Raffler._disableRaffle = function() {
     Raffler.btnRaffle.addClass("disabled");
     Raffler.btnTimerStart.removeClass("disabled");
@@ -43,18 +43,18 @@ if (typeof Raffler !== "undefined") {
     try {
       return JSON.parse(localStorage.getItem(lsKey));
     } catch (e) {
-      console.log("_getLocalStorageItem: can't access localStorage", e);
+      console.log("_getLocalStorageItem: " + e);
     }
   }
   Raffler._setLocalStorageItem = function(lsKey, obj) {
     try {
       localStorage.setItem(lsKey, JSON.stringify(obj));
     } catch (e) {
-      console.log("_setLocalStorageItem: can't access localStorage", e);
+      console.log("_setLocalStorageItem: " + e);
     }
   }
   // app notifications
-  Raffler._notify = function(msg, type = "") {
+  Raffler._notify = function(msg, type = "", notifyUser = false) {
     var bgColor = "#FFF3BB";
     var color = "#000";
     var header = "Notice";
@@ -80,26 +80,31 @@ if (typeof Raffler !== "undefined") {
         break;
     }
 
-    d = document.createElement('div');
-    $(d).addClass("item-status")
-        .css({
-          "background-color": bgColor,
-          "color": color
-        })
-        .html("<strong>" + header + "</strong>: " + msg)
-        .prependTo('.main-container')
-        .click(function() {
-          $(this).remove();
-        })
-        .hide()
-        .slideToggle(200)
-        .delay(speed)
-        .slideToggle(200)
-        .queue(function() {
-          $(this).remove();
-        });
-
+    // 1. notify admin
     console.log("Raffler (" + header + "): " + msg);
+
+    // 2. also notify user
+    if (notifyUser) {
+      d = document.createElement('div');
+      $(d).addClass("item-status")
+          .css({
+            "background-color": bgColor,
+            "color": color
+          })
+          .html("<strong>" + header + "</strong>: " + msg)
+          .prependTo('.main-container')
+          .click(function() {
+            $(this).remove();
+          })
+          .hide()
+          .slideToggle(200)
+          .delay(speed)
+          .slideToggle(200)
+          .queue(function() {
+            $(this).remove();
+          });
+        }
+
   }
 } else {
   console.log("helper.js: could not be loaded");
