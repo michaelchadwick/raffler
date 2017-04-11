@@ -190,8 +190,9 @@ div#admin-menu.menu-show {
 }
 div#admin-menu .menu div.title {
   background: #5f2497;
-  border-bottom: 2px solid #222;
-  border-top: 2px solid #444;
+  border-left: 3px solid #000;
+  border-bottom: 3px solid #444;
+  border-top: 1px solid #888;
   font-size: 1.3em;
   padding: 5px 5px 5px 7px;
   width: 100%;
@@ -228,11 +229,6 @@ div#timer-controls > a {
   margin: 0;
   width: 100%;
 }
-div#items-available textarea,
-div#items-chosen textarea {
-  height: 200px;
-  width: 100%;
-}
 
 div#user-items-manager {
   clear: left;
@@ -263,6 +259,8 @@ div#user-items-manager button#button-user-items-clear {
 }
 div#user-items-manager button#button-user-items-clear.disabled {
   background-color: #999;
+  border: 2px solid #666;
+  color: #777;
 }
 div#user-items-manager div#user-items-display {
   clear: left;
@@ -271,6 +269,16 @@ div#user-items-manager div#user-items-display {
   margin: 4px 0 0;
   padding: 2px 4px;
 }
+
+div#items-available textarea,
+div#items-chosen textarea {
+  background: #aaa;
+  border: none;
+  height: 200px;
+  width: 100%;
+}
+
+/* main area */
 .item-status {
   background: #FFF3BB;
   border: 2px solid #000;
