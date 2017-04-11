@@ -2,8 +2,6 @@
 /* methods to do little utility things */
 
 if (typeof Raffler !== "undefined") {
-  console.log("helper.js: Loaded!");
-
   Raffler._disableRaffle = function() {
     Raffler.body.removeClass();
     Raffler.btnRaffle.addClass("disabled");
@@ -78,6 +76,7 @@ if (typeof Raffler !== "undefined") {
         speed = 5000;
         break;
       default:
+        header = "Notice";
         break;
     }
 
@@ -107,6 +106,7 @@ if (typeof Raffler !== "undefined") {
         }
 
   }
+  Raffler._notify("helper.js: Loaded!", "success");
 } else {
   console.log("helper.js: could not be loaded");
 }
