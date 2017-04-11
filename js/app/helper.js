@@ -5,6 +5,7 @@ if (typeof Raffler !== "undefined") {
   console.log("helper.js: Loaded!");
 
   Raffler._disableRaffle = function() {
+    Raffler.body.removeClass();
     Raffler.btnRaffle.addClass("disabled");
     Raffler.btnTimerStart.removeClass("disabled");
     Raffler.btnTimerStop.removeClass("disabled");

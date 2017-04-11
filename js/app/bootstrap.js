@@ -15,6 +15,7 @@ Raffler.lastInterval =            359;
 Raffler.hasLocalStorage =         true;
 
 // main divs/elements
+Raffler.body =                    $('body');
 Raffler.divAdminMenu =            $('div#admin-menu');
 Raffler.divMainWrapper =          $('div#wrapper');
 Raffler.divItemsCycle =           $('div#items-cycle');

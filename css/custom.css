@@ -1,5 +1,20 @@
 body {
+  -webkit-transition: all 300ms ease;
+  -moz-transition: all 300ms ease;
+  -o-transition: all 300ms ease;
+  -ms-transition: all 300ms ease;
+  transition: all 300ms ease;
+  background: #000;
   font-family: 'Cabin';
+}
+body.level2 {
+  background: #666;
+}
+body.level3 {
+  background: #aaa;
+}
+body.level4 {
+  background: #fff;
 }
 button, input {
   font-family: 'Inconsolata', monospace;
@@ -75,7 +90,7 @@ canvas {
   .main-container .wrapper {
     /*margin: 0 5%;*/
   }
-  div {
+  .main-container .wrapper div {
     margin: 0 auto;
     position: relative;
     text-align: center;

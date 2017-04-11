@@ -356,6 +356,8 @@ $(function() {
       this.stage = 2;
       Raffler.divItemsCycle.removeClass();
       Raffler.divItemsCycle.addClass('level2');
+      Raffler.body.removeClass();
+      Raffler.body.addClass('level2');
     }
 
     // slow down more at a certain point
@@ -364,6 +366,8 @@ $(function() {
       this.stage = 3;
       Raffler.divItemsCycle.removeClass();
       Raffler.divItemsCycle.addClass('level3');
+      Raffler.body.removeClass();
+      Raffler.body.addClass('level3');
     }
 
     // stop and pick an item!
@@ -380,6 +384,8 @@ $(function() {
         Raffler.lastItemChosen = Raffler.divItemsCycle.text();
         Raffler.divItemsCycle.removeClass();
         Raffler.divItemsCycle.addClass('level4');
+        Raffler.body.removeClass();
+        Raffler.body.addClass('level4');
 
         Raffler._playSound("victory");
 
