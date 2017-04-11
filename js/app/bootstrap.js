@@ -38,6 +38,7 @@ Raffler.btnUserItemsAdd =         $('button#button-user-items-add');
 Raffler.btnUserItemsClear =       $('button#button-user-items-clear');
 
 // optiony things
+Raffler.ckOptResize =             $('input#check-option-resize');
 Raffler.ckOptSound =              $('input#check-option-sound');
 Raffler.ckOptFireworks =          $('input#check-option-fireworks');
 
@@ -45,6 +46,13 @@ Raffler.ckOptFireworks =          $('input#check-option-fireworks');
 Raffler.inputUserItemsAdd =       $('input#text-user-items-add');
 Raffler.textAvailableItems =      $('div#items-available textarea');
 Raffler.textChosenItems =         $('div#items-chosen textarea');
+
+if (!Raffler.ckOptResize.is(":checked")) {
+  Raffler.body.removeClass();
+  Raffler.body.addClass("level4");
+  Raffler.divItemsCycle.removeClass();
+  Raffler.divItemsCycle.addClass("level4");
+}
 
 // Array extension to make it easier to clear arrays
 Array.prototype.clear = function() {

@@ -378,20 +378,26 @@ $(function() {
     if (this.interval > 150 &&
         this.interval <= 250) {
       this.stage = 2;
-      Raffler.divItemsCycle.removeClass();
-      Raffler.divItemsCycle.addClass('level2');
-      Raffler.body.removeClass();
-      Raffler.body.addClass('level2');
+
+      if (Raffler.ckOptResize.is(":checked")) {
+        Raffler.divItemsCycle.removeClass();
+        Raffler.divItemsCycle.addClass('level2');
+        Raffler.body.removeClass();
+        Raffler.body.addClass('level2');
+      }
     }
 
     // slow down more at a certain point
     if (this.interval > 250 &&
         this.interval <= 325) {
       this.stage = 3;
-      Raffler.divItemsCycle.removeClass();
-      Raffler.divItemsCycle.addClass('level3');
-      Raffler.body.removeClass();
-      Raffler.body.addClass('level3');
+
+      if (Raffler.ckOptResize.is(":checked")) {
+        Raffler.divItemsCycle.removeClass();
+        Raffler.divItemsCycle.addClass('level3');
+        Raffler.body.removeClass();
+        Raffler.body.addClass('level3');
+      }
     }
 
     // stop and pick an item!
@@ -406,10 +412,13 @@ $(function() {
         this.startCountdown = false;
 
         Raffler.lastItemChosen = Raffler.divItemsCycle.text();
-        Raffler.divItemsCycle.removeClass();
-        Raffler.divItemsCycle.addClass('level4');
-        Raffler.body.removeClass();
-        Raffler.body.addClass('level4');
+
+        if (Raffler.ckOptResize.is(":checked")) {
+          Raffler.divItemsCycle.removeClass();
+          Raffler.divItemsCycle.addClass('level4');
+          Raffler.body.removeClass();
+          Raffler.body.addClass('level4');
+        }
 
         Raffler._playSound("victory");
 
@@ -461,10 +470,15 @@ $(function() {
     // disable button until countdown done
     Raffler._disableRaffle();
 
+    if (Raffler.ckOptResize.is(":checked")) {
+      Raffler.divItemsCycle.removeClass();
+    } else {
+      Raffler.body.addClass("level4");
+    }
+
     // if we got more than 1 item,
     // then we can raffle
     if (Raffler.itemsArr.length > 1) {
-      Raffler.divItemsCycle.removeClass();
       countdownTimer.startCountdown = true;
       countdownTimer.interval = Raffler.initInterval;
       // start new cycle at random spot
@@ -489,7 +503,9 @@ $(function() {
     Raffler.resetApp();
     Raffler.resetChosenItems();
     Raffler.resetUserItems();
-    Raffler.divItemsCycle.removeClass();
+    if (Raffler.ckOptResize.is(":checked")) {
+      Raffler.divItemsCycle.removeClass();
+    }
     Raffler.divResultsContent.text("");
     Raffler.inputUserItemsAdd.val("");
     Raffler.textAvailableItems.text("");
