@@ -1,4 +1,4 @@
-/* main */
+Raffler._notify/* main */
 /* app entry point and main functions */
 
 $(function() {
