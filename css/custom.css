@@ -544,7 +544,7 @@ div#results-wrapper div {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c1bfea', endColorstr='#ebe9f9',GradientType=0 ); /* IE6-9 */
 
   height: 110px;
-  overflow: scroll;
+  overflow: auto;
   padding: 5px 0 20px;
   text-transform: uppercase;
 }
