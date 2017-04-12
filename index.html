@@ -137,6 +137,7 @@
   <script>
     SystemJS.import('/js/lib/jquery.js')
       .then(jqueryui => SystemJS.import('/js/lib/jquery-ui.js'))
+      .then(createjs => SystemJS.import('/js/lib/create.js'))
       .then(fireworks => SystemJS.import('/js/lib/fireworks.js'))
       .then(bootstrap => SystemJS.import('/js/app/bootstrap.js'))
       .then(helper => SystemJS.import('/js/app/helper.js'))

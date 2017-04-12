@@ -14,7 +14,7 @@ if (typeof Raffler !== "undefined") {
     if (Raffler.ckOptFireworks.is(":checked")) {
       Raffler.divItemsCycle.prop("z-index", 1000);
       Raffler.btnRaffle.prop("z-index", 1000);
-      Raffler.canvasFireworks.prop("z-index", 999);
+      Raffler.canvasFireworks.prop("z-index", 1001);
       Raffler.canvasFireworks.show();
     }
   }
