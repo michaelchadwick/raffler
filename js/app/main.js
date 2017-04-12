@@ -195,10 +195,11 @@ $(function() {
       });
 
       Raffler.syncChosenItemsToItemsArr();
+      Raffler.updateChosenItemsDisplay();
       Raffler.syncUserItemsToItemsArr();
     });
   };
-  
+
   // remove chosen items from main items array
   Raffler.syncChosenItemsToItemsArr = function() {
     var chosenItemIndex = 0;
@@ -206,6 +207,7 @@ $(function() {
       var chosenItems = Raffler._getLocalStorageItem("rafflerChosenItems").items;
 
       if(chosenItems.length > 0) {
+        Raffler.divResultsContent.text("");
         $.each(chosenItems, function(chosenItemKey, chosenItemVal) {
           if (chosenItemIndex >= 0) {
             Raffler.itemsArr.splice(Raffler.itemsArr.indexOf(chosenItemVal), 1);
@@ -271,20 +273,22 @@ $(function() {
       Raffler._notify("resetUserItems: " + e);
     }
   }
-  
+
   Raffler.updateChosenItemsDisplay = function() {
     try {
-      var lsChosenItems = Raffler._getLocalStorageItem("rafflerChosenItems");
+      var lsChosenItems = Raffler._getLocalStorageItem("rafflerChosenItems").items;
       if (lsChosenItems && lsChosenItems.length > 0) {
+        console.log("lsChosenItems", lsChosenItems);
+        console.log("lsChosenItems.length", lsChosenItems.length);
         Raffler.textChosenItems.text("");
-        for(var item in lsChosenItems) {
-          Raffler.textChosenItems.prepend(item + "\n");
-        }
+        $.each(lsChosenItems, function(key, val) {
+          Raffler.textChosenItems.prepend(val + "\n");
+        });
 
         Raffler._notify("updateChosenItemsDisplay: chosen items display updated");
       } else {
-        Raffler._notify("updateChosenItemsDisplay: no chosen items to display");
         Raffler.textChosenItems.text("");
+        Raffler._notify("updateChosenItemsDisplay: no chosen items to display");
       }
     } catch (e) {
       Raffler._notify("updateChosenItemsDisplay: " + e);
@@ -306,7 +310,7 @@ $(function() {
       Raffler._notify("updateUserItemsDisplay: " + e);
     }
   }
-  
+
   Raffler.updateChosenItemsLocalStorage = function(item) {
     try {
       var tempChosenItemsObj = Raffler._getLocalStorageItem("rafflerChosenItems");
@@ -324,7 +328,7 @@ $(function() {
 
     Raffler._notify("updateAdminItemsAvailable: admin items available display updated");
   }
-  
+
   // timer object to keep track of countdown
   Raffler.setVariableInterval = function(callbackFunc, timing) {
     var variableInterval = {
