@@ -332,7 +332,7 @@ div#items-cycle {
   font-family: 'Bungee';
   font-size: 5vw;
   font-weight: bold;
-  line-height: 1em;
+  line-height: 1.75em;
   margin-bottom: 20px;
   margin-top: 0;
   padding: 10px;
@@ -340,6 +340,7 @@ div#items-cycle {
   word-wrap: break-word;
   height: 10vw;
   width: 55vw;
+  word-break: break-all;
 }
 div#items-cycle span {
   font-size: 1em;
