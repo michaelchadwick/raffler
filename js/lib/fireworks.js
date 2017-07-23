@@ -17,7 +17,7 @@
 
   ctx = canvas.getContext("2d");
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0)";
+  ctx.fillStyle = "rgba(0,142,214,1)";
 
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 

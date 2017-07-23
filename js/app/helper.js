@@ -54,13 +54,15 @@ if (typeof Raffler !== "undefined") {
   }
   // app notifications
   Raffler._notify = function(msg, type = "", notifyUser = false) {
-    var bgColor = "#FFF3BB";
+    var bgColor = "#e9db9d";
     var color = "#000";
     var header = "Notice";
     var speed = 1500;
+
     switch (type) {
       case "success":
         bgColor = "#4c8504";
+        color: "#fff";
         header = "Success";
         speed = 1500;
         break;
@@ -69,19 +71,30 @@ if (typeof Raffler !== "undefined") {
         header = "Warning";
         speed = 3000;
         break;
-      case "failure":
+      case "error":
         bgColor = "#880000";
         color = "#fff";
         header = "Error";
         speed = 5000;
         break;
       default:
+        color: "#000";
         header = "Notice";
         break;
     }
 
+    const label = function(raw) {
+      const [bgColor, color, type, ...msg] = raw.split(' ');
+      const retval = [
+        `%c${type}%c ${msg.join(' ')}`,
+        `background: ${bgColor}; border-right: 3px solid #000; color: ${color}; padding: 0.15em 0.35em 0.15em 0.5em`,
+        ''
+      ];
+      return retval;
+    }
+
     // 1. notify admin
-    console.log("Raffler (" + header + "): " + msg);
+    console.log.apply(console, label(`${bgColor} ${color} ${header.toUpperCase()} ${msg}`));
 
     // 2. also notify user
     if (notifyUser) {
@@ -106,7 +119,6 @@ if (typeof Raffler !== "undefined") {
         }
 
   }
-  Raffler._notify("helper.js: Loaded!", "success");
 } else {
   console.log("helper.js: could not be loaded");
 }

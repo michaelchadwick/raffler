@@ -6,13 +6,14 @@ var Raffler = {};
 
 // global variables
 Raffler.itemsArr =                [];
-Raffler.initItemsObj =            { "items": [] }
+Raffler.initItemsObj =            [];
 Raffler.initInterval =            25;
 Raffler.initMult =                1;
 Raffler.lastItemChosen =          "";
 Raffler.timesRun =                0;
 Raffler.lastInterval =            359;
 Raffler.hasLocalStorage =         true;
+Raffler.raffleCount =             0;
 
 // main divs/elements
 Raffler.body =                    $('body');
@@ -20,6 +21,7 @@ Raffler.divAdminMenu =            $('div#admin-menu');
 Raffler.divMainWrapper =          $('div#wrapper');
 Raffler.divItemsCycle =           $('div#items-cycle');
 Raffler.divResultsWrapper =       $('div#results-wrapper');
+Raffler.divResultsCount =         $('div#results-wrapper h3 span');
 Raffler.divResultsContent =       $('div#results-wrapper div ul');
 Raffler.divUserItemsManager =     $('div#user-items-manager');
 Raffler.divUserItemsDisplay =     $('div#user-items-display');

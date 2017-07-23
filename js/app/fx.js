@@ -2,7 +2,7 @@
 /* extra fluff to make it look and sound cool */
 
 if (typeof Raffler !== "undefined") {
-  Raffler._notify("fx.js: Loaded!");
+  //Raffler._notify("fx.js: Loaded!");
 
   Raffler.hideFireworks = function() {
     Raffler.divMainWrapper.prop("z-index", 0);

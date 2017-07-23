@@ -1,15 +1,46 @@
-{
-  "items_initial": [
-    "Madmartigan",
-    "Sorsha",
-    "Willow",
-    "Bavmorda",
-    "Raziel",
-    "Meegosh",
-    "Vohnkar",
-    "Airk",
-    "Kael",
-    "Rool",
-    "Burglekutt"
-  ]
-}
+[
+  {
+    "name" : "Airk",
+    "affiliation": "Galladoorn"
+  },
+  {
+    "name": "Bavmorda",
+    "affiliation": "Nockmaar"
+  },
+  {
+    "name": "Cherlindrea",
+    "affiliation": "The Forest"
+  },
+  {
+    "name": "Elora Danan",
+    "affiliation": "Tir Asleen"
+  },
+  {
+    "name": "Kael",
+    "affiliation": "Nockmaar"
+  },
+  {
+    "name": "Madmartigan",
+    "affiliation": "Crossroads"
+  },
+  {
+    "name": "Meegosh",
+    "affiliation": "Newlyn"
+  },
+  {
+    "name": "Raziel",
+    "affiliation": "Tir Asleen"
+  },
+  {
+    "name": "Sorsha",
+    "affiliation": "Nockmaar"
+  },
+  {
+    "name": "Vohnkar",
+    "affiliation": "Newlyn"
+  },
+  {
+    "name": "Willow Ufgood",
+    "affiliation": "Newlyn"
+  }
+]
