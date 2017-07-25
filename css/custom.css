@@ -364,7 +364,7 @@ div#items-cycle {
   word-wrap: break-word;
   height: 6vw;
   width: 55vw;
-  word-break: break-all;
+  word-break: break-word;
 }
 div#items-cycle div {
   font-size: 1em;
@@ -399,7 +399,7 @@ div#items-cycle.level1 {
   width: 60vw;
 }
 div#items-cycle.level1 div.itemName { color: #444; font-size: 1.0em; }
-div#items-cycle.level1 div.itemName { color: #444; font-size: 0.65em; }
+div#items-cycle.level1 div.itemName { color: #444; font-size: 0.6em; }
 div#items-cycle.level2 {
   background: #e8ebee; /* Old browsers */
   background: -moz-linear-gradient(top,  #e8ebee 0%, #d8dbde 14%, #b3c2cb 100%); /* FF3.6-15 */
@@ -413,7 +413,7 @@ div#items-cycle.level2 {
   width: 70vw;
 }
 div#items-cycle.level2 div.itemName { color: #c03b66; font-size: 1.25em; }
-div#items-cycle.level2 div.itemAffl { color: #c03b66; font-size: 0.95em; }
+div#items-cycle.level2 div.itemAffl { color: #c03b66; font-size: 0.85em; }
 div#items-cycle.level3 {
   background: #f4f5f6; /* Old browsers */
   background: -moz-linear-gradient(top,  #f4f5f6 0%, #ecedee 14%, #d8e0e4 100%); /* FF3.6-15 */
@@ -429,7 +429,7 @@ div#items-cycle.level3 {
   width: 75vw;
 }
 div#items-cycle.level3 div.itemName { color: #3b56c0; font-size: 1.5em; }
-div#items-cycle.level3 div.itemAffl { color: #3b56c0; font-size: 1.15em; }
+div#items-cycle.level3 div.itemAffl { color: #3b56c0; font-size: 1.05em; }
 div#items-cycle.level4 {
   background: #fcfcfc; /* Old browsers */
   background: -moz-linear-gradient(top,  #fcfcfc 0%, #f9f9f9 14%, #f3f6f7 100%); /* FF3.6-15 */
@@ -448,7 +448,7 @@ div#items-cycle.level4 {
   width: 90vw;
 }
 div#items-cycle.level4 div.itemName { color: #008ed6; font-size: 1.75em; }
-div#items-cycle.level4 div.itemAffl { color: #608ed6; font-size: 1.35em; }
+div#items-cycle.level4 div.itemAffl { color: #608ed6; font-size: 1.15em; }
 
 div#the-button {}
   .button {
