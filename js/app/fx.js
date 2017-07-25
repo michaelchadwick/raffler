@@ -20,7 +20,12 @@ if (typeof Raffler !== "undefined") {
   }
   Raffler._playSound = function(soundId) {
     if (Raffler.ckOptSound.is(":checked")) {
-      document.getElementById(soundId).play();
+      var sound = document.getElementById(soundId);
+      if (sound) {
+        sound.play();
+      } else {
+        Raffler._notify("Sound file not found or is invalid", "warning");
+      }
     }
   }
 } else {
