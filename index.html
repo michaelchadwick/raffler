@@ -104,8 +104,8 @@
     <div class="main-container">
       <div class="main wrapper clearfix">
 
-        <audio id="beep" src="assets/beepboop1.mp3" preload="auto" volume="0.5" type="audio/mp3"></audio>
-        <audio id="victory" src="assets/victory.mp3" preload="auto" volume="0.5" type="audio/mp3"></audio>
+        <audio id="beep" preload="auto" volume="0.5" type="audio/mp3"></audio>
+        <audio id="victory" preload="auto" volume="0.5" type="audio/mp3"></audio>
 
         <div id="items-cycle"></div>
 
@@ -114,7 +114,7 @@
         </div>
 
         <div id="results-wrapper">
-          <h3>Results <span>0</span></h3>
+          <h3>Results (<span>0</span>)</h3>
           <div id="inner-results">
             <ul></ul>
           </div>
@@ -139,7 +139,7 @@
       .then(jqueryui => SystemJS.import('/js/lib/jquery-ui.js'))
       .then(createjs => SystemJS.import('/js/lib/create.js'))
       .then(fireworks => SystemJS.import('/js/lib/fireworks.js'))
-      .then(bootstrap => SystemJS.import('/js/app/bootstrap.js'))
+      .then(init => SystemJS.import('/js/app/init.js'))
       .then(helper => SystemJS.import('/js/app/helper.js'))
       .then(main => SystemJS.import('/js/app/main.js'))
       .then(fx => SystemJS.import('/js/app/fx.js'));

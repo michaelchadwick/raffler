@@ -11,7 +11,7 @@ $(function() {
 
     Raffler.setEventHandlers();
     Raffler.checkForLocalStorage();
-    Raffler.resetApp(true);
+    Raffler.resetApp();
 
     Raffler.btnRaffle.focus();
 
@@ -178,35 +178,37 @@ $(function() {
     }
   }
 
-  Raffler.resetApp = function(firstRun = false) {
+  Raffler.resetApp = function() {
     Raffler.initItemsArr();
-    Raffler.resetUserItems(firstRun);
+    Raffler.resetUserItems();
     Raffler.lastItemChosen = "";
-    Raffler.divResultsCount.text(Raffler._getLocalStorageItem('rafflerChosenItems').length);
+    Raffler.updateResultsCount();
     Raffler._notify("Raffler reset");
   }
 
   // init/reset Raffler.itemsArr with server json
   Raffler.initItemsArr = function() {
-    let name, affl;
-    var jqxhr = $.getJSON("/json/raffler_items_initial.json",
-      function(data) {
-
+    var key0, key1, val0, val1;
+    var jqxhr = $.getJSON(Raffler.dataFilePath, function(data) {
       })
       .done(function(data) {
         Raffler.itemsArr.clear();
         Raffler.itemsArr.length = 0;
 
         $.each(data, function(key, val) {
-          name = val.name;
-          affl = val.affiliation;
-          Raffler.itemsArr.push(
-            {
-              'name' : name,
-              'affl' : affl
-            }
-          );
-          Raffler.textAvailableItems.prepend(name + " (" + affl + ")\n");
+          key0 = Object.keys(val)[0];
+          key1 = Object.keys(val)[1];
+
+          val0 = val[key0];
+          console.log('val0', val0);
+          val1 = val[key1];
+          console.log('val1', val1);
+
+          console.log('val', val);
+          console.log('itemsArr', Raffler.itemsArr);
+
+          Raffler.itemsArr.push(val);
+          Raffler.textAvailableItems.prepend(val0 + " (" + val1 + ")\n");
         });
 
         Raffler.syncChosenItemsToItemsArr();
@@ -284,13 +286,16 @@ $(function() {
   Raffler.resetUserItems = function(firstRun = false) {
     try {
       Raffler._setLocalStorageItem("rafflerUserItems", Raffler.initItemsObj);
-      if (!firstRun) Raffler.initItemsArr();
       Raffler.updateUserItemsDisplay();
 
       Raffler._notify("resetUserItems: user items reset");
     } catch (e) {
       Raffler._notify("resetUserItems: " + e, "error");
     }
+  }
+  // reset number of results to the length of localStorage
+  Raffler.updateResultsCount = function() {
+    Raffler.divResultsCount.text(Raffler._getLocalStorageItem('rafflerChosenItems').length);
   }
 
   // set admin chosen items to localStorage values
@@ -371,6 +376,8 @@ $(function() {
         }
         // switch to next item if countdown not done
         if (variableInterval.stage != 4) {
+          //console.log('variableInterval', variableInterval.items[variableInterval.itemsIndex]);
+
           var name = variableInterval.items[variableInterval.itemsIndex].name;
           var affl = variableInterval.items[variableInterval.itemsIndex].affl;
           var chosenItemHTML = "";
@@ -433,7 +440,7 @@ $(function() {
       }
     }
 
-    // stop and pick an item!
+    // finally, stop and pick an item!
     if (this.interval > 325) {
       this.mult = Raffler.initMult;
       if (this.interval > 350) this.mult = this.mult++;
@@ -463,23 +470,23 @@ $(function() {
         Raffler.divResultsContent.prepend(
           "<li>" + Raffler.lastItemChosen.name + " (" + Raffler.lastItemChosen.affl + ")</li>"
         );
-        //// increase counter
-        Raffler.raffleCount++;
-        Raffler._notify(Raffler.raffleCount);
-        Raffler.divResultsCount.text(Raffler.raffleCount.toString());
 
         //// sync chosen item to localStorage
         Raffler.updateChosenItemsLocalStorage(Raffler.lastItemChosen);
+        //// increase count
+        Raffler.updateResultsCount();
         //// show results wrapper
         Raffler.divResultsWrapper.show();
         //// display fireworks
         Raffler.displayFireworks();
 
         Raffler.timesRun++;
-        // add to admin list of chosen items
-        Raffler.textChosenItems.prepend(Raffler.lastItemChosen.name + " (" + Raffler.lastItemChosen.affl + ")\n");
+
         // remove last chosen item from Raffler.itemsArr if anything picked
-        if (Raffler.lastItemChosen !== "") {
+        if (Raffler.lastItemChosen != "") {
+          // add to admin list of chosen items
+          Raffler.textChosenItems.prepend(Raffler.lastItemChosen.name + " (" + Raffler.lastItemChosen.affl + ")\n");
+
           let item = Raffler.lastItemChosen;
           let items = Raffler.itemsArr;
 
@@ -538,11 +545,29 @@ $(function() {
       countdownTimer.stage = 1;
       countdownTimer.start();
     } else if (Raffler.itemsArr.length == 1) {
-      Raffler.divItemsCycle.html("<div class='itemName'>" + Raffler.itemsArr[0].name + "</div> <div class='itemAffl'>(" + Raffler.itemsArr[0].affl + ")</div>");
-      Raffler.divResultsContent.prepend(Raffler.divItemsCycle.text());
+      countdownTimer.stop();
+      Raffler.divItemsCycle.html("<div class='itemName'>" + Raffler.itemsArr[0].name + "</div> <div class='itemAffl'>" + Raffler.itemsArr[0].affl + "</div>");
+
+      Raffler.lastItemChosen = {
+        'name': $('div.itemName').text(),
+        'affl': $('div.itemAffl').text()
+      };
+      Raffler._playSound("victory");
+
+      // add to results div
+      //// prepend to bottom public list
+      Raffler.divResultsContent.prepend(
+        "<li>" + Raffler.lastItemChosen.name + " (" + Raffler.lastItemChosen.affl + ")</li>"
+      );
+      //// sync chosen item to localStorage
+      Raffler.updateChosenItemsLocalStorage(Raffler.lastItemChosen);
+      //// increase count
+      Raffler.updateResultsCount();
+
+      Raffler.timesRun++;
       Raffler._notify("Only one item to raffle!<br /><strong>instant winner!</strong>", "warning", true);
     } else {
-      Raffler.divItemsCycle.html("<span>:'(</span>");
+      Raffler.divItemsCycle.html("<div>:'(</div>");
       Raffler._notify("Nothing to raffle!<br /><strong>Please advise the admin!</strong>", "error", true);
     }
   };

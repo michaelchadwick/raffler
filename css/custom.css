@@ -61,6 +61,9 @@ canvas {
   position: relative;
   width: 100%;
 }
+.main {
+  padding-bottom: 5px;
+}
 @media only screen and (min-width: 1140px) {
   .wrapper {
     width: 100%;
@@ -72,7 +75,7 @@ canvas {
     box-shadow: none;
     color: #ffffff;
     height: 44px;
-    margin: 0 auto;
+    margin: 0 auto 0;
     padding: 0 0 5px;
     position: fixed;
     top: 0;
@@ -356,7 +359,7 @@ div#items-cycle {
   font-family: 'Bungee';
   font-size: 5vw;
   font-weight: bold;
-  line-height: 1.35em;
+  line-height: 1.5em;
   padding: 10px;
   margin-bottom: 20px;
   margin-top: 0;
@@ -444,8 +447,9 @@ div#items-cycle.level4 {
   -webkit-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   -moz-box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
   box-shadow: 0px 0px 20px 7px rgba(120,120,120,1);
+  margin-top: 0;
   height: 25vw;
-  width: 90vw;
+  width: 92vw;
 }
 div#items-cycle.level4 div.itemName { color: #008ed6; font-size: 1.75em; }
 div#items-cycle.level4 div.itemAffl { color: #608ed6; font-size: 1.15em; }

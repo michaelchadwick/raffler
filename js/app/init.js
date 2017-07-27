@@ -1,10 +1,11 @@
-/* bootstrap */
+/* init */
 /* get the main app object set up */
 /* also define a couple extensions */
 
 var Raffler = {};
 
 // global variables
+Raffler.dataFilePath =            "/assets/json/raffler_test2.json";
 Raffler.itemsArr =                [];
 Raffler.initItemsObj =            [];
 Raffler.initInterval =            25;
@@ -13,7 +14,6 @@ Raffler.lastItemChosen =          "";
 Raffler.timesRun =                0;
 Raffler.lastInterval =            359;
 Raffler.hasLocalStorage =         true;
-Raffler.raffleCount =             0;
 
 // main divs/elements
 Raffler.body =                    $('body');
@@ -39,6 +39,10 @@ Raffler.btnDataReset =            $('a#button-data-reset');
 Raffler.btnUserItemsAdd =         $('button#button-user-items-add');
 Raffler.btnUserItemsClear =       $('button#button-user-items-clear');
 
+// audio files
+Raffler.sndBeep =                 $('audio#beep');
+Raffler.sndVictory =              $('audio#victory');
+
 // optiony things
 Raffler.ckOptResize =             $('input#check-option-resize');
 Raffler.ckOptSound =              $('input#check-option-sound');
@@ -55,6 +59,9 @@ if (!Raffler.ckOptResize.is(":checked")) {
   Raffler.divItemsCycle.removeClass();
   Raffler.divItemsCycle.addClass("level4");
 }
+
+Raffler.sndBeep.attr('src', '/assets/audio/beep1.mp3');
+Raffler.sndVictory.attr('src', '/assets/audio/victory.mp3');
 
 // Array extension to make it easier to clear arrays
 Array.prototype.clear = function() {
