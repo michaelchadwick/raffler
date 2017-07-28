@@ -200,12 +200,7 @@ $(function() {
           key1 = Object.keys(val)[1];
 
           val0 = val[key0];
-          console.log('val0', val0);
           val1 = val[key1];
-          console.log('val1', val1);
-
-          console.log('val', val);
-          console.log('itemsArr', Raffler.itemsArr);
 
           Raffler.itemsArr.push(val);
           Raffler.textAvailableItems.prepend(val0 + " (" + val1 + ")\n");
@@ -216,7 +211,7 @@ $(function() {
         Raffler.updateChosenItemsDisplay();
       })
       .fail(function(jqxhr, textStatus, error) {
-        console.log("initial json failed: ", error);
+        console.error("initial json failed: ", error);
       });
   };
 
@@ -376,8 +371,6 @@ $(function() {
         }
         // switch to next item if countdown not done
         if (variableInterval.stage != 4) {
-          //console.log('variableInterval', variableInterval.items[variableInterval.itemsIndex]);
-
           var name = variableInterval.items[variableInterval.itemsIndex].name;
           var affl = variableInterval.items[variableInterval.itemsIndex].affl;
           var chosenItemHTML = "";
