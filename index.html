@@ -142,7 +142,8 @@
       .then(init => SystemJS.import('/js/app/init.js'))
       .then(helper => SystemJS.import('/js/app/helper.js'))
       .then(main => SystemJS.import('/js/app/main.js'))
-      .then(fx => SystemJS.import('/js/app/fx.js'));
+      .then(fx => SystemJS.import('/js/app/fx.js'))
+      .then(ga => SystemJS.import('/js/lib/ga.js'));
   </script>
 
 </body>
