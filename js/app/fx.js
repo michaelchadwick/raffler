@@ -1,33 +1,28 @@
 /* fx */
 /* extra fluff to make it look and sound cool */
 
-if (typeof Raffler !== "undefined") {
-  //Raffler._notify("fx.js: Loaded!");
-
-  Raffler.hideFireworks = function() {
-    Raffler.divMainWrapper.prop("z-index", 0);
-    Raffler.divItemsCycle.prop("z-index", 0);
-    Raffler.btnRaffle.prop("z-index", 0);
-    Raffler.canvasFireworks.hide();
+Raffler._hideFireworks = function () {
+  Raffler.divMainWrapper.prop('z-index', 0)
+  Raffler.divItemsCycle.prop('z-index', 0)
+  Raffler.btnRaffle.prop('z-index', 0)
+  Raffler.canvasFireworks.hide()
+}
+Raffler._displayFireworks = function () {
+  if (Raffler.ckOptFireworks.is(':checked')) {
+    Raffler.divItemsCycle.prop('z-index', 1000)
+    Raffler.btnRaffle.prop('z-index', 1000)
+    Raffler.canvasFireworks.prop('z-index', 1001)
+    Raffler.canvasFireworks.show()
   }
-  Raffler.displayFireworks = function() {
-    if (Raffler.ckOptFireworks.is(":checked")) {
-      Raffler.divItemsCycle.prop("z-index", 1000);
-      Raffler.btnRaffle.prop("z-index", 1000);
-      Raffler.canvasFireworks.prop("z-index", 1001);
-      Raffler.canvasFireworks.show();
+}
+Raffler._playSound = function (soundId) {
+  if (Raffler.ckOptSound.is(':checked') && !Raffler.ignoreSound) {
+    var sound = document.getElementById(soundId)
+    if (sound) {
+      sound.play()
+    } else {
+      Raffler._notify('Sound file not found or is invalid', 'warning')
     }
   }
-  Raffler._playSound = function(soundId) {
-    if (Raffler.ckOptSound.is(":checked")) {
-      var sound = document.getElementById(soundId);
-      if (sound) {
-        sound.play();
-      } else {
-        Raffler._notify("Sound file not found or is invalid", "warning");
-      }
-    }
-  }
-} else {
-  Raffler._notify("fx.js: Could not load. Raffler object undefined");
+  if (Raffler.ignoreSound) Raffler.ignoreSound = false
 }

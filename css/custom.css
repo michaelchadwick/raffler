@@ -208,6 +208,7 @@ div#admin-menu {
   height: 100%;
   width: 200px;
   margin-right: -200px;
+  margin-right: 0;
   font-size: 1em;
   font-weight: 700;
   overflow: auto;
@@ -221,14 +222,27 @@ div#admin-menu.menu-show {
   margin-right: 0;
 }
 div#admin-menu .menu div.title {
-  background: #3b7bc0;
+  background: #4a5e73;
   border-left: 3px solid #000;
-  border-bottom: 3px solid #444;
-  border-top: 1px solid #888;
-  font-size: 1.3em;
-  padding: 5px 5px 5px 7px;
+  border-bottom: 2px solid #000;
+  border-top: 1px solid #555;
+  font-size: 1.2em;
+  padding: 0 5px 2px 7px;
+  height: 23px;
   width: 100%;
+  text-transform: uppercase;
+  clear: left;
   float: none;
+}
+div#debug-values div.values {
+  background: #3b6fa8;
+  font-family: monospace;
+  padding: 2px 10px;
+  -webkit-transition: all 100ms ease;
+  -moz-transition: all 100ms ease;
+  -ms-transition: all 100ms ease;
+  -o-transition: all 100ms ease;
+  transition: all 100ms ease;
 }
 div#fancy-options {
   float: left;
@@ -263,8 +277,15 @@ div#timer-controls {
   width: 100%;
 }
 div#timer-controls > a {
+  border-left: 3px solid #666;
+  font-size: 20px;
   margin: 0;
   width: 100%;
+}
+div#timer-controls > a#button-timer-start,
+div#timer-controls > a#button-timer-stop {
+  float: left;
+  width: 50%;
 }
 
 div#user-items-manager {
@@ -314,7 +335,7 @@ div#items-chosen textarea {
   background: #dedede;
   border: none;
   font-size: 0.9em;
-  height: 200px;
+  height: 150px;
   padding: 5px;
   width: 100%;
 }
@@ -389,6 +410,7 @@ div#items-cycle.level4 {
   -o-transition: all 1s ease;
   -ms-transition: all 1s ease;
   transition: all 1s ease;
+  line-height: 0.8;
 }
 div#items-cycle.level1 {
   background: #d7dbe1; /* Old browsers */
@@ -401,8 +423,9 @@ div#items-cycle.level1 {
   height: 13vw;
   width: 60vw;
 }
-div#items-cycle.level1 div.itemName { color: #444; font-size: 1.0em; }
-div#items-cycle.level1 div.itemName { color: #444; font-size: 0.6em; }
+div#items-cycle.level1 div.itemName { color: #444; font-size: 0.9em; }
+div#items-cycle.level1 div.itemName { color: #444; font-size: 0.5em; }
+
 div#items-cycle.level2 {
   background: #e8ebee; /* Old browsers */
   background: -moz-linear-gradient(top,  #e8ebee 0%, #d8dbde 14%, #b3c2cb 100%); /* FF3.6-15 */
@@ -415,8 +438,9 @@ div#items-cycle.level2 {
   height: 17vw;
   width: 70vw;
 }
-div#items-cycle.level2 div.itemName { color: #c03b66; font-size: 1.25em; }
-div#items-cycle.level2 div.itemAffl { color: #c03b66; font-size: 0.85em; }
+div#items-cycle.level2 div.itemName { color: #c03b66; font-size: 1.05em; }
+div#items-cycle.level2 div.itemAffl { color: #c03b66; font-size: 0.65em; }
+
 div#items-cycle.level3 {
   background: #f4f5f6; /* Old browsers */
   background: -moz-linear-gradient(top,  #f4f5f6 0%, #ecedee 14%, #d8e0e4 100%); /* FF3.6-15 */
@@ -431,8 +455,9 @@ div#items-cycle.level3 {
   height: 21vw;
   width: 75vw;
 }
-div#items-cycle.level3 div.itemName { color: #3b56c0; font-size: 1.5em; }
-div#items-cycle.level3 div.itemAffl { color: #3b56c0; font-size: 1.05em; }
+div#items-cycle.level3 div.itemName { color: #3b56c0; font-size: 1.25em; }
+div#items-cycle.level3 div.itemAffl { color: #3b56c0; font-size: 0.85em; }
+
 div#items-cycle.level4 {
   background: #fcfcfc; /* Old browsers */
   background: -moz-linear-gradient(top,  #fcfcfc 0%, #f9f9f9 14%, #f3f6f7 100%); /* FF3.6-15 */
@@ -451,8 +476,29 @@ div#items-cycle.level4 {
   height: 25vw;
   width: 92vw;
 }
-div#items-cycle.level4 div.itemName { color: #008ed6; font-size: 1.75em; }
-div#items-cycle.level4 div.itemAffl { color: #608ed6; font-size: 1.15em; }
+div#items-cycle.level4 div.itemName { color: #008ed6; font-size: 1.5em; }
+div#items-cycle.level4 div.itemAffl { color: #608ed6; font-size: 1.0em; }
+
+div#items-cycle.level-win {
+  background: #fcfcfc; /* Old browsers */
+  background: -moz-linear-gradient(top,  #fcfcfc 0%, #f9f9f9 14%, #f3f6f7 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #fcfcfc 0%,#f9f9f9 14%,#f3f6f7 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #fcfcfc 0%,#f9f9f9 14%,#f3f6f7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#f3f6f7',GradientType=0 ); /* IE6-9 */
+
+  border-top: 5px solid #0b982e;
+  border-bottom: 5px solid #097724;
+  border-left: 5px solid #0b982e;
+  border-right: 5px solid #097724;
+  -webkit-box-shadow: 0px 0px 20px 7px rgba(100,100,100,1);
+  -moz-box-shadow: 0px 0px 20px 7px rgba(100,100,100,1);
+  box-shadow: 0px 0px 20px 7px rgba(100,100,100,1);
+  margin-top: 0;
+  height: 25vw;
+  width: 92vw;
+}
+div#items-cycle.level-win div.itemName { color: #1cc737; font-size: 1.6em; }
+div#items-cycle.level-win div.itemAffl { color: #2da135; font-size: 1.15em; }
 
 div#the-button {}
   .button {
@@ -472,8 +518,8 @@ div#the-button {}
   /* timer control buttons */
   .button.start { background-color: #428d4b; }
   .button.start:hover { background-color: #429d4b; }
-  .button.reset { background-color: #a7b65a; }
-  .button.reset:hover { background-color: #a7c65a; }
+  .button.reset { background-color: #869633; }
+  .button.reset:hover { background-color: #9bac45; }
   .button.stop { background-color: #8d4254; }
   .button.stop:hover { background-color: #9d4254; }
 

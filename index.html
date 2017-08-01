@@ -45,6 +45,19 @@
   <div id="admin-menu">
     <div class="menu-sidebar">
       <div class="menu">
+        <div id="debug-values">
+          <div class="title">Debug Values</div>
+          <div class="values" id="interval-value">
+            <label>Interval:</label> <span></span>
+            <input type="range" min="1" max="359" step="1" value="25" />
+          </div>
+          <div class="values" id="multiply-value">
+            <label>Multiply:</label> <span></span>
+          </div>
+          <div class="values" id="timesrun-value">
+            <label>Times Run:</label> <span></span>
+          </div>
+        </div>
         <div id="fancy-options">
           <div class="title">Special Effects</div>
           <div class="checkbox">
@@ -75,11 +88,11 @@
           <div id="user-items-display"></div>
         </div>
         <div id="items-available">
-          <div class="title">Items Available</div>
+          <div class="title">Available Items</div>
           <textarea readonly></textarea>
         </div>
         <div id="items-chosen">
-          <div class="title">Items Chosen</div>
+          <div class="title">Chosen Items</div>
           <textarea readonly></textarea>
         </div>
       </div>
@@ -139,11 +152,11 @@
       .then(jqueryui => SystemJS.import('/js/lib/jquery-ui.js'))
       .then(createjs => SystemJS.import('/js/lib/create.js'))
       .then(fireworks => SystemJS.import('/js/lib/fireworks.js'))
+      .then(ga => SystemJS.import('/js/lib/ga.js'))
       .then(init => SystemJS.import('/js/app/init.js'))
       .then(helper => SystemJS.import('/js/app/helper.js'))
       .then(main => SystemJS.import('/js/app/main.js'))
-      .then(fx => SystemJS.import('/js/app/fx.js'))
-      .then(ga => SystemJS.import('/js/lib/ga.js'));
+      .then(fx => SystemJS.import('/js/app/fx.js'));
   </script>
 
 </body>
