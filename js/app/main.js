@@ -197,13 +197,13 @@ Raffler.checkForLocalStorage = function () {
 Raffler.resetApp = function () {
   Raffler.initItemsArr()
 
-  Raffler.refreshAvailableItems()
-  Raffler.refreshResultsCount()
-  Raffler.refreshDebugValues()
-
   Raffler.lastItemChosen = ''
   Raffler.timesRun = Raffler._getLocalStorageItem('rafflerChosenItems').length
   Raffler.divIntervalRange.val(Raffler.initInterval)
+
+  Raffler.refreshAvailableItems()
+  Raffler.refreshResultsCount()
+  Raffler.refreshDebugValues()
 
   Raffler._notify('Raffler reset', 'notice')
 }
@@ -235,13 +235,13 @@ Raffler.resetCountdown = function () {
   countdownTimer.stage = 0
   countdownTimer.start()
 
+  Raffler.timesRun = 0
+
   Raffler.refreshDebugValues()
 }
 
 // fill in-memory itemsArr with server JSON
 Raffler.initItemsArr = function () {
-  var key0, key1, val0, val1
-
   $.getJSON(Raffler.dataFilePath, function (data) {})
     .done(function (data) {
       Raffler.itemsArr.clear()
@@ -249,13 +249,6 @@ Raffler.initItemsArr = function () {
 
       if (Raffler.itemsArr) {
         $.each(data, function (key, val) {
-          /*
-          key0 = Object.keys(val)[0]
-          key1 = Object.keys(val)[1]
-
-          val0 = val[key0]
-          val1 = val[key1]
-          */
           Raffler.itemsArr.push(val)
         })
 
@@ -344,6 +337,7 @@ Raffler.resetUserItems = function () {
 
 // refresh dem debug values in the admin menu
 Raffler.refreshDebugValues = function () {
+  Raffler.divIntervalValue.text(countdownTimer.interval)
   Raffler.divIntervalRange.val(countdownTimer.interval)
   Raffler.divMultiplyValue.text(countdownTimer.mult)
   Raffler.divTimesRunValue.text(Raffler.timesRun)
@@ -396,7 +390,6 @@ Raffler.refreshUserItemsDisplay = function () {
 }
 // re-display available items from in-memory itemsArr
 Raffler.refreshAvailableItems = function () {
-  //Raffler.syncChosenItemsWithItemsArr()
   Raffler.textAvailableItems.text('')
   Raffler.itemsArr.forEach(function (item) {
     Raffler.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
@@ -587,7 +580,7 @@ var countdownTimer = Raffler.setVariableInterval(function () {
   if (this.stage > 0 && this.stage !== 4) {
     var newInterval = interval + (1.5 ^ this.mult++)
     Raffler.divMultiplyValue.text(this.mult)
-    Raffler.divIntervalRange.val(newInterval);
+    Raffler.divIntervalRange.val(newInterval)
     return newInterval
   }
 }, Raffler.initInterval)
@@ -625,58 +618,6 @@ Raffler.raffleButtonSmash = function () {
     countdownTimer.startCountdown = true
     countdownTimer.mult = 1
     countdownTimer.start()
-
-    /*
-    var chosenItemHTML = ''
-    chosenItemHTML += '<div class=\'itemName\'>' + Raffler.itemsArr[0].name + `</div>\n`
-    chosenItemHTML += '<div class=\'itemAffl\'>' + Raffler.itemsArr[0].affl + '</div>'
-
-    Raffler.divItemsCycle.html(chosenItemHTML)
-
-    Raffler.lastItemChosen = {
-      'name': $('div.itemName').text(),
-      'affl': $('div.itemAffl').text()
-    }
-
-    if (Raffler.ckOptResize.is(':checked')) {
-      Raffler.divItemsCycle.removeClass()
-    }
-
-    Raffler.divItemsCycle.addClass('level-win')
-    Raffler.body.addClass('level4')
-    Raffler._playSound('victory')
-
-    // remove last chosen item from Raffler.itemsArr if anything picked
-    if (Raffler.lastItemChosen !== '') {
-      // add chosen item to localStorage
-      Raffler.addChosenItemToLocalStorage(Raffler.lastItemChosen)
-      // add to list of chosen items and update displays
-      Raffler.refreshChosenItemsDisplay()
-      // update results count
-      Raffler.refreshResultsCount()
-      // display fireworks
-      Raffler._displayFireworks()
-
-      let item = Raffler.lastItemChosen
-      let items = Raffler.itemsArr
-
-      for (var i = 0; i < items.length; i++) {
-        if (items[i].name === item.name && items[i].affl === item.affl) {
-          items.splice(i, 1)
-          Raffler.refreshAvailableItems()
-          break
-        }
-      }
-    }
-    Raffler._notify('Raffled successfully! ' + Raffler.lastItemChosen.name + ' chosen!', 'success')
-
-    // increment counter of times run
-    Raffler.timesRun++
-    Raffler.divTimesRunValue.text(Raffler.timesRun)
-
-    // turn the button back on for a subsequent raffle
-    Raffler._enableRaffle()
-    */
   }
   if (Raffler.itemsArr.length <= 0) {
     Raffler._notify('Nothing to raffle!<br /><strong>Please advise the admin!</strong>', 'error', true)
@@ -685,9 +626,6 @@ Raffler.raffleButtonSmash = function () {
     Raffler.divItemsCycle.html('<div>:\'(</div>')
     Raffler._enableRaffle()
   }
-
-
-
 }
 
 // get the whole show going!
