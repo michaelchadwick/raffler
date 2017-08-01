@@ -337,9 +337,10 @@ Raffler.resetUserItems = function () {
 
 // refresh dem debug values in the admin menu
 Raffler.refreshDebugValues = function () {
-  Raffler.divIntervalValue.text(countdownTimer.interval)
-  Raffler.divIntervalRange.val(countdownTimer.interval)
-  Raffler.divMultiplyValue.text(countdownTimer.mult)
+  Raffler.divStageValue.text(window.countdownTimer.stage)
+  Raffler.divIntervalValue.text(window.countdownTimer.interval)
+  Raffler.divIntervalRange.val(window.countdownTimer.interval)
+  Raffler.divMultiplyValue.text(window.countdownTimer.mult)
   Raffler.divTimesRunValue.text(Raffler.timesRun)
 }
 // refresh number of raffle results with localStorage values
@@ -476,6 +477,7 @@ var countdownTimer = Raffler.setVariableInterval(function () {
     // slow down at a certain point
     if (this.interval > 150 && this.interval <= 250) {
       this.stage = 2
+      Raffler.divStageValue.text(this.stage)
 
       if (Raffler.ckOptResize.is(':checked')) {
         Raffler.divItemsCycle.removeClass()
@@ -488,6 +490,7 @@ var countdownTimer = Raffler.setVariableInterval(function () {
     // slow down more at a certain point
     if (this.interval > 250 && this.interval <= 325) {
       this.stage = 3
+      Raffler.divStageValue.text(this.stage)
 
       if (Raffler.ckOptResize.is(':checked')) {
         Raffler.divItemsCycle.removeClass()
@@ -510,6 +513,7 @@ var countdownTimer = Raffler.setVariableInterval(function () {
       // WINNER WINNER CHICKEN DINNER
       if (this.interval >= Raffler.lastInterval) {
         this.stage = 4
+        Raffler.divStageValue.text(this.stage)
         this.stop()
         this.startCountdown = false
 
@@ -565,14 +569,12 @@ var countdownTimer = Raffler.setVariableInterval(function () {
   }
 
   // start countdown!
-  if (this.startCountdown &&
-      (this.stage === 0 || this.stage === 1)) {
+  if (this.startCountdown && (this.stage === 0 || this.stage === 1)) {
     this.stage = 1
+    Raffler.divStageValue.text(this.stage)
     if (!Raffler.divItemsCycle.hasClass('level1')) {
       Raffler.divItemsCycle.addClass('level1')
     }
-
-    // play beepboop noise
     Raffler._playSound('beep')
   }
   // if we've started countdown and we haven't reached end
@@ -603,6 +605,7 @@ Raffler.raffleButtonSmash = function () {
     countdownTimer.interval = Raffler.initInterval
     countdownTimer.itemsIndex = Math.floor(Math.random() * Raffler.itemsArr.length)
     countdownTimer.stage = 0
+    Raffler.divStageValue.text(this.stage)
     countdownTimer.startCountdown = true
     countdownTimer.mult = 1
     countdownTimer.start()
@@ -615,6 +618,7 @@ Raffler.raffleButtonSmash = function () {
     countdownTimer.interval = 349
     countdownTimer.itemsIndex = 0
     countdownTimer.stage = 4
+    Raffler.divStageValue.text(this.stage)
     countdownTimer.startCountdown = true
     countdownTimer.mult = 1
     countdownTimer.start()
@@ -626,6 +630,7 @@ Raffler.raffleButtonSmash = function () {
     Raffler.divItemsCycle.html('<div>:\'(</div>')
     Raffler._enableRaffle()
   }
+  Raffler.refreshDebugValues()
 }
 
 // get the whole show going!

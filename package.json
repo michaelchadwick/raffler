@@ -1,0 +1,38 @@
+{
+  "name": "raffler",
+  "version": "1.0.0",
+  "description": "Pick an item from a pool of items in a fun way.",
+  "main": "index.html",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.6.1",
+    "gulp-jshint": "^2.0.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^3.0.0",
+    "jshint": "^2.9.5"
+  },
+  "scripts": {
+    "serve": "http-server -a 0.0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelchadwick/raffler.win.git"
+  },
+  "keywords": [
+    "webapp",
+    "raffle",
+    "raffler",
+    "random",
+    "choice",
+    "pick"
+  ],
+  "author": "Michael Chadwick",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelchadwick/raffler.win/issues"
+  },
+  "homepage": "https://github.com/michaelchadwick/raffler.win#readme"
+}

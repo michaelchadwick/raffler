@@ -56,8 +56,9 @@ Raffler.sndBeep = $('audio#beep')
 Raffler.sndVictory = $('audio#victory')
 
 // debug
-Raffler.divIntervalRange = $('div#interval-value input[type=range]')
+Raffler.divStageValue = $('div#stage-value span')
 Raffler.divIntervalValue = $('div#interval-value span')
+Raffler.divIntervalRange = $('div#interval-value input[type=range]')
 Raffler.divMultiplyValue = $('div#multiply-value span')
 Raffler.divTimesRunValue = $('div#timesrun-value span')
 
