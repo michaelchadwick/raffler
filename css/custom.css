@@ -510,82 +510,82 @@ div#items-cycle.level-win {
 div#items-cycle.level-win div.itemName { color: #1cc737; font-size: 1.6em; }
 div#items-cycle.level-win div.itemAffl { color: #2da135; font-size: 1.15em; }
 
-div#the-button {}
-  .button {
-    -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-    -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-    box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
-    color: #ffffff;
-    display: block;
-    font-size: 24px;
-    margin: 0;
-    padding: 2px 15px 7px;
-    text-decoration: none;
-    width: 100%;
-  }
 
-  /* timer control buttons */
-  .button.start { background-color: #428d4b; }
-  .button.start:hover { background-color: #429d4b; }
-  .button.reset { background-color: #869633; }
-  .button.reset:hover { background-color: #9bac45; }
-  .button.stop { background-color: #8d4254; }
-  .button.stop:hover { background-color: #9d4254; }
+.button {
+  -webkit-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0px -3px 1px rgba(0, 0, 0, 0.45), 0px 2px 2px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  color: #ffffff;
+  display: block;
+  font-size: 24px;
+  margin: 0;
+  padding: 2px 15px 7px;
+  text-decoration: none;
+  width: 100%;
+}
 
-  /* main raffle! button */
-  .button.raffle {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    background-color: #1e77a5;
-    clear: left;
-    float: none;
-    font-size: 3.75em;
-    margin: 0 auto;
-    padding: 24px 32px;
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
-    width: 80%;
-  }
-  .button.raffle:active {
-    position: relative;
-    top: 3px;
-    -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
-    -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
-    box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
-    background-color: #41a5d8;
-  }
-  .button.raffle:active:after {
-    content: "";
-    width: 100%;
-    height: 3px;
-    background: #ffffff;
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-  }
-  .button.raffle.vertical {
-    border-radius: 25px !important;
-    position: relative;
-    padding: 20px 20px;
-    text-transform: uppercase;
-    width: 127px;
-    display: block;
-  }
-  .button.raffle.vertical.bottom {
-    top: -17px;
-    padding-top: 25px;
-    padding-bottom: 20px;
-  }
-  .button.raffle:hover {
-    background-color: #41a5d8;
-  }
-  .button.disabled, .button.disabled:hover {
-    background-color: #555555;
-    border: 1px solid #ccc;
-    color: #999;
-    cursor: not-allowed;
-  }
+/* timer control buttons */
+.button.start { background-color: #428d4b; }
+.button.start:hover { background-color: #429d4b; }
+.button.reset { background-color: #869633; }
+.button.reset:hover { background-color: #9bac45; }
+.button.stop { background-color: #8d4254; }
+.button.stop:hover { background-color: #9d4254; }
+
+/* main raffle! button */
+.button.raffle {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #1e77a5;
+  clear: left;
+  float: none;
+  font-size: 3.75em;
+  margin: 0 auto;
+  padding: 24px 32px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+  width: 80%;
+}
+.button.raffle:active {
+  position: relative;
+  top: 3px;
+  -webkit-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+  -moz-box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+  box-shadow: inset 0px -3px 1px rgba(255, 255, 255, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);
+  background-color: #41a5d8;
+}
+.button.raffle:active:after {
+  content: "";
+  width: 100%;
+  height: 3px;
+  background: #ffffff;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+}
+.button.raffle.vertical {
+  border-radius: 25px !important;
+  position: relative;
+  padding: 20px 20px;
+  text-transform: uppercase;
+  width: 127px;
+  display: block;
+}
+.button.raffle.vertical.bottom {
+  top: -17px;
+  padding-top: 25px;
+  padding-bottom: 20px;
+}
+.button.raffle:hover {
+  background-color: #41a5d8;
+}
+.button.disabled, .button.disabled:hover {
+  background-color: #555555;
+  border: 1px solid #ccc;
+  color: #999;
+  cursor: not-allowed;
+}
 
 div#results-wrapper {
   background: #ffffff;
