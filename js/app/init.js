@@ -5,7 +5,7 @@
 var Raffler = {}
 
 // global variables
-Raffler.dataFilePath = '/assets/json/raffler_willow.json'
+Raffler.dataFilePath = '/assets/json/raffler_data.json'
 Raffler.itemsArr = []
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
