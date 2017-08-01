@@ -89,6 +89,17 @@ canvas {
     padding-left: 5px;
     text-shadow: 1px 1px 1px #222;
   }
+  .header-container span {
+    font-size: 1.25em;
+    margin: auto 5px auto 10px;
+    position: relative;
+    text-shadow: 1px 1px 1px #222;
+    top: 5px;
+  }
+  .header-container img {
+    position: relative;
+    top: 3px;
+  }
   header {
     width: 100%;
     margin: 0;
@@ -125,7 +136,7 @@ canvas {
     left: -10px;
   }
   .footer-container footer {
-    padding: 20px;
+    padding: 17px 20px;
     position: relative;
     top: -23px;
   }
