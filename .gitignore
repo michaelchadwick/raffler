@@ -1,5 +1,5 @@
 assets/audio/*
-assets/json/*
+assets/json/alts/*
 node_modules
 .DS_Store
 dandelion.yml
