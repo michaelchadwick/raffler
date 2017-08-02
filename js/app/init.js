@@ -2,10 +2,15 @@
 /* get the main app object set up */
 /* also define a couple extensions */
 
+let initDataFile = '/assets/json/raffler_data.json'
+// change this to your own
+let userDataFile = '/assets/json/alts/raffler_uccsc_small.json'
+
+// main object
 var Raffler = {}
 
 // global variables
-Raffler.dataFilePath = '/assets/json/alts/raffler_uccsc_small.json'
+Raffler.dataFilePath = userDataFile ? userDataFile : initDataFile
 Raffler.itemsArr = []
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
