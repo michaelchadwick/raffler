@@ -5,7 +5,7 @@
 var Raffler = {}
 
 // global variables
-Raffler.dataFilePath = '/assets/json/raffler_data.json'
+Raffler.dataFilePath = '/assets/json/alts/raffler_uccsc_small.json'
 Raffler.itemsArr = []
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
@@ -34,12 +34,12 @@ Raffler.canvasFireworks = $('canvas')
 
 // clicky things
 Raffler.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
-Raffler.btnRaffle = $('a#button-raffle')
 Raffler.btnTimerStart = $('a#button-timer-start')
 Raffler.btnTimerStop = $('a#button-timer-stop')
 Raffler.btnDataReset = $('a#button-data-reset')
 Raffler.btnUserItemsAdd = $('button#button-user-items-add')
 Raffler.btnUserItemsClear = $('button#button-user-items-clear')
+Raffler.btnRaffle = $('a#button-raffle')
 
 // optiony things
 Raffler.ckOptResize = $('input#check-option-resize')
@@ -95,3 +95,29 @@ $.QueryString = (function (a) {
   }
   return b
 })(window.location.search.substr(1).split('&'))
+
+// Export raffle results to text file
+$('div#results-wrapper div button').click(function (e) {
+  e.preventDefault()
+  Raffler._notify('exporting results', 'notice');
+  exportResults()
+})
+
+function exportResults() {
+  var plainText = $('div#results-wrapper div ul')
+    .html()
+    .replace(/<li>/g, '')
+    .replace(/<\/li>/g, "\n")
+
+  var Blob = window.Blob
+  var plainTextBlob = new Blob(
+    [plainText],
+    {type: 'text/plain;charset=' + document.characterSet}
+  )
+
+  var today = new Date()
+  var ymd = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate()
+  var filename = 'raffler-uccsc-export-results-' + ymd + '.txt'
+
+  saveAs(plainTextBlob, filename)
+}

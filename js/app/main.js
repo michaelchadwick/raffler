@@ -31,12 +31,6 @@ Raffler.setEventHandlers = function () {
     $(this).toggleClass('button-open')
     Raffler.divAdminMenu.toggleClass('menu-show')
   })
-  Raffler.btnRaffle.click(function (e) {
-    e.preventDefault()
-    if (!Raffler.btnRaffle.prop('disabled')) {
-      Raffler.raffleButtonSmash()
-    }
-  })
   Raffler.divIntervalRange.on('change', function (e) {
     e.preventDefault()
     Raffler.divIntervalValue.text($(this).val())
@@ -46,12 +40,14 @@ Raffler.setEventHandlers = function () {
     e.preventDefault()
     if (Raffler.btnTimerStart.prop('disabled', false)) {
       countdownTimer.start()
+      Raffler._notify('countdownTimer started', 'notice')
     }
   })
   Raffler.btnTimerStop.click(function (e) {
     e.preventDefault()
     if (Raffler.btnTimerStop.prop('disabled', false)) {
       countdownTimer.stop()
+      Raffler._notify('countdownTimer stopped', 'notice')
     }
   })
   Raffler.btnDataReset.click(function (e) {
@@ -158,6 +154,12 @@ Raffler.setEventHandlers = function () {
       }
     } catch (e) {
       Raffler._notify('btnUserItemsClear: ' + e, 'error')
+    }
+  })
+  Raffler.btnRaffle.click(function (e) {
+    e.preventDefault()
+    if (!Raffler.btnRaffle.prop('disabled')) {
+      Raffler.raffleButtonSmash()
     }
   })
 }
@@ -283,8 +285,17 @@ Raffler.syncChosenItemsWithItemsArr = function () {
     } else {
       Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'warning')
     }
+
+    // all items have been chosen on reload
+    if (items.length == 0) {
+      countdownTimer.stop()
+      Raffler._disableRaffle()
+      Raffler.divItemsCycle.html('<div>:\'(<br /><br />Nothing to raffle!</div>')
+      Raffler.body.addClass('level4')
+      Raffler._notify('syncChosenItemsWithItemsArr: all items chosen', 'warning')
+    }
   } catch (e) {
-    console.log('syncChosenItemsWithItemsArr: ', e)
+    Raffler._notify('syncChosenItemsWithItemsArr: ' + e, 'error')
   }
 }
 // add user items to in-memory itemsArr
@@ -428,6 +439,7 @@ Raffler.setVariableInterval = function (callbackFunc, timing) {
         if (variableInterval.stopped) return
         // check to see if the time interval is at the end of a raffle
         var result = variableInterval.callback.call(variableInterval)
+
         if (typeof result === 'number') {
           if (result === 0) return
           variableInterval.interval = result
@@ -614,22 +626,71 @@ Raffler.raffleButtonSmash = function () {
   if (Raffler.itemsArr.length === 1) {
     Raffler._notify('Only one item to raffle!<br /><strong>instant winner!</strong>', 'warning', true)
 
+    // don't need to play any sound
     Raffler.ignoreSound = true
-    countdownTimer.interval = 349
-    countdownTimer.itemsIndex = 0
-    countdownTimer.stage = 4
-    Raffler.divStageValue.text(this.stage)
-    countdownTimer.startCountdown = true
-    countdownTimer.mult = 1
-    countdownTimer.start()
+
+    // add lone item to items-cycle
+    var loneItemHTML = ''
+    loneItemHTML += '<div class=\'itemName\'>' + Raffler.itemsArr[0].name + `</div>\n`
+    loneItemHTML += '<div class=\'itemAffl\'>' + Raffler.itemsArr[0].affl + '</div>'
+
+    Raffler.divItemsCycle.html(loneItemHTML)
+    Raffler.divItemsCycle.addClass('level4')
+
+    // grab lone item
+    Raffler.lastItemChosen = {
+      'name': $('div.itemName').text(),
+      'affl': $('div.itemAffl').text()
+    }
+
+    if (Raffler.ckOptResize.is(':checked')) {
+      Raffler.divItemsCycle.removeClass()
+    }
+
+    Raffler.divItemsCycle.removeClass()
+    Raffler.divItemsCycle.addClass('level-win')
+    Raffler.body.addClass('level4')
+    Raffler._playSound('victory')
+
+    // remove last chosen item from Raffler.itemsArr if anything picked
+    if (Raffler.lastItemChosen !== '') {
+      // add chosen item to localStorage
+      Raffler.addChosenItemToLocalStorage(Raffler.lastItemChosen)
+      // add to list of chosen items and update displays
+      Raffler.refreshChosenItemsDisplay()
+      // update results count
+      Raffler.refreshResultsCount()
+      // display fireworks
+      Raffler._displayFireworks()
+
+      let item = Raffler.lastItemChosen
+      let items = Raffler.itemsArr
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].name === item.name && items[i].affl === item.affl) {
+          items.splice(i, 1)
+          Raffler.refreshAvailableItems()
+          break
+        }
+      }
+    }
+    Raffler._notify('Raffled successfully! ' + Raffler.lastItemChosen.name + ' chosen!', 'success')
+
+    // increment counter of times run
+    Raffler.timesRun++
+    Raffler.divTimesRunValue.text(Raffler.timesRun)
   }
+  // we got nothing to raffle!
+  /*
   if (Raffler.itemsArr.length <= 0) {
     Raffler._notify('Nothing to raffle!<br /><strong>Please advise the admin!</strong>', 'error', true)
 
     Raffler.body.addClass('level4')
-    Raffler.divItemsCycle.html('<div>:\'(</div>')
+    Raffler.divItemsCycle.html('<div>:\'(<br />Nothing to raffle!</div>')
     Raffler._enableRaffle()
   }
+  */
+
   Raffler.refreshDebugValues()
 }
 
