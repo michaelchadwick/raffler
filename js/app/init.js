@@ -34,6 +34,10 @@ Raffler.canvasFireworks = $('canvas')
 
 // clicky things
 Raffler.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
+Raffler.btnTestSuccess = $('a#button-test-success')
+Raffler.btnTestNotice = $('a#button-test-notice')
+Raffler.btnTestWarning = $('a#button-test-warning')
+Raffler.btnTestError = $('a#button-test-error')
 Raffler.btnTimerStart = $('a#button-timer-start')
 Raffler.btnTimerStop = $('a#button-timer-stop')
 Raffler.btnDataReset = $('a#button-data-reset')

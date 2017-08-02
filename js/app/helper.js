@@ -59,24 +59,25 @@ Raffler._notify = function (msg, type = '', notifyUser = false) {
       bgColor = '#4c8504'
       fgColor = '#ffffff'
       header = 'Success'
-      speed = 1500
+      speed = 4000
       break
     case 'warning' || 'warn':
       bgColor = '#c1bf24'
       fgColor = '#000000'
       header = 'Warning'
-      speed = 3000
+      speed = 6000
       break
     case 'error' || 'err':
       bgColor = '#880000'
       fgColor = '#ffffff'
       header = 'Error'
-      speed = 5000
+      speed = 0
       break
     default:
       bgColor = '#e6e1d0'
       fgColor = '#000000'
       header = 'Notice'
+      speed = 4000
       break
   }
 
@@ -98,20 +99,25 @@ Raffler._notify = function (msg, type = '', notifyUser = false) {
     $(d).addClass('item-status')
       .css({
         'background-color': bgColor,
-        'color': fgColor,
-        'cursor': 'pointer'
+        'color': fgColor
       })
       .html('<strong>' + header + '</strong>: ' + msg)
       .prependTo('.main-container')
       .click(function () {
         $(this).remove()
       })
-      .hide()
-      .toggle(200)
-      .delay(speed)
-      .toggle(200)
-      .queue(function () {
-        $(this).remove()
-      })
+
+    if (speed > 0) {
+      $(d).hide()
+          .fadeToggle(500)
+          .delay(speed)
+          .fadeToggle(200)
+          .queue(function () {
+            $(this).remove()
+          })
+    } else {
+      $(d).hide()
+          .fadeToggle(500)
+    }
   }
 }

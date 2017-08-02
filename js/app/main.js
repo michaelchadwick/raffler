@@ -36,6 +36,22 @@ Raffler.setEventHandlers = function () {
     Raffler.divIntervalValue.text($(this).val())
     countdownTimer.interval = parseInt($(this).val())
   })
+  Raffler.btnTestSuccess.click(function (e) {
+    e.preventDefault()
+    Raffler._notify('test success that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)
+  })
+  Raffler.btnTestNotice.click(function (e) {
+    e.preventDefault()
+    Raffler._notify('test notice that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)
+  })
+  Raffler.btnTestWarning.click(function (e) {
+    e.preventDefault()
+    Raffler._notify('test notice that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)
+  })
+  Raffler.btnTestError.click(function (e) {
+    e.preventDefault()
+    Raffler._notify('test notice that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)
+  })
   Raffler.btnTimerStart.click(function (e) {
     e.preventDefault()
     if (Raffler.btnTimerStart.prop('disabled', false)) {
@@ -167,8 +183,8 @@ Raffler.setEventHandlers = function () {
 Raffler.checkForLocalStorage = function () {
   // if we got LS or SS, then set up the user items UI
   try {
-    var LSsupport = !(typeof window.localStorage === 'undefined')
-    var SSsupport = !(typeof window.sessionStorage === 'undefined')
+    var LSsupport = (typeof window.localStorage !== 'undefined')
+    var SSsupport = (typeof window.sessionStorage !== 'undefined')
     if (!LSsupport && !SSsupport) {
       Raffler.hasLocalStorage = false
       Raffler.divUserItemsManager.hide()

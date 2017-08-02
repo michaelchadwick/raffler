@@ -168,6 +168,21 @@ canvas {
     width: 100%;
   }
 
+  /* test notifications buttons */
+  .button.test {
+    font-size: 18px;
+    margin: 0;
+    text-align: center;
+  }
+  .button.test.success { background-color: #4c8504; }
+  .button.test.success:hover { background-color: #5e9c11; }
+  .button.test.notice { background-color: #e6e1d0; color: #000; }
+  .button.test.notice:hover { background-color: #f2f0e9; }
+  .button.test.warning { background-color: #c1bf24; color: #000; }
+  .button.test.warning:hover { background-color: #d2d037; }
+  .button.test.error { background-color: #880000; }
+  .button.test.error:hover { background-color: #9a0f0f; }
+
   /* timer control buttons */
   .button.start { background-color: #428d4b; }
   .button.start:hover { background-color: #429d4b; }
@@ -361,6 +376,13 @@ div#debug-values div.values {
   -o-transition: all 100ms ease;
   transition: all 100ms ease;
 }
+div#test-notify {
+  clear: both;
+}
+div#test-notify > a {
+  float: left;
+  width: 25%;
+}
 div#fancy-options {
   float: left;
   width: 100%;
@@ -461,20 +483,21 @@ div#items-chosen textarea {
 .item-status {
   background: #fff3bb;
   border: 2px solid #000;
-  border-top: none;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  border-top: 1px solid #000;
+  -webkit-border-radius: 0 0 3px 3px;
+  -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
+  cursor: pointer;
   font-size: 1.1em;
   left: 25%;
-  margin: 0 auto;
+  margin: 0 auto 5px;
   max-width: 50vw;
   min-width: 40px;
   min-height: 30px;
-  padding: 5px;
+  padding: 10px 20px;
   position: static;
   text-align: center;
-  top: 0;
+  top: 7px;
   z-index: 10000;
 }
 
