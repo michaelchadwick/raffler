@@ -1,5 +1,6 @@
 /* main */
 /* app entry point and main functions */
+/* global $ */
 
 if ((typeof Raffler) === 'undefined') var Raffler = {}
 
@@ -303,7 +304,7 @@ Raffler.syncChosenItemsWithItemsArr = function () {
     }
 
     // all items have been chosen on reload
-    if (items.length == 0) {
+    if (items.length === 0) {
       countdownTimer.stop()
       Raffler._disableRaffle()
       Raffler.divItemsCycle.html('<div>:\'(<br /><br />Nothing to raffle!</div>')
