@@ -455,7 +455,7 @@ Raffler.setVariableInterval = function (callbackFunc, timing) {
       runLoop: function () {
         if (variableInterval.stopped) return
         // check to see if the time interval is at the end of a raffle
-        var result = variableInterval.callback.call(variableInterval)
+        var result = variableInterval.callback(variableInterval)
 
         if (typeof result === 'number') {
           if (result === 0) return
