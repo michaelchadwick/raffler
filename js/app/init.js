@@ -4,7 +4,7 @@
 
 let initDataFile = '/assets/json/raffler_data.json'
 // change this to your own
-let userDataFile = '/assets/json/alts/raffler_uccsc_small.json'
+let userDataFile = null
 
 // main object
 var Raffler = {}
