@@ -517,7 +517,8 @@ div#items-cycle {
   flex-wrap: wrap;
   align-items: center;
   align-content: center;
-  font-family: 'Bungee';
+  /*font-family: 'Bungee';*/
+  font-family: Arial Bold, sans-serif;
   font-size: 5vw;
   font-weight: bold;
   line-height: 1.5em;
