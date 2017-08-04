@@ -75,8 +75,12 @@
             <input type='checkbox' id='check-option-resize' />
           </div>
           <div class='checkbox'>
-            <label for='check-option-sound'>sound?</label>
-            <input type='checkbox' id='check-option-sound' checked='checked' />
+            <label for='check-option-sound-countdown'>countdown sound?</label>
+            <input type='checkbox' id='check-option-sound-countdown' checked='checked' />
+          </div>
+          <div class='checkbox'>
+            <label for='check-option-sound-winner'>winner sound?</label>
+            <input type='checkbox' id='check-option-sound-winner' />
           </div>
           <div class='checkbox'>
             <label for='check-option-fireworks'>fireworks?</label>
@@ -107,7 +111,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div><!-- admin menu -->
 
   <div class='wrapper' role='main'>
 
@@ -119,8 +123,7 @@
          <div class='menu-bar menu-bar-bottom'></div>
       </span>
       <header class='wrapper clearfix'>
-        <h1 class='title'>Raffler</h1><span>at</span>
-        <a href='http://uccsc.ucsd.edu' target='_blank'><img src='/assets/images/uccsc-2017-3.png' /></a>
+        <h1 class='title'>Raffler</h1>
       </header>
     </div> <!-- header-container -->
 
@@ -132,6 +135,12 @@
         <audio id='victory' preload='auto' volume='0.5' type='audio/mp3'></audio>
 
         <div id='items-cycle'></div>
+
+        <div id='winner-confirm'>
+          <h2>Winner Present?</h2>
+          <button id='button-confirm-yes' class='button confirm disabled' disabled='true'>YES</button>
+          <button id='button-confirm-no' class='button deny disabled' disabled='true'>NO</button>
+        </div>
 
         <div id='the-button'>
           <a href='#' class='button raffle' id='button-raffle'>RAFFLE!</a>
@@ -160,18 +169,18 @@
   </div> <!-- main#wrapper -->
 
   <!-- scripts -->
+  <script src='/js/app/custom.js'></script>
   <script src='/js/lib/systemjs/dist/system.js'></script>
   <script src='/js/lib/FileSaver.min.js'></script>
-  <script>
-    SystemJS.import('/js/lib/jquery.js')
-      .then(jqueryui => SystemJS.import('/js/lib/jquery-ui.js'))
-      .then(createjs => SystemJS.import('/js/lib/create.js'))
-      .then(fireworks => SystemJS.import('/js/lib/fireworks.js'))
-      .then(ga => SystemJS.import('/js/lib/ga.js'))
-      .then(init => SystemJS.import('/js/app/init.js'))
-      .then(helper => SystemJS.import('/js/app/helper.js'))
-      .then(main => SystemJS.import('/js/app/main.js'))
-      .then(fx => SystemJS.import('/js/app/fx.js'));
+  <script>SystemJS.import('/js/lib/jquery.js')
+    .then(jqueryui => SystemJS.import('/js/lib/jquery-ui.js'))
+    .then(createjs => SystemJS.import('/js/lib/create.js'))
+    .then(fireworks => SystemJS.import('/js/lib/fireworks.js'))
+    .then(ga => SystemJS.import('/js/lib/ga.js'))
+    .then(init => SystemJS.import('/js/app/init.js'))
+    .then(helper => SystemJS.import('/js/app/helper.js'))
+    .then(main => SystemJS.import('/js/app/main.js'))
+    .then(fx => SystemJS.import('/js/app/fx.js'));
   </script>
 
 </body>

@@ -1,4 +1,5 @@
 assets/audio/*
+assets/images/*
 assets/json/alts/*
 node_modules
 .DS_Store

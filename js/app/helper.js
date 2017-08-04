@@ -1,20 +1,35 @@
 /* helper */
 /* methods to do little utility things */
+/* global $, Raffler */
 
 Raffler._disableRaffle = function () {
   Raffler.body.removeClass()
-  Raffler.btnRaffle.addClass('disabled')
-  Raffler.btnTimerStart.removeClass('disabled')
-  Raffler.btnTimerStop.removeClass('disabled')
   Raffler.btnRaffle.prop('disabled', true)
-  Raffler.btnTimerStart.prop('disabled', false)
-  Raffler.btnTimerStop.prop('disabled', false)
+  Raffler.btnRaffle.addClass('disabled')
 }
 Raffler._enableRaffle = function () {
   Raffler.btnRaffle.removeClass('disabled')
+  Raffler.btnRaffle.prop('disabled', false)
+}
+Raffler._disableChosenConfirm = function () {
+  Raffler.divChosenConfirm.hide()
+  Raffler.btnChosenConfirmYes.addClass('disabled')
+  Raffler.btnChosenConfirmNo.addClass('disabled')
+  Raffler.btnChosenConfirmYes.prop('disabled', true)
+  Raffler.btnChosenConfirmNo.prop('disabled', true)
+  Raffler.btnTimerStart.removeClass('disabled')
+  Raffler.btnTimerStop.removeClass('disabled')
+  Raffler.btnTimerStart.prop('disabled', false)
+  Raffler.btnTimerStop.prop('disabled', false)
+}
+Raffler._enableChosenConfirm = function () {
+  Raffler.divChosenConfirm.show()
+  Raffler.btnChosenConfirmYes.removeClass('disabled')
+  Raffler.btnChosenConfirmNo.removeClass('disabled')
+  Raffler.btnChosenConfirmYes.prop('disabled', false)
+  Raffler.btnChosenConfirmNo.prop('disabled', false)
   Raffler.btnTimerStart.addClass('disabled')
   Raffler.btnTimerStop.addClass('disabled')
-  Raffler.btnRaffle.prop('disabled', false)
   Raffler.btnTimerStart.prop('disabled', true)
   Raffler.btnTimerStop.prop('disabled', true)
 }

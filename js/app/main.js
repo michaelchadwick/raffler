@@ -6,9 +6,22 @@ if ((typeof Raffler) === 'undefined') var Raffler = {}
 
 // app entry point
 Raffler.initApp = function () {
+  // sync user customizations
+  Raffler.dataFilePath = (userDataFile != null) ? userDataFile : initDataFile
+  Raffler.logoFilePath = (userLogoFile != null) ? userLogoFile : initLogoFile
+  Raffler.logoFileLink = (userLogoLink != null) ? userLogoLink : initLogoLink
+  
   // if admin passed, show hamburger menu
   if ((typeof $.QueryString['admin']) !== 'undefined') {
     Raffler.btnAdminMenuToggle.show()
+  }
+  
+  // add logo, if exists
+  if (Raffler.userLogoFile !== null && Raffler.userLogoLink !== null) {
+    Raffler._notify('User logo and link found, so adding to header', 'notice')
+    Raffler.title.append(
+      `<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img src='${Raffler.logoFilePath}' /></a>`
+    )
   }
 
   Raffler.setEventHandlers()
@@ -179,6 +192,35 @@ Raffler.setEventHandlers = function () {
       Raffler.raffleButtonSmash()
     }
   })
+  Raffler.btnChosenConfirmYes.click(function (e) {
+    Raffler.lastItemChosenConfirmed = true
+    Raffler.continueRaffling()
+  })
+  Raffler.btnChosenConfirmNo.click(function (e) {
+    Raffler.lastItemChosenConfirmed = false
+    Raffler.continueRaffling()
+  })
+  Raffler.btnExportResults.click(function (e) {
+    e.preventDefault()
+    Raffler._notify('exporting results', 'notice')
+
+    var plainText = $('div#results-wrapper div ul')
+      .html()
+      .replace(/<li>/g, '')
+      .replace(/<\/li>/g, `\n`)
+
+    var Blob = window.Blob
+    var plainTextBlob = new Blob(
+      [plainText],
+      {type: 'text/plain;charset=' + document.characterSet}
+    )
+
+    var today = new Date()
+    var ymd = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
+    var filename = 'raffler-uccsc-export-results-' + ymd + '.txt'
+
+    saveAs(plainTextBlob, filename)
+  })
 }
 // check for LS - notify if not found
 Raffler.checkForLocalStorage = function () {
@@ -263,7 +305,9 @@ Raffler.resetCountdown = function () {
 Raffler.initItemsArr = function () {
   $.getJSON(Raffler.dataFilePath, function (data) {})
     .done(function (data) {
-      Raffler.itemsArr.clear()
+      while (Raffler.itemsArr.length) {
+        Raffler.itemsArr.pop()
+      }
       Raffler.itemsArr.length = 0
 
       if (Raffler.itemsArr) {
@@ -537,19 +581,14 @@ var countdownTimer = Raffler.setVariableInterval(function () {
       }
 
       // adjust for odd time drift
-      if (Raffler.timesRun > 0) Raffler.lastInterval = 349
+      //if (Raffler.timesRun > 0) Raffler.lastInterval = 349
 
       // WINNER WINNER CHICKEN DINNER
       if (this.interval >= Raffler.lastInterval) {
         this.stage = 4
         Raffler.divStageValue.text(this.stage)
-        this.stop()
         this.startCountdown = false
-
-        Raffler.lastItemChosen = {
-          'name': $('div.itemName').text(),
-          'affl': $('div.itemAffl').text()
-        }
+        this.stop()
 
         if (Raffler.ckOptResize.is(':checked')) {
           Raffler.divItemsCycle.removeClass()
@@ -558,37 +597,14 @@ var countdownTimer = Raffler.setVariableInterval(function () {
         Raffler.divItemsCycle.addClass('level-win')
         Raffler.body.addClass('level4')
         Raffler._playSound('victory')
+        Raffler._displayFireworks()
 
-        // remove last chosen item from Raffler.itemsArr if anything picked
-        if (Raffler.lastItemChosen !== '') {
-          // add chosen item to localStorage
-          Raffler.addChosenItemToLocalStorage(Raffler.lastItemChosen)
-          // add to list of chosen items and update displays
-          Raffler.refreshChosenItemsDisplay()
-          // update results count
-          Raffler.refreshResultsCount()
-          // display fireworks
-          Raffler._displayFireworks()
-
-          let item = Raffler.lastItemChosen
-          let items = Raffler.itemsArr
-
-          for (var i = 0; i < items.length; i++) {
-            if (items[i].name === item.name && items[i].affl === item.affl) {
-              items.splice(i, 1)
-              Raffler.refreshAvailableItems()
-              break
-            }
-          }
-        }
-        Raffler._notify('Raffled successfully! ' + Raffler.lastItemChosen.name + ' chosen!', 'success')
+        // confirm winner
+        Raffler._enableChosenConfirm()
 
         // increment counter of times run
         Raffler.timesRun++
         Raffler.divTimesRunValue.text(Raffler.timesRun)
-
-        // turn the button back on for a subsequent raffle
-        Raffler._enableRaffle()
       } else {
         var intervalMult = interval + this.mult
         Raffler.divIntervalRange.val(intervalMult)
@@ -630,6 +646,7 @@ Raffler.raffleButtonSmash = function () {
   }
 
   // we got a choice
+  // start a countdown
   if (Raffler.itemsArr.length > 1) {
     countdownTimer.interval = Raffler.initInterval
     countdownTimer.itemsIndex = Math.floor(Math.random() * Raffler.itemsArr.length)
@@ -640,6 +657,7 @@ Raffler.raffleButtonSmash = function () {
     countdownTimer.start()
   }
   // we got 1 choice, so no choice, really
+  // no countdown
   if (Raffler.itemsArr.length === 1) {
     Raffler._notify('Only one item to raffle!<br /><strong>instant winner!</strong>', 'warning', true)
 
@@ -697,18 +715,74 @@ Raffler.raffleButtonSmash = function () {
     Raffler.timesRun++
     Raffler.divTimesRunValue.text(Raffler.timesRun)
   }
-  // we got nothing to raffle!
-  /*
-  if (Raffler.itemsArr.length <= 0) {
-    Raffler._notify('Nothing to raffle!<br /><strong>Please advise the admin!</strong>', 'error', true)
-
-    Raffler.body.addClass('level4')
-    Raffler.divItemsCycle.html('<div>:\'(<br />Nothing to raffle!</div>')
-    Raffler._enableRaffle()
-  }
-  */
 
   Raffler.refreshDebugValues()
+}
+
+// after confirming a winner or not, go back to raffling
+Raffler.continueRaffling = function () {
+  // if we have confirmed, then take out of raffle
+  if (Raffler.lastItemChosenConfirmed) {
+    Raffler.lastItemChosen = {
+      'name': $('div.itemName').text(),
+      'affl': $('div.itemAffl').text()
+    }
+
+    if (Raffler.lastItemChosen !== '') {
+      // add chosen item to localStorage
+      Raffler.addChosenItemToLocalStorage(Raffler.lastItemChosen)
+      // add to list of chosen items and update displays
+      Raffler.refreshChosenItemsDisplay()
+      // update results count
+      Raffler.refreshResultsCount()
+
+      let item = Raffler.lastItemChosen
+      let items = Raffler.itemsArr
+
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].name === item.name && items[i].affl === item.affl) {
+          items.splice(i, 1)
+          Raffler.refreshAvailableItems()
+          break
+        }
+      }
+
+      Raffler._notify('Raffled successfully! ' + Raffler.lastItemChosen.name + ' chosen!', 'success')
+    } else {
+      Raffler._notify('Choice could not be made. Pool of choices unchanged.', 'warning')
+    }
+  } else {
+    Raffler._notify('Choice rejected. Pool of choices unchanged.', 'notice')
+  }
+
+  // either way, disable confirm buttons
+  // and re-enable raffler
+  Raffler._disableChosenConfirm()
+  Raffler._enableRaffle()
+
+  // start an infinite cycle
+  countdownTimer.interval = Raffler.initInterval
+  countdownTimer.mult = 1
+  countdownTimer.stage = 0
+  countdownTimer.itemsIndex = Math.floor(Math.random() * Raffler.itemsArr.length)
+
+  Raffler.divIntervalRange.val(parseInt(Raffler.initInterval))
+  Raffler.divIntervalValue.text(Raffler.divIntervalRange.val())
+  Raffler.divStageValue.text(this.stage)
+
+  if (Raffler.ckOptResize.is(':checked')) {
+    Raffler.body.removeClass()
+    Raffler.divItemsCycle.removeClass()
+  } else {
+    Raffler.body.addClass('level4')
+    Raffler.divItemsCycle.removeClass()
+    Raffler.divItemsCycle.addClass('level4')
+  }
+
+  Raffler.refreshDebugValues()
+
+  countdownTimer.startCountdown = false
+  countdownTimer.start()
 }
 
 // get the whole show going!

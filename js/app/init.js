@@ -1,16 +1,17 @@
 /* init */
 /* get the main app object set up */
 /* also define a couple extensions */
-
-let initDataFile = '/assets/json/raffler_data.json'
-// change this to your own
-let userDataFile = null
+/* global $, saveAs */
 
 // main object
 var Raffler = {}
 
+// init customizable things
+var initDataFile = '/assets/json/raffler_data.json'
+var initLogoFile = null
+var initLogoLink = null
+
 // global variables
-Raffler.dataFilePath = userDataFile ? userDataFile : initDataFile
 Raffler.itemsArr = []
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
@@ -21,9 +22,11 @@ Raffler.hasLocalStorage = true
 Raffler.ignoreSound = false
 Raffler.enableUserItems = false
 Raffler.lastItemChosen = ''
+Raffler.lastItemChosenConfirmed = false
 
 // main divs/elements
 Raffler.body = $('body')
+Raffler.title = $('header')
 Raffler.divItemStatusBubble = $('div#item-status-bubble')
 Raffler.divAdminMenu = $('div#admin-menu')
 Raffler.divMainWrapper = $('div#wrapper')
@@ -49,10 +52,15 @@ Raffler.btnDataReset = $('a#button-data-reset')
 Raffler.btnUserItemsAdd = $('button#button-user-items-add')
 Raffler.btnUserItemsClear = $('button#button-user-items-clear')
 Raffler.btnRaffle = $('a#button-raffle')
+Raffler.divChosenConfirm = $('div#winner-confirm')
+Raffler.btnChosenConfirmYes = $('button#button-confirm-yes')
+Raffler.btnChosenConfirmNo = $('button#button-confirm-no')
+Raffler.btnExportResults = $('div#results-wrapper div button')
 
 // optiony things
 Raffler.ckOptResize = $('input#check-option-resize')
-Raffler.ckOptSound = $('input#check-option-sound')
+Raffler.ckOptSoundCountdown = $('input#check-option-sound-countdown')
+Raffler.ckOptSoundWinner = $('input#check-option-sound-winner')
 Raffler.ckOptFireworks = $('input#check-option-fireworks')
 
 // input things
@@ -84,13 +92,6 @@ if (!Raffler.ckOptResize.is(':checked')) {
 Raffler.sndBeep.attr('src', '/assets/audio/beep.mp3')
 Raffler.sndVictory.attr('src', '/assets/audio/victory.mp3')
 
-// Array extension to make it easier to clear arrays
-Array.prototype.clear = function () {
-  while (this.length) {
-    this.pop()
-  }
-}
-
 // jQuery extension to parse url querystring
 $.QueryString = (function (a) {
   if (a === '') return {}
@@ -104,29 +105,3 @@ $.QueryString = (function (a) {
   }
   return b
 })(window.location.search.substr(1).split('&'))
-
-// Export raffle results to text file
-$('div#results-wrapper div button').click(function (e) {
-  e.preventDefault()
-  Raffler._notify('exporting results', 'notice');
-  exportResults()
-})
-
-function exportResults() {
-  var plainText = $('div#results-wrapper div ul')
-    .html()
-    .replace(/<li>/g, '')
-    .replace(/<\/li>/g, "\n")
-
-  var Blob = window.Blob
-  var plainTextBlob = new Blob(
-    [plainText],
-    {type: 'text/plain;charset=' + document.characterSet}
-  )
-
-  var today = new Date()
-  var ymd = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate()
-  var filename = 'raffler-uccsc-export-results-' + ymd + '.txt'
-
-  saveAs(plainTextBlob, filename)
-}

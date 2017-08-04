@@ -1,5 +1,6 @@
 /* fx */
 /* extra fluff to make it look and sound cool */
+/* global Raffler */
 
 Raffler._hideFireworks = function () {
   Raffler.divMainWrapper.prop('z-index', 0)
@@ -16,13 +17,16 @@ Raffler._displayFireworks = function () {
   }
 }
 Raffler._playSound = function (soundId) {
-  if (Raffler.ckOptSound.is(':checked') && !Raffler.ignoreSound) {
-    var sound = document.getElementById(soundId)
-    if (sound) {
+  var sound = document.getElementById(soundId)
+  if (sound) {
+    if (soundId === 'beep' && Raffler.ckOptSoundCountdown.is(':checked')) {
       sound.play()
-    } else {
-      Raffler._notify('Sound file not found or is invalid', 'warning')
     }
+    if (soundId === 'victory' && Raffler.ckOptSoundWinner.is(':checked')) {
+      sound.play()
+    }
+  } else {
+    Raffler._notify('Sound file not found or is invalid', 'warning')
   }
   if (Raffler.ignoreSound) Raffler.ignoreSound = false
 }
