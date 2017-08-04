@@ -314,6 +314,7 @@ Raffler.initItemsArr = function () {
         $.each(data, function (key, val) {
           Raffler.itemsArr.push(val)
         })
+        Raffler._shuffleArray(Raffler.itemsArr)
 
         Raffler.syncChosenItemsWithItemsArr()
         Raffler.addUserItemsToItemsArr()
