@@ -10,7 +10,7 @@ Raffler.initApp = function () {
   if ((typeof $.QueryString['admin']) !== 'undefined') {
     Raffler.btnAdminMenuToggle.show()
   }
-  
+
   // add logo, if exists
   if (Raffler.userOptionsMerge && (typeof Raffler.logoFilePath !== 'undefined') && (typeof Raffler.logoFileLink !== 'undefined')) {
     //Raffler._notify('User logo and link found, so adding to header', 'notice')
@@ -21,6 +21,8 @@ Raffler.initApp = function () {
   Raffler.checkForLocalStorage()
   Raffler.resetApp()
   Raffler.refreshDebugValues()
+  Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
+
   if (Raffler._getLocalStorageItem('rafflerChosenItems').length) {
     Raffler.refreshChosenItemsDisplay()
     Raffler.divResultsWrapper.show()
@@ -43,6 +45,9 @@ Raffler.setEventHandlers = function () {
     e.preventDefault()
     Raffler.divIntervalValue.text($(this).val())
     countdownTimer.interval = parseInt($(this).val())
+  })
+  Raffler.ckOptShowGraph.on('change', function (e) {
+    Raffler.divItemsGraph.toggle()
   })
   Raffler.btnTestSuccess.click(function (e) {
     e.preventDefault()
@@ -257,7 +262,7 @@ Raffler.checkForLocalStorage = function () {
       }
       if (!window.localStorage.getItem('rafflerChosenItems')) {
         Raffler._setLocalStorageItem('rafflerChosenItems', Raffler.initItemsObj)
-        Raffler._notify('checkForLocalStorage: rafflerChosenItems created!', 'noticed')
+        //Raffler._notify('checkForLocalStorage: rafflerChosenItems created!', 'notice')
       } else {
         Raffler._notify('checkForLocalStorage: rafflerChosenItems already exists', 'warning')
       }
@@ -330,7 +335,8 @@ Raffler.initItemsArr = function () {
           Raffler.itemsArr.push(val)
         })
         Raffler._shuffleArray(Raffler.itemsArr)
-
+        Raffler.itemsMinusChosenArr = Raffler.itemsArr
+        Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
         Raffler.syncChosenItemsWithItemsArr()
         Raffler.addUserItemsToItemsArr()
       }
@@ -357,6 +363,8 @@ Raffler.syncChosenItemsWithItemsArr = function () {
           }
         }
       }
+      Raffler.itemsMinusChosenArr = items
+      Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
 
       //Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
@@ -423,6 +431,16 @@ Raffler.resetUserItems = function () {
   }
 }
 
+// refresh items graph
+Raffler.refreshItemsGraph = function (items) {
+  var index = 0
+  console.log('itemsMinusChosenArr', items)
+  Raffler.divItemsGraph.html('')
+  items.forEach(function (elem) {
+    Raffler.divItemsGraph
+      .append('<span id=' + (index++) + '></span>')
+  })
+}
 // refresh dem debug values in the admin menu
 Raffler.refreshDebugValues = function () {
   Raffler.divStageValue.text(window.countdownTimer.stage)
@@ -531,6 +549,14 @@ Raffler.setVariableInterval = function (callbackFunc, timing) {
           chosenItemHTML += '<div class=\'itemAffl\'>' + affl + '</div>'
 
           Raffler.divItemsCycle.html(chosenItemHTML)
+
+          $('div#items-graph span').each(function () {
+            if (variableInterval.itemsIndex === parseInt($(this)[0].id)) {
+              $(this).addClass('chosen')
+            } else {
+              $(this).removeClass('chosen')
+            }
+          })
           variableInterval.itemsIndex++
         }
         if (variableInterval.itemsIndex === variableInterval.items.length) variableInterval.itemsIndex = 0
@@ -720,6 +746,8 @@ Raffler.raffleButtonSmash = function () {
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
           items.splice(i, 1)
+          Raffler.itemsMinusChosenArr = items
+          Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
           Raffler.refreshAvailableItems()
           break
         }
@@ -758,6 +786,8 @@ Raffler.continueRaffling = function () {
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
           items.splice(i, 1)
+          Raffler.itemsMinusChosenArr = items
+          Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
           Raffler.refreshAvailableItems()
           break
         }

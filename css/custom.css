@@ -643,6 +643,26 @@ div#items-cycle.level-win {
 div#items-cycle.level-win div.itemName { color: #1cc737; font-size: 2em; }
 div#items-cycle.level-win div.itemAffl { color: #2da135; font-size: 1.5em; }
 
+div#items-graph {
+  display: none;
+  text-align: center;
+  width: 80%;
+}
+div#items-graph span {
+  background-color: #bbbbbb;
+  display: inline-block;
+  font-size: 8px;
+  height: 1px;
+  line-height: 2px;
+  margin: 0 1px 0 0;
+  padding: 1px;
+  width: 1px;
+}
+div#items-graph span.chosen {
+  background-color: #efea07;
+  height: 10px;
+}
+
 div#winner-confirm {
   display: none;
   margin: 0 auto 100px;

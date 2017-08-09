@@ -13,7 +13,7 @@ Raffler.initLogoLink = null
 
 // user options
 //// set to true to use raffler_user_options.json
-Raffler.userOptionsMerge = false
+Raffler.userOptionsMerge = true
 Raffler.userOptionsPath = '/assets/json/raffler_user_options.json'
 
 if (Raffler.userOptionsMerge) {
@@ -39,6 +39,7 @@ if (Raffler.userOptionsMerge) {
 
 // global variables
 Raffler.itemsArr = []
+Raffler.itemsMinusChosenArr = []
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
 Raffler.initMult = 1
@@ -57,6 +58,7 @@ Raffler.divItemStatusBubble = $('div#item-status-bubble')
 Raffler.divAdminMenu = $('div#admin-menu')
 Raffler.divMainWrapper = $('div#wrapper')
 Raffler.divItemsCycle = $('div#items-cycle')
+Raffler.divItemsGraph = $('div#items-graph')
 Raffler.divResultsWrapper = $('div#results-wrapper')
 Raffler.divResultsCount = $('div#results-wrapper h3 span')
 Raffler.divResultsContent = $('div#results-wrapper div ul')
@@ -84,6 +86,7 @@ Raffler.btnChosenConfirmNo = $('button#button-confirm-no')
 Raffler.btnExportResults = $('div#results-wrapper div button')
 
 // optiony things
+Raffler.ckOptShowGraph = $('input#check-option-show-graph')
 Raffler.ckOptResize = $('input#check-option-resize')
 Raffler.ckOptSoundCountdown = $('input#check-option-sound-countdown')
 Raffler.ckOptSoundWinner = $('input#check-option-sound-winner')
