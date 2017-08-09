@@ -6,22 +6,15 @@ if ((typeof Raffler) === 'undefined') var Raffler = {}
 
 // app entry point
 Raffler.initApp = function () {
-  // sync user customizations
-  Raffler.dataFilePath = (userDataFile != null) ? userDataFile : initDataFile
-  Raffler.logoFilePath = (userLogoFile != null) ? userLogoFile : initLogoFile
-  Raffler.logoFileLink = (userLogoLink != null) ? userLogoLink : initLogoLink
-  
   // if admin passed, show hamburger menu
   if ((typeof $.QueryString['admin']) !== 'undefined') {
     Raffler.btnAdminMenuToggle.show()
   }
   
   // add logo, if exists
-  if (Raffler.userLogoFile !== null && Raffler.userLogoLink !== null) {
-    Raffler._notify('User logo and link found, so adding to header', 'notice')
-    Raffler.title.append(
-      `<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img src='${Raffler.logoFilePath}' /></a>`
-    )
+  if (Raffler.userOptionsMerge && (typeof Raffler.logoFilePath !== 'undefined') && (typeof Raffler.logoFileLink !== 'undefined')) {
+    //Raffler._notify('User logo and link found, so adding to header', 'notice')
+    Raffler.title.append(`<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img src='${Raffler.logoFilePath}' /></a>`)
   }
 
   Raffler.setEventHandlers()
@@ -36,7 +29,7 @@ Raffler.initApp = function () {
 
   Raffler.btnRaffle.focus()
 
-  Raffler._notify('Raffler init', 'notice')
+  //Raffler._notify('Raffler init', 'notice')
 }
 
 // attach event handlers to button and such
@@ -70,14 +63,14 @@ Raffler.setEventHandlers = function () {
     e.preventDefault()
     if (Raffler.btnTimerStart.prop('disabled', false)) {
       countdownTimer.start()
-      Raffler._notify('countdownTimer started', 'notice')
+      //Raffler._notify('countdownTimer started', 'notice')
     }
   })
   Raffler.btnTimerStop.click(function (e) {
     e.preventDefault()
     if (Raffler.btnTimerStop.prop('disabled', false)) {
       countdownTimer.stop()
-      Raffler._notify('countdownTimer stopped', 'notice')
+      //Raffler._notify('countdownTimer stopped', 'notice')
     }
   })
   Raffler.btnDataReset.click(function (e) {
@@ -202,7 +195,7 @@ Raffler.setEventHandlers = function () {
   })
   Raffler.btnExportResults.click(function (e) {
     e.preventDefault()
-    Raffler._notify('exporting results', 'notice')
+    //Raffler._notify('exporting results', 'notice')
 
     var plainText = $('div#results-wrapper div ul')
       .html()
@@ -251,7 +244,7 @@ Raffler.checkForLocalStorage = function () {
       // if our specific keys don't exist, then init
       if (!window.localStorage.getItem('rafflerUserItems')) {
         Raffler._setLocalStorageItem('rafflerUserItems', Raffler.initItemsObj)
-        Raffler._notify('checkForLocalStorage: rafflerUserItems created', 'notice')
+        //Raffler._notify('checkForLocalStorage: rafflerUserItems created', 'notice')
       } else {
         Raffler._notify('checkForLocalStorage: rafflerUserItems already exists', 'warning')
       }
@@ -281,7 +274,7 @@ Raffler.resetApp = function () {
   Raffler.refreshResultsCount()
   Raffler.refreshDebugValues()
 
-  Raffler._notify('Raffler reset', 'notice')
+  //Raffler._notify('Raffler reset', 'notice')
 }
 // you hit the 'reset data' button
 // puts everyone back in raffle
@@ -336,7 +329,7 @@ Raffler.initItemsArr = function () {
       }
     })
     .fail(function (jqxhr, textStatus, e) {
-      Raffler._notify('Raffler failed initial data load: ' + e, 'error', true)
+      Raffler._notify('Failed initial data load: ' + e, 'error', true)
     })
 }
 
@@ -358,9 +351,9 @@ Raffler.syncChosenItemsWithItemsArr = function () {
         }
       }
 
-      Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
+      //Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
-      Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'warning')
+      //Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'warning')
     }
 
     // all items have been chosen on reload
@@ -392,7 +385,7 @@ Raffler.addUserItemsToItemsArr = function () {
 
       Raffler._notify('addUserItemsToItemsArr: synced', 'notice')
     } else {
-      Raffler._notify('addUserItemsToItemsArr: none to sync', 'warning')
+      //Raffler._notify('addUserItemsToItemsArr: none to sync', 'warning')
     }
     Raffler.refreshAvailableItems()
   } catch (e) {
@@ -468,7 +461,7 @@ Raffler.refreshUserItemsDisplay = function () {
       Raffler.divUserItemsDisplay.html('<span class=\'heading\'>user items</span>: ')
       Raffler.divUserItemsDisplay.append(lsUserItems.join(', '))
 
-      Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
+      //Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
     } else {
       Raffler.divUserItemsDisplay.html('')
       Raffler._notify('refreshUserItemsDisplay: none to display')
@@ -484,7 +477,7 @@ Raffler.refreshAvailableItems = function () {
     Raffler.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
   })
 
-  Raffler._notify('refreshAvailableItems: display updated', 'notice')
+  //Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
 
 // add last chosen item to localStorage
@@ -494,7 +487,7 @@ Raffler.addChosenItemToLocalStorage = function (lastChosenItem) {
     localChosenItemsObj.push(lastChosenItem)
     Raffler._setLocalStorageItem('rafflerChosenItems', localChosenItemsObj)
     Raffler.refreshAvailableItems()
-    Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
+    //Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
   } catch (e) {
     Raffler._notify('addChosenItemToLocalStorage: ' + e, 'error')
   }
@@ -650,7 +643,7 @@ var countdownTimer = Raffler.setVariableInterval(function () {
 
 // you hit the big raffle button
 Raffler.raffleButtonSmash = function () {
-  Raffler._notify('BUTTON SMASH', 'notice')
+  //Raffler._notify('BUTTON SMASH', 'notice')
   Raffler._hideFireworks()
   Raffler._disableRaffle()
 
@@ -768,7 +761,7 @@ Raffler.continueRaffling = function () {
       Raffler._notify('Choice could not be made. Pool of choices unchanged.', 'warning')
     }
   } else {
-    Raffler._notify('Choice rejected. Pool of choices unchanged.', 'notice')
+    //Raffler._notify('Choice rejected. Pool of choices unchanged.', 'notice')
   }
 
   // either way, disable confirm buttons

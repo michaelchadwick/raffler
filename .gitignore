@@ -1,5 +1,6 @@
 assets/audio/*
 assets/images/*
+assets/json/raffler_user_options.json
 assets/json/alts/*
 node_modules
 .DS_Store

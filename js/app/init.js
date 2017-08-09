@@ -7,9 +7,35 @@
 var Raffler = {}
 
 // init customizable things
-var initDataFile = '/assets/json/raffler_data.json'
-var initLogoFile = null
-var initLogoLink = null
+Raffler.initDataFile = '/assets/json/raffler_data.json'
+Raffler.initLogoFile = null
+Raffler.initLogoLink = null
+
+// user options
+//// set to true to use raffler_user_options.json
+Raffler.userOptionsMerge = false
+Raffler.userOptionsPath = '/assets/json/raffler_user_options.json'
+
+if (Raffler.userOptionsMerge) {
+  var jqxhr = $.getJSON(Raffler.userOptionsPath, function (data) {})
+    .done(function (data) {
+      // get user options, if they exist
+      Raffler.userDataFile = data.userDataFile
+      Raffler.userLogoFile = data.userLogoFile
+      Raffler.userLogoLink = data.userLogoLink
+
+      // sync user customizations
+      Raffler.dataFilePath = Raffler.userDataFile || Raffler.initDataFile
+      Raffler.logoFilePath = Raffler.userLogoFile || Raffler.initLogoFile
+      Raffler.logoFileLink = Raffler.userLogoLink || Raffler.initLogoLink
+    })
+    .fail(function (jqxhr, textStatus, e) {
+      //Raffler._notify('User options not loaded: ' + e, 'notice')
+      Raffler.dataFilePath = Raffler.initDataFile
+    })
+} else {
+  Raffler.dataFilePath = Raffler.initDataFile
+}
 
 // global variables
 Raffler.itemsArr = []

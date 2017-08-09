@@ -34,7 +34,24 @@ Click or tap the button and a cavalcade of pre-loaded names will begin to cycle 
 ```
 You can optionally add additional items on the fly (this functionality is hidden by default, however) by using the admin menu (`?admin=1` in querystring). The admin menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle sound and visual effects.
 
-The logo next to the main Raffler logo can be changed by change the image at `/assets/images/logo.png`. Keep it under 200px so it still looks OK on mobile.
+### User Options
+There are three options that can be changed via flag and an additional config file.
+
+* `userDataFile` - json file of Raffler items
+* `userLogoFile` - logo for your thingy
+* `userLogoLink` - click logo and go somewhere
+
+Here's how you make Raffler use your stuff
+* `/js/app/init.js` - change the line `Raffler.userOptionsMerge = false` to `true`
+* `/js/app/raffler_user_options_disabled.json` - remove the `_disabled` part and fill in the appropriate values
+
+```
+{
+  "userDataFile": "/assets/json/floobidy-hoo.json",
+  "userLogoFile": "/assets/images/jamma-mamma.png",
+  "userLogoLink": "http://ohmanwhat.omg"
+}
+```
 
 ### Third-Party Help
 * [Javascript Standard Style Guide](https://github.com/standard/standard)
