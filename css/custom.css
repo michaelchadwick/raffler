@@ -522,6 +522,14 @@ div#items-cycle {
   word-break: break-word;
   word-wrap: break-word;
 }
+div#items-cycle.stopped div {
+  -moz-transition: all 200ms ease;
+  -ms-transition: all 200ms ease;
+  -o-transition: all 200ms ease;
+  -webkit-transition: all 200ms ease;
+  opacity: 0.02;
+  transition: all 200ms ease;
+}
 div#items-cycle div {
   -moz-transition: all 750ms ease;
   -ms-transition: all 750ms ease;

@@ -27,6 +27,7 @@ Raffler.initApp = function () {
   }
   Raffler.divIntervalValue.text(Raffler.divIntervalRange.val())
 
+  Raffler._disableTimerStart()
   Raffler.btnRaffle.focus()
 
   //Raffler._notify('Raffler init', 'notice')
@@ -63,6 +64,9 @@ Raffler.setEventHandlers = function () {
     e.preventDefault()
     if (Raffler.btnTimerStart.prop('disabled', false)) {
       countdownTimer.start()
+      Raffler.divItemsCycle.removeClass('stopped')
+      Raffler._disableTimerStart()
+      Raffler._enableTimerStop()
       //Raffler._notify('countdownTimer started', 'notice')
     }
   })
@@ -70,6 +74,9 @@ Raffler.setEventHandlers = function () {
     e.preventDefault()
     if (Raffler.btnTimerStop.prop('disabled', false)) {
       countdownTimer.stop()
+      Raffler.divItemsCycle.addClass('stopped')
+      Raffler._disableTimerStop()
+      Raffler._enableTimerStart()
       //Raffler._notify('countdownTimer stopped', 'notice')
     }
   })

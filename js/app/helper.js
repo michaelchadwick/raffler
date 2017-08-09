@@ -11,16 +11,29 @@ Raffler._enableRaffle = function () {
   Raffler.btnRaffle.removeClass('disabled')
   Raffler.btnRaffle.prop('disabled', false)
 }
+Raffler._disableTimerStart = function () {
+  Raffler.btnTimerStart.prop('disabled', true)
+  Raffler.btnTimerStart.addClass('disabled')
+}
+Raffler._enableTimerStart = function () {
+  Raffler.btnTimerStart.prop('disabled', false)
+  Raffler.btnTimerStart.removeClass('disabled')
+}
+Raffler._disableTimerStop = function () {
+  Raffler.btnTimerStop.prop('disabled', true)
+  Raffler.btnTimerStop.addClass('disabled')
+}
+Raffler._enableTimerStop = function () {
+  Raffler.btnTimerStop.prop('disabled', false)
+  Raffler.btnTimerStop.removeClass('disabled')
+}
 Raffler._disableChosenConfirm = function () {
   Raffler.divChosenConfirm.hide()
   Raffler.btnChosenConfirmYes.addClass('disabled')
   Raffler.btnChosenConfirmNo.addClass('disabled')
   Raffler.btnChosenConfirmYes.prop('disabled', true)
   Raffler.btnChosenConfirmNo.prop('disabled', true)
-  Raffler.btnTimerStart.removeClass('disabled')
-  Raffler.btnTimerStop.removeClass('disabled')
-  Raffler.btnTimerStart.prop('disabled', false)
-  Raffler.btnTimerStop.prop('disabled', false)
+  Raffler._enableTimerStop()
 }
 Raffler._enableChosenConfirm = function () {
   Raffler.divChosenConfirm.show()
@@ -28,10 +41,8 @@ Raffler._enableChosenConfirm = function () {
   Raffler.btnChosenConfirmNo.removeClass('disabled')
   Raffler.btnChosenConfirmYes.prop('disabled', false)
   Raffler.btnChosenConfirmNo.prop('disabled', false)
-  Raffler.btnTimerStart.addClass('disabled')
-  Raffler.btnTimerStop.addClass('disabled')
-  Raffler.btnTimerStart.prop('disabled', true)
-  Raffler.btnTimerStop.prop('disabled', true)
+  Raffler._disableTimerStart()
+  Raffler._disableTimerStop()
 }
 // encode user entries html
 Raffler._sanitize = function (s) {
