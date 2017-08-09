@@ -207,7 +207,7 @@ Raffler.setEventHandlers = function () {
     var plainText = $('div#results-wrapper div ul')
       .html()
       .replace(/<li>/g, '')
-      .replace(/<\/li>/g, `\n`)
+      .replace(/<\/li>/g, `\r\n`)
 
     var Blob = window.Blob
     var plainTextBlob = new Blob(
@@ -216,8 +216,23 @@ Raffler.setEventHandlers = function () {
     )
 
     var today = new Date()
-    var ymd = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-    var filename = 'raffler-uccsc-export-results-' + ymd + '.txt'
+
+    var yr = today.getFullYear()
+    var mo = today.getMonth() + 1
+    mo = (mo < 10) ? `0${mo}` : `${mo}`
+    var dy = today.getDate()
+    dy = (dy < 10) ? `0${dy}` : `${dy}`
+    var ymd = `${yr}${mo}${dy}`
+
+    var hr = today.getHours()
+    hr = (hr < 10) ? `0${hr}` : `${hr}`
+    var mi = today.getMinutes()
+    mi = (mi < 10) ? `0${mi}` : `${mi}`
+    var sc = today.getSeconds()
+    sc = (sc < 10) ? `0${sc}` : `${sc}`
+    var hms = hr + ':' + mi + ':' + sc
+
+    var filename = `raffler-export_${ymd}_${hms}.txt`
 
     saveAs(plainTextBlob, filename)
   })
