@@ -85,7 +85,10 @@ Raffler._setLocalStorageItem = function (lsKey, obj) {
   }
 }
 // app notifications
-Raffler._notify = function (msg, type = '', notifyUser = false) {
+Raffler._notify = function (msg, type, notifyUser) {
+  type = (typeof type) === 'undefined' ? '' : type
+  notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
+  
   var bgColor, fgColor, header
   var speed = 1500
 
@@ -116,8 +119,8 @@ Raffler._notify = function (msg, type = '', notifyUser = false) {
       break
   }
 
-  const label = function (raw) {
-    const [bgColor, fgColor, type, ...msg] = raw.split(' ')
+  var label = function (raw) {
+    var [bgColor, fgColor, type, ...msg] = raw.split(' ')
     return [
       `%c${type}%c ${msg.join(' ')}`,
       `background-color: ${bgColor}; border-right: 3px solid #000; color: ${fgColor}; padding: 0.15em 0.35em 0.15em 0.5em`,

@@ -7,7 +7,7 @@ if ((typeof Raffler) === 'undefined') var Raffler = {}
 // app entry point
 Raffler.initApp = function () {
   // if admin passed, show hamburger menu
-  if ((typeof $.QueryString['admin']) !== 'undefined') {
+  if ((typeof $.QueryString.admin) !== 'undefined') {
     Raffler.btnAdminMenuToggle.show()
   }
 
@@ -187,8 +187,8 @@ Raffler.setEventHandlers = function () {
 
         Raffler.divUserItemsClearDialog.dialog('open')
       }
-    } catch (e) {
-      Raffler._notify('btnUserItemsClear: ' + e, 'error')
+    } catch (err) {
+      Raffler._notify('btnUserItemsClear: ' + err, 'error')
     }
   })
   Raffler.btnRaffle.click(function (e) {
@@ -350,6 +350,7 @@ Raffler.initItemsArr = function () {
 Raffler.syncChosenItemsWithItemsArr = function () {
   try {
     var items = Raffler.itemsArr
+    var itemsSpliced = []
     var chosenItems = Raffler._getLocalStorageItem('rafflerChosenItems')
 
     // if we've previously chosen items
@@ -359,7 +360,7 @@ Raffler.syncChosenItemsWithItemsArr = function () {
         for (var j = 0; j < items.length; j++) {
           if (chosenItems[i].name === items[j].name &&
               chosenItems[i].affl === items[j].affl) {
-            items.splice(j, 1)[0]
+            itemsSpliced = items.splice(j, 1)[0]
           }
         }
       }
@@ -740,8 +741,8 @@ Raffler.raffleButtonSmash = function () {
       // display fireworks
       Raffler._displayFireworks()
 
-      let item = Raffler.lastItemChosen
-      let items = Raffler.itemsArr
+      var item = Raffler.lastItemChosen
+      var items = Raffler.itemsArr
 
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
@@ -780,8 +781,8 @@ Raffler.continueRaffling = function () {
       // update results count
       Raffler.refreshResultsCount()
 
-      let item = Raffler.lastItemChosen
-      let items = Raffler.itemsArr
+      var item = Raffler.lastItemChosen
+      var items = Raffler.itemsArr
 
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
