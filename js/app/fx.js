@@ -10,9 +10,12 @@ Raffler._hideFireworks = function () {
 }
 Raffler._displayFireworks = function () {
   if (Raffler.ckOptFireworks.is(':checked')) {
-    Raffler.divItemsCycle.prop('z-index', 1000)
-    Raffler.btnRaffle.prop('z-index', 1000)
-    Raffler.canvasFireworks.prop('z-index', 1001)
+    Raffler.divItemsCycle.prop('z-index', 99)
+    Raffler.btnRaffle.prop('z-index', 99)
+    Raffler.canvasFireworks.css({
+      'opacity': 0.3,
+      'z-index': 100
+    })
     Raffler.canvasFireworks.show()
   }
 }
