@@ -6,7 +6,7 @@ Click or tap the button and a cavalcade of pre-loaded names will begin to cycle 
 ### Tech Specs
 *Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep data and options stateful, even in the event of a browser reload or crash.
 
-*Raffler's* initial data set comes from `/json/raffler_data.json` (filename can be changed in `/js/app/init.js`), and it is structured as follows:
+*Raffler's* initial data set comes from `/assets/json/raffler_data.json` (filename can be changed in `/assets/js/app/init.js`), and it is structured as follows:
 
 ```
 [
@@ -42,8 +42,8 @@ There are three options that can be changed via flag and an additional config fi
 * `userLogoLink` - click logo and go somewhere
 
 Here's how you make Raffler use your stuff
-* `/js/app/init.js` - change the line `Raffler.userOptionsMerge = false` to `true`
-* `/js/app/raffler_user_options_disabled.json` - remove the `_disabled` part and fill in the appropriate values
+* `/assets/js/app/init.js` - change the line `Raffler.userOptionsMerge = false` to `true`
+* `/assets/js/app/raffler_user_options_disabled.json` - remove the `_disabled` part and fill in the appropriate values
 
 ```
 {

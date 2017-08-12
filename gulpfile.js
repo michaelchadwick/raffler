@@ -12,13 +12,13 @@ var gutil = require('gulp-util')
 
 // JS files
 var js_app_files = [
-  'js/app/init.js',
-  'js/app/helper.js',
-  'js/app/fx.js',
-  'js/app/main.js'
+  'assets/js/app/init.js',
+  'assets/js/app/helper.js',
+  'assets/js/app/fx.js',
+  'assets/js/app/main.js'
 ]
 var js_lib_files = [
-  'js/lib/*.js'
+  'assets/js/lib/*.js'
 ]
 
 // Compile Sass
@@ -57,11 +57,11 @@ gulp.task('app-concat-minify', function (cb) {
     [
       gulp.src(js_app_files),
       concat('all-app.js', {newLine: '\r\n'}),
-      gulp.dest('js/app/build'),
+      gulp.dest('assets/js/app/build'),
       babel({ presets: ['es2015'] }),
       rename('all-app.min.js'),
       uglify(),
-      gulp.dest('js/app/build')
+      gulp.dest('assets/js/app/build')
     ],
     cb
   )
@@ -71,11 +71,11 @@ gulp.task('lib-concat-minify', function () {
     [
       gulp.src(js_lib_files),
       concat('all-lib.js', {newLine: '\r\n'}),
-      gulp.dest('js/lib/build'),
+      gulp.dest('assets/js/lib/build'),
       babel({ presets: ['es2015'] }),
       rename('all-lib.min.js'),
       UglifyJS.minify(),
-      gulp.dest('js/lib/build')
+      gulp.dest('assets/js/lib/build')
     ],
     cb
   )
