@@ -8,6 +8,7 @@ var Raffler = {}
 
 // init customizable things
 Raffler.initDataFile = '/assets/json/raffler_data.json'
+Raffler.initOptionsFile = '/assets/json/raffler_options.json'
 Raffler.initLogoFile = null
 Raffler.initLogoLink = null
 
@@ -39,7 +40,13 @@ if (Raffler.userOptionsMerge) {
 
 // global variables
 Raffler.itemsArr = []
-Raffler.itemsMinusChosenArr = []
+Raffler.itemsLeftArr = []
+Raffler.initOptionsObj = {
+  'showGraph': false,
+  'boxResize': false,
+  'soundCountdown': true,
+  'soundVictory': false
+}
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
 Raffler.initMult = 1
@@ -88,7 +95,7 @@ Raffler.btnExportResults = $('div#results-wrapper div button')
 Raffler.ckOptShowGraph = $('input#check-option-show-graph')
 Raffler.ckOptResize = $('input#check-option-resize')
 Raffler.ckOptSoundCountdown = $('input#check-option-sound-countdown')
-Raffler.ckOptSoundWinner = $('input#check-option-sound-winner')
+Raffler.ckOptSoundVictory = $('input#check-option-sound-winner')
 Raffler.ckOptFireworks = $('input#check-option-fireworks')
 
 // input things

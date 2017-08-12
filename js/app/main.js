@@ -13,7 +13,6 @@ Raffler.initApp = function () {
 
   // add logo, if exists
   if (Raffler.userOptionsMerge && (typeof Raffler.logoFilePath !== 'undefined') && (typeof Raffler.logoFileLink !== 'undefined')) {
-    // Raffler._notify('User logo and link found, so adding to header', 'notice')
     Raffler.title.append(`<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img src='${Raffler.logoFilePath}' /></a>`)
   }
 
@@ -21,7 +20,7 @@ Raffler.initApp = function () {
   Raffler.checkForLocalStorage()
   Raffler.resetApp()
   Raffler.refreshDebugValues()
-  Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
+  Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
 
   if (Raffler._getLocalStorageItem('rafflerChosenItems').length) {
     Raffler.refreshChosenItemsDisplay()
@@ -48,6 +47,24 @@ Raffler.setEventHandlers = function () {
   })
   Raffler.ckOptShowGraph.on('change', function (e) {
     Raffler.divItemsGraph.toggle()
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.showGraph = !curObj.showGraph
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
+  })
+  Raffler.ckOptResize.on('change', function (e) {
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.boxResize = !curObj.boxResize
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
+  })
+  Raffler.ckOptSoundCountdown.on('change', function (e) {
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.soundCountdown = !curObj.soundCountdown
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
+  })
+  Raffler.ckOptSoundVictory.on('change', function (e) {
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.soundVictory = !curObj.soundVictory
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
   Raffler.btnTestSuccess.click(function (e) {
     e.preventDefault()
@@ -254,6 +271,13 @@ Raffler.checkForLocalStorage = function () {
       Raffler._notify('No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don\'t reload!', 'error', true)
     } else {
       // if our specific keys don't exist, then init
+      if (!window.localStorage.getItem('rafflerOptions')) {
+        Raffler._setLocalStorageItem('rafflerOptions', Raffler.initOptionsObj)
+        // Raffler._notify('checkForLocalStorage: rafflerOptions created', 'notice')
+      } else {
+        Raffler._notify('checkForLocalStorage: rafflerOptions already exists', 'warning')
+      }
+      Raffler.syncOptionsToUI()
       if (!window.localStorage.getItem('rafflerUserItems')) {
         Raffler._setLocalStorageItem('rafflerUserItems', Raffler.initItemsObj)
         // Raffler._notify('checkForLocalStorage: rafflerUserItems created', 'notice')
@@ -335,8 +359,8 @@ Raffler.initItemsArr = function () {
           Raffler.itemsArr.push(val)
         })
         Raffler._shuffleArray(Raffler.itemsArr)
-        Raffler.itemsMinusChosenArr = Raffler.itemsArr
-        Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
+        Raffler.itemsLeftArr = Raffler.itemsArr
+        Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
         Raffler.syncChosenItemsWithItemsArr()
         Raffler.addUserItemsToItemsArr()
       }
@@ -346,6 +370,26 @@ Raffler.initItemsArr = function () {
     })
 }
 
+// sync localStorage options to admin UI
+Raffler.syncOptionsToUI = function () {
+  var lsVals = Raffler._getLocalStorageItem('rafflerOptions')
+  if (lsVals.showGraph) {
+    Raffler.ckOptShowGraph.prop('checked', true)
+    Raffler.divItemsGraph.show()
+  } else {
+    Raffler.ckOptShowGraph.prop('checked', false)
+    Raffler.divItemsGraph.hide()
+  }
+  lsVals.boxResize
+    ? Raffler.ckOptResize.prop('checked', true)
+    : Raffler.ckOptResize.prop('checked', false)
+  lsVals.soundCountdown
+    ? Raffler.ckOptSoundCountdown.prop('checked', true)
+    : Raffler.ckOptSoundCountdown.prop('checked', false)
+  lsVals.soundVictory
+    ? Raffler.ckOptSoundVictory.prop('checked', true)
+    : Raffler.ckOptSoundVictory.prop('checked', false)
+}
 // remove previously chosen items from in-memory itemsArr
 Raffler.syncChosenItemsWithItemsArr = function () {
   try {
@@ -364,12 +408,12 @@ Raffler.syncChosenItemsWithItemsArr = function () {
           }
         }
       }
-      Raffler.itemsMinusChosenArr = items
-      Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
+      Raffler.itemsLeftArr = items
+      Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
 
       // Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
-      // Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'warning')
+      // Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'notice')
     }
 
     // all items have been chosen on reload
@@ -583,7 +627,7 @@ Raffler.setVariableInterval = function (callbackFunc, timing) {
   }
 }
 
-// main timer instancefor raffler cycler
+// main timer instance for raffler cycler
 var countdownTimer = Raffler.setVariableInterval(function () {
   // this is the variableInterval - so we can change/get the interval here:
   var interval = this.interval
@@ -742,8 +786,8 @@ Raffler.raffleButtonSmash = function () {
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
           items.splice(i, 1)
-          Raffler.itemsMinusChosenArr = items
-          Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
+          Raffler.itemsLeftArr = items
+          Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
           Raffler.refreshAvailableItems()
           break
         }
@@ -782,8 +826,8 @@ Raffler.continueRaffling = function () {
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
           items.splice(i, 1)
-          Raffler.itemsMinusChosenArr = items
-          Raffler.refreshItemsGraph(Raffler.itemsMinusChosenArr)
+          Raffler.itemsLeftArr = items
+          Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
           Raffler.refreshAvailableItems()
           break
         }

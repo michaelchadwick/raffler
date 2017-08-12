@@ -1,5 +1,5 @@
 /* fx */
-/* extra fluff to make it look and sound cool */
+/* extra fluff to make it cool(er) */
 /* global Raffler */
 
 Raffler._playSound = function (soundId) {
@@ -8,7 +8,7 @@ Raffler._playSound = function (soundId) {
     if (soundId === 'beep' && Raffler.ckOptSoundCountdown.is(':checked')) {
       sound.play()
     }
-    if (soundId === 'victory' && Raffler.ckOptSoundWinner.is(':checked')) {
+    if (soundId === 'victory' && Raffler.ckOptSoundVictory.is(':checked')) {
       sound.play()
     }
   } else {
