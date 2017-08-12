@@ -58,3 +58,7 @@ Here's how you make Raffler use your stuff
 * [JS File Saving](https://github.com/eligrey/FileSaver.js)
 * [CSV to JSON](https://github.com/Keyang/node-csvtojson)
 * [Grunt](https://github.com/gruntjs/grunt)
+
+### Attribution
+* Countdown sound &copy; Comedy Central/The Daily Show
+* Victory sound &copy; http://freesound.org/people/shinephoenixstormcrow/sounds/337049/

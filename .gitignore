@@ -1,4 +1,5 @@
-assets/audio/*
+!assets/audio
+!assets/audio/*.mp3
 assets/images/*
 assets/json/raffler_user_options.json
 assets/json/alts/*
