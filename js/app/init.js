@@ -1,7 +1,7 @@
 /* init */
 /* get the main app object set up */
 /* also define a couple extensions */
-/* global $, saveAs */
+/* global $ */
 
 // main object
 var Raffler = {}
@@ -12,12 +12,12 @@ Raffler.initLogoFile = null
 Raffler.initLogoLink = null
 
 // user options
-//// set to true to use raffler_user_options.json
-Raffler.userOptionsMerge = true
+// set to true to use raffler_user_options.json
+Raffler.userOptionsMerge = false
 Raffler.userOptionsPath = '/assets/json/raffler_user_options.json'
 
 if (Raffler.userOptionsMerge) {
-  var jqxhr = $.getJSON(Raffler.userOptionsPath, function (data) {})
+  $.getJSON(Raffler.userOptionsPath, function (data) {})
     .done(function (data) {
       // get user options, if they exist
       Raffler.userDataFile = data.userDataFile
@@ -29,8 +29,8 @@ if (Raffler.userOptionsMerge) {
       Raffler.logoFilePath = Raffler.userLogoFile || Raffler.initLogoFile
       Raffler.logoFileLink = Raffler.userLogoLink || Raffler.initLogoLink
     })
-    .fail(function (jqxhr, textStatus, e) {
-      //Raffler._notify('User options not loaded: ' + e, 'notice')
+    .fail(function () {
+      // Raffler._notify('User options not loaded: ' + e, 'notice')
       Raffler.dataFilePath = Raffler.initDataFile
     })
 } else {

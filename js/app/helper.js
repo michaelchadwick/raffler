@@ -88,7 +88,7 @@ Raffler._setLocalStorageItem = function (lsKey, obj) {
 Raffler._notify = function (msg, type, notifyUser) {
   type = (typeof type) === 'undefined' ? '' : type
   notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
-  
+
   var bgColor, fgColor, header
   var speed = 1500
 
