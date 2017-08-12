@@ -639,7 +639,6 @@ var countdownTimer = Raffler.setVariableInterval(function () {
         Raffler.divItemsCycle.addClass('level-win')
         Raffler.body.addClass('level4')
         Raffler._playSound('victory')
-        Raffler._displayFireworks()
 
         // confirm winner
         Raffler._enableChosenConfirm()
@@ -677,7 +676,6 @@ var countdownTimer = Raffler.setVariableInterval(function () {
 // you hit the big raffle button
 Raffler.raffleButtonSmash = function () {
   // Raffler._notify('BUTTON SMASH', 'notice')
-  Raffler._hideFireworks()
   Raffler._disableRaffle()
 
   if (Raffler.ckOptResize.is(':checked')) {
@@ -737,8 +735,6 @@ Raffler.raffleButtonSmash = function () {
       Raffler.refreshChosenItemsDisplay()
       // update results count
       Raffler.refreshResultsCount()
-      // display fireworks
-      Raffler._displayFireworks()
 
       var item = Raffler.lastItemChosen
       var items = Raffler.itemsArr

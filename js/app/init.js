@@ -66,7 +66,6 @@ Raffler.divDataResetDialog = $('div#data-reset-dialog')
 Raffler.divUserItemsManager = $('div#user-items-manager')
 Raffler.divUserItemsDisplay = $('div#user-items-display')
 Raffler.divUserItemsClearDialog = $('div#user-items-clear-dialog')
-Raffler.canvasFireworks = $('canvas')
 
 // clicky things
 Raffler.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
