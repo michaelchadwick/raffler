@@ -4,7 +4,7 @@
 Click or tap the button and a cavalcade of pre-loaded names will begin to cycle more and more slowly as it finally comes to a stop, and a single choice is made. That name will then be added to a results list below the *Raffler*, and will not be chosen again if re-run (until a reset, naturally).
 
 ### Tech Specs
-*Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep everything stateful, even in the event of a browser reload or crash.
+*Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep data and options stateful, even in the event of a browser reload or crash.
 
 *Raffler's* initial data set comes from `/json/raffler_data.json` (filename can be changed in `/js/app/init.js`), and it is structured as follows:
 
@@ -32,7 +32,7 @@ Click or tap the button and a cavalcade of pre-loaded names will begin to cycle 
   }
 ]
 ```
-You can optionally add additional items on the fly (this functionality is hidden by default, however) by using the admin menu (`?admin=1` in querystring). The admin menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle sound and visual effects.
+You can optionally add additional items on the fly (this functionality is hidden by default, however) by using the admin menu (`?admin=1` in querystring). The admin menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
 
 ### User Options
 There are three options that can be changed via flag and an additional config file.
