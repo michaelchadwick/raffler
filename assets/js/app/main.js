@@ -331,7 +331,7 @@ Raffler.resetCountdown = function () {
   countdownTimer.startCountdown = false
   countdownTimer.interval = Raffler.initInterval
   countdownTimer.mult = Raffler.initMult
-  countdownTimer.stage = 0
+  countdownTimer.stage = Raffler.stages.INIT
   countdownTimer.start()
 
   Raffler.timesRun = 0
@@ -666,7 +666,7 @@ var countdownTimer = Raffler.timer(function () {
   if (this.startCountdown) {
     // slow down at a certain point
     if (this.interval > 150 && this.interval <= 250) {
-      this.stage = 2
+      this.stage = Raffler.stages.SLOWED
       Raffler.divStageValue.text(this.stage)
 
       if (Raffler.ckOptResize.is(':checked')) {
@@ -679,7 +679,7 @@ var countdownTimer = Raffler.timer(function () {
 
     // slow down more at a certain point
     if (this.interval > 250 && this.interval <= 325) {
-      this.stage = 3
+      this.stage = Raffler.stages.SLOWEST
       Raffler.divStageValue.text(this.stage)
 
       if (Raffler.ckOptResize.is(':checked')) {
@@ -702,7 +702,7 @@ var countdownTimer = Raffler.timer(function () {
 
       // WINNER WINNER CHICKEN DINNER
       if (this.interval >= Raffler.lastInterval) {
-        this.stage = 4
+        this.stage = Raffler.stages.DONE
         Raffler.divStageValue.text(this.stage)
         this.startCountdown = false
         this.stop()
@@ -730,8 +730,8 @@ var countdownTimer = Raffler.timer(function () {
   }
 
   // start countdown!
-  if (this.startCountdown && (this.stage === 0 || this.stage === 1)) {
-    this.stage = 1
+  if (this.startCountdown && (this.stage === Raffler.stages.INIT || this.stage === Raffler.stages.BEGUN)) {
+    this.stage = Raffler.stages.BEGUN
     Raffler.divStageValue.text(this.stage)
     if (!Raffler.divItemsCycle.hasClass('level1')) {
       Raffler.divItemsCycle.addClass('level1')
@@ -740,7 +740,7 @@ var countdownTimer = Raffler.timer(function () {
   }
   // if we've started countdown and we haven't reached end
   // then keep cycling with increased multiplier
-  if (this.stage > 0 && this.stage !== 4) {
+  if (this.stage > Raffler.stages.INIT && this.stage !== Raffler.stages.DONE) {
     var newInterval = interval + (1.5 ^ this.mult++)
     Raffler.divMultiplyValue.text(this.mult)
     Raffler.divIntervalRange.val(newInterval)
@@ -777,7 +777,7 @@ Raffler.raffleButtonSmash = function () {
     Raffler._notify('Only one item to raffle!<br /><strong>instant winner!</strong>', 'warning', true)
 
     // don't need to play any sound
-    Raffler.ignoreSound = true
+    Raffler.shouldIgnoreSound = true
 
     // add lone item to items-cycle
     var loneItemHTML = ''

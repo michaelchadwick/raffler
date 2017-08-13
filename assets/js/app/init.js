@@ -38,7 +38,7 @@ if (Raffler.userOptionsMerge) {
   Raffler.dataFilePath = Raffler.initDataFile
 }
 
-// global variables
+// main Raffler properties
 Raffler.itemsArr = []
 Raffler.itemsLeftArr = []
 Raffler.initOptionsObj = {
@@ -53,10 +53,16 @@ Raffler.initMult = 1
 Raffler.initTimesRun = 0
 Raffler.lastInterval = 359
 Raffler.hasLocalStorage = true
-Raffler.ignoreSound = false
-Raffler.enableUserItems = false
+Raffler.shouldIgnoreSound = false
 Raffler.lastItemChosen = ''
 Raffler.lastItemChosenConfirmed = false
+Raffler.stages = {
+  INIT: 0,
+  BEGUN: 1,
+  SLOWED: 2,
+  SLOWEST: 3,
+  DONE: 4
+}
 
 // main divs/elements
 Raffler.body = $('body')
