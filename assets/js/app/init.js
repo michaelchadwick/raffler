@@ -102,7 +102,9 @@ Raffler.ckOptFireworks = $('input#check-option-fireworks')
 Raffler.inputUserItemsAddName = $('input#text-user-items-add-name')
 Raffler.inputUserItemsAddAffl = $('input#text-user-items-add-affl')
 Raffler.textAvailableItems = $('div#items-available textarea')
+Raffler.textAvailableItemsCount = $('div#items-available .title span')
 Raffler.textChosenItems = $('div#items-chosen textarea')
+Raffler.textChosenItemsCount = $('div#items-chosen .title span')
 
 // audio files
 Raffler.sndBeep = $('audio#beep')

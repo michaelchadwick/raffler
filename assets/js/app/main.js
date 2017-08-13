@@ -531,6 +531,7 @@ Raffler.refreshChosenItemsDisplay = function () {
         Raffler.divResultsContent.prepend('<li>' + ordinal++ + '. ' + val.name + ' (' + val.affl + ')</li>')
         Raffler.textChosenItems.prepend(val.name + ' (' + val.affl + `)\n`)
       })
+      Raffler.textChosenItemsCount.text(`(${lsChosenItems.length})`)
 
       Raffler._notify('refreshChosenItemsDisplay: display updated')
     } else {
@@ -565,6 +566,7 @@ Raffler.refreshAvailableItemsDisplay = function () {
   Raffler.itemsArr.forEach(function (item) {
     Raffler.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
   })
+  Raffler.textAvailableItemsCount.text(`(${Raffler.itemsArr.length})`)
 
   // Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
