@@ -45,18 +45,24 @@ Raffler._enableChosenConfirm = function () {
   Raffler._disableTimerStop()
 }
 // encode user entries html
-Raffler._sanitize = function (s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/""/g, '&quot;')
+Raffler._sanitize = function (newEntry) {
+  $.each(newEntry, function (key, val) {
+    val = val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/""/g, '&quot;')
+  })
+  return newEntry
 }
 // check for duplicate user entries
 Raffler._isDuplicateValue = function (newUserItem) {
   var currentUserItems = Raffler._getLocalStorageItem('rafflerUserItems')
+  var isDupe = false
 
-  $.each(currentUserItems.items, function (key, val) {
-    if (newUserItem === val) return true
+  $.each(currentUserItems, function (key, val) {
+    if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
+      isDupe = true
+    }
   })
 
-  return false
+  return isDupe
 }
 // shuffle array
 Raffler._shuffleArray = function (array) {

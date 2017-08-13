@@ -24,6 +24,13 @@ button, input {
 button {
   width: 64px;
 }
+ul {
+  margin: 2px;
+}
+ul li {
+  line-height: 1.3em;
+  margin: 0 0 0 -21px;
+}
 
 .ui-draggable .ui-dialog-titlebar {
   background-color: #8d4254;
@@ -323,7 +330,7 @@ div#admin-menu {
   font-size: 1em;
   font-weight: 700;
   height: 100%;
-  margin-right: -225px;
+  margin-right: 0px;
   overflow: auto;
   position: fixed;
   right: 0;
@@ -412,8 +419,6 @@ div#timer-controls > a#button-timer-stop {
 
 div#user-items-manager {
   clear: left;
-  /* need to fix user items after changing data format */
-  display: none;
 }
 div#user-items-manager input,
 div#user-items-manager button,
@@ -423,7 +428,10 @@ div#user-items-manager div {
 div#user-items-manager input {
   width: auto;
 }
-div#user-items-manager input#text-user-items-add {
+div#user-items-manager input#text-user-items-add-name {
+  padding: 3px;
+}
+div#user-items-manager input#text-user-items-add-affl {
   padding: 3px;
 }
 div#user-items-manager button {

@@ -122,7 +122,14 @@ Raffler.setEventHandlers = function () {
 
     Raffler.divDataResetDialog.dialog('open')
   })
-  Raffler.inputUserItemsAdd.keyup(function (e) {
+  Raffler.inputUserItemsAddName.keyup(function (e) {
+    var code = e.which
+    if (code === 13) {
+      e.preventDefault()
+      Raffler.btnUserItemsAdd.click()
+    }
+  })
+  Raffler.inputUserItemsAddAffl.keyup(function (e) {
     var code = e.which
     if (code === 13) {
       e.preventDefault()
@@ -130,43 +137,32 @@ Raffler.setEventHandlers = function () {
     }
   })
   Raffler.btnUserItemsAdd.click(function () {
-    if (Raffler.inputUserItemsAdd.val() !== '' || Raffler.inputUserItemsAdd.val() !== undefined) {
-      var newUserItem = Raffler.inputUserItemsAdd.val().trim()
+    if (Raffler.inputUserItemsAddName.val() !== '' && Raffler.inputUserItemsAddAffl.val() !== '') {
+      var newUserItem = {
+        'name': Raffler.inputUserItemsAddName.val().trim(),
+        'affl': Raffler.inputUserItemsAddAffl.val().trim()
+      }
 
-      if (newUserItem !== '') {
+      if (newUserItem !== 'undefined') {
         var tempUserItemObj = Raffler._getLocalStorageItem('rafflerUserItems')
         var newItemAdded = false
 
-        // if someone adds a list of things, turn into array and then push
-        if (newUserItem.indexOf(',') > -1) {
-          $.each(newUserItem.split(','), function (key, val) {
-            if (!Raffler._isDuplicateValue(val)) {
-              tempUserItemObj.push(Raffler._sanitize(val))
-              newItemAdded = true
-              Raffler.btnUserItemsClear.prop('disabled', false)
-              Raffler.btnUserItemsClear.removeClass()
-            } else {
-              Raffler._notify('user item ' + val + ' not added: duplicate.', 'error', true)
-            }
-          })
+        if (!Raffler._isDuplicateValue(newUserItem)) {
+          tempUserItemObj.push(Raffler._sanitize(newUserItem))
+          newItemAdded = true
+          Raffler.btnUserItemsClear.prop('disabled', false)
+          Raffler.btnUserItemsClear.removeClass()
         } else {
-          // else push single new item onto temp tempUserItemObj
-          if (!Raffler._isDuplicateValue(newUserItem)) {
-            tempUserItemObj.push(Raffler._sanitize(newUserItem))
-            newItemAdded = true
-            Raffler.btnUserItemsClear.prop('disabled', false)
-            Raffler.btnUserItemsClear.removeClass()
-          } else {
-            Raffler._notify('user item ' + newUserItem + ' not added: duplicate.', 'error', true)
-          }
+          Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" not added: duplicate.', 'error', true)
         }
 
         if (newItemAdded) {
           // update localStorage with temp tempUserItemObj
           Raffler._setLocalStorageItem('rafflerUserItems', tempUserItemObj)
           // show status bubble
-          Raffler._notify('user item ' + newUserItem + ' added!', 'success', true)
-          Raffler.addUserItemsToItemsArr()
+          Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" added!', 'success', true)
+          Raffler.clearUserItemsInput()
+          Raffler.syncUserItemsWithItemsArr()
         }
       }
     }
@@ -187,12 +183,10 @@ Raffler.setEventHandlers = function () {
             'Clear them!': function () {
               Raffler.resetUserItems()
 
-              Raffler.inputUserItemsAdd.val('')
+              Raffler.clearUserItemsInput()
 
               Raffler.btnUserItemsClear.prop('disabled', true)
               Raffler.btnUserItemsClear.addClass('disabled')
-
-              Raffler._notify('User items cleared', 'success', true)
 
               $(this).dialog('close')
             },
@@ -306,7 +300,7 @@ Raffler.resetApp = function () {
   Raffler.timesRun = Raffler._getLocalStorageItem('rafflerChosenItems').length
   Raffler.divIntervalRange.val(Raffler.initInterval)
 
-  Raffler.refreshAvailableItems()
+  Raffler.refreshAvailableItemsDisplay()
   Raffler.refreshResultsCount()
   Raffler.refreshDebugValues()
 
@@ -328,7 +322,7 @@ Raffler.resetCountdown = function () {
   Raffler.resetUserItems()
 
   Raffler.divResultsContent.text('')
-  Raffler.inputUserItemsAdd.val('')
+  Raffler.clearUserItemsInput()
   Raffler.textAvailableItems.text('')
   Raffler.textChosenItems.text('')
   Raffler.divResultsWrapper.hide()
@@ -343,6 +337,44 @@ Raffler.resetCountdown = function () {
   Raffler.timesRun = 0
 
   Raffler.refreshDebugValues()
+}
+// reset rafflerChosenItems localStorage to nothing and update displays
+Raffler.resetChosenItems = function () {
+  try {
+    Raffler._setLocalStorageItem('rafflerChosenItems', Raffler.initItemsObj)
+    Raffler.refreshChosenItemsDisplay()
+
+    Raffler._notify('resetChosenItems: reset', 'warning')
+  } catch (e) {
+    Raffler._notify('resetChosenItems: ' + e, 'error')
+  }
+}
+// reset rafflerUserItems localStorage to nothing and update displays
+Raffler.resetUserItems = function () {
+  try {
+    var lsUserItems = Raffler._getLocalStorageItem('rafflerUserItems')
+
+    for (var i = 0; i < Raffler.itemsArr.length; i++) {
+      for (var j = 0; j < lsUserItems.length; j++) {
+        if (Raffler.itemsArr[i].name === lsUserItems[j].name &&
+            Raffler.itemsArr[i].affl === lsUserItems[j].affl) {
+          Raffler.itemsArr.splice(i, 1)[0]
+        }
+      }
+    }
+
+    Raffler._setLocalStorageItem('rafflerUserItems', Raffler.initItemsObj)
+    Raffler.refreshUserItemsDisplay()
+    Raffler.refreshAvailableItemsDisplay()
+
+    Raffler._notify('User items reset', 'success', true)
+  } catch (e) {
+    Raffler._notify('resetUserItems: ' + e, 'error')
+  }
+}
+Raffler.clearUserItemsInput = function () {
+  Raffler.inputUserItemsAddName.val('')
+  Raffler.inputUserItemsAddAffl.val('')
 }
 
 // fill in-memory itemsArr with server JSON
@@ -362,7 +394,7 @@ Raffler.initItemsArr = function () {
         Raffler.itemsLeftArr = Raffler.itemsArr
         Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
         Raffler.syncChosenItemsWithItemsArr()
-        Raffler.addUserItemsToItemsArr()
+        Raffler.syncUserItemsWithItemsArr()
       }
     })
     .fail(function (jqxhr, textStatus, e) {
@@ -399,7 +431,7 @@ Raffler.syncChosenItemsWithItemsArr = function () {
 
     // if we've previously chosen items
     // we need to remove them from the raffle
-    if (chosenItems.length > 0) {
+    if (chosenItems && chosenItems.length > 0) {
       for (var i = 0; i < chosenItems.length; i++) {
         for (var j = 0; j < items.length; j++) {
           if (chosenItems[i].name === items[j].name &&
@@ -429,50 +461,37 @@ Raffler.syncChosenItemsWithItemsArr = function () {
   }
 }
 // add user items to in-memory itemsArr
-Raffler.addUserItemsToItemsArr = function () {
+Raffler.syncUserItemsWithItemsArr = function () {
   try {
+    var items = Raffler.itemsArr
     var userItems = Raffler._getLocalStorageItem('rafflerUserItems')
-    Raffler.inputUserItemsAdd.text('')
+    var userItemWillBeAdded = true
+
+    // if we've previously added user items
     if (userItems && userItems.length > 0) {
       Raffler.btnUserItemsClear.prop('disabled', false)
       Raffler.btnUserItemsClear.removeClass()
-      $.each(userItems, function (key, val) {
-        if (Raffler.itemsArr.indexOf(val) < 0) {
-          Raffler.itemsArr.push(val)
+
+      for (var i = 0; i < userItems.length; i++) {
+        for (var j = 0; j < items.length; j++) {
+          if (userItems[i].name === items[j].name &&
+              userItems[i].affl === items[j].affl) {
+            userItemWillBeAdded = false
+          }
         }
-      })
+        if (userItemWillBeAdded) {
+          Raffler.itemsArr.push(userItems[i])
+        }
+      }
       Raffler.refreshUserItemsDisplay()
 
-      Raffler._notify('addUserItemsToItemsArr: synced', 'notice')
+      Raffler._notify('syncUserItemsWithItemsArr: synced', 'notice')
     } else {
-      // Raffler._notify('addUserItemsToItemsArr: none to sync', 'warning')
+      // Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'warning')
     }
-    Raffler.refreshAvailableItems()
+    Raffler.refreshAvailableItemsDisplay()
   } catch (e) {
-    Raffler._notify('addUserItemsToItemsArr: ' + e, 'error')
-  }
-}
-
-// reset rafflerChosenItems localStorage to nothing and update displays
-Raffler.resetChosenItems = function () {
-  try {
-    Raffler._setLocalStorageItem('rafflerChosenItems', Raffler.initItemsObj)
-    Raffler.refreshChosenItemsDisplay()
-
-    Raffler._notify('resetChosenItems: reset', 'warning')
-  } catch (e) {
-    Raffler._notify('resetChosenItems: ' + e, 'error')
-  }
-}
-// reset rafflerUserItems localStorage to nothing and update displays
-Raffler.resetUserItems = function () {
-  try {
-    Raffler._setLocalStorageItem('rafflerUserItems', Raffler.initItemsObj)
-    Raffler.refreshUserItemsDisplay()
-
-    Raffler._notify('resetUserItems: reset', 'warning')
-  } catch (e) {
-    Raffler._notify('resetUserItems: ' + e, 'error')
+    Raffler._notify('syncUserItemsWithItemsArr: ' + e, 'error')
   }
 }
 
@@ -527,8 +546,9 @@ Raffler.refreshUserItemsDisplay = function () {
   try {
     var lsUserItems = Raffler._getLocalStorageItem('rafflerUserItems')
     if (lsUserItems && lsUserItems.length > 0) {
-      Raffler.divUserItemsDisplay.html('<span class=\'heading\'>user items</span>: ')
-      Raffler.divUserItemsDisplay.append(lsUserItems.join(', '))
+      $.each(lsUserItems, function (key, val) {
+        Raffler.divUserItemsDisplay.children().append('<li>' + val.name + ' (' + val.affl + ')</li>')
+      })
 
       // Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
     } else {
@@ -540,7 +560,7 @@ Raffler.refreshUserItemsDisplay = function () {
   }
 }
 // re-display available items from in-memory itemsArr
-Raffler.refreshAvailableItems = function () {
+Raffler.refreshAvailableItemsDisplay = function () {
   Raffler.textAvailableItems.text('')
   Raffler.itemsArr.forEach(function (item) {
     Raffler.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
@@ -555,7 +575,7 @@ Raffler.addChosenItemToLocalStorage = function (lastChosenItem) {
     var localChosenItemsObj = Raffler._getLocalStorageItem('rafflerChosenItems')
     localChosenItemsObj.push(lastChosenItem)
     Raffler._setLocalStorageItem('rafflerChosenItems', localChosenItemsObj)
-    Raffler.refreshAvailableItems()
+    Raffler.refreshAvailableItemsDisplay()
     // Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
   } catch (e) {
     Raffler._notify('addChosenItemToLocalStorage: ' + e, 'error')
@@ -563,7 +583,7 @@ Raffler.addChosenItemToLocalStorage = function (lastChosenItem) {
 }
 
 // timer object to keep track of countdown
-Raffler.setVariableInterval = function (callbackFunc, timing) {
+Raffler.timer = function (callbackFunc, timing) {
   if (Raffler.itemsArr) {
     var variableInterval = {
       items: Raffler.itemsArr,
@@ -573,37 +593,46 @@ Raffler.setVariableInterval = function (callbackFunc, timing) {
       callback: callbackFunc,
       stopped: false,
       startCountdown: false,
-      itemsIndex: Math.floor(Math.random() * Raffler.itemsArr.length),
+      index: Math.floor(Math.random() * Raffler.itemsArr.length),
       runLoop: function () {
         if (variableInterval.stopped) return
         // check to see if the time interval is at the end of a raffle
         var result = variableInterval.callback(variableInterval)
 
         if (typeof result === 'number') {
-          if (result === 0) return
+          if (result === 0) { return }
           variableInterval.interval = result
         }
         Raffler.divIntervalValue.text(result)
         // switch to next item if countdown not done
         if (variableInterval.stage !== 4 && variableInterval.items.length) {
-          var name = variableInterval.items[variableInterval.itemsIndex].name
-          var affl = variableInterval.items[variableInterval.itemsIndex].affl
-          var chosenItemHTML = ''
-          chosenItemHTML += '<div class=\'itemName\'>' + name + `</div>\n`
-          chosenItemHTML += '<div class=\'itemAffl\'>' + affl + '</div>'
+          var curIndex = variableInterval.items[variableInterval.index]
 
-          Raffler.divItemsCycle.html(chosenItemHTML)
+          // check for valid data
+          if (curIndex.name && curIndex.affl) {
+            var chosenItemHTML = ''
+            chosenItemHTML += `<div class='itemName'>${curIndex.name}</div>\n`
+            chosenItemHTML += `<div class='itemAffl'>${curIndex.affl}</div>`
 
-          $('div#items-graph span').each(function () {
-            if (variableInterval.itemsIndex === parseInt($(this)[0].id)) {
-              $(this).addClass('chosen')
-            } else {
-              $(this).removeClass('chosen')
-            }
-          })
-          variableInterval.itemsIndex++
+            Raffler.divItemsCycle.html(chosenItemHTML)
+
+            $('div#items-graph span').each(function () {
+              if (variableInterval.index === parseInt($(this)[0].id)) {
+                $(this).addClass('chosen')
+              } else {
+                $(this).removeClass('chosen')
+              }
+            })
+
+            variableInterval.index++
+          } else {
+            variableInterval.index = 0
+          }
         }
-        if (variableInterval.itemsIndex === variableInterval.items.length) variableInterval.itemsIndex = 0
+        // reached the end of items array? back to beginning
+        if (variableInterval.index === variableInterval.items.length) {
+          variableInterval.index = 0
+        }
         // loop
         if (variableInterval.stage !== 4) {
           variableInterval.loop()
@@ -628,7 +657,7 @@ Raffler.setVariableInterval = function (callbackFunc, timing) {
 }
 
 // main timer instance for raffler cycler
-var countdownTimer = Raffler.setVariableInterval(function () {
+var countdownTimer = Raffler.timer(function () {
   // this is the variableInterval - so we can change/get the interval here:
   var interval = this.interval
 
@@ -733,7 +762,7 @@ Raffler.raffleButtonSmash = function () {
   // start a countdown
   if (Raffler.itemsArr.length > 1) {
     countdownTimer.interval = Raffler.initInterval
-    countdownTimer.itemsIndex = Math.floor(Math.random() * Raffler.itemsArr.length)
+    countdownTimer.index = Math.floor(Math.random() * Raffler.itemsArr.length)
     countdownTimer.stage = 0
     Raffler.divStageValue.text(this.stage)
     countdownTimer.startCountdown = true
@@ -788,7 +817,7 @@ Raffler.raffleButtonSmash = function () {
           items.splice(i, 1)
           Raffler.itemsLeftArr = items
           Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
-          Raffler.refreshAvailableItems()
+          Raffler.refreshAvailableItemsDisplay()
           break
         }
       }
@@ -828,7 +857,7 @@ Raffler.continueRaffling = function () {
           items.splice(i, 1)
           Raffler.itemsLeftArr = items
           Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
-          Raffler.refreshAvailableItems()
+          Raffler.refreshAvailableItemsDisplay()
           break
         }
       }
@@ -850,7 +879,7 @@ Raffler.continueRaffling = function () {
   countdownTimer.interval = Raffler.initInterval
   countdownTimer.mult = 1
   countdownTimer.stage = 0
-  countdownTimer.itemsIndex = Math.floor(Math.random() * Raffler.itemsArr.length)
+  countdownTimer.index = Math.floor(Math.random() * Raffler.itemsArr.length)
 
   Raffler.divIntervalRange.val(parseInt(Raffler.initInterval))
   Raffler.divIntervalValue.text(Raffler.divIntervalRange.val())

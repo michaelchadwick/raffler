@@ -99,7 +99,8 @@ Raffler.ckOptSoundVictory = $('input#check-option-sound-winner')
 Raffler.ckOptFireworks = $('input#check-option-fireworks')
 
 // input things
-Raffler.inputUserItemsAdd = $('input#text-user-items-add')
+Raffler.inputUserItemsAddName = $('input#text-user-items-add-name')
+Raffler.inputUserItemsAddAffl = $('input#text-user-items-add-affl')
 Raffler.textAvailableItems = $('div#items-available textarea')
 Raffler.textChosenItems = $('div#items-chosen textarea')
 
