@@ -3,21 +3,19 @@ var gulp = require('gulp')
 var jshint = require('gulp-jshint')
 var sass = require('gulp-sass')
 var concat = require('gulp-concat')
-var babel = require('babel-core')
 var babel = require('gulp-babel')
 var uglify = require('gulp-uglify')
 var rename = require('gulp-rename')
 var pump = require('pump')
-var gutil = require('gulp-util')
 
 // JS files
-var js_app_files = [
+var jsAppFiles = [
   'assets/js/app/init.js',
   'assets/js/app/helper.js',
   'assets/js/app/fx.js',
   'assets/js/app/main.js'
 ]
-var js_lib_files = [
+var jsLibFiles = [
   'assets/js/lib/*.js'
 ]
 
@@ -32,7 +30,7 @@ gulp.task('sass', function () {
 gulp.task('app-lint', function (cb) {
   pump(
     [
-      gulp.src(js_app_files),
+      gulp.src(jsAppFiles),
       jshint(),
       jshint.reporter('default')
     ],
@@ -43,7 +41,7 @@ gulp.task('app-lint', function (cb) {
 gulp.task('lib-lint', function (cb) {
   pump(
     [
-      gulp.src(js_lib_files),
+      gulp.src(jsLibFiles),
       jshint(),
       jshint.reporter('default')
     ],
@@ -55,7 +53,7 @@ gulp.task('lib-lint', function (cb) {
 gulp.task('app-concat-minify', function (cb) {
   pump(
     [
-      gulp.src(js_app_files),
+      gulp.src(jsAppFiles),
       concat('all-app.js', {newLine: '\r\n'}),
       gulp.dest('assets/js/app/build'),
       babel({ presets: ['es2015'] }),
@@ -66,15 +64,15 @@ gulp.task('app-concat-minify', function (cb) {
     cb
   )
 })
-gulp.task('lib-concat-minify', function () {
+gulp.task('lib-concat-minify', function (cb) {
   pump(
     [
-      gulp.src(js_lib_files),
+      gulp.src(jsLibFiles),
       concat('all-lib.js', {newLine: '\r\n'}),
       gulp.dest('assets/js/lib/build'),
       babel({ presets: ['es2015'] }),
       rename('all-lib.min.js'),
-      UglifyJS.minify(),
+      uglify(),
       gulp.dest('assets/js/lib/build')
     ],
     cb
@@ -83,8 +81,8 @@ gulp.task('lib-concat-minify', function () {
 
 // Watch Files For Changes
 gulp.task('watch', function () {
-  gulp.watch(js_app_files, ['app-lint', 'app-scripts'])
-  //gulp.watch('scss/*.scss', ['sass'])
+  gulp.watch(jsAppFiles, ['app-lint', 'app-scripts'])
+  // gulp.watch('scss/*.scss', ['sass'])
 })
 
 // Default Task

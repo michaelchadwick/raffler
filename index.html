@@ -176,10 +176,7 @@
     .then(jqueryui => SystemJS.import('/assets/js/lib/jquery-ui.js'))
     .then(createjs => SystemJS.import('/assets/js/lib/create.js'))
     .then(ga => SystemJS.import('/assets/js/lib/ga.js'))
-    .then(init => SystemJS.import('/assets/js/app/init.js'))
-    .then(helper => SystemJS.import('/assets/js/app/helper.js'))
-    .then(main => SystemJS.import('/assets/js/app/main.js'))
-    .then(fx => SystemJS.import('/assets/js/app/fx.js'));
+    .then(app => SystemJS.import('/assets/js/app/build/all-app.min.js'));
   </script>
 
 </body>
