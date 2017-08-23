@@ -330,7 +330,7 @@ div#admin-menu {
   font-size: 1em;
   font-weight: 700;
   height: 100%;
-  margin-right: 0px;
+  margin-right: -300px;
   overflow: auto;
   position: fixed;
   right: 0;
