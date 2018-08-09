@@ -15,16 +15,17 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
+    "http-server": "^0.11.1",
     "jshint": "^2.9.5",
     "pump": "^1.0.2",
     "uglify-es": "^3.0.27"
   },
   "scripts": {
-    "serve": "http-server -a 0.0.0.0"
+    "serve": "http-server -a 0.0.0.0 -p 3000"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/michaelchadwick/raffler.win.git"
+    "url": "git+https://github.com/michaelchadwick/raffler.git"
   },
   "keywords": [
     "webapp",
