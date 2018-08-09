@@ -18,7 +18,7 @@ Raffler.userOptionsMerge = false
 Raffler.userOptionsPath = '/assets/json/raffler_user_options.json'
 
 if (Raffler.userOptionsMerge) {
-  $.getJSON(Raffler.userOptionsPath, function (data) {})
+  $.getJSON(Raffler.userOptionsPath, function () {})
     .done(function (data) {
       // get user options, if they exist
       Raffler.userDataFile = data.userDataFile

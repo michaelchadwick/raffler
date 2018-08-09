@@ -45,23 +45,23 @@ Raffler.setEventHandlers = function () {
     Raffler.divIntervalValue.text($(this).val())
     window.countdownTimer.interval = parseInt($(this).val())
   })
-  Raffler.ckOptShowGraph.on('change', function (e) {
+  Raffler.ckOptShowGraph.on('change', function () {
     Raffler.divItemsGraph.toggle()
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.showGraph = !curObj.showGraph
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptResize.on('change', function (e) {
+  Raffler.ckOptResize.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.boxResize = !curObj.boxResize
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptSoundCountdown.on('change', function (e) {
+  Raffler.ckOptSoundCountdown.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.soundCountdown = !curObj.soundCountdown
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptSoundVictory.on('change', function (e) {
+  Raffler.ckOptSoundVictory.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.soundVictory = !curObj.soundVictory
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
@@ -208,11 +208,11 @@ Raffler.setEventHandlers = function () {
       Raffler.raffleButtonSmash()
     }
   })
-  Raffler.btnChosenConfirmYes.click(function (e) {
+  Raffler.btnChosenConfirmYes.click(function () {
     Raffler.lastItemChosenConfirmed = true
     Raffler.continueRaffling()
   })
-  Raffler.btnChosenConfirmNo.click(function (e) {
+  Raffler.btnChosenConfirmNo.click(function () {
     Raffler.lastItemChosenConfirmed = false
     Raffler.continueRaffling()
   })
@@ -380,7 +380,7 @@ Raffler.clearUserItemsInput = function () {
 
 // fill in-memory itemsArr with server JSON
 Raffler.initItemsArr = function () {
-  $.getJSON(Raffler.dataFilePath, function (data) {})
+  $.getJSON(Raffler.dataFilePath, function () {})
     .done(function (data) {
       while (Raffler.itemsArr.length) {
         Raffler.itemsArr.pop()
@@ -506,7 +506,7 @@ Raffler.syncUserItemsWithItemsArr = function () {
 Raffler.refreshItemsGraph = function (items) {
   var index = 0
   Raffler.divItemsGraph.html('')
-  items.forEach(function (elem) {
+  items.forEach(function () {
     Raffler.divItemsGraph
       .append('<span id=' + (index++) + '></span>')
   })
