@@ -47,7 +47,7 @@ Raffler._enableChosenConfirm = function () {
 // encode user entries html
 Raffler._sanitize = function (newEntry) {
   $.each(newEntry, function (key, val) {
-    val = val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/""/g, '&quot;')
+    newEntry.val = val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/""/g, '&quot;')
   })
   return newEntry
 }
@@ -99,30 +99,30 @@ Raffler._notify = function (msg, type, notifyUser) {
   var speed = 1500
 
   switch (type) {
-    case 'success':
-      bgColor = '#4c8504'
-      fgColor = '#ffffff'
-      header = 'Success'
-      speed = 4000
-      break
-    case 'warning' || 'warn':
-      bgColor = '#c1bf24'
-      fgColor = '#000000'
-      header = 'Warning'
-      speed = 6000
-      break
-    case 'error' || 'err':
-      bgColor = '#880000'
-      fgColor = '#ffffff'
-      header = 'Error'
-      speed = 0
-      break
-    default:
-      bgColor = '#e6e1d0'
-      fgColor = '#000000'
-      header = 'Notice'
-      speed = 4000
-      break
+  case 'success':
+    bgColor = '#4c8504'
+    fgColor = '#ffffff'
+    header = 'Success'
+    speed = 4000
+    break
+  case 'warning' || 'warn':
+    bgColor = '#c1bf24'
+    fgColor = '#000000'
+    header = 'Warning'
+    speed = 6000
+    break
+  case 'error' || 'err':
+    bgColor = '#880000'
+    fgColor = '#ffffff'
+    header = 'Error'
+    speed = 0
+    break
+  default:
+    bgColor = '#e6e1d0'
+    fgColor = '#000000'
+    header = 'Notice'
+    speed = 4000
+    break
   }
 
   var label = function (raw) {
@@ -153,15 +153,15 @@ Raffler._notify = function (msg, type, notifyUser) {
 
     if (speed > 0) {
       $(d).hide()
-          .fadeToggle(500)
-          .delay(speed)
-          .fadeToggle(200)
-          .queue(function () {
-            $(this).remove()
-          })
+        .fadeToggle(500)
+        .delay(speed)
+        .fadeToggle(200)
+        .queue(function () {
+          $(this).remove()
+        })
     } else {
       $(d).hide()
-          .fadeToggle(500)
+        .fadeToggle(500)
     }
   }
 }
