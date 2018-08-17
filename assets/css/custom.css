@@ -101,9 +101,6 @@ ul li {
     overflow: hidden;
     padding: 0 0 50px;
   }
-  .main-container .wrapper {
-    /*margin: 0 5%;*/
-  }
   .main-container .wrapper div {
     margin: 0 auto;
     position: relative;
@@ -379,7 +376,7 @@ div#fancy-options {
 }
 .checkbox {
   clear: both;
-  padding: 5px`;
+  padding: 5px;
   width: 100%;
 }
 .checkbox label {
@@ -688,7 +685,6 @@ div#results-wrapper {
     margin: 0;
     text-transform: uppercase;
   }
-  div#results-wrapper div#results-header span {}
   div#results-wrapper div#inner-results {
     background: #bfd9ea; /* Old browsers */
     background: -moz-linear-gradient(top, #bfd9ea 0%, #d8e5ee 49%, #e6edf1 63%, #f8f9fa 100%); /* FF3.6-15 */

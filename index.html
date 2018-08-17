@@ -20,12 +20,12 @@
   <link href='https://fonts.googleapis.com/css?family=Bungee|Cabin|Inconsolata' rel='stylesheet'>
 
   <!-- stylesheets -->
-  <link rel='stylesheet' href='/assets/css/normalize.min.css'>
-  <link rel='stylesheet' href='/assets/css/main.css'>
-  <link rel='stylesheet' href='/assets/css/custom.css'>
-  <link rel='stylesheet' href='/assets/css/vendor/jquery-ui.min.css'>
-  <link rel='stylesheet' href='/assets/css/vendor/jquery-ui.structure.min.css'>
-  <link rel='stylesheet' href='/assets/css/vendor/jquery-ui.theme.min.css'>
+  <link rel='stylesheet' href='./assets/css/normalize.min.css'>
+  <link rel='stylesheet' href='./assets/css/main.css'>
+  <link rel='stylesheet' href='./assets/css/custom.css'>
+  <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.min.css'>
+  <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.structure.min.css'>
+  <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.theme.min.css'>
 </head>
 <body>
   <!--[if lt IE 7]>
@@ -117,9 +117,9 @@
     <!-- title -->
     <div class='header-container'>
       <span id='button-admin-menu-toggle'>
-         <div class='menu-bar menu-bar-top'></div>
-         <div class='menu-bar menu-bar-middle'></div>
-         <div class='menu-bar menu-bar-bottom'></div>
+        <div class='menu-bar menu-bar-top'></div>
+        <div class='menu-bar menu-bar-middle'></div>
+        <div class='menu-bar menu-bar-bottom'></div>
       </span>
       <header class='wrapper clearfix'>
         <h1 class='title'>Raffler</h1>
@@ -163,20 +163,20 @@
     <!-- credits -->
     <div class='footer-container'>
       <footer>
-        <span>a <a href='http://codana.me' target='_blank'>codana.me</a> project by <a href='http://michaelchadwick.info' target='_blank'>mc</a> | <a href='https://github.com/michaelchadwick/raffler.win'>source</a></span>
+        <span>a <a href='https://codana.me' target='_blank'>codana.me</a> project by <a href='https://michaelchadwick.info' target='_blank'>mc</a> | <a href='https://github.com/michaelchadwick/raffler'>source</a></span>
       </footer>
     </div> <!-- #footer-container -->
 
   </div> <!-- main#wrapper -->
 
   <!-- scripts -->
-  <script src='/assets/js/lib/systemjs/dist/system.js'></script>
-  <script src='/assets/js/lib/FileSaver.min.js'></script>
+  <script src='./assets/js/lib/systemjs/dist/system.js'></script>
+  <script src='./assets/js/lib/FileSaver.min.js'></script>
   <script>SystemJS.import('/assets/js/lib/jquery.js')
-    .then(jqueryui => SystemJS.import('/assets/js/lib/jquery-ui.js'))
-    .then(createjs => SystemJS.import('/assets/js/lib/create.js'))
-    .then(ga => SystemJS.import('/assets/js/lib/ga.js'))
-    .then(app => SystemJS.import('/assets/js/app/build/all-app.min.js'));
+    .then(jqueryui => SystemJS.import('./assets/js/lib/jquery-ui.js'))
+    .then(createjs => SystemJS.import('./assets/js/lib/create.js'))
+    .then(ga => SystemJS.import('./assets/js/lib/ga.js'))
+    .then(app => SystemJS.import('./assets/js/app/build/all-app.min.js'));
   </script>
 
 </body>

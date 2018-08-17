@@ -7,15 +7,15 @@
 var Raffler = {}
 
 // init customizable things
-Raffler.initDataFile = '/assets/json/raffler_data.json'
-Raffler.initOptionsFile = '/assets/json/raffler_options.json'
+Raffler.initDataFile = './assets/json/raffler_data.json'
+Raffler.initOptionsFile = './assets/json/raffler_options.json'
 Raffler.initLogoFile = null
 Raffler.initLogoLink = null
 
 // user options
 // set to true to use raffler_user_options.json
 Raffler.userOptionsMerge = false
-Raffler.userOptionsPath = '/assets/json/raffler_user_options.json'
+Raffler.userOptionsPath = './assets/json/raffler_user_options.json'
 
 if (Raffler.userOptionsMerge) {
   $.getJSON(Raffler.userOptionsPath, function () {})
@@ -133,8 +133,8 @@ if (!Raffler.ckOptResize.is(':checked')) {
 }
 
 // sfx
-Raffler.sndBeep.attr('src', '/assets/audio/beep.mp3')
-Raffler.sndVictory.attr('src', '/assets/audio/victory.mp3')
+Raffler.sndBeep.attr('src', './assets/audio/beep.mp3')
+Raffler.sndVictory.attr('src', './assets/audio/victory.mp3')
 
 // jQuery extension to parse url querystring
 $.QueryString = (function (a) {
