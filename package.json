@@ -1,14 +1,12 @@
 {
   "name": "raffler",
-  "version": "1.0.0",
   "description": "Pick an item from a pool of items in a fun way.",
-  "main": "index.html",
-  "devDependencies": {
-    "eslint": "^5.3.0",
-    "http-server": "^0.11.1"
-  },
-  "scripts": {
-    "serve": "http-server -a 0.0.0.0 -p 3000"
+  "author": "Michael Chadwick",
+  "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://github.com/michaelchadwick/raffler#readme",
+  "bugs": {
+    "url": "https://github.com/michaelchadwick/raffler/issues"
   },
   "repository": {
     "type": "git",
@@ -22,10 +20,30 @@
     "choice",
     "pick"
   ],
-  "author": "Michael Chadwick",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/michaelchadwick/raffler/issues"
+  "main": "index.html",
+  "scripts": {
+    "serve": "http-server ./ -a 0.0.0.0 -p 3000"
   },
-  "homepage": "https://github.com/michaelchadwick/raffler#readme"
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "ajv": "^6.5.4",
+    "babel-preset-env": "^1.7.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^3.10.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-jscs": "^4.1.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.1",
+    "pump": "^3.0.0",
+    "uglify-js": "^3.4.9"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "gulp": "^4.0.0",
+    "http-server": "^0.11.1",
+    "tslint": "^5.11.0"
+  }
 }
