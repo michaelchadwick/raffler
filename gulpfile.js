@@ -21,6 +21,9 @@ const pump = require('pump')
 const DIR_CSS_BUILD = 'public/build/css'
 const DIR_JS_BUILD = 'public/build/js'
 
+const cssAppFiles = [
+  'assets/css/custom.css'
+]
 const scssAppFiles = [
   'assets/scss/custom.scss'
 ]
@@ -96,8 +99,8 @@ gulp.task('jscompress-app', function (cb) {
     uglify(),
     gulp.dest(DIR_JS_BUILD),
     notify({
-      title: 'JS Compress (App)',
-      message: 'JS Compress (App) Passed'
+      title: 'JS Concat/Uglify (App)',
+      message: 'JS Concat/Uglify (App) Passed'
     })
   ], cb)
 })
@@ -129,6 +132,18 @@ gulp.task('sass-compile', function (cb) {
     notify({
       title: 'SASS',
       message: 'SASS Compiled'
+    })
+  ], cb)
+})
+
+gulp.task('css-clean', function (cb) {
+  pump([
+    gulp.src(cssAppFiles),
+    cleanCSS(),
+    gulp.dest(DIR_CSS_BUILD),
+    notify({
+      title: 'CSS',
+      message: 'CSS Minified'
     })
   ], cb)
 })
