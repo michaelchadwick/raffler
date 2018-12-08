@@ -13,19 +13,19 @@
   <!-- icons -->
   <link rel='favicon' href='favicon.ico'>
   <link rel='icon' type='image/x-icon' href='favicon.ico'>
-  <link rel='apple-touch-icon' href='favicon.png'>
-  <link rel='apple-touch-startup-image' href='favicon.png'>
+  <link rel='apple-touch-icon' href='assets/images/favicon.png'>
+  <link rel='apple-touch-startup-image' href='assets/images/favicon.png'>
 
-  <!-- font -->
-  <link href='https://fonts.googleapis.com/css?family=Bungee|Cabin|Inconsolata' rel='stylesheet'>
+  <!-- fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Cabin|Overpass+Mono' rel='stylesheet'>
 
   <!-- stylesheets -->
-  <link rel='stylesheet' href='./assets/css/normalize.min.css'>
-  <link rel='stylesheet' href='./assets/css/main.css'>
-  <link rel='stylesheet' href='./assets/css/custom.css'>
+  <link rel='stylesheet' href='./assets/css/vendor/normalize.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.structure.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.theme.min.css'>
+  <link rel='stylesheet' href='./assets/css/vendor/main.css'>
+  <link rel='stylesheet' href='./assets/css/custom.css'>
 </head>
 <body>
   <!--[if lt IE 7]>
@@ -162,8 +162,8 @@
 
     <!-- credits -->
     <div class='footer-container'>
-      <footer>
-        <span>a <a href='https://codana.me' target='_blank'>codana.me</a> project by <a href='https://michaelchadwick.info' target='_blank'>mc</a> | <a href='https://github.com/michaelchadwick/raffler'>source</a></span>
+      <footer class="wrapper">
+        a <a href='https://codana.me' target='_blank'>codana.me</a> project by <a href='https://michaelchadwick.info' target='_blank'>michael chadwick</a> | <a href='https://github.com/michaelchadwick/raffler'>source</a>
       </footer>
     </div> <!-- #footer-container -->
 
@@ -176,7 +176,7 @@
     .then(jqueryui => SystemJS.import('./assets/js/lib/jquery-ui.js'))
     .then(createjs => SystemJS.import('./assets/js/lib/create.js'))
     .then(ga => SystemJS.import('./assets/js/lib/ga.js'))
-    .then(app => SystemJS.import('./assets/js/app/build/all-app.min.js'));
+    .then(app => SystemJS.import('./public/build/js/all-app.js'));
   </script>
 
 </body>
