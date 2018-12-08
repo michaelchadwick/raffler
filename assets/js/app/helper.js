@@ -92,6 +92,8 @@ Raffler._setLocalStorageItem = function (lsKey, obj) {
 }
 // app notifications
 Raffler._notify = function (msg, type, notifyUser) {
+  if (!Raffler.notifierEnabled) { return }
+
   type = (typeof type) === 'undefined' ? '' : type
   notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
 
@@ -160,8 +162,7 @@ Raffler._notify = function (msg, type, notifyUser) {
           $(this).remove()
         })
     } else {
-      $(d).hide()
-        .fadeToggle(500)
+      $(d).hide().fadeToggle(500)
     }
   }
 }

@@ -31,7 +31,7 @@ Raffler.initApp = function () {
   Raffler._disableTimerStart()
   Raffler.btnRaffle.focus()
 
-  // Raffler._notify('Raffler init', 'notice')
+  Raffler._notify('Raffler init', 'notice')
 }
 
 // attach event handlers to button and such
@@ -68,19 +68,19 @@ Raffler.setEventHandlers = function () {
   })
   Raffler.btnTestSuccess.click(function (e) {
     e.preventDefault()
-    Raffler._notify('test success that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)
+    Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)
   })
   Raffler.btnTestNotice.click(function (e) {
     e.preventDefault()
-    Raffler._notify('test notice that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)
+    Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)
   })
   Raffler.btnTestWarning.click(function (e) {
     e.preventDefault()
-    Raffler._notify('test notice that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)
+    Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)
   })
   Raffler.btnTestError.click(function (e) {
     e.preventDefault()
-    Raffler._notify('test notice that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)
+    Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)
   })
   Raffler.btnTimerStart.click(function (e) {
     e.preventDefault()
@@ -89,7 +89,7 @@ Raffler.setEventHandlers = function () {
       Raffler.divItemsCycle.removeClass('stopped')
       Raffler._disableTimerStart()
       Raffler._enableTimerStop()
-      // Raffler._notify('window.countdownTimer started', 'notice')
+      Raffler._notify('window.countdownTimer started', 'notice')
     }
   })
   Raffler.btnTimerStop.click(function (e) {
@@ -99,7 +99,7 @@ Raffler.setEventHandlers = function () {
       Raffler.divItemsCycle.addClass('stopped')
       Raffler._disableTimerStop()
       Raffler._enableTimerStart()
-      // Raffler._notify('window.countdownTimer stopped', 'notice')
+      Raffler._notify('window.countdownTimer stopped', 'notice')
     }
   })
   Raffler.btnDataReset.click(function (e) {
@@ -218,7 +218,7 @@ Raffler.setEventHandlers = function () {
   })
   Raffler.btnExportResults.click(function (e) {
     e.preventDefault()
-    // Raffler._notify('exporting results', 'notice')
+    Raffler._notify('exporting results', 'notice')
 
     var plainText = $('div#results-wrapper div ul')
       .html()
@@ -267,20 +267,20 @@ Raffler.checkForLocalStorage = function () {
       // if our specific keys don't exist, then init
       if (!window.localStorage.getItem('rafflerOptions')) {
         Raffler._setLocalStorageItem('rafflerOptions', Raffler.initOptionsObj)
-        // Raffler._notify('checkForLocalStorage: rafflerOptions created', 'notice')
+        Raffler._notify('checkForLocalStorage: rafflerOptions created', 'notice')
       } else {
         Raffler._notify('checkForLocalStorage: rafflerOptions already exists', 'notice')
       }
       Raffler.syncOptionsToUI()
       if (!window.localStorage.getItem('rafflerUserItems')) {
         Raffler._setLocalStorageItem('rafflerUserItems', Raffler.initItemsObj)
-        // Raffler._notify('checkForLocalStorage: rafflerUserItems created', 'notice')
+        Raffler._notify('checkForLocalStorage: rafflerUserItems created', 'notice')
       } else {
         Raffler._notify('checkForLocalStorage: rafflerUserItems already exists', 'notice')
       }
       if (!window.localStorage.getItem('rafflerChosenItems')) {
         Raffler._setLocalStorageItem('rafflerChosenItems', Raffler.initItemsObj)
-        // Raffler._notify('checkForLocalStorage: rafflerChosenItems created!', 'notice')
+        Raffler._notify('checkForLocalStorage: rafflerChosenItems created!', 'notice')
       } else {
         Raffler._notify('checkForLocalStorage: rafflerChosenItems already exists', 'notice')
       }
@@ -304,7 +304,7 @@ Raffler.resetApp = function () {
   Raffler.refreshResultsCount()
   Raffler.refreshDebugValues()
 
-  // Raffler._notify('Raffler reset', 'notice')
+  Raffler._notify('Raffler reset', 'notice')
 }
 // you hit the 'reset data' button
 // puts everyone back in raffle
@@ -450,9 +450,9 @@ Raffler.syncChosenItemsWithItemsArr = function () {
       Raffler.itemsLeftArr = items
       Raffler.refreshItemsGraph(Raffler.itemsLeftArr)
 
-      // Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
+      Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
-      // Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'notice')
+      Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'notice')
     }
 
     // all items have been chosen on reload
@@ -494,7 +494,7 @@ Raffler.syncUserItemsWithItemsArr = function () {
 
       Raffler._notify('syncUserItemsWithItemsArr: synced', 'notice')
     } else {
-      // Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'warning')
+      Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'warning')
     }
     Raffler.refreshAvailableItemsDisplay()
   } catch (e) {
@@ -558,7 +558,7 @@ Raffler.refreshUserItemsDisplay = function () {
         Raffler.divUserItemsDisplay.children().append('<li>' + val.name + ' (' + val.affl + ')</li>')
       })
 
-      // Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
+      Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
     } else {
       Raffler.divUserItemsDisplay.html('')
       Raffler._notify('refreshUserItemsDisplay: none to display')
@@ -575,7 +575,7 @@ Raffler.refreshAvailableItemsDisplay = function () {
   })
   Raffler.textAvailableItemsCount.text(`(${Raffler.itemsArr.length})`)
 
-  // Raffler._notify('refreshAvailableItems: display updated', 'notice')
+  Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
 
 // add last chosen item to localStorage
@@ -585,7 +585,7 @@ Raffler.addChosenItemToLocalStorage = function (lastChosenItem) {
     localChosenItemsObj.push(lastChosenItem)
     Raffler._setLocalStorageItem('rafflerChosenItems', localChosenItemsObj)
     Raffler.refreshAvailableItemsDisplay()
-    // Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
+    Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
   } catch (e) {
     Raffler._notify('addChosenItemToLocalStorage: ' + e, 'error')
   }
@@ -757,7 +757,7 @@ window.countdownTimer = Raffler.timer(function () {
 
 // you hit the big raffle button
 Raffler.raffleButtonSmash = function () {
-  // Raffler._notify('BUTTON SMASH', 'notice')
+  Raffler._notify('BUTTON SMASH', 'notice')
   Raffler._disableRaffle()
 
   if (Raffler.ckOptResize.is(':checked')) {
@@ -876,7 +876,7 @@ Raffler.continueRaffling = function () {
       Raffler._notify('Choice could not be made. Pool of choices unchanged.', 'warning')
     }
   } else {
-    // Raffler._notify('Choice rejected. Pool of choices unchanged.', 'notice')
+    Raffler._notify('Choice rejected. Pool of choices unchanged.', 'notice')
   }
 
   // either way, disable confirm buttons
