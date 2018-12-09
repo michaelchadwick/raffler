@@ -1,15 +1,9 @@
 /* global require */
 
-'use strict'
-
-/**
- * imports
- */
 const gulp = require('gulp')
 
 const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
-const jshint = require('gulp-jshint')
 const jscs = require('gulp-jscs')
 const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
@@ -21,21 +15,15 @@ const pump = require('pump')
 const DIR_CSS_BUILD = 'public/build/css'
 const DIR_JS_BUILD = 'public/build/js'
 
-const cssAppFiles = [
-  'assets/css/custom.css'
-]
-const scssAppFiles = [
-  'assets/scss/custom.scss'
-]
+const scssAppFiles = [ 'assets/css/app.scss' ]
 const jsAppFiles = [
   'assets/js/app/init.js',
+  'assets/js/app/main.js',
   'assets/js/app/helper.js',
   'assets/js/app/fx.js',
-  'assets/js/app/main.js'
 ]
 const jsLibFiles = [ 'assets/js/lib/*.js' ]
 
-// Error function
 const onError = function (err) {
   notify({
     title: 'Gulp Task Error',
@@ -48,10 +36,6 @@ const onError = function (err) {
   this.emit('end')
 }
 
-/**
- * Gulp Tasks
- **/
-
 gulp.task('jscs-app', function (cb) {
   pump([
     gulp.src(jsAppFiles),
@@ -62,31 +46,6 @@ gulp.task('jscs-app', function (cb) {
     })
   ], cb)
 })
-gulp.task('jshint-app', function (cb) {
-  pump([
-    gulp.src(jsAppFiles),
-    jshint(),
-    jshint.reporter('jshint-stylish'),
-    jshint.reporter('fail'),
-    notify({
-      title: 'JS Hint (App)',
-      message: 'JS Hint (App) Passed'
-    })
-  ], cb)
-})
-gulp.task('jshint-lib', function (cb) {
-  pump([
-    gulp.src(jsLibFiles),
-    jshint(),
-    jshint.reporter('jshint-stylish'),
-    jshint.reporter('fail'),
-    notify({
-      title: 'JS Hint (Lib)',
-      message: 'JS Hint (Lib) Passed'
-    })
-  ], cb)
-})
-
 gulp.task('jscompress-app', function (cb) {
   pump([
     gulp.src(jsAppFiles),
@@ -126,7 +85,7 @@ gulp.task('sass-compile', function (cb) {
   pump([
     gulp.src(scssAppFiles),
     sass(),
-    concat('custom.css'),
+    concat('app.css'),
     cleanCSS(),
     gulp.dest(DIR_CSS_BUILD),
     notify({
@@ -138,7 +97,7 @@ gulp.task('sass-compile', function (cb) {
 
 gulp.task('css-clean', function (cb) {
   pump([
-    gulp.src(cssAppFiles),
+    gulp.src(DIR_CSS_BUILD),
     cleanCSS(),
     gulp.dest(DIR_CSS_BUILD),
     notify({
@@ -148,35 +107,27 @@ gulp.task('css-clean', function (cb) {
   ], cb)
 })
 
-// (DEV) Watch for changes
 gulp.task('watch-files', function () {
   gulp.watch(jsAppFiles,
     gulp.series(
-      'jscs-app',
-      'jshint-app',
       'jscompress-app',
-      'jscompress-lib'
+      'jscompress-lib',
+      'jscs-app'
     )
   )
-  /*
   gulp.watch(scssAppFiles,
     gulp.series(
       'sass-compile'
     )
   )
-  */
 })
-
-/**
- * CLI tasks
- **/
-
 gulp.task('build',
   gulp.series(
     gulp.parallel(
-      // 'jscompress-lib',
-      // 'sass-compile',
-      'jscompress-app'
+      'jscompress-app',
+      'jscompress-lib',
+      'jscs-app',
+      'sass-compile'
     )
   ), function (cb) {
     pump([
