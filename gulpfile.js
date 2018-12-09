@@ -4,7 +4,6 @@ const gulp = require('gulp')
 
 const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
-const jscs = require('gulp-jscs')
 const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
 const babel = require('gulp-babel')
@@ -18,9 +17,9 @@ const DIR_JS_BUILD = 'public/build/js'
 const scssAppFiles = [ 'assets/css/app.scss' ]
 const jsAppFiles = [
   'assets/js/app/init.js',
-  'assets/js/app/main.js',
   'assets/js/app/helper.js',
   'assets/js/app/fx.js',
+  'assets/js/app/main.js'
 ]
 const jsLibFiles = [ 'assets/js/lib/*.js' ]
 
@@ -36,16 +35,6 @@ const onError = function (err) {
   this.emit('end')
 }
 
-gulp.task('jscs-app', function (cb) {
-  pump([
-    gulp.src(jsAppFiles),
-    jscs(),
-    notify({
-      title: 'JSCS',
-      message: 'JSCS Passed'
-    })
-  ], cb)
-})
 gulp.task('jscompress-app', function (cb) {
   pump([
     gulp.src(jsAppFiles),
@@ -111,8 +100,7 @@ gulp.task('watch-files', function () {
   gulp.watch(jsAppFiles,
     gulp.series(
       'jscompress-app',
-      'jscompress-lib',
-      'jscs-app'
+      'jscompress-lib'
     )
   )
   gulp.watch(scssAppFiles,
@@ -126,7 +114,6 @@ gulp.task('build',
     gulp.parallel(
       'jscompress-app',
       'jscompress-lib',
-      'jscs-app',
       'sass-compile'
     )
   ), function (cb) {
