@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class='no-js lt-ie9 lt-ie8 lt-ie7'> <![endif]-->
-<!--[if IE 7]>         <html class='no-js lt-ie9 lt-ie8'> <![endif]-->
-<!--[if IE 8]>         <html class='no-js lt-ie9'> <![endif]-->
-<!--[if gt IE 8]><!--> <html class='no-js'> <!--<![endif]-->
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -13,25 +9,27 @@
   <!-- icons -->
   <link rel='favicon' href='favicon.ico'>
   <link rel='icon' type='image/x-icon' href='favicon.ico'>
-  <link rel='apple-touch-icon' href='assets/images/favicon.png'>
-  <link rel='apple-touch-startup-image' href='assets/images/favicon.png'>
+  <link rel='apple-touch-icon' href='./public/build/images/favicon.png'>
+  <link rel='apple-touch-startup-image' href='./public/build/images/favicon.png'>
 
   <!-- fonts -->
   <link href='https://fonts.googleapis.com/css?family=Cabin|Overpass+Mono' rel='stylesheet'>
 
   <!-- stylesheets -->
+  <!--// VENDORS //-->
   <link rel='stylesheet' href='./assets/css/vendor/normalize.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.structure.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.theme.min.css'>
   <link rel='stylesheet' href='./assets/css/vendor/main.css'>
-  <link rel='stylesheet' href='./assets/css/custom.css'>
+  <!--// CUSTOM //-->
+  <link rel='stylesheet' href='./public/build/css/app.css'>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/solid.css" integrity="sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
 </head>
 <body>
-  <!--[if lt IE 7]>
-  <p class='browsehappy'>You are using an <strong>outdated</strong> browser. Please <a href='http://browsehappy.com/'>upgrade your browser</a> to improve your experience.</p>
-  <![endif]-->
-
   <div id='data-reset-dialog' class='dialog' title='Confirmation Required'>
     Are you sure you want to reset Raffler? <em>(Note: all chosen and user items will be lost)</em>
   </div>
@@ -65,10 +63,18 @@
         </div>
         <div id='test-notify'>
           <div class='title'>Test Notifications</div>
-          <a href='#' class='button test success' id='button-test-success' title='success'>&#x1f604;</a>
-          <a href='#' class='button test notice' id='button-test-notice' title='notice'>&#x2139;</a>
-          <a href='#' class='button test warning' id='button-test-warning' title='warning'>&#x26a0;</a>
-          <a href='#' class='button test error' id='button-test-error' title='error'>&#x24cd;</a>
+          <a href='#' class='button test success' id='button-test-success' title='success'>
+            <i class="fas fa-smile"></i>
+          </a>
+          <a href='#' class='button test notice' id='button-test-notice' title='notice'>
+            <i class="fas fa-info-circle"></i>
+          </a>
+          <a href='#' class='button test warning' id='button-test-warning' title='warning'>
+            <i class="fas fa-exclamation-triangle"></i>
+          </a>
+          <a href='#' class='button test error' id='button-test-error' title='error'>
+            <i class="fas fa-times-circle"></i>
+          </a>
         </div>
         <div id='fancy-options'>
           <div class='title'>Special Effects</div>
