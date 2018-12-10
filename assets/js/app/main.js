@@ -9,6 +9,8 @@ Raffler.initApp = function () {
   // if admin passed, show hamburger menu
   if ((typeof $.QueryString.admin) !== 'undefined') {
     Raffler.btnAdminMenuToggle.show()
+    Raffler.btnAdminMenuToggle.toggleClass('button-open')
+    Raffler.divAdminMenu.toggleClass('menu-show')
   }
 
   // add logo, if exists
@@ -620,8 +622,8 @@ Raffler.timer = function (callbackFunc, timing) {
           // check for valid data
           if (curIndex.name && curIndex.affl) {
             var chosenItemHTML = ''
-            chosenItemHTML += `<div class='itemName'>${curIndex.name}</div>\n`
-            chosenItemHTML += `<div class='itemAffl'>${curIndex.affl}</div>`
+            chosenItemHTML += `<div class='item-name'>${curIndex.name}</div>\n`
+            chosenItemHTML += `<div class='item-affl'>${curIndex.affl}</div>`
 
             Raffler.divItemsCycle.html(chosenItemHTML)
 
@@ -788,16 +790,16 @@ Raffler.raffleButtonSmash = function () {
 
     // add lone item to items-cycle
     var loneItemHTML = ''
-    loneItemHTML += '<div class=\'itemName\'>' + Raffler.itemsArr[0].name + `</div>\n`
-    loneItemHTML += '<div class=\'itemAffl\'>' + Raffler.itemsArr[0].affl + '</div>'
+    loneItemHTML += '<div class=\'item-name\'>' + Raffler.itemsArr[0].name + `</div>\n`
+    loneItemHTML += '<div class=\'item-affl\'>' + Raffler.itemsArr[0].affl + '</div>'
 
     Raffler.divItemsCycle.html(loneItemHTML)
     Raffler.divItemsCycle.addClass('level4')
 
     // grab lone item
     Raffler.lastItemChosen = {
-      'name': $('div.itemName').text(),
-      'affl': $('div.itemAffl').text()
+      'name': $('div.item-name').text(),
+      'affl': $('div.item-affl').text()
     }
 
     if (Raffler.ckOptResize.is(':checked')) {
@@ -846,8 +848,8 @@ Raffler.continueRaffling = function () {
   // if we have confirmed, then take out of raffle
   if (Raffler.lastItemChosenConfirmed) {
     Raffler.lastItemChosen = {
-      'name': $('div.itemName').text(),
-      'affl': $('div.itemAffl').text()
+      'name': $('div.item-name').text(),
+      'affl': $('div.item-affl').text()
     }
 
     if (Raffler.lastItemChosen !== '') {

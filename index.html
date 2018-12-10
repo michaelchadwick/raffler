@@ -9,11 +9,11 @@
   <!-- icons -->
   <link rel='favicon' href='favicon.ico'>
   <link rel='icon' type='image/x-icon' href='favicon.ico'>
-  <link rel='apple-touch-icon' href='./public/build/images/favicon.png'>
-  <link rel='apple-touch-startup-image' href='./public/build/images/favicon.png'>
+  <link rel='apple-touch-icon' href='./assets/images/favicon.png'>
+  <link rel='apple-touch-startup-image' href='./assets/images/favicon.png'>
 
   <!-- fonts -->
-  <link href='https://fonts.googleapis.com/css?family=Cabin|Overpass+Mono' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Cabin|Overpass+Mono|Roboto' rel='stylesheet'>
 
   <!-- stylesheets -->
   <!--// VENDORS //-->
@@ -30,15 +30,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
 </head>
 <body>
-  <div id='data-reset-dialog' class='dialog' title='Confirmation Required'>
-    Are you sure you want to reset Raffler? <em>(Note: all chosen and user items will be lost)</em>
-  </div>
-  <div id='user-items-clear-dialog' class='dialog' title='Confirmation Required'>
-    Are you sure you want to clear user-entered items?
-  </div>
-
-  <!-- admin menu -->
-  <div id='admin-menu'>
+  <nav id='admin-menu'>
     <div class='menu-sidebar'>
       <div class='menu'>
         <div id='debug-values'>
@@ -102,8 +94,8 @@
           <div class='title'>User Items</div>
           <input id='text-user-items-add-name' type='text' placeholder='name' />
           <input id='text-user-items-add-affl' type='text' placeholder='affiliation' />
-          <button id='button-user-items-add'>ADD</button>
-          <button id='button-user-items-clear' disabled='true' class='disabled'>CLEAR</button>
+          <a href="#" class="button" id='button-user-items-add'>add</a>
+          <a href="#" class="button disabled" id='button-user-items-clear' disabled='true'>clear</a>
           <div id='user-items-display'><ul></ul></div>
         </div>
         <div id='items-available'>
@@ -116,11 +108,10 @@
         </div>
       </div>
     </div>
-  </div><!-- admin menu -->
+  </nav> <!-- #admin-menu -->
 
   <div class='wrapper' role='main'>
 
-    <!-- title -->
     <div class='header-container'>
       <span id='button-admin-menu-toggle'>
         <div class='menu-bar menu-bar-top'></div>
@@ -130,7 +121,7 @@
       <header class='wrapper clearfix'>
         <h1 class='title'>Raffler</h1>
       </header>
-    </div> <!-- header-container -->
+    </div> <!-- #header-container -->
 
     <!-- status messages, button, item results -->
     <div class='main-container'>
@@ -166,7 +157,6 @@
       </div> <!-- #main -->
     </div> <!-- #main-container -->
 
-    <!-- credits -->
     <div class='footer-container'>
       <footer class="wrapper">
         a <a href='https://codana.me' target='_blank'>codana.me</a> project by <a href='https://michaelchadwick.info' target='_blank'>michael chadwick</a> | <a href='https://github.com/michaelchadwick/raffler'>source</a>
@@ -175,7 +165,6 @@
 
   </div> <!-- main#wrapper -->
 
-  <!-- scripts -->
   <script src='./assets/js/lib/systemjs/dist/system.js'></script>
   <script src='./assets/js/lib/FileSaver.min.js'></script>
   <script>SystemJS.import('./assets/js/lib/jquery.js')
@@ -184,6 +173,5 @@
     .then(ga => SystemJS.import('./assets/js/lib/ga.js'))
     .then(app => SystemJS.import('./public/build/js/all-app.js'));
   </script>
-
 </body>
 </html>

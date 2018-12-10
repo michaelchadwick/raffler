@@ -1,7 +1,6 @@
 /* global require */
 
 const gulp = require('gulp')
-
 const sass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
 const uglify = require('gulp-uglify')
@@ -11,10 +10,11 @@ const rename = require('gulp-rename')
 const notify = require('gulp-notify')
 const pump = require('pump')
 
-const DIR_CSS_BUILD = 'public/build/css'
+// where to build public app files
 const DIR_JS_BUILD = 'public/build/js'
+const DIR_CSS_BUILD = 'public/build/css'
 
-const scssAppFiles = [ 'assets/css/app.scss' ]
+// order matters!
 const jsAppFiles = [
   'assets/js/app/init.js',
   'assets/js/app/helper.js',
@@ -22,7 +22,9 @@ const jsAppFiles = [
   'assets/js/app/main.js'
 ]
 const jsLibFiles = [ 'assets/js/lib/*.js' ]
+const scssAppFiles = [ 'assets/css/app.scss' ]
 
+// error function
 const onError = function (err) {
   notify({
     title: 'Gulp Task Error',
@@ -35,7 +37,8 @@ const onError = function (err) {
   this.emit('end')
 }
 
-gulp.task('jscompress-app', function (cb) {
+// sub-tasks
+gulp.task('sub_jscompress-app', function (cb) {
   pump([
     gulp.src(jsAppFiles),
     concat('all-app.js', {newLine: '\r\n'}),
@@ -52,7 +55,7 @@ gulp.task('jscompress-app', function (cb) {
     })
   ], cb)
 })
-gulp.task('jscompress-lib', function (cb) {
+gulp.task('sub_jscompress-lib', function (cb) {
   pump([
     gulp.src(jsLibFiles),
     concat('all-lib.js', {newLine: '\r\n'}),
@@ -69,8 +72,7 @@ gulp.task('jscompress-lib', function (cb) {
     })
   ], cb)
 })
-
-gulp.task('sass-compile', function (cb) {
+gulp.task('sub_compile-sass', function (cb) {
   pump([
     gulp.src(scssAppFiles),
     sass(),
@@ -83,8 +85,7 @@ gulp.task('sass-compile', function (cb) {
     })
   ], cb)
 })
-
-gulp.task('css-clean', function (cb) {
+gulp.task('sub_clean-css', function (cb) {
   pump([
     gulp.src(DIR_CSS_BUILD),
     cleanCSS(),
@@ -99,24 +100,25 @@ gulp.task('css-clean', function (cb) {
 gulp.task('watch-files', function () {
   gulp.watch(jsAppFiles,
     gulp.series(
-      'jscompress-app',
-      'jscompress-lib'
+      'sub_jscompress-app',
+      'sub_jscompress-lib'
     )
   )
   gulp.watch(scssAppFiles,
     gulp.series(
-      'sass-compile'
+      'sub_compile-sass'
     )
   )
 })
 gulp.task('build',
   gulp.series(
     gulp.parallel(
-      'jscompress-app',
-      'jscompress-lib',
-      'sass-compile'
+      'sub_jscompress-app',
+      'sub_jscompress-lib',
+      'sub_compile-sass'
     )
-  ), function (cb) {
+  ),
+  function (cb) {
     pump([
       gulp.src('/'),
       gulp.on('error', onError),
@@ -134,4 +136,5 @@ gulp.task('watch',
   )
 )
 
+// set default task
 gulp.task('default', gulp.series('build'))

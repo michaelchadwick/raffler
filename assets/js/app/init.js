@@ -34,7 +34,6 @@ if (Raffler.userOptionsMerge) {
       Raffler.logoFileLink = Raffler.userLogoLink || Raffler.initLogoLink
     })
     .fail(function () {
-      // Raffler._notify('User options not loaded: ' + e, 'notice')
       Raffler.dataFilePath = Raffler.initDataFile
     })
 } else {
@@ -70,18 +69,18 @@ Raffler.stages = {
 // main divs/elements
 Raffler.body = $('body')
 Raffler.title = $('header')
-Raffler.divItemStatusBubble = $('div#item-status-bubble')
-Raffler.divAdminMenu = $('div#admin-menu')
-Raffler.divMainWrapper = $('div#wrapper')
-Raffler.divItemsCycle = $('div#items-cycle')
-Raffler.divItemsGraph = $('div#items-graph')
-Raffler.divResultsWrapper = $('div#results-wrapper')
-Raffler.divResultsCount = $('div#results-wrapper h3 span')
-Raffler.divResultsContent = $('div#results-wrapper div ul')
-Raffler.divDataResetDialog = $('div#data-reset-dialog')
-Raffler.divUserItemsManager = $('div#user-items-manager')
-Raffler.divUserItemsDisplay = $('div#user-items-display')
-Raffler.divUserItemsClearDialog = $('div#user-items-clear-dialog')
+Raffler.divItemStatusBubble = $('#item-status-bubble')
+Raffler.divAdminMenu = $('#admin-menu')
+Raffler.divMainWrapper = $('#wrapper')
+Raffler.divItemsCycle = $('#items-cycle')
+Raffler.divItemsGraph = $('#items-graph')
+Raffler.divResultsWrapper = $('#results-wrapper')
+Raffler.divResultsCount = $('#results-wrapper h3 span')
+Raffler.divResultsContent = $('#results-wrapper div ul')
+Raffler.divDataResetDialog = $('#data-reset-dialog')
+Raffler.divUserItemsManager = $('#user-items-manager')
+Raffler.divUserItemsDisplay = $('#user-items-display')
+Raffler.divUserItemsClearDialog = $('#user-items-clear-dialog')
 
 // clicky things
 Raffler.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
@@ -95,10 +94,10 @@ Raffler.btnDataReset = $('a#button-data-reset')
 Raffler.btnUserItemsAdd = $('button#button-user-items-add')
 Raffler.btnUserItemsClear = $('button#button-user-items-clear')
 Raffler.btnRaffle = $('a#button-raffle')
-Raffler.divChosenConfirm = $('div#winner-confirm')
+Raffler.divChosenConfirm = $('#winner-confirm')
 Raffler.btnChosenConfirmYes = $('button#button-confirm-yes')
 Raffler.btnChosenConfirmNo = $('button#button-confirm-no')
-Raffler.btnExportResults = $('div#results-wrapper div button')
+Raffler.btnExportResults = $('#results-wrapper div button')
 
 // optiony things
 Raffler.ckOptShowGraph = $('input#check-option-show-graph')
@@ -120,11 +119,11 @@ Raffler.sndBeep = $('audio#beep')
 Raffler.sndVictory = $('audio#victory')
 
 // debug
-Raffler.divStageValue = $('div#stage-value span')
-Raffler.divIntervalValue = $('div#interval-value span')
-Raffler.divIntervalRange = $('div#interval-value input[type=range]')
-Raffler.divMultiplyValue = $('div#multiply-value span')
-Raffler.divTimesRunValue = $('div#timesrun-value span')
+Raffler.divStageValue = $('#stage-value span')
+Raffler.divIntervalValue = $('#interval-value span')
+Raffler.divIntervalRange = $('#interval-value input[type=range]')
+Raffler.divMultiplyValue = $('#multiply-value span')
+Raffler.divTimesRunValue = $('#timesrun-value span')
 
 // if we aren't doing the "resize as the raffle counts down" thing
 // then fast track display to final level

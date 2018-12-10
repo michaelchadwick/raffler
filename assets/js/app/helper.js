@@ -102,26 +102,26 @@ Raffler._notify = function (msg, type, notifyUser) {
 
   switch (type) {
   case 'success':
-    bgColor = '#4c8504'
-    fgColor = '#ffffff'
+    bgColor = '#99c24d'
+    fgColor = '#000000'
     header = 'Success'
     speed = 4000
     break
   case 'warning' || 'warn':
-    bgColor = '#c1bf24'
+    bgColor = '#fadf63'
     fgColor = '#000000'
     header = 'Warning'
     speed = 6000
     break
   case 'error' || 'err':
-    bgColor = '#880000'
+    bgColor = '#632b30'
     fgColor = '#ffffff'
     header = 'Error'
     speed = 0
     break
   default:
-    bgColor = '#e6e1d0'
-    fgColor = '#000000'
+    bgColor = '#006e90'
+    fgColor = '#ffffff'
     header = 'Notice'
     speed = 4000
     break
