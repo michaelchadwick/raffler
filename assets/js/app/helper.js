@@ -97,7 +97,7 @@ Raffler._notify = function (msg, type, notifyUser) {
   type = (typeof type) === 'undefined' ? '' : type
   notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
 
-  var bgColor, fgColor, header
+  var bgColor, fgColor, header, icon
   var speed = 1500
 
   switch (type) {
@@ -106,24 +106,28 @@ Raffler._notify = function (msg, type, notifyUser) {
     fgColor = '#000000'
     header = 'Success'
     speed = 4000
+    icon = 'fa-smile'
     break
   case 'warning' || 'warn':
     bgColor = '#fadf63'
     fgColor = '#000000'
     header = 'Warning'
     speed = 6000
+    icon = 'fa-exclamation-triangle'
     break
   case 'error' || 'err':
     bgColor = '#632b30'
     fgColor = '#ffffff'
     header = 'Error'
     speed = 0
+    icon = 'fa-times-circle'
     break
   default:
     bgColor = '#006e90'
     fgColor = '#ffffff'
     header = 'Notice'
     speed = 4000
+    icon = 'fa-info-circle'
     break
   }
 
@@ -147,7 +151,7 @@ Raffler._notify = function (msg, type, notifyUser) {
         'background-color': bgColor,
         'color': fgColor
       })
-      .html('<strong>' + header + '</strong>: ' + msg)
+      .html(`<i class='fas ${icon}'></i> <strong>${header}</strong>: ${msg}`)
       .prependTo('.main-container')
       .click(function () {
         $(this).remove()

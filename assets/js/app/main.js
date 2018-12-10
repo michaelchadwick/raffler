@@ -11,6 +11,8 @@ Raffler.initApp = function () {
     Raffler.btnAdminMenuToggle.show()
     Raffler.btnAdminMenuToggle.toggleClass('button-open')
     Raffler.divAdminMenu.toggleClass('menu-show')
+    Raffler.divMainContent.toggleClass('with-menu')
+    Raffler.divFooter.toggleClass('with-menu')
   }
 
   // add logo, if exists
@@ -41,6 +43,8 @@ Raffler.setEventHandlers = function () {
   Raffler.btnAdminMenuToggle.click(function () {
     $(this).toggleClass('button-open')
     Raffler.divAdminMenu.toggleClass('menu-show')
+    Raffler.divMainContent.toggleClass('with-menu')
+    Raffler.divFooter.toggleClass('with-menu')
   })
   Raffler.divIntervalRange.on('change', function (e) {
     e.preventDefault()
@@ -130,12 +134,28 @@ Raffler.setEventHandlers = function () {
       e.preventDefault()
       Raffler.btnUserItemsAdd.click()
     }
+
+    if ($(this).val().length > 0 && Raffler.inputUserItemsAddAffl.val().length > 0) {
+      Raffler.btnUserItemsAdd.prop('disabled', false)
+      Raffler.btnUserItemsAdd.removeClass('disabled')
+    } else {
+      Raffler.btnUserItemsAdd.prop('disabled', true)
+      Raffler.btnUserItemsAdd.addClass('disabled')
+    }
   })
   Raffler.inputUserItemsAddAffl.keyup(function (e) {
     var code = e.which
     if (code === 13) {
       e.preventDefault()
       Raffler.btnUserItemsAdd.click()
+    }
+
+    if ($(this).val().length > 0 && Raffler.inputUserItemsAddName.val().length > 0) {
+      Raffler.btnUserItemsAdd.prop('disabled', false)
+      Raffler.btnUserItemsAdd.removeClass('disabled')
+    } else {
+      Raffler.btnUserItemsAdd.prop('disabled', true)
+      Raffler.btnUserItemsAdd.addClass('disabled')
     }
   })
   Raffler.btnUserItemsAdd.click(function () {
@@ -153,7 +173,7 @@ Raffler.setEventHandlers = function () {
           tempUserItemObj.push(Raffler._sanitize(newUserItem))
           newItemAdded = true
           Raffler.btnUserItemsClear.prop('disabled', false)
-          Raffler.btnUserItemsClear.removeClass()
+          Raffler.btnUserItemsClear.removeClass('disabled')
         } else {
           Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" not added: duplicate.', 'error', true)
         }
@@ -174,7 +194,7 @@ Raffler.setEventHandlers = function () {
     try {
       if (Raffler._getLocalStorageItem('rafflerUserItems').length > 0) {
         Raffler.btnUserItemsClear.prop('disabled', false)
-        Raffler.btnUserItemsClear.removeClass()
+        Raffler.btnUserItemsClear.removeClass('disabled')
 
         Raffler.divUserItemsClearDialog.dialog({
           autoOpen: false,
@@ -479,7 +499,7 @@ Raffler.syncUserItemsWithItemsArr = function () {
     // if we've previously added user items
     if (userItems && userItems.length > 0) {
       Raffler.btnUserItemsClear.prop('disabled', false)
-      Raffler.btnUserItemsClear.removeClass()
+      Raffler.btnUserItemsClear.removeClass('disabled')
 
       for (var i = 0; i < userItems.length; i++) {
         for (var j = 0; j < items.length; j++) {
@@ -496,7 +516,7 @@ Raffler.syncUserItemsWithItemsArr = function () {
 
       Raffler._notify('syncUserItemsWithItemsArr: synced', 'notice')
     } else {
-      Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'warning')
+      Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'notice')
     }
     Raffler.refreshAvailableItemsDisplay()
   } catch (e) {

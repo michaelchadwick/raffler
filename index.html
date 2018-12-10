@@ -55,11 +55,11 @@
         </div>
         <div id='test-notify'>
           <div class='title'>Test Notifications</div>
-          <a href='#' class='button test success' id='button-test-success' title='success'>
-            <i class="fas fa-smile"></i>
-          </a>
           <a href='#' class='button test notice' id='button-test-notice' title='notice'>
             <i class="fas fa-info-circle"></i>
+          </a>
+          <a href='#' class='button test success' id='button-test-success' title='success'>
+            <i class="fas fa-smile"></i>
           </a>
           <a href='#' class='button test warning' id='button-test-warning' title='warning'>
             <i class="fas fa-exclamation-triangle"></i>
@@ -85,17 +85,17 @@
         </div>
         <div id='timer-controls'>
           <div class='title'>Timer Controls</div>
-          <a href='#' class='button start' id='button-timer-start'>start</a>
-          <a href='#' class='button stop' id='button-timer-stop'>stop</a>
+          <a href='#' class='button start' id='button-timer-start'><i class="fas fa-play"></i> start</a>
+          <a href='#' class='button stop' id='button-timer-stop'><i class="fas fa-stop"></i> stop</a>
           <div class='title'>App Controls</div>
-          <a href='#' class='button reset confirmLink' id='button-data-reset'>reset data</a>
+          <a href='#' class='button reset confirmLink' id='button-data-reset'><i class="fas fa-redo-alt"></i> reset data</a>
         </div>
         <div id='user-items-manager'>
           <div class='title'>User Items</div>
           <input id='text-user-items-add-name' type='text' placeholder='name' />
           <input id='text-user-items-add-affl' type='text' placeholder='affiliation' />
-          <a href="#" class="button" id='button-user-items-add'>add</a>
-          <a href="#" class="button disabled" id='button-user-items-clear' disabled='true'>clear</a>
+          <a href="#" class="button disabled" id='button-user-items-add' disabled><i class="fas fa-plus"></i> add</a>
+          <a href="#" class="button disabled" id='button-user-items-clear' disabled><i class="fas fa-minus-circle"></i> clear</a>
           <div id='user-items-display'><ul></ul></div>
         </div>
         <div id='items-available'>
@@ -110,7 +110,7 @@
     </div>
   </nav> <!-- #admin-menu -->
 
-  <div class='wrapper' role='main'>
+  <div id="main-content" role='main'>
 
     <div class='header-container'>
       <span id='button-admin-menu-toggle'>
@@ -127,17 +127,18 @@
     <div class='main-container'>
       <div class='main wrapper clearfix'>
 
-        <audio id='beep' preload='auto' volume='0.5' type='audio/mp3'></audio>
-        <audio id='victory' preload='auto' volume='0.5' type='audio/mp3'></audio>
-
         <div id='items-cycle'></div>
 
         <div id='items-graph'></div>
 
         <div id='winner-confirm'>
           <h2>Winner Present?</h2>
-          <button id='button-confirm-yes' class='button confirm disabled' disabled='true'>YES</button>
-          <button id='button-confirm-no' class='button deny disabled' disabled='true'>NO</button>
+          <button id='button-confirm-yes' class='button confirm disabled' disabled>
+            <i class="fas fa-check"></i> YES
+          </button>
+          <button id='button-confirm-no' class='button deny disabled' disabled>
+            <i class="fas fa-times-circle"></i> NO
+          </button>
         </div>
 
         <div id='the-button'>
@@ -147,9 +148,11 @@
         <div id='results-wrapper'>
           <div id='results-header'>
             <h3>Results (<span>0</span>)</h3>
-            <button type='submit' id='button-export-results' title='Export Results' class='button export-results'>&#x1f4be;</button>
+            <a href="#" id='button-export-results' title='Export Results' class='button export'>
+              <i class="fas fa-save"></i> Export Results
+            </a>
           </div>
-          <div id='inner-results'>
+          <div id='results-list'>
             <ul></ul>
           </div>
         </div>
@@ -164,6 +167,17 @@
     </div> <!-- #footer-container -->
 
   </div> <!-- main#wrapper -->
+
+  <!-- dialog templates -->
+  <div id='data-reset-dialog' class='dialog' title='Confirmation Required'>
+    Are you sure you want to reset Raffler? <em>(Note: all chosen and user items will be lost)</em>
+  </div>
+  <div id='user-items-clear-dialog' class='dialog' title='Confirmation Required'>
+    Are you sure you want to clear user-entered items?
+  </div>
+
+  <audio id='beep' preload='auto' volume='0.5' type='audio/mp3'></audio>
+  <audio id='victory' preload='auto' volume='0.5' type='audio/mp3'></audio>
 
   <script src='./assets/js/lib/systemjs/dist/system.js'></script>
   <script src='./assets/js/lib/FileSaver.min.js'></script>
