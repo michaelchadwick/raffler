@@ -7,7 +7,7 @@
 var Raffler = {}
 
 // debug notifier
-Raffler.notifierEnabled = true
+Raffler.notifierEnabled = false
 
 // init customizable things
 Raffler.initDataFile = './assets/json/raffler_data.json'
