@@ -11,10 +11,10 @@ Click or tap the button and a cavalcade of pre-loaded names will begin to cycle 
 To develop locally, first `git clone` the project, change into that directory, install nodejs dependencies, and then run a local http server.
 
 ```shell
-[~/Code]         $ git clone git@github.com:michaelchadwick/raffler.git
-[~/Code]         $ cd raffler
-[~/Code/raffler] $ npm install
-[~/Code/raffler] $ npm run serve
+git clone git@github.com:michaelchadwick/raffler.git
+cd raffler
+npm install
+npm run serve
 ```
 
 Check out [http://localhost:3000](http://localhost:3000) for your running instance!
