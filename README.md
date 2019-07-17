@@ -8,16 +8,22 @@ Click or tap the button and a cavalcade of pre-loaded names will begin to cycle 
 
 ### Local Development
 
-To develop locally, first `git clone` the project, change into that directory, install nodejs dependencies, and then run a local http server.
+To develop locally, a few simple steps need to be taken.
 
-```shell
-git clone git@github.com:michaelchadwick/raffler.git
-cd raffler
-npm install
-npm run serve
-```
+* clone the project to your local computer
+`git clone git@github.com:michaelchadwick/raffler.git`
+* change into the new directory
+`cd raffler`
+* install NodeJS dependencies
+`npm install`
+* build the project files
+`gulp build`
+* run a local http server
+`npm run serve`
 
-Check out [http://localhost:3000](http://localhost:3000) for your running instance!
+Finally, check out [http://localhost:3000](http://localhost:3000) in a browser for your running instance!
+
+To stop the local instance, issue a `Ctrl-C` at the command line where it's running.
 
 ### Tech Specs
 
