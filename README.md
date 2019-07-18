@@ -65,7 +65,7 @@ There are four options that can be changed via flag and an additional config fil
 * `dataFilePath` - json file of Raffler items
 * `logoFilePath` - logo for your thingy
 * `logoFileLink` - click logo and go somewhere
-* `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account
+* `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads names as they are picked)
 
 Here's how you make Raffler use your stuff
 
