@@ -30,10 +30,7 @@ if (Raffler.userOptionsMerge) {
     dataType: 'json',
     success: function (userOps) {
       // sync user customizations
-      Raffler.dataFilePath = userOps.dataFilePath
-      Raffler.logoFilePath = userOps.logoFilePath
-      Raffler.logoFileLink = userOps.logoFileLink
-      Raffler.talkifyKey = userOps.talkifyKey
+      $.extend(Raffler, userOps)
     }
   })
 }

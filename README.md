@@ -69,13 +69,13 @@ There are four options that can be changed via flag and an additional config fil
 
 Here's how you make Raffler use your stuff
 
-* `assets/js/app/init.js` - change the line `Raffler.userOptionsMerge = false` to `true`
-* `assets/js/app/raffler_user_options_disabled.json` - remove the `_disabled` part and fill in the appropriate values
+* `assets/js/app/init.js` - change the value in line `Raffler.userOptionsMerge = false` to `true`
+* copy `assets/js/app/raffler_user_options.dist` to `assets/js/app/raffler_user_options.json` and fill in your specific information
 
 ```json
 {
-  "dataFilePath": "assets/json/floobidy-hoo.json",
-  "logoFilePath": "assets/images/jamma-mamma.png",
+  "dataFilePath": "./assets/json/floobidy-hoo.json",
+  "logoFilePath": "./assets/images/jamma-mamma.png",
   "logoFileLink": "http://ohmanwhat.omg",
   "talkifyKey": "123456ABCDEF"
 }

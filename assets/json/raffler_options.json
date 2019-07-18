@@ -3,9 +3,5 @@
   "boxResize": false,
   "soundCountdown": true,
   "soundVictory": false,
-  "soundName": false,
-  "dataFilePath": "",
-  "logoFilePath": "",
-  "logoFileLink": "",
-  "talkifyKey": ""
+  "soundName": false
 }
