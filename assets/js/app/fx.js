@@ -1,6 +1,6 @@
 /* fx */
 /* extra fluff to make it cool(er) */
-/* global Raffler */
+/* global Raffler, talkify */
 
 Raffler._playSound = function (soundId) {
   var sound = document.getElementById(soundId)
@@ -15,4 +15,13 @@ Raffler._playSound = function (soundId) {
     Raffler._notify('Sound file not found or is invalid', 'warning')
   }
   if (Raffler.shouldIgnoreSound) Raffler.shouldIgnoreSound = false
+}
+
+Raffler._readName = function (itemChosen) {
+  if (Raffler.ckOptSoundName.is(':checked')) {
+    var player = new talkify.TtsPlayer()
+    // var player = new talkify.Html5Player()
+    player.setRate(0.9)
+    player.playText(`${itemChosen.name} from ${itemChosen.affl}`)
+  }
 }

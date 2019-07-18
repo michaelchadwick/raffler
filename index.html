@@ -52,6 +52,11 @@
             <label for='check-option-show-graph'>show graph</label>
             <input type='checkbox' id='check-option-show-graph' />
           </div>
+          <!--
+          <div>
+            <button type='button' id="btnTestTTS">text-to-speech</button>
+          </div>
+          -->
         </div>
         <div id='test-notify'>
           <div class='title'>Test Notifications</div>
@@ -81,6 +86,10 @@
           <div class='checkbox'>
             <label for='check-option-sound-winner'>sound: victory</label>
             <input type='checkbox' id='check-option-sound-winner' />
+          </div>
+          <div class='checkbox'>
+            <label for='check-option-sound-name' id='check-option-sound-name-label'>sound: name</label>
+            <input type='checkbox' id='check-option-sound-name' />
           </div>
         </div>
         <div id='timer-controls'>
@@ -185,6 +194,7 @@
     .then(jqueryui => SystemJS.import('./assets/js/lib/jquery-ui.js'))
     .then(createjs => SystemJS.import('./assets/js/lib/create.js'))
     .then(ga => SystemJS.import('./assets/js/lib/ga.js'))
+    .then(talkify => SystemJS.import('./node_modules/talkify-tts/dist/talkify.min.js'))
     .then(app => SystemJS.import('./public/build/js/all-app.js'));
   </script>
 </body>

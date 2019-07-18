@@ -1,6 +1,6 @@
 /* main */
 /* app entry point and main functions */
-/* global $ */
+/* global $, talkify */
 
 if ((typeof Raffler) === 'undefined') var Raffler = {}
 
@@ -17,7 +17,7 @@ Raffler.initApp = function () {
 
   // add logo, if exists
   if (Raffler.userOptionsMerge && (typeof Raffler.logoFilePath !== 'undefined') && (typeof Raffler.logoFileLink !== 'undefined')) {
-    Raffler.title.append(`<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img src='${Raffler.logoFilePath}' /></a>`)
+    Raffler.title.append(`<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img id='logo' src='${Raffler.logoFilePath}' /></a>`)
   }
 
   Raffler.setEventHandlers()
@@ -71,6 +71,17 @@ Raffler.setEventHandlers = function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.soundVictory = !curObj.soundVictory
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
+  })
+  Raffler.ckOptSoundName.on('change', function () {
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.soundName = !curObj.soundName
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
+  })
+  Raffler.btnTestTTS.click(function () {
+    var player = new talkify.TtsPlayer()
+
+    player.setRate(0.9)
+    player.playText('yes, we very well can kanban.')
   })
   Raffler.btnTestSuccess.click(function (e) {
     e.preventDefault()
@@ -744,6 +755,13 @@ window.countdownTimer = Raffler.timer(function () {
         Raffler.body.addClass('level4')
         Raffler._playSound('victory')
 
+        Raffler.lastItemChosen = {
+          'name': $('div.item-name').text(),
+          'affl': $('div.item-affl').text()
+        }
+
+        Raffler._readName(Raffler.lastItemChosen)
+
         // confirm winner
         Raffler._enableChosenConfirm()
 
@@ -830,6 +848,7 @@ Raffler.raffleButtonSmash = function () {
     Raffler.divItemsCycle.addClass('level-win')
     Raffler.body.addClass('level4')
     Raffler._playSound('victory')
+    Raffler._readName(Raffler.lastItemChosen)
 
     // remove last chosen item from Raffler.itemsArr if anything picked
     if (Raffler.lastItemChosen !== '') {

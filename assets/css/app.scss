@@ -48,8 +48,18 @@ input {
   height: 26px;
 }
 
+audio {
+  &#talkify-audio {
+    border-radius: 0;
+    bottom: 0;
+    display: none;
+    position: fixed;
+    width: calc(100% - 227px);
+  }
+}
+
 button {
-  width: 64px;
+  width: auto;
 }
 
 .button {
@@ -323,6 +333,13 @@ a {
   header {
     margin: 0;
     width: 100%;
+
+    img {
+      &#logo {
+        max-height: 30px;
+        padding-left: 5px;
+      }
+    }
   }
 }
 

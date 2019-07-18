@@ -2,5 +2,10 @@
   "showGraph": false,
   "boxResize": false,
   "soundCountdown": true,
-  "soundVictory": false
+  "soundVictory": false,
+  "soundName": false,
+  "dataFilePath": "",
+  "logoFilePath": "",
+  "logoFileLink": "",
+  "talkifyKey": "ddf9956c-22a0-42c2-9add-5daa97878773"
 }

@@ -1,7 +1,7 @@
 /* init */
 /* get the main app object set up */
 /* also define a couple extensions */
-/* global $ */
+/* global $, talkify */
 
 // main object
 var Raffler = {}
@@ -9,11 +9,14 @@ var Raffler = {}
 // debug notifier
 Raffler.notifierEnabled = false
 
-// init customizable things
-Raffler.initDataFile = './assets/json/raffler_data.json'
-Raffler.initOptionsFile = './assets/json/raffler_options.json'
-Raffler.initLogoFile = null
-Raffler.initLogoLink = null
+// main options file
+Raffler.optionsFile = './assets/json/raffler_options.json'
+
+// init settings
+Raffler.dataFilePath = './assets/json/raffler_data.json'
+Raffler.logoFilePath = null
+Raffler.logoFileLink = null
+Raffler.talkifyKey = null
 
 // user options
 // set to true to use raffler_user_options.json
@@ -21,23 +24,18 @@ Raffler.userOptionsMerge = false
 Raffler.userOptionsPath = './assets/json/raffler_user_options.json'
 
 if (Raffler.userOptionsMerge) {
-  $.getJSON(Raffler.userOptionsPath, function () {})
-    .done(function (data) {
-      // get user options, if they exist
-      Raffler.userDataFile = data.userDataFile
-      Raffler.userLogoFile = data.userLogoFile
-      Raffler.userLogoLink = data.userLogoLink
-
+  $.ajax({
+    url: Raffler.userOptionsPath,
+    async: false,
+    dataType: 'json',
+    success: function (userOps) {
       // sync user customizations
-      Raffler.dataFilePath = Raffler.userDataFile || Raffler.initDataFile
-      Raffler.logoFilePath = Raffler.userLogoFile || Raffler.initLogoFile
-      Raffler.logoFileLink = Raffler.userLogoLink || Raffler.initLogoLink
-    })
-    .fail(function () {
-      Raffler.dataFilePath = Raffler.initDataFile
-    })
-} else {
-  Raffler.dataFilePath = Raffler.initDataFile
+      Raffler.dataFilePath = userOps.dataFilePath
+      Raffler.logoFilePath = userOps.logoFilePath
+      Raffler.logoFileLink = userOps.logoFileLink
+      Raffler.talkifyKey = userOps.talkifyKey
+    }
+  })
 }
 
 // main Raffler properties
@@ -47,7 +45,8 @@ Raffler.initOptionsObj = {
   'showGraph': false,
   'boxResize': false,
   'soundCountdown': true,
-  'soundVictory': false
+  'soundVictory': false,
+  'soundName': false
 }
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
@@ -85,6 +84,7 @@ Raffler.divFooter = $('.footer-container')
 
 // clicky things
 Raffler.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
+Raffler.btnTestTTS = $('button#btnTestTTS')
 Raffler.btnTestSuccess = $('a#button-test-success')
 Raffler.btnTestNotice = $('a#button-test-notice')
 Raffler.btnTestWarning = $('a#button-test-warning')
@@ -105,6 +105,8 @@ Raffler.ckOptShowGraph = $('input#check-option-show-graph')
 Raffler.ckOptResize = $('input#check-option-resize')
 Raffler.ckOptSoundCountdown = $('input#check-option-sound-countdown')
 Raffler.ckOptSoundVictory = $('input#check-option-sound-winner')
+Raffler.ckOptSoundName = $('input#check-option-sound-name')
+Raffler.ckOptSoundNameLabel = $('label#check-option-sound-name-label')
 Raffler.ckOptFireworks = $('input#check-option-fireworks')
 
 // input things
@@ -115,9 +117,11 @@ Raffler.textAvailableItemsCount = $('div#items-available .title span')
 Raffler.textChosenItems = $('div#items-chosen textarea')
 Raffler.textChosenItemsCount = $('div#items-chosen .title span')
 
-// audio files
+// audio
 Raffler.sndBeep = $('audio#beep')
+Raffler.sndBeep.attr('src', './assets/audio/beep.mp3')
 Raffler.sndVictory = $('audio#victory')
+Raffler.sndVictory.attr('src', './assets/audio/victory.mp3')
 
 // debug
 Raffler.divStageValue = $('#stage-value span')
@@ -135,9 +139,21 @@ if (!Raffler.ckOptResize.is(':checked')) {
   Raffler.divItemsCycle.addClass('level4')
 }
 
-// sfx
-Raffler.sndBeep.attr('src', './assets/audio/beep.mp3')
-Raffler.sndVictory.attr('src', './assets/audio/victory.mp3')
+// talkify
+talkify.config.debug = false
+talkify.config.remoteService.enabled = false
+talkify.config.remoteService.host = 'https://talkify.net'
+talkify.config.remoteService.apiKey = Raffler.talkifyKey
+talkify.config.ui.audioControls = {
+  enabled: false,
+  container: document.getElementById('#talkify-audio')
+}
+
+if (Raffler.talkifyKey === null || Raffler.talkifyKey === '') {
+  Raffler.ckOptSoundName.attr('disabled', true)
+  Raffler.ckOptSoundName.attr('title', 'Currently disabled as no valid Talkify API Key was found')
+  Raffler.ckOptSoundNameLabel.attr('title', 'Currently disabled as no valid Talkify API Key was found')
+}
 
 // jQuery extension to parse url querystring
 $.QueryString = (function (a) {
