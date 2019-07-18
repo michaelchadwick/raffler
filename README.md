@@ -60,11 +60,12 @@ You can optionally add additional items on the fly (this functionality is hidden
 
 ### User Options
 
-There are three options that can be changed via flag and an additional config file.
+There are four options that can be changed via flag and an additional config file.
 
-* `userDataFile` - json file of Raffler items
-* `userLogoFile` - logo for your thingy
-* `userLogoLink` - click logo and go somewhere
+* `dataFilePath` - json file of Raffler items
+* `logoFilePath` - logo for your thingy
+* `logoFileLink` - click logo and go somewhere
+* `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account
 
 Here's how you make Raffler use your stuff
 
@@ -73,9 +74,10 @@ Here's how you make Raffler use your stuff
 
 ```json
 {
-  "userDataFile": "assets/json/floobidy-hoo.json",
-  "userLogoFile": "assets/images/jamma-mamma.png",
-  "userLogoLink": "http://ohmanwhat.omg"
+  "dataFilePath": "assets/json/floobidy-hoo.json",
+  "logoFilePath": "assets/images/jamma-mamma.png",
+  "logoFileLink": "http://ohmanwhat.omg",
+  "talkifyKey": "123456ABCDEF"
 }
 ```
 
@@ -85,6 +87,7 @@ Here's how you make Raffler use your stuff
 * [JS File Saving](https://github.com/eligrey/FileSaver.js)
 * [CSV to JSON](https://github.com/Keyang/node-csvtojson)
 * [Gulp](https://gulpjs.com)
+* [Talkify](https://talkify.net)
 
 #### Attribution
 
