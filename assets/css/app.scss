@@ -48,6 +48,10 @@ input {
   height: 26px;
 }
 
+button {
+  width: auto;
+}
+
 audio {
   &#talkify-audio {
     border-radius: 0;
@@ -58,8 +62,20 @@ audio {
   }
 }
 
-button {
-  width: auto;
+.button,
+a {
+  &.disabled {
+    background-color: $gray;
+    color: $gray-light;
+    cursor: not-allowed;
+    text-decoration: none;
+
+    &:hover {
+      background-color: lighten($gray, 5%);
+      color: $gray-light;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .button {
@@ -179,22 +195,6 @@ button {
   }
 }
 
-.button,
-a {
-  &.disabled {
-    background-color: $gray;
-    color: $gray-light;
-    cursor: not-allowed;
-    text-decoration: none;
-
-    &:hover {
-      background-color: lighten($gray, 5%);
-      color: $gray-light;
-      cursor: not-allowed;
-    }
-  }
-}
-
 .ui-draggable {
   .ui-dialog-titlebar {
     background-color: lighten($danger, 10%);
@@ -223,246 +223,23 @@ a {
   width: 100%;
 }
 
-#main-content {
-  margin: 0;
-  min-height: 100%;
-  position: relative;
-  width: 100%;
-
-  &.with-menu {
-    width: calc(100% - 225px);
-  }
-}
-
-.header-container {
-  background: $blue;
-  border-bottom: 5px solid darken($blue, 5%);
-  box-shadow: none;
-  color: $white;
-  height: 32px;
-  margin: 0 0 10px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 2;
-
-  h1 {
-    float: left;
-    font-size: 2.5em;
-    margin: 0.1em 0 0.04em;
-    padding-left: 5px;
-    text-shadow: 1px 1px 1px darken($blue, 20%);
-  }
-
-  span {
-    font-size: 1.25em;
-    margin: auto 5px auto 10px;
-    position: relative;
-    text-shadow: 1px 1px 1px $text-shadow;
-    top: 5px;
-  }
-
-  img {
-    position: relative;
-    top: 3px;
-  }
-
-  #button-admin-menu-toggle {
-    cursor: pointer;
-    display: none;
-    height: 24px;
-    padding: 4px;
-    position: fixed;
-    right: 7px;
-    top: 6px;
-    transition: .25s;
-    width: 24px;
-    z-index: 15;
-
-    div {
-      box-shadow: 1px 1px 1px $text-shadow;
-    }
-
-    .menu-bar {
-      border-radius: 2px;
-      position: absolute;
-      transition: .5s;
-      width: 75%;
-    }
-
-    .menu-bar-top {
-      border: 4px solid $white;
-      border-bottom: none;
-      top: 0;
-    }
-
-    .menu-bar-middle {
-      background-color: $white;
-      height: 4px;
-      margin-bottom: 5px;
-      margin-top: 5px;
-      top: 4px;
-      width: 32px;
-    }
-
-    .menu-bar-bottom {
-      border: 4px solid $white;
-      border-top: none;
-      top: 18px;
-    }
-
-    .button-open {
-      .menu-bar-top {
-        transform: rotate(45deg) translate(6px, 7px);
-        transition: .5s;
-      }
-
-      .menu-bar-middle {
-        opacity: 0;
-        transform: translate(-230px);
-        transition: .1s ease-in;
-      }
-
-      .menu-bar-bottom {
-        transform: rotate(-45deg) translate(5px, -7px);
-        transition: .5s;
-      }
-    }
-  }
-
-  header {
-    margin: 0;
-    width: 100%;
-
-    img {
-      &#logo {
-        max-height: 30px;
-        padding-left: 5px;
-      }
-    }
-  }
-}
-
-.main-container {
-  clear: both;
-  margin: 25px 0 0;
-  overflow: hidden;
-  padding: 0 0 50px;
-
-  .wrapper {
-    div {
-      margin: 0 auto;
-      position: relative;
-      text-align: center;
-    }
-  }
-}
-
-.footer-container {
-  background: darken($blue, 5%);
-  border-top: 5px solid darken($blue, 10%);
-  bottom: 0;
-  color: $white;
-  font-family: 'Overpass Mono', monospace;
-  font-size: 0.9em;
-  letter-spacing: 0.01em;
-  margin: 0;
-  padding: 10px 0;
+.item-status {
+  background: $orange;
+  border: 2px solid $black;
+  border-radius: 0 0 3px 3px;
+  border-top: 1px solid $black;
+  cursor: pointer;
+  font-size: 1.1em;
+  left: 25%;
+  margin: 0 auto 5px;
+  max-width: 50vw;
+  min-height: 30px;
+  min-width: 40px;
+  padding: 10px 20px;
   position: fixed;
   text-align: center;
-  width: 100%;
-
-  footer {
-    padding: 0;
-
-    a {
-      color: $warning;
-      text-decoration: none;
-
-      &:hover {
-        color: lighten($warning, 5%);
-      }
-    }
-  }
-}
-
-.with-menu {
-  width: calc(100% - 225px);
-}
-
-#admin-menu {
-  background-color: darken($blue-sky, 10%);
-  border-left: 1px solid $black;
-  color: $white;
-  display: block;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1em;
-  font-weight: 700;
-  height: 100%;
-  margin-right: -300px;
-  overflow: auto;
-  position: fixed;
-  right: 0;
-  top: 37px;
-  transition: .25s;
-  width: 225px;
-  z-index: 10;
-
-  .fa,
-  .fas {
-    font-size: 16px;
-  }
-
-  &.menu-show {
-    box-shadow: -3px 3px 10px $gray-dark;
-    margin-right: 0;
-  }
-
-  .menu {
-    text-align: left;
-
-    div {
-      text-align: left;
-
-      &.title {
-        background: $gray-dark;
-        border-bottom: 1px solid $black;
-        border-left: 0;
-        border-top: 1px solid darken($gray, 2%);
-        clear: left;
-        float: none;
-        font-size: 1.2em;
-        height: 23px;
-        padding: 0 5px 2px 7px;
-        text-transform: uppercase;
-        width: 100%;
-      }
-    }
-  }
-}
-
-#debug-values {
-  div {
-    &.values {
-      background: lighten($blue, 10%);
-      padding: 0 10px;
-      transition: all 100ms ease;
-    }
-  }
-}
-
-#test-notify {
-  clear: both;
-
-  & > a {
-    float: left;
-    width: 25%;
-  }
-}
-
-#fancy-options {
-  float: left;
-  width: 100%;
+  top: 32px;
+  z-index: 10000;
 }
 
 .checkbox {
@@ -495,335 +272,6 @@ a {
   }
 }
 
-#timer-controls {
-  clear: both;
-  display: block;
-  float: none;
-  width: 100%;
-
-  & > a {
-    font-size: 20px;
-    margin: 0;
-    width: 100%;
-
-    &#button-timer-start,
-    &#button-timer-stop {
-      float: left;
-      width: 50%;
-    }
-  }
-}
-
-#user-items-manager {
-  clear: left;
-
-  input,
-  button,
-  div {
-    position: relative;
-  }
-
-  input {
-    width: 100%;
-
-    &#text-user-items-add-name,
-    &#text-user-items-add-affl {
-      padding: 3px;
-    }
-  }
-
-  a {
-    color: $white;
-    font-size: 20px;
-    margin: 0;
-
-    &#button-user-items-add,
-    &#button-user-items-clear {
-      float: left;
-      width: 50%;
-    }
-
-    &#button-user-items-add {
-      background-color: $green;
-
-      &:hover {
-        background-color: lighten($green, 5%);
-      }
-
-      &.disabled {
-        background-color: $gray;
-        color: $gray-light;
-        cursor: not-allowed;
-        text-decoration: none;
-
-        &:hover {
-          background-color: lighten($gray, 5%);
-          color: $gray-light;
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    &#button-user-items-clear {
-      background-color: $danger;
-
-      &.disabled {
-        background-color: $gray;
-        color: $gray-light;
-        cursor: not-allowed;
-        text-decoration: none;
-
-        &:hover {
-          background-color: lighten($gray, 5%);
-          color: $gray-light;
-          cursor: not-allowed;
-        }
-      }
-    }
-  }
-}
-
-#user-items-display {
-  clear: left;
-  color: $white;
-  font-weight: bold;
-  margin: 4px 0 0;
-  padding: 2px 4px;
-}
-
-#items-available {
-  textarea {
-    background: darken($white, 10%);
-    border: none;
-    font-size: 0.9em;
-    height: 150px;
-    padding: 5px;
-    width: 100%;
-  }
-}
-
-#items-chosen {
-  textarea {
-    background: darken($white, 10%);
-    border: none;
-    font-size: 0.9em;
-    height: 150px;
-    padding: 5px;
-    width: 100%;
-  }
-}
-
-// main area
-.item-status {
-  background: $orange;
-  border: 2px solid $black;
-  border-radius: 0 0 3px 3px;
-  border-top: 1px solid $black;
-  cursor: pointer;
-  font-size: 1.1em;
-  left: 25%;
-  margin: 0 auto 5px;
-  max-width: 50vw;
-  min-height: 30px;
-  min-width: 40px;
-  padding: 10px 20px;
-  position: fixed;
-  text-align: center;
-  top: 32px;
-  z-index: 10000;
-}
-
-#items-cycle {
-  align-content: center;
-  align-items: center;
-  background: linear-gradient(to bottom, $gray-light 0%, $gray 14%, $gray-dark 100%);
-  color: $gray-light;
-  display: flex;
-  flex-wrap: wrap;
-  font-family: 'Cabin', sans-serif;
-  font-size: 5vw;
-  font-weight: bold;
-  height: 25vw;
-  line-height: 0.8;
-  margin-bottom: 20px;
-  margin-top: 0;
-  padding: 10px;
-  text-transform: uppercase;
-  transition: all 1s ease;
-  width: 100%;
-  word-break: break-word;
-  word-wrap: break-word;
-
-  .item-name { font-size: 0.7em; }
-  .item-affl { font-size: 0.35em; }
-
-  &.level1,
-  &.level2,
-  &.level3,
-  &.level4 {
-    line-height: 0.8;
-    transition: all 1s ease;
-  }
-
-  &.level1 {
-    background: darken($white, 30%);
-
-    .item-name { color: $gray-light; font-size: 0.9em; }
-    .item-affl { color: $gray-light; font-size: 0.5em; }
-  }
-
-  &.level2 {
-    background: darken($white, 15%);
-
-    .item-name { color: saturate($danger, 10%); font-size: 1.05em; }
-    .item-affl { color: saturate($danger, 10%); font-size: 0.65em; }
-  }
-
-  &.level3 {
-    background: darken($white, 7%);
-
-    .item-name { color: saturate($blue, 10%); font-size: 1.25em; }
-    .item-affl { color: saturate($blue, 10%); font-size: 0.85em; }
-  }
-
-  &.level4 {
-    background: darken($white, 4%);
-    box-shadow: 0 0 20px 7px lighten($gray, 5%);
-
-    .item-name { color: darken($blue, 5%); font-size: 1.5em; }
-    .item-affl { color: darken($blue, 5%); font-size: 1em; }
-  }
-
-  &.level-win {
-    background: darken($white, 1%);
-    border-bottom: 5px solid darken($green, 10%);
-    border-left: 5px solid darken($green, 7%);
-    border-right: 5px solid darken($green, 10%);
-    border-top: 5px solid darken($green, 7%);
-    box-shadow: 0 0 20px 7px $gray;
-
-    .item-name { color: $green; font-size: 2em; }
-    .item-affl { color: darken($green, 5%); font-size: 1.5em; }
-  }
-
-  &.stopped {
-    div {
-      opacity: 0.02;
-      transition: all 200ms ease;
-    }
-  }
-
-  div {
-    text-transform: uppercase;
-    transition: all 200ms ease;
-    width: 100%;
-  }
-}
-
-#items-graph {
-  display: none;
-  text-align: center;
-  width: 80%;
-
-  span {
-    background-color: $gray-light;
-    display: inline-block;
-    font-size: 8px;
-    height: 1px;
-    line-height: 2px;
-    margin: 0 1px 0 0;
-    padding: 1px;
-    width: 1px;
-
-    &.chosen {
-      background-color: $warning;
-      height: 10px;
-    }
-  }
-}
-
-#winner-confirm {
-  display: none;
-  margin: 0 auto 100px;
-  padding: 0 20px;
-  width: 80%;
-
-  h2 {
-    color: $white;
-    font-size: 30px;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 1px lighten($black, 2%);
-  }
-
-  & > button {
-    float: left;
-    font-size: 36px;
-    height: 70px;
-    width: 50%;
-
-    &.confirm {
-      &:hover {
-        background-color: $green;
-      }
-    }
-
-    &.deny {
-      &:hover {
-        background-color: $danger;
-      }
-    }
-  }
-}
-
-#results-wrapper {
-  clear: all;
-  color: lighten($black, 2%);
-  display: none;
-  float: none;
-  margin-top: 20px;
-  min-height: 40px;
-  overflow: hidden;
-  padding: 0;
-  text-align: center;
-  width: 80%;
-
-
-  #results-header {
-    color: $black;
-    margin: 0;
-    padding: 5px;
-    text-align: center;
-
-    h3 {
-      font-size: 1.7em;
-      margin: 0;
-      text-transform: uppercase;
-    }
-  }
-
-  #results-list {
-    height: 110px;
-    margin: 0 auto;
-    overflow: auto;
-    padding: 8px 10px 20px;
-    text-transform: uppercase;
-    width: 100%;
-
-    ul {
-      font-size: 1.3em;
-      margin: auto;
-      padding: 0 15%;
-      text-align: center;
-      width: 45vw;
-
-      li {
-        list-style-type: none;
-        margin-right: 10px;
-      }
-    }
-  }
-}
-
 .success,
 .confirm {
   background-color: $green;
@@ -836,4 +284,551 @@ a {
 
 .dialog {
   display: none;
+}
+
+#admin-menu {
+  background-color: darken($blue-sky, 10%);
+  border-left: 1px solid $black;
+  color: $white;
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  height: 100%;
+  margin-right: -300px;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 37px;
+  transition: .25s;
+  width: 225px;
+  z-index: 10;
+
+  &.menu-show {
+    box-shadow: -3px 3px 10px $gray-dark;
+    margin-right: 0;
+  }
+
+  .menu {
+    text-align: left;
+
+    div {
+      text-align: left;
+
+      &.title {
+        background: $gray-dark;
+        border-bottom: 1px solid $black;
+        border-left: 0;
+        border-top: 1px solid darken($gray, 2%);
+        clear: left;
+        float: none;
+        font-size: 1.2em;
+        height: 23px;
+        padding: 0 5px 2px 7px;
+        text-transform: uppercase;
+        width: 100%;
+      }
+    }
+
+    .fa,
+    .fas {
+      font-size: 16px;
+    }
+
+    #fancy-options {
+      float: left;
+      width: 100%;
+    }
+
+    #timer-controls {
+      clear: both;
+      display: block;
+      float: none;
+      width: 100%;
+
+      & > a {
+        font-size: 20px;
+        margin: 0;
+        width: 100%;
+
+        &#button-timer-start,
+        &#button-timer-stop {
+          float: left;
+          width: 50%;
+        }
+      }
+    }
+
+    #user-items-manager {
+      clear: left;
+
+      input,
+      button,
+      div {
+        position: relative;
+      }
+
+      input {
+        width: 100%;
+
+        &#text-user-items-add-name,
+        &#text-user-items-add-affl {
+          padding: 3px;
+        }
+      }
+
+      a {
+        color: $white;
+        font-size: 20px;
+        margin: 0;
+
+        &#button-user-items-add,
+        &#button-user-items-clear {
+          float: left;
+          width: 50%;
+        }
+
+        &#button-user-items-add {
+          background-color: $green;
+
+          &:hover {
+            background-color: lighten($green, 5%);
+          }
+
+          &.disabled {
+            background-color: $gray;
+            color: $gray-light;
+            cursor: not-allowed;
+            text-decoration: none;
+
+            &:hover {
+              background-color: lighten($gray, 5%);
+              color: $gray-light;
+              cursor: not-allowed;
+            }
+          }
+        }
+
+        &#button-user-items-clear {
+          background-color: $danger;
+
+          &.disabled {
+            background-color: $gray;
+            color: $gray-light;
+            cursor: not-allowed;
+            text-decoration: none;
+
+            &:hover {
+              background-color: lighten($gray, 5%);
+              color: $gray-light;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+
+      #user-items-display {
+        clear: left;
+        color: $white;
+        font-weight: bold;
+        margin: 4px 0 0;
+        padding: 2px 4px;
+      }
+    }
+
+    #items-available {
+      textarea {
+        background: darken($white, 10%);
+        border: none;
+        font-size: 0.9em;
+        height: 150px;
+        padding: 5px;
+        width: 100%;
+      }
+    }
+
+    #items-chosen {
+      textarea {
+        background: darken($white, 10%);
+        border: none;
+        font-size: 0.9em;
+        height: 150px;
+        padding: 5px;
+        width: 100%;
+      }
+    }
+
+    #debug-values {
+      div {
+        &.values {
+          background: lighten($blue, 10%);
+          padding: 0 10px;
+          transition: all 100ms ease;
+        }
+      }
+    }
+
+    #test-notify {
+      clear: both;
+
+      & > a {
+        float: left;
+        width: 25%;
+      }
+    }
+  }
+}
+
+#main-content {
+  margin: 0;
+  min-height: 100%;
+  position: relative;
+  width: 100%;
+
+  &.with-menu {
+    width: calc(100% - 225px);
+  }
+
+  .header-container {
+    background: $blue;
+    border-bottom: 5px solid darken($blue, 5%);
+    box-shadow: none;
+    color: $white;
+    height: 32px;
+    margin: 0 0 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+
+    h1 {
+      float: left;
+      font-size: 2.5em;
+      margin: 0.1em 0 0.04em;
+      padding-left: 5px;
+      text-shadow: 1px 1px 1px darken($blue, 20%);
+    }
+
+    span {
+      font-size: 1.25em;
+      margin: auto 5px auto 10px;
+      position: relative;
+      text-shadow: 1px 1px 1px $text-shadow;
+      top: 5px;
+    }
+
+    img {
+      position: relative;
+      top: 3px;
+    }
+
+    #button-admin-menu-toggle {
+      cursor: pointer;
+      display: none;
+      height: 24px;
+      padding: 4px;
+      position: fixed;
+      right: 7px;
+      top: 6px;
+      transition: .25s;
+      width: 24px;
+      z-index: 15;
+
+      div {
+        box-shadow: 1px 1px 1px $text-shadow;
+      }
+
+      .menu-bar {
+        border-radius: 2px;
+        position: absolute;
+        transition: .5s;
+        width: 75%;
+      }
+
+      .menu-bar-top {
+        border: 4px solid $white;
+        border-bottom: none;
+        top: 0;
+      }
+
+      .menu-bar-middle {
+        background-color: $white;
+        height: 4px;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        top: 4px;
+        width: 32px;
+      }
+
+      .menu-bar-bottom {
+        border: 4px solid $white;
+        border-top: none;
+        top: 18px;
+      }
+
+      .button-open {
+        .menu-bar-top {
+          transform: rotate(45deg) translate(6px, 7px);
+          transition: .5s;
+        }
+
+        .menu-bar-middle {
+          opacity: 0;
+          transform: translate(-230px);
+          transition: .1s ease-in;
+        }
+
+        .menu-bar-bottom {
+          transform: rotate(-45deg) translate(5px, -7px);
+          transition: .5s;
+        }
+      }
+    }
+
+    header {
+      margin: 0;
+      width: 100%;
+
+      img {
+        &#logo {
+          max-height: 30px;
+          padding-left: 5px;
+        }
+      }
+    }
+  }
+
+  .main-container {
+    clear: both;
+    margin: 25px 0 0;
+    overflow: hidden;
+    padding: 0 0 50px;
+
+    .wrapper {
+      div {
+        margin: 0 auto;
+        position: relative;
+        text-align: center;
+      }
+    }
+
+    #items-cycle {
+      align-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom, $gray-light 0%, $gray 14%, $gray-dark 100%);
+      color: $gray-light;
+      display: flex;
+      flex-wrap: wrap;
+      font-family: 'Cabin', sans-serif;
+      font-size: 5vw;
+      font-weight: bold;
+      height: 25vw;
+      line-height: 0.8;
+      margin-bottom: 20px;
+      margin-top: 0;
+      padding: 10px;
+      text-transform: uppercase;
+      transition: all 1s ease;
+      width: 100%;
+      word-break: break-word;
+      word-wrap: break-word;
+
+      .item-name { font-size: 0.7em; }
+      .item-affl { font-size: 0.35em; }
+
+      &.level1,
+      &.level2,
+      &.level3,
+      &.level4 {
+        line-height: 0.8;
+        transition: all 1s ease;
+      }
+
+      &.level1 {
+        background: darken($white, 30%);
+
+        .item-name { color: $gray-light; font-size: 0.9em; }
+        .item-affl { color: $gray-light; font-size: 0.5em; }
+      }
+
+      &.level2 {
+        background: darken($white, 15%);
+
+        .item-name { color: saturate($danger, 10%); font-size: 1.05em; }
+        .item-affl { color: saturate($danger, 10%); font-size: 0.65em; }
+      }
+
+      &.level3 {
+        background: darken($white, 7%);
+
+        .item-name { color: saturate($blue, 10%); font-size: 1.25em; }
+        .item-affl { color: saturate($blue, 10%); font-size: 0.85em; }
+      }
+
+      &.level4 {
+        background: darken($white, 4%);
+        box-shadow: 0 0 20px 7px lighten($gray, 5%);
+
+        .item-name { color: darken($blue, 5%); font-size: 1.5em; }
+        .item-affl { color: darken($blue, 5%); font-size: 1em; }
+      }
+
+      &.level-win {
+        background: darken($white, 1%);
+        border-bottom: 5px solid darken($green, 10%);
+        border-left: 5px solid darken($green, 7%);
+        border-right: 5px solid darken($green, 10%);
+        border-top: 5px solid darken($green, 7%);
+        box-shadow: 0 0 20px 7px $gray;
+
+        .item-name { color: $green; font-size: 2em; }
+        .item-affl { color: darken($green, 5%); font-size: 1.5em; }
+      }
+
+      &.stopped {
+        div {
+          opacity: 0.02;
+          transition: all 200ms ease;
+        }
+      }
+
+      div {
+        text-transform: uppercase;
+        transition: all 200ms ease;
+        width: 100%;
+      }
+    }
+
+    #items-graph {
+      display: none;
+      text-align: center;
+      width: 80%;
+
+      span {
+        background-color: $gray-light;
+        display: inline-block;
+        font-size: 8px;
+        height: 1px;
+        line-height: 2px;
+        margin: 0 1px 0 0;
+        padding: 1px;
+        width: 1px;
+
+        &.chosen {
+          background-color: $warning;
+          height: 10px;
+        }
+      }
+    }
+
+    #winner-confirm {
+      display: none;
+      margin: 0 auto 100px;
+      padding: 0 20px;
+      width: 80%;
+
+      h2 {
+        color: $white;
+        font-size: 30px;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 1px lighten($black, 2%);
+      }
+
+      & > button {
+        float: left;
+        font-size: 36px;
+        height: 70px;
+        width: 50%;
+
+        &.confirm {
+          &:hover {
+            background-color: $green;
+          }
+        }
+
+        &.deny {
+          &:hover {
+            background-color: $danger;
+          }
+        }
+      }
+    }
+
+    #results-wrapper {
+      clear: all;
+      color: lighten($black, 2%);
+      display: none;
+      float: none;
+      margin-top: 20px;
+      min-height: 40px;
+      overflow: hidden;
+      padding: 0;
+      text-align: center;
+      width: 80%;
+
+
+      #results-header {
+        color: $black;
+        margin: 0;
+        padding: 5px;
+        text-align: center;
+
+        h3 {
+          font-size: 1.7em;
+          margin: 0;
+          text-transform: uppercase;
+        }
+      }
+
+      #results-list {
+        height: 110px;
+        margin: 0 auto;
+        overflow: auto;
+        padding: 8px 10px 20px;
+        text-transform: uppercase;
+        width: 100%;
+
+        ul {
+          font-size: 1.3em;
+          margin: auto;
+          padding: 0 15%;
+          text-align: center;
+          width: 45vw;
+
+          li {
+            list-style-type: none;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-container {
+    background: darken($blue, 5%);
+    border-top: 5px solid darken($blue, 10%);
+    bottom: 0;
+    color: $white;
+    font-family: 'Overpass Mono', monospace;
+    font-size: 0.9em;
+    letter-spacing: 0.01em;
+    margin: 0;
+    padding: 10px 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+
+    footer {
+      padding: 0;
+
+      a {
+        color: $warning;
+        text-decoration: none;
+
+        &:hover {
+          color: lighten($warning, 5%);
+        }
+      }
+    }
+  }
 }
