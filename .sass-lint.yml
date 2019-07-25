@@ -54,7 +54,7 @@ rules:
   mixins-before-declarations: 1
   nesting-depth:
     - 1
-    - max-depth: 3
+    - max-depth: 5
   no-color-keywords: 1
   no-color-literals: 1
   no-css-comments: 1
