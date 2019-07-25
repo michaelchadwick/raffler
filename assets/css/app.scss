@@ -483,6 +483,12 @@ a {
             transition: all 100ms ease;
           }
         }
+
+        input {
+          &[type='range'] {
+            width: 100%;
+          }
+        }
       }
 
       #test-notify {
