@@ -3,5 +3,6 @@
   "boxResize": false,
   "soundCountdown": true,
   "soundVictory": false,
-  "soundName": false
+  "soundName": false,
+  "showDebug": false
 }

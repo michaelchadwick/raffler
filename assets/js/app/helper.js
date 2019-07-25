@@ -92,7 +92,10 @@ Raffler._setLocalStorageItem = function (lsKey, obj) {
 }
 // app notifications
 Raffler._notify = function (msg, type, notifyUser) {
-  if (!Raffler.notifierEnabled) { return }
+  if (!Raffler.notifierEnabled) {
+    console.warn('Raffler notifier disabled')
+    return
+  }
 
   type = (typeof type) === 'undefined' ? '' : type
   notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser

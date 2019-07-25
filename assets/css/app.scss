@@ -302,7 +302,12 @@ a {
   }
 
   .menu {
+    overflow-x: hidden;
     text-align: left;
+
+    &.with-debug {
+      min-height: 1085px;
+    }
 
     div {
       text-align: left;
@@ -319,6 +324,19 @@ a {
         padding: 0 5px 2px 7px;
         text-transform: uppercase;
         width: 100%;
+
+        &.title-with-checkbox {
+          width: auto;
+
+          span,
+          input {
+            float: left;
+          }
+
+          input {
+            margin: 0 0 2px 5px;
+          }
+        }
       }
     }
 
@@ -428,44 +446,52 @@ a {
       }
     }
 
-    #items-available {
-      textarea {
-        background: darken($white, 10%);
-        border: none;
-        font-size: 0.9em;
-        height: 150px;
-        padding: 5px;
-        width: 100%;
-      }
-    }
+    #debug-options {
+      display: none;
 
-    #items-chosen {
-      textarea {
-        background: darken($white, 10%);
-        border: none;
-        font-size: 0.9em;
-        height: 150px;
-        padding: 5px;
-        width: 100%;
+      &.show {
+        display: block;
       }
-    }
 
-    #debug-values {
-      div {
-        &.values {
-          background: lighten($blue, 10%);
-          padding: 0 10px;
-          transition: all 100ms ease;
+      #items-available {
+        textarea {
+          background: darken($white, 10%);
+          border: none;
+          font-size: 0.9em;
+          height: 150px;
+          padding: 5px;
+          width: 100%;
         }
       }
-    }
 
-    #test-notify {
-      clear: both;
+      #items-chosen {
+        textarea {
+          background: darken($white, 10%);
+          border: none;
+          font-size: 0.9em;
+          height: 150px;
+          padding: 5px;
+          width: 100%;
+        }
+      }
 
-      & > a {
-        float: left;
-        width: 25%;
+      #debug-values {
+        div {
+          &.values {
+            background: lighten($blue, 10%);
+            padding: 0 10px;
+            transition: all 100ms ease;
+          }
+        }
+      }
+
+      #test-notify {
+        clear: both;
+
+        & > a {
+          float: left;
+          width: 25%;
+        }
       }
     }
   }

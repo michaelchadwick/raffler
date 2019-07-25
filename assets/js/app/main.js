@@ -77,6 +77,14 @@ Raffler.setEventHandlers = function () {
     curObj.soundName = !curObj.soundName
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
+  Raffler.ckOptShowDebug.on('change', function () {
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.showDebug = !curObj.showDebug
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
+
+    Raffler.divDebugOptions.toggleClass('show')
+    Raffler.divAdminMenuInner.toggleClass('with-debug')
+  })
   Raffler.btnTestTTS.click(function () {
     var player = new talkify.TtsPlayer()
 
