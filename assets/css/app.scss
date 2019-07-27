@@ -133,6 +133,18 @@ a {
     text-shadow: 2px 2px 0 $text-shadow;
     width: 80%;
 
+    &.disabled {
+      background-color: $gray;
+      box-shadow: 0 9px lighten($black, 40%);
+      color: $gray-light;
+
+      &:hover {
+        background-color: lighten($gray, 5%);
+        color: $gray-light;
+        cursor: not-allowed;
+      }
+    }
+
     &:hover {
       background-color: darken($blue, 15%);
     }
