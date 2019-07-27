@@ -51,7 +51,6 @@ Raffler.initMult = 1
 Raffler.initTimesRun = 0
 Raffler.lastInterval = 359
 Raffler.hasLocalStorage = true
-Raffler.shouldIgnoreSound = false
 Raffler.lastItemChosen = ''
 Raffler.lastItemChosenConfirmed = false
 Raffler.stages = {

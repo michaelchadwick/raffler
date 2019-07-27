@@ -12,9 +12,8 @@ Raffler._playSound = function (soundId) {
       sound.play()
     }
   } else {
-    Raffler._notify('Sound file not found or is invalid', 'warning')
+    Raffler._notify('Sound file not found or is invalid', 'error')
   }
-  if (Raffler.shouldIgnoreSound) Raffler.shouldIgnoreSound = false
 }
 
 Raffler._readName = function (itemChosen) {

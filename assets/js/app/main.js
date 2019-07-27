@@ -831,9 +831,6 @@ Raffler.raffleButtonSmash = function () {
   if (Raffler.itemsArr.length === 1) {
     Raffler._notify('Only one item to raffle!<br /><strong>instant winner!</strong>', 'warning', true)
 
-    // don't need to play any sound
-    Raffler.shouldIgnoreSound = true
-
     // add lone item to items-cycle
     var loneItemHTML = ''
     loneItemHTML += '<div class=\'item-name\'>' + Raffler.itemsArr[0].name + `</div>\n`
