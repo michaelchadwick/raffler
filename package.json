@@ -1,6 +1,6 @@
 {
   "name": "raffler",
-  "description": "Pick an item from a pool of items in a fun way.",
+  "description": "Pick something from a pool of items in a fun way.",
   "author": "Michael Chadwick",
   "version": "1.0.0",
   "license": "MIT",
@@ -18,7 +18,8 @@
     "raffler",
     "random",
     "choice",
-    "pick"
+    "pick",
+    "lottery"
   ],
   "main": "index.html",
   "scripts": {
@@ -28,21 +29,23 @@
     "talkify-tts": "^2.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "ajv": "^6.5.4",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "ajv": "^6.10.2",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.16.0",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^3.10.0",
     "gulp-concat": "^2.6.1",
     "gulp-notify": "^3.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify": "^3.0.2",
     "http-server": "^0.11.1",
     "pump": "^3.0.0",
-    "tslint": "^5.11.0",
-    "uglify-js": "^3.4.9"
+    "tslint": "^5.18.0",
+    "uglify-js": "^3.6.0"
   }
 }
