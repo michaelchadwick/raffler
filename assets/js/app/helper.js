@@ -54,15 +54,14 @@ Raffler._sanitize = function (newEntry) {
 // check for duplicate user entries
 Raffler._isDuplicateValue = function (newUserItem) {
   var currentUserItems = Raffler._getLocalStorageItem('rafflerUserItems')
-  var isDupe = false
 
   $.each(currentUserItems, function (key, val) {
     if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
-      isDupe = true
+      return true
     }
   })
 
-  return isDupe
+  return false
 }
 // shuffle array
 Raffler._shuffleArray = function (array) {

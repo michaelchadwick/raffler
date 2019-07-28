@@ -460,6 +460,12 @@ a {
         font-weight: bold;
         margin: 4px 0 0;
         padding: 2px 4px;
+
+        ul {
+          li {
+            margin-left: 0;
+          }
+        }
       }
     }
 

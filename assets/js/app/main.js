@@ -176,26 +176,21 @@ Raffler.setEventHandlers = function () {
         'affl': Raffler.elements.inputUserItemsAddAffl.val().trim()
       }
 
-      if (newUserItem !== 'undefined') {
+      if (newUserItem !== undefined) {
         var tempUserItemObj = Raffler._getLocalStorageItem('rafflerUserItems')
-        var newItemAdded = false
 
         if (!Raffler._isDuplicateValue(newUserItem)) {
           tempUserItemObj.push(Raffler._sanitize(newUserItem))
-          newItemAdded = true
           Raffler.elements.btnUserItemsClear.prop('disabled', false)
           Raffler.elements.btnUserItemsClear.removeClass('disabled')
-        } else {
-          Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" not added: duplicate.', 'error', true)
-        }
-
-        if (newItemAdded) {
           // update localStorage with temp tempUserItemObj
           Raffler._setLocalStorageItem('rafflerUserItems', tempUserItemObj)
           // show status bubble
           Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" added!', 'success', true)
           Raffler.clearUserItemsInput()
           Raffler.syncUserItemsWithItemsArr()
+        } else {
+          Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" not added: duplicate.', 'error', true)
         }
       }
     }
