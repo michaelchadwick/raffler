@@ -88,8 +88,3 @@ Here's how you make Raffler use your stuff
 * [CSV to JSON](https://github.com/Keyang/node-csvtojson)
 * [Gulp](https://gulpjs.com)
 * [Talkify](https://talkify.net)
-
-#### Attribution
-
-* Countdown sound &copy; [Comedy Central/The Daily Show](https://cc.com)
-* Victory sound &copy; [320655__rhodesmas__level-up-01.mp3](http://freesound.org/people/shinephoenixstormcrow/sounds/337049/)
