@@ -44,7 +44,7 @@ gulp.task('sub_jscompress-app', function (cb) {
     concat('all-app.js', {newLine: '\r\n'}),
     gulp.dest(DIR_JS_BUILD),
     babel(
-      { presets: [[ 'env' ]] }
+      { presets: [[ '@babel/preset-env' ]] }
     ),
     rename('all-app.min.js'),
     uglify(),
@@ -61,7 +61,7 @@ gulp.task('sub_jscompress-lib', function (cb) {
     concat('all-lib.js', {newLine: '\r\n'}),
     gulp.dest(DIR_JS_BUILD),
     babel(
-      { presets: [[ 'env' ]] }
+      { presets: [[ '@babel/preset-env' ]] }
     ),
     rename('all-lib.min.js'),
     uglify(),
