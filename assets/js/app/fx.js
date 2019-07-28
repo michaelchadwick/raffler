@@ -5,12 +5,14 @@
 Raffler._playSound = function (soundId) {
   var sound = document.getElementById(soundId)
   if (sound) {
-    if (soundId === 'beep' && Raffler.elements.ckOptSoundCountdown.is(':checked')) {
-      sound.play()
-    }
-    if (soundId === 'victory' && Raffler.elements.ckOptSoundVictory.is(':checked')) {
-      sound.play()
-    }
+    Raffler.audioContext.resume().then(() => {
+      if (soundId === 'beep' && Raffler.elements.ckOptSoundCountdown.is(':checked')) {
+        sound.play()
+      }
+      if (soundId === 'victory' && Raffler.elements.ckOptSoundVictory.is(':checked')) {
+        sound.play()
+      }
+    })
   } else {
     Raffler._notify('Sound file not found or is invalid', 'error')
   }

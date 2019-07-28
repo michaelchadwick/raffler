@@ -790,14 +790,18 @@ a {
         width: 50%;
 
         &.confirm {
+          background-color: darken($green, 10%);
+
           &:hover {
             background-color: $green;
           }
         }
 
         &.deny {
+          background-color: $danger;
+
           &:hover {
-            background-color: $danger;
+            background-color: lighten($danger, 10%);
           }
         }
       }

@@ -788,7 +788,7 @@ window.countdownTimer = Raffler.timer(function () {
   // if we've started countdown and we haven't reached end
   // then keep cycling with increased multiplier
   if (this.stage > Raffler.stages.INIT && this.stage !== Raffler.stages.DONE) {
-    var newInterval = interval + (1.5 ^ this.mult++)
+    var newInterval = interval + (1.75 ^ this.mult++)
     Raffler.divMultiplyValue.text(this.mult)
     Raffler.divIntervalRange.val(newInterval)
     return newInterval

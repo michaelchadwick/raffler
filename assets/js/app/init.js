@@ -50,7 +50,7 @@ Raffler.initItemsObj = []
 Raffler.initInterval = 25
 Raffler.initMult = 1
 Raffler.initTimesRun = 0
-Raffler.lastInterval = 359
+Raffler.lastInterval = 361
 Raffler.hasLocalStorage = true
 Raffler.lastItemChosen = ''
 Raffler.lastItemChosenConfirmed = false
@@ -133,6 +133,7 @@ Raffler.elements.textChosenItems = $('div#items-chosen textarea')
 Raffler.elements.textChosenItemsCount = $('div#items-chosen .title span')
 
 // load audio files
+Raffler.audioContext = new ( window.AudioContext || window.webkitAudioContext )()
 $('audio#beep').attr('src', './assets/audio/beep2.mp3')
 $('audio#victory').attr('src', './assets/audio/victory2.mp3')
 
