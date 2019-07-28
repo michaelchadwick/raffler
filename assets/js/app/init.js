@@ -3,49 +3,12 @@
 /* also define a couple extensions */
 /* global $, talkify */
 
-// main object
+// Raffler object init
 if ((typeof Raffler) === 'undefined') var Raffler = {}
 
-Raffler.options = {}
-Raffler.elements = {}
-
-// debug notifier
-Raffler.options.notifierEnabled = false
-
-// main options file
-Raffler.optionsFile = './assets/json/raffler_options.json'
-
-// init settings
-Raffler.options.dataFilePath = './assets/json/raffler_data.json'
-Raffler.options.logoFilePath = null
-Raffler.options.logoFileLink = null
-Raffler.options.talkifyKey = null
-// set to true to use raffler_user_options.json
-Raffler.options.userOptionsMerge = false
-Raffler.options.userOptionsPath = './assets/json/raffler_user_options.json'
-
-if (Raffler.options.userOptionsMerge) {
-  $.ajax({
-    url: Raffler.options.userOptionsPath,
-    async: false,
-    dataType: 'json',
-    success: function (userOps) {
-      // sync user customizations
-      $.extend(Raffler, userOps)
-    }
-  })
-}
-
-// main Raffler properties
+// Raffler properties
 Raffler.itemsArr = []
 Raffler.itemsLeftArr = []
-Raffler.initOptionsObj = {
-  'showGraph': false,
-  'boxResize': false,
-  'soundCountdown': true,
-  'soundVictory': false,
-  'soundName': false
-}
 Raffler.initItemsObj = []
 Raffler.initInterval = 25
 Raffler.initMult = 1
@@ -62,10 +25,38 @@ Raffler.stages = {
   DONE: 4
 }
 
+// Raffler sub-property groups
+Raffler.options = {}
+Raffler.elements = {}
+
+// Raffler options file
+const RAFFLER_OPTIONS_FILE = './config/raffler_options.json'
+
+$.ajax({
+  dataType: 'json',
+  url: RAFFLER_OPTIONS_FILE,
+  async: false,
+  success: function(options) {
+    Raffler.initOptionsObj = options
+    $.extend(Raffler.options, options)
+  }
+})
+
+// Raffler user overrides file
+const USER_OPTIONS_FILE = './config/raffler_options.user.json'
+
+$.ajax({
+  dataType: 'json',
+  url: USER_OPTIONS_FILE,
+  async: false,
+  success: function(options) {
+    $.extend(Raffler.options, options)
+  }
+})
+
 // main divs/elements
 Raffler.elements.body = $('body')
 Raffler.elements.title = $('header')
-// Raffler.divItemStatusBubble = $('#item-status-bubble')
 Raffler.elements.adminMenu = $('#admin-menu')
 Raffler.elements.adminMenuInner = $('#admin-menu .menu')
 Raffler.elements.mainContent = $('#main-content')
@@ -118,7 +109,7 @@ Raffler.elements.btnExportResults = $('a#button-export-results')
 Raffler.elements.ckOptShowGraph = $('input#check-option-show-graph')
 Raffler.elements.ckOptResize = $('input#check-option-resize')
 Raffler.elements.ckOptSoundCountdown = $('input#check-option-sound-countdown')
-Raffler.elements.ckOptSoundVictory = $('input#check-option-sound-winner')
+Raffler.elements.ckOptSoundVictory = $('input#check-option-sound-victory')
 Raffler.elements.ckOptSoundName = $('input#check-option-sound-name')
 Raffler.elements.ckOptSoundNameLabel = $('label#check-option-sound-name-label')
 Raffler.elements.ckOptFireworks = $('input#check-option-fireworks')
@@ -134,15 +125,15 @@ Raffler.elements.textChosenItemsCount = $('div#items-chosen .title span')
 
 // load audio files
 Raffler.audioContext = new ( window.AudioContext || window.webkitAudioContext )()
-$('audio#beep').attr('src', './assets/audio/beep2.mp3')
-$('audio#victory').attr('src', './assets/audio/victory2.mp3')
+$('audio#countdown').attr('src', './assets/audio/countdown.mp3')
+$('audio#victory').attr('src', './assets/audio/victory.mp3')
 
 // debug
-Raffler.divStageValue = $('#stage-value span')
-Raffler.divIntervalValue = $('#interval-value span')
-Raffler.divIntervalRange = $('#interval-value input[type=range]')
-Raffler.divMultiplyValue = $('#multiply-value span')
-Raffler.divTimesRunValue = $('#timesrun-value span')
+Raffler.elements.stageValue = $('#stage-value span')
+Raffler.elements.intervalValue = $('#interval-value span')
+Raffler.elements.intervalRange = $('#interval-value input[type=range]')
+Raffler.elements.multiplyValue = $('#multiply-value span')
+Raffler.elements.timesRunValue = $('#timesrun-value span')
 
 // if we aren't doing the "resize as the raffle counts down" thing
 // then fast track display to final level

@@ -4,7 +4,7 @@ And the winner is...
 
 ## Description
 
-Click or tap the button and a cavalcade of pre-loaded names will begin to cycle more and more slowly as it finally comes to a stop, and a single choice is made. That name will then be added to a results list below the *Raffler*, and will not be chosen again if re-run (until a reset, naturally).
+Click or tap the button and a cavalcade of pre-loaded items will begin to cycle more and more slowly as it finally comes to a stop, and a single choice is made. That item will then be added to a results list below the *Raffler*, and will not be chosen again if re-run (until a reset, naturally).
 
 ### Local Development
 
@@ -29,7 +29,7 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 
 *Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep data and options stateful, even in the event of a browser reload or crash.
 
-*Raffler's* initial data set comes from `assets/json/raffler_data.json` (filename can be changed in `assets/js/app/init.js`), and it is structured as follows:
+*Raffler's* data set comes from `assets/json/raffler_data.json`, and it is structured as follows:
 
 ```json
 [
@@ -56,21 +56,18 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 ]
 ```
 
-You can optionally add additional items on the fly (this functionality is hidden by default, however) by using the admin menu (`?admin=1` in querystring). The admin menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
+Override this data with your own names and affiliations in order to successfully raffle off your items. Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the admin menu (`?admin=1` in querystring). The admin menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
 
 ### User Options
 
-There are four options that can be changed via flag and an additional config file.
+There are four options that can be changed via an additional override file.
 
 * `dataFilePath` - json file of Raffler items
 * `logoFilePath` - logo for your thingy
 * `logoFileLink` - click logo and go somewhere
-* `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads names as they are picked)
+* `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
-Here's how you make Raffler use your stuff
-
-* `assets/js/app/init.js` - change the value in line `Raffler.options.userOptionsMerge = false` to `true`
-* copy `assets/js/app/raffler_user_options.dist` to `assets/js/app/raffler_user_options.json` and fill in your specific information
+Simply copy `config/raffler_options.user.dist` to `config/raffler_options.user.json` and fill in your specific information.
 
 ```json
 {

@@ -4,9 +4,10 @@
 
 Raffler._playSound = function (soundId) {
   var sound = document.getElementById(soundId)
+
   if (sound) {
     Raffler.audioContext.resume().then(() => {
-      if (soundId === 'beep' && Raffler.elements.ckOptSoundCountdown.is(':checked')) {
+      if (soundId === 'countdown' && Raffler.elements.ckOptSoundCountdown.is(':checked')) {
         sound.play()
       }
       if (soundId === 'victory' && Raffler.elements.ckOptSoundVictory.is(':checked')) {
@@ -14,12 +15,13 @@ Raffler._playSound = function (soundId) {
       }
     })
   } else {
-    Raffler._notify('Sound file not found or is invalid', 'error')
+    Raffler._notify(`${soundId} sound file not found or is invalid`, 'error')
   }
 }
 
 Raffler._readName = function (itemChosen) {
   if (Raffler.elements.ckOptSoundName.is(':checked')) {
+    console.log('talkify', talkify.config)
     var player = new talkify.TtsPlayer()
     // var player = new talkify.Html5Player()
     player.setRate(0.9)

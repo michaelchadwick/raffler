@@ -1,0 +1,13 @@
+{
+	"boxResize": false,
+	"soundCountdown": false,
+	"soundVictory": false,
+  "soundName": false,
+	"showDebug": false,
+	"showGraph": false,
+	"notifierEnabled": true,
+	"dataFilePath": "./assets/json/raffler_data.json",
+	"logoFilePath": "",
+	"logoFileLink": "",
+	"talkifyKey": ""
+}
