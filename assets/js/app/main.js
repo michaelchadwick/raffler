@@ -1,23 +1,21 @@
 /* main */
 /* app entry point and main functions */
-/* global $, talkify */
-
-if ((typeof Raffler) === 'undefined') var Raffler = {}
+/* global $, Raffler */
 
 // app entry point
 Raffler.initApp = function () {
   // if admin passed, show hamburger menu
   if ((typeof $.QueryString.admin) !== 'undefined') {
-    Raffler.btnAdminMenuToggle.show()
-    Raffler.btnAdminMenuToggle.toggleClass('button-open')
-    Raffler.divAdminMenu.toggleClass('menu-show')
-    Raffler.divMainContent.toggleClass('with-menu')
-    Raffler.divFooter.toggleClass('with-menu')
+    Raffler.elements.btnAdminMenuToggle.show()
+    Raffler.elements.btnAdminMenuToggle.toggleClass('button-open')
+    Raffler.elements.adminMenu.toggleClass('menu-show')
+    Raffler.elements.mainContent.toggleClass('with-menu')
+    Raffler.elements.footer.toggleClass('with-menu')
   }
 
   // add logo, if exists
-  if (Raffler.userOptionsMerge && (typeof Raffler.logoFilePath !== 'undefined') && (typeof Raffler.logoFileLink !== 'undefined')) {
-    Raffler.title.append(`<span>at</span><a href='${Raffler.logoFileLink}' target='_blank'><img id='logo' src='${Raffler.logoFilePath}' /></a>`)
+  if (Raffler.options.userOptionsMerge && (typeof Raffler.options.logoFilePath !== 'undefined') && (typeof Raffler.options.logoFileLink !== 'undefined')) {
+    Raffler.elements.title.append(`<span>at</span><a href='${Raffler.options.logoFileLink}' target='_blank'><img id='logo' src='${Raffler.options.logoFilePath}' /></a>`)
   }
 
   Raffler.setEventHandlers()
@@ -28,108 +26,102 @@ Raffler.initApp = function () {
 
   if (Raffler._getLocalStorageItem('rafflerChosenItems').length) {
     Raffler.refreshChosenItemsDisplay()
-    Raffler.divResultsWrapper.show()
+    Raffler.elements.resultsWrapper.show()
   }
   Raffler.divIntervalValue.text(Raffler.divIntervalRange.val())
 
   Raffler._disableTimerStart()
-  Raffler.btnRaffle.focus()
+  Raffler.elements.btnRaffle.focus()
 
   Raffler._notify('Raffler init', 'notice')
 }
 
 // attach event handlers to button and such
 Raffler.setEventHandlers = function () {
-  Raffler.btnAdminMenuToggle.click(function () {
+  Raffler.elements.btnAdminMenuToggle.click(function () {
     $(this).toggleClass('button-open')
-    Raffler.divAdminMenu.toggleClass('menu-show')
-    Raffler.divMainContent.toggleClass('with-menu')
-    Raffler.divFooter.toggleClass('with-menu')
+    Raffler.elements.adminMenu.toggleClass('menu-show')
+    Raffler.elements.mainContent.toggleClass('with-menu')
+    Raffler.elements.footer.toggleClass('with-menu')
   })
   Raffler.divIntervalRange.on('change', function (e) {
     e.preventDefault()
     Raffler.divIntervalValue.text($(this).val())
     window.countdownTimer.interval = parseInt($(this).val())
   })
-  Raffler.ckOptShowGraph.on('change', function () {
-    Raffler.divItemsGraph.toggle()
+  Raffler.elements.ckOptShowGraph.on('change', function () {
+    Raffler.elements.itemsGraph.toggle()
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.showGraph = !curObj.showGraph
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptResize.on('change', function () {
+  Raffler.elements.ckOptResize.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.boxResize = !curObj.boxResize
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptSoundCountdown.on('change', function () {
+  Raffler.elements.ckOptSoundCountdown.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.soundCountdown = !curObj.soundCountdown
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptSoundVictory.on('change', function () {
+  Raffler.elements.ckOptSoundVictory.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.soundVictory = !curObj.soundVictory
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptSoundName.on('change', function () {
+  Raffler.elements.ckOptSoundName.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.soundName = !curObj.soundName
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
-  Raffler.ckOptShowDebug.on('change', function () {
+  Raffler.elements.ckOptShowDebug.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.showDebug = !curObj.showDebug
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
 
-    Raffler.divDebugOptions.toggleClass('show')
-    Raffler.divAdminMenuInner.toggleClass('with-debug')
+    Raffler.elements.debugOptions.toggleClass('show')
+    Raffler.elements.adminMenuInner.toggleClass('with-debug')
   })
-  Raffler.btnTestTTS.click(function () {
-    var player = new talkify.TtsPlayer()
-
-    player.setRate(0.9)
-    player.playText('yes, we very well can kanban.')
-  })
-  Raffler.btnTestSuccess.click(function (e) {
+  Raffler.elements.btnTestSuccess.click(function (e) {
     e.preventDefault()
     Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)
   })
-  Raffler.btnTestNotice.click(function (e) {
+  Raffler.elements.btnTestNotice.click(function (e) {
     e.preventDefault()
     Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)
   })
-  Raffler.btnTestWarning.click(function (e) {
+  Raffler.elements.btnTestWarning.click(function (e) {
     e.preventDefault()
     Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)
   })
-  Raffler.btnTestError.click(function (e) {
+  Raffler.elements.btnTestError.click(function (e) {
     e.preventDefault()
     Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)
   })
-  Raffler.btnTimerStart.click(function (e) {
+  Raffler.elements.btnTimerStart.click(function (e) {
     e.preventDefault()
-    if (Raffler.btnTimerStart.prop('disabled', false)) {
+    if (Raffler.elements.btnTimerStart.prop('disabled', false)) {
       window.countdownTimer.start()
-      Raffler.divItemsCycle.removeClass('stopped')
+      Raffler.elements.itemsCycle.removeClass('stopped')
       Raffler._disableTimerStart()
       Raffler._enableTimerStop()
       Raffler._notify('window.countdownTimer started', 'notice')
     }
   })
-  Raffler.btnTimerStop.click(function (e) {
+  Raffler.elements.btnTimerStop.click(function (e) {
     e.preventDefault()
-    if (Raffler.btnTimerStop.prop('disabled', false)) {
+    if (Raffler.elements.btnTimerStop.prop('disabled', false)) {
       window.countdownTimer.stop()
-      Raffler.divItemsCycle.addClass('stopped')
+      Raffler.elements.itemsCycle.addClass('stopped')
       Raffler._disableTimerStop()
       Raffler._enableTimerStart()
       Raffler._notify('window.countdownTimer stopped', 'notice')
     }
   })
-  Raffler.btnDataReset.click(function (e) {
+  Raffler.elements.btnDataReset.click(function (e) {
     e.preventDefault()
-    Raffler.divDataResetDialog.dialog({
+    Raffler.elements.dataResetDialog.dialog({
       autoOpen: false,
       modal: true,
       resizeable: false,
@@ -145,43 +137,43 @@ Raffler.setEventHandlers = function () {
       }
     })
 
-    Raffler.divDataResetDialog.dialog('open')
+    Raffler.elements.dataResetDialog.dialog('open')
   })
-  Raffler.inputUserItemsAddName.keyup(function (e) {
+  Raffler.elements.inputUserItemsAddName.keyup(function (e) {
     var code = e.which
     if (code === 13) {
       e.preventDefault()
-      Raffler.btnUserItemsAdd.click()
+      Raffler.elements.btnUserItemsAdd.click()
     }
 
-    if ($(this).val().length > 0 && Raffler.inputUserItemsAddAffl.val().length > 0) {
-      Raffler.btnUserItemsAdd.prop('disabled', false)
-      Raffler.btnUserItemsAdd.removeClass('disabled')
+    if ($(this).val().length > 0 && Raffler.elements.inputUserItemsAddAffl.val().length > 0) {
+      Raffler.elements.btnUserItemsAdd.prop('disabled', false)
+      Raffler.elements.btnUserItemsAdd.removeClass('disabled')
     } else {
-      Raffler.btnUserItemsAdd.prop('disabled', true)
-      Raffler.btnUserItemsAdd.addClass('disabled')
+      Raffler.elements.btnUserItemsAdd.prop('disabled', true)
+      Raffler.elements.btnUserItemsAdd.addClass('disabled')
     }
   })
-  Raffler.inputUserItemsAddAffl.keyup(function (e) {
+  Raffler.elements.inputUserItemsAddAffl.keyup(function (e) {
     var code = e.which
     if (code === 13) {
       e.preventDefault()
-      Raffler.btnUserItemsAdd.click()
+      Raffler.elements.btnUserItemsAdd.click()
     }
 
-    if ($(this).val().length > 0 && Raffler.inputUserItemsAddName.val().length > 0) {
-      Raffler.btnUserItemsAdd.prop('disabled', false)
-      Raffler.btnUserItemsAdd.removeClass('disabled')
+    if ($(this).val().length > 0 && Raffler.elements.inputUserItemsAddName.val().length > 0) {
+      Raffler.elements.btnUserItemsAdd.prop('disabled', false)
+      Raffler.elements.btnUserItemsAdd.removeClass('disabled')
     } else {
-      Raffler.btnUserItemsAdd.prop('disabled', true)
-      Raffler.btnUserItemsAdd.addClass('disabled')
+      Raffler.elements.btnUserItemsAdd.prop('disabled', true)
+      Raffler.elements.btnUserItemsAdd.addClass('disabled')
     }
   })
-  Raffler.btnUserItemsAdd.click(function () {
-    if (Raffler.inputUserItemsAddName.val() !== '' && Raffler.inputUserItemsAddAffl.val() !== '') {
+  Raffler.elements.btnUserItemsAdd.click(function () {
+    if (Raffler.elements.inputUserItemsAddName.val() !== '' && Raffler.elements.inputUserItemsAddAffl.val() !== '') {
       var newUserItem = {
-        'name': Raffler.inputUserItemsAddName.val().trim(),
-        'affl': Raffler.inputUserItemsAddAffl.val().trim()
+        'name': Raffler.elements.inputUserItemsAddName.val().trim(),
+        'affl': Raffler.elements.inputUserItemsAddAffl.val().trim()
       }
 
       if (newUserItem !== 'undefined') {
@@ -191,8 +183,8 @@ Raffler.setEventHandlers = function () {
         if (!Raffler._isDuplicateValue(newUserItem)) {
           tempUserItemObj.push(Raffler._sanitize(newUserItem))
           newItemAdded = true
-          Raffler.btnUserItemsClear.prop('disabled', false)
-          Raffler.btnUserItemsClear.removeClass('disabled')
+          Raffler.elements.btnUserItemsClear.prop('disabled', false)
+          Raffler.elements.btnUserItemsClear.removeClass('disabled')
         } else {
           Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" not added: duplicate.', 'error', true)
         }
@@ -208,14 +200,14 @@ Raffler.setEventHandlers = function () {
       }
     }
   })
-  Raffler.btnUserItemsClear.click(function (e) {
+  Raffler.elements.btnUserItemsClear.click(function (e) {
     e.preventDefault()
     try {
       if (Raffler._getLocalStorageItem('rafflerUserItems').length > 0) {
-        Raffler.btnUserItemsClear.prop('disabled', false)
-        Raffler.btnUserItemsClear.removeClass('disabled')
+        Raffler.elements.btnUserItemsClear.prop('disabled', false)
+        Raffler.elements.btnUserItemsClear.removeClass('disabled')
 
-        Raffler.divUserItemsClearDialog.dialog({
+        Raffler.elements.userItemsClearDialog.dialog({
           autoOpen: false,
           modal: true,
           resizeable: false,
@@ -226,8 +218,8 @@ Raffler.setEventHandlers = function () {
 
               Raffler.clearUserItemsInput()
 
-              Raffler.btnUserItemsClear.prop('disabled', true)
-              Raffler.btnUserItemsClear.addClass('disabled')
+              Raffler.elements.btnUserItemsClear.prop('disabled', true)
+              Raffler.elements.btnUserItemsClear.addClass('disabled')
 
               $(this).dialog('close')
             },
@@ -237,27 +229,27 @@ Raffler.setEventHandlers = function () {
           }
         })
 
-        Raffler.divUserItemsClearDialog.dialog('open')
+        Raffler.elements.userItemsClearDialog.dialog('open')
       }
     } catch (err) {
       Raffler._notify('btnUserItemsClear: ' + err, 'error')
     }
   })
-  Raffler.btnRaffle.click(function (e) {
+  Raffler.elements.btnRaffle.click(function (e) {
     e.preventDefault()
-    if (!Raffler.btnRaffle.prop('disabled')) {
+    if (!Raffler.elements.btnRaffle.prop('disabled')) {
       Raffler.raffleButtonSmash()
     }
   })
-  Raffler.btnChosenConfirmYes.click(function () {
+  Raffler.elements.btnChosenConfirmYes.click(function () {
     Raffler.lastItemChosenConfirmed = true
     Raffler.continueRaffling()
   })
-  Raffler.btnChosenConfirmNo.click(function () {
+  Raffler.elements.btnChosenConfirmNo.click(function () {
     Raffler.lastItemChosenConfirmed = false
     Raffler.continueRaffling()
   })
-  Raffler.btnExportResults.click(function (e) {
+  Raffler.elements.btnExportResults.click(function (e) {
     e.preventDefault()
     Raffler._notify('exporting results', 'notice')
 
@@ -302,7 +294,7 @@ Raffler.checkForLocalStorage = function () {
     var SSsupport = (typeof window.sessionStorage !== 'undefined')
     if (!LSsupport && !SSsupport) {
       Raffler.hasLocalStorage = false
-      Raffler.divUserItemsManager.hide()
+      Raffler.elements.userItemsManager.hide()
       Raffler._notify('No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don\'t reload!', 'error', true)
     } else {
       // if our specific keys don't exist, then init
@@ -328,7 +320,7 @@ Raffler.checkForLocalStorage = function () {
     }
   } catch (e) {
     Raffler.hasLocalStorage = false
-    Raffler.divUserItemsManager.hide()
+    Raffler.elements.userItemsManager.hide()
     Raffler._notify('No localStorage or sessionStorage support, so no user items or saving of chosen items. Please don\'t reload!', 'error', true)
   }
 }
@@ -351,22 +343,22 @@ Raffler.resetApp = function () {
 // puts everyone back in raffle
 // resets stuff, as if you reloaded page
 Raffler.resetCountdown = function () {
-  if (Raffler.ckOptResize.is(':checked')) {
-    Raffler.divItemsCycle.removeClass()
+  if (Raffler.elements.ckOptResize.is(':checked')) {
+    Raffler.elements.itemsCycle.removeClass()
   } else {
-    Raffler.divItemsCycle.removeClass()
-    Raffler.divItemsCycle.addClass('level4')
+    Raffler.elements.itemsCycle.removeClass()
+    Raffler.elements.itemsCycle.addClass('level4')
   }
 
   Raffler.resetApp()
   Raffler.resetChosenItems()
   Raffler.resetUserItems()
 
-  Raffler.divResultsContent.text('')
+  Raffler.elements.resultsContent.text('')
   Raffler.clearUserItemsInput()
-  Raffler.textAvailableItems.text('')
-  Raffler.textChosenItems.text('')
-  Raffler.divResultsWrapper.hide()
+  Raffler.elements.textAvailableItems.text('')
+  Raffler.elements.textChosenItems.text('')
+  Raffler.elements.resultsWrapper.hide()
   Raffler._enableRaffle()
 
   window.countdownTimer.startCountdown = false
@@ -415,13 +407,13 @@ Raffler.resetUserItems = function () {
   }
 }
 Raffler.clearUserItemsInput = function () {
-  Raffler.inputUserItemsAddName.val('')
-  Raffler.inputUserItemsAddAffl.val('')
+  Raffler.elements.inputUserItemsAddName.val('')
+  Raffler.elements.inputUserItemsAddAffl.val('')
 }
 
 // fill in-memory itemsArr with server JSON
 Raffler.initItemsArr = function () {
-  $.getJSON(Raffler.dataFilePath, function () {})
+  $.getJSON(Raffler.options.dataFilePath, function () {})
     .done(function (data) {
       while (Raffler.itemsArr.length) {
         Raffler.itemsArr.pop()
@@ -448,26 +440,26 @@ Raffler.initItemsArr = function () {
 Raffler.syncOptionsToUI = function () {
   var lsVals = Raffler._getLocalStorageItem('rafflerOptions')
   if (lsVals.showGraph) {
-    Raffler.ckOptShowGraph.prop('checked', true)
-    Raffler.divItemsGraph.show()
+    Raffler.elements.ckOptShowGraph.prop('checked', true)
+    Raffler.elements.itemsGraph.show()
   } else {
-    Raffler.ckOptShowGraph.prop('checked', false)
-    Raffler.divItemsGraph.hide()
+    Raffler.elements.ckOptShowGraph.prop('checked', false)
+    Raffler.elements.itemsGraph.hide()
   }
   if (lsVals.boxResize) {
-    Raffler.ckOptResize.prop('checked', true)
+    Raffler.elements.ckOptResize.prop('checked', true)
   } else {
-    Raffler.ckOptResize.prop('checked', false)
+    Raffler.elements.ckOptResize.prop('checked', false)
   }
   if (lsVals.soundCountdown) {
-    Raffler.ckOptSoundCountdown.prop('checked', true)
+    Raffler.elements.ckOptSoundCountdown.prop('checked', true)
   } else {
-    Raffler.ckOptSoundCountdown.prop('checked', false)
+    Raffler.elements.ckOptSoundCountdown.prop('checked', false)
   }
   if (lsVals.soundVictory) {
-    Raffler.ckOptSoundVictory.prop('checked', true)
+    Raffler.elements.ckOptSoundVictory.prop('checked', true)
   } else {
-    Raffler.ckOptSoundVictory.prop('checked', false)
+    Raffler.elements.ckOptSoundVictory.prop('checked', false)
   }
 }
 // remove previously chosen items from in-memory itemsArr
@@ -500,8 +492,8 @@ Raffler.syncChosenItemsWithItemsArr = function () {
     if (items.length === 0) {
       window.countdownTimer.stop()
       Raffler._disableRaffle()
-      Raffler.divItemsCycle.html('<div>:\'(<br /><br />Nothing to raffle!</div>')
-      Raffler.body.addClass('level4')
+      Raffler.elements.itemsCycle.html('<div>:\'(<br /><br />Nothing to raffle!</div>')
+      Raffler.elements.body.addClass('level4')
       Raffler._notify('syncChosenItemsWithItemsArr: all items chosen', 'warning')
     }
   } catch (e) {
@@ -517,8 +509,8 @@ Raffler.syncUserItemsWithItemsArr = function () {
 
     // if we've previously added user items
     if (userItems && userItems.length > 0) {
-      Raffler.btnUserItemsClear.prop('disabled', false)
-      Raffler.btnUserItemsClear.removeClass('disabled')
+      Raffler.elements.btnUserItemsClear.prop('disabled', false)
+      Raffler.elements.btnUserItemsClear.removeClass('disabled')
 
       for (var i = 0; i < userItems.length; i++) {
         for (var j = 0; j < items.length; j++) {
@@ -546,9 +538,9 @@ Raffler.syncUserItemsWithItemsArr = function () {
 // refresh items graph
 Raffler.refreshItemsGraph = function (items) {
   var index = 0
-  Raffler.divItemsGraph.html('')
+  Raffler.elements.itemsGraph.html('')
   items.forEach(function () {
-    Raffler.divItemsGraph
+    Raffler.elements.itemsGraph
       .append('<span id=' + (index++) + '></span>')
   })
 }
@@ -562,7 +554,7 @@ Raffler.refreshDebugValues = function () {
 }
 // refresh number of raffle results with localStorage values
 Raffler.refreshResultsCount = function () {
-  Raffler.divResultsCount.text(Raffler._getLocalStorageItem('rafflerChosenItems').length)
+  Raffler.elements.resultsCount.text(Raffler._getLocalStorageItem('rafflerChosenItems').length)
 }
 // refresh chosen items with localStorage values
 Raffler.refreshChosenItemsDisplay = function () {
@@ -571,19 +563,19 @@ Raffler.refreshChosenItemsDisplay = function () {
     if (lsChosenItems && lsChosenItems.length > 0) {
       var ordinal = 1
 
-      Raffler.textChosenItems.text('')
-      Raffler.divResultsContent.text('')
-      Raffler.divResultsWrapper.show()
+      Raffler.elements.textChosenItems.text('')
+      Raffler.elements.resultsContent.text('')
+      Raffler.elements.resultsWrapper.show()
 
       $.each(lsChosenItems, function (key, val) {
-        Raffler.divResultsContent.prepend('<li>' + ordinal++ + '. ' + val.name + ' (' + val.affl + ')</li>')
-        Raffler.textChosenItems.prepend(val.name + ' (' + val.affl + `)\n`)
+        Raffler.elements.resultsContent.prepend('<li>' + ordinal++ + '. ' + val.name + ' (' + val.affl + ')</li>')
+        Raffler.elements.textChosenItems.prepend(val.name + ' (' + val.affl + `)\n`)
       })
-      Raffler.textChosenItemsCount.text(`(${lsChosenItems.length})`)
+      Raffler.elements.textChosenItemsCount.text(`(${lsChosenItems.length})`)
 
       Raffler._notify('refreshChosenItemsDisplay: display updated')
     } else {
-      Raffler.textChosenItems.text('')
+      Raffler.elements.textChosenItems.text('')
       Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
     }
   } catch (e) {
@@ -596,12 +588,12 @@ Raffler.refreshUserItemsDisplay = function () {
     var lsUserItems = Raffler._getLocalStorageItem('rafflerUserItems')
     if (lsUserItems && lsUserItems.length > 0) {
       $.each(lsUserItems, function (key, val) {
-        Raffler.divUserItemsDisplay.children().append('<li>' + val.name + ' (' + val.affl + ')</li>')
+        Raffler.elements.userItemsDisplay.children().append('<li>' + val.name + ' (' + val.affl + ')</li>')
       })
 
       Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
     } else {
-      Raffler.divUserItemsDisplay.html('')
+      Raffler.elements.userItemsDisplay.html('')
       Raffler._notify('refreshUserItemsDisplay: none to display')
     }
   } catch (e) {
@@ -610,11 +602,11 @@ Raffler.refreshUserItemsDisplay = function () {
 }
 // re-display available items from in-memory itemsArr
 Raffler.refreshAvailableItemsDisplay = function () {
-  Raffler.textAvailableItems.text('')
+  Raffler.elements.textAvailableItems.text('')
   Raffler.itemsArr.forEach(function (item) {
-    Raffler.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
+    Raffler.elements.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
   })
-  Raffler.textAvailableItemsCount.text(`(${Raffler.itemsArr.length})`)
+  Raffler.elements.textAvailableItemsCount.text(`(${Raffler.itemsArr.length})`)
 
   Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
@@ -664,7 +656,7 @@ Raffler.timer = function (callbackFunc, timing) {
             chosenItemHTML += `<div class='item-name'>${curIndex.name}</div>\n`
             chosenItemHTML += `<div class='item-affl'>${curIndex.affl}</div>`
 
-            Raffler.divItemsCycle.html(chosenItemHTML)
+            Raffler.elements.itemsCycle.html(chosenItemHTML)
 
             $('div#items-graph span').each(function () {
               if (variableInterval.index === parseInt($(this)[0].id)) {
@@ -717,11 +709,11 @@ window.countdownTimer = Raffler.timer(function () {
       this.stage = Raffler.stages.SLOWED
       Raffler.divStageValue.text(this.stage)
 
-      if (Raffler.ckOptResize.is(':checked')) {
-        Raffler.divItemsCycle.removeClass()
-        Raffler.divItemsCycle.addClass('level2')
-        Raffler.body.removeClass()
-        Raffler.body.addClass('level2')
+      if (Raffler.elements.ckOptResize.is(':checked')) {
+        Raffler.elements.itemsCycle.removeClass()
+        Raffler.elements.itemsCycle.addClass('level2')
+        Raffler.elements.body.removeClass()
+        Raffler.elements.body.addClass('level2')
       }
     }
 
@@ -730,11 +722,11 @@ window.countdownTimer = Raffler.timer(function () {
       this.stage = Raffler.stages.SLOWEST
       Raffler.divStageValue.text(this.stage)
 
-      if (Raffler.ckOptResize.is(':checked')) {
-        Raffler.divItemsCycle.removeClass()
-        Raffler.divItemsCycle.addClass('level3')
-        Raffler.body.removeClass()
-        Raffler.body.addClass('level3')
+      if (Raffler.elements.ckOptResize.is(':checked')) {
+        Raffler.elements.itemsCycle.removeClass()
+        Raffler.elements.itemsCycle.addClass('level3')
+        Raffler.elements.body.removeClass()
+        Raffler.elements.body.addClass('level3')
       }
     }
 
@@ -755,12 +747,12 @@ window.countdownTimer = Raffler.timer(function () {
         this.startCountdown = false
         this.stop()
 
-        if (Raffler.ckOptResize.is(':checked')) {
-          Raffler.divItemsCycle.removeClass()
+        if (Raffler.elements.ckOptResize.is(':checked')) {
+          Raffler.elements.itemsCycle.removeClass()
         }
 
-        Raffler.divItemsCycle.addClass('level-win')
-        Raffler.body.addClass('level4')
+        Raffler.elements.itemsCycle.addClass('level-win')
+        Raffler.elements.body.addClass('level4')
         Raffler._playSound('victory')
 
         Raffler.lastItemChosen = {
@@ -788,8 +780,8 @@ window.countdownTimer = Raffler.timer(function () {
   if (this.startCountdown && (this.stage === Raffler.stages.INIT || this.stage === Raffler.stages.BEGUN)) {
     this.stage = Raffler.stages.BEGUN
     Raffler.divStageValue.text(this.stage)
-    if (!Raffler.divItemsCycle.hasClass('level1')) {
-      Raffler.divItemsCycle.addClass('level1')
+    if (!Raffler.elements.itemsCycle.hasClass('level1')) {
+      Raffler.elements.itemsCycle.addClass('level1')
     }
     Raffler._playSound('beep')
   }
@@ -808,11 +800,11 @@ Raffler.raffleButtonSmash = function () {
   Raffler._notify('BUTTON SMASH', 'notice')
   Raffler._disableRaffle()
 
-  if (Raffler.ckOptResize.is(':checked')) {
-    Raffler.divItemsCycle.removeClass()
+  if (Raffler.elements.ckOptResize.is(':checked')) {
+    Raffler.elements.itemsCycle.removeClass()
   } else {
-    Raffler.divItemsCycle.removeClass()
-    Raffler.divItemsCycle.addClass('level4')
+    Raffler.elements.itemsCycle.removeClass()
+    Raffler.elements.itemsCycle.addClass('level4')
   }
 
   // we got a choice
@@ -836,8 +828,8 @@ Raffler.raffleButtonSmash = function () {
     loneItemHTML += '<div class=\'item-name\'>' + Raffler.itemsArr[0].name + `</div>\n`
     loneItemHTML += '<div class=\'item-affl\'>' + Raffler.itemsArr[0].affl + '</div>'
 
-    Raffler.divItemsCycle.html(loneItemHTML)
-    Raffler.divItemsCycle.addClass('level4')
+    Raffler.elements.itemsCycle.html(loneItemHTML)
+    Raffler.elements.itemsCycle.addClass('level4')
 
     // grab lone item
     Raffler.lastItemChosen = {
@@ -845,13 +837,13 @@ Raffler.raffleButtonSmash = function () {
       'affl': $('div.item-affl').text()
     }
 
-    if (Raffler.ckOptResize.is(':checked')) {
-      Raffler.divItemsCycle.removeClass()
+    if (Raffler.elements.ckOptResize.is(':checked')) {
+      Raffler.elements.itemsCycle.removeClass()
     }
 
-    Raffler.divItemsCycle.removeClass()
-    Raffler.divItemsCycle.addClass('level-win')
-    Raffler.body.addClass('level4')
+    Raffler.elements.itemsCycle.removeClass()
+    Raffler.elements.itemsCycle.addClass('level-win')
+    Raffler.elements.body.addClass('level4')
     Raffler._playSound('victory')
     Raffler._readName(Raffler.lastItemChosen)
 
@@ -940,13 +932,13 @@ Raffler.continueRaffling = function () {
   Raffler.divIntervalValue.text(Raffler.divIntervalRange.val())
   Raffler.divStageValue.text(this.stage)
 
-  if (Raffler.ckOptResize.is(':checked')) {
-    Raffler.body.removeClass()
-    Raffler.divItemsCycle.removeClass()
+  if (Raffler.elements.ckOptResize.is(':checked')) {
+    Raffler.elements.body.removeClass()
+    Raffler.elements.itemsCycle.removeClass()
   } else {
-    Raffler.body.addClass('level4')
-    Raffler.divItemsCycle.removeClass()
-    Raffler.divItemsCycle.addClass('level4')
+    Raffler.elements.body.addClass('level4')
+    Raffler.elements.itemsCycle.removeClass()
+    Raffler.elements.itemsCycle.addClass('level4')
   }
 
   Raffler.refreshDebugValues()

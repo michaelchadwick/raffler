@@ -4,28 +4,29 @@
 /* global $, talkify */
 
 // main object
-var Raffler = {}
+if ((typeof Raffler) === 'undefined') var Raffler = {}
+
+Raffler.options = {}
+Raffler.elements = {}
 
 // debug notifier
-Raffler.notifierEnabled = false
+Raffler.options.notifierEnabled = false
 
 // main options file
 Raffler.optionsFile = './assets/json/raffler_options.json'
 
 // init settings
-Raffler.dataFilePath = './assets/json/raffler_data.json'
-Raffler.logoFilePath = null
-Raffler.logoFileLink = null
-Raffler.talkifyKey = null
-
-// user options
+Raffler.options.dataFilePath = './assets/json/raffler_data.json'
+Raffler.options.logoFilePath = null
+Raffler.options.logoFileLink = null
+Raffler.options.talkifyKey = null
 // set to true to use raffler_user_options.json
-Raffler.userOptionsMerge = false
-Raffler.userOptionsPath = './assets/json/raffler_user_options.json'
+Raffler.options.userOptionsMerge = false
+Raffler.options.userOptionsPath = './assets/json/raffler_user_options.json'
 
-if (Raffler.userOptionsMerge) {
+if (Raffler.options.userOptionsMerge) {
   $.ajax({
-    url: Raffler.userOptionsPath,
+    url: Raffler.options.userOptionsPath,
     async: false,
     dataType: 'json',
     success: function (userOps) {
@@ -62,65 +63,78 @@ Raffler.stages = {
 }
 
 // main divs/elements
-Raffler.body = $('body')
-Raffler.title = $('header')
-Raffler.divItemStatusBubble = $('#item-status-bubble')
-Raffler.divAdminMenu = $('#admin-menu')
-Raffler.divAdminMenuInner = $('#admin-menu .menu')
-Raffler.divMainContent = $('#main-content')
-Raffler.divDebugOptions = $('#debug-options')
-Raffler.divItemsCycle = $('#items-cycle')
-Raffler.divItemsGraph = $('#items-graph')
-Raffler.divResultsWrapper = $('#results-wrapper')
-Raffler.divResultsCount = $('#results-wrapper h3 span')
-Raffler.divResultsContent = $('#results-wrapper div ul')
-Raffler.divDataResetDialog = $('#data-reset-dialog')
-Raffler.divUserItemsManager = $('#user-items-manager')
-Raffler.divUserItemsDisplay = $('#user-items-display')
-Raffler.divUserItemsClearDialog = $('#user-items-clear-dialog')
-Raffler.divFooter = $('.footer-container')
+Raffler.elements.body = $('body')
+Raffler.elements.title = $('header')
+// Raffler.divItemStatusBubble = $('#item-status-bubble')
+Raffler.elements.adminMenu = $('#admin-menu')
+Raffler.elements.adminMenuInner = $('#admin-menu .menu')
+Raffler.elements.mainContent = $('#main-content')
+Raffler.elements.debugOptions = $('#debug-options')
+Raffler.elements.itemsCycle = $('#items-cycle')
+Raffler.elements.itemsGraph = $('#items-graph')
+Raffler.elements.resultsWrapper = $('#results-wrapper')
+Raffler.elements.resultsCount = $('#results-wrapper h3 span')
+Raffler.elements.resultsContent = $('#results-wrapper div ul')
+Raffler.elements.chosenConfirm = $('#winner-confirm')
+Raffler.elements.dataResetDialog = $('#data-reset-dialog')
+Raffler.elements.userItemsManager = $('#user-items-manager')
+Raffler.elements.userItemsDisplay = $('#user-items-display')
+Raffler.elements.userItemsClearDialog = $('#user-items-clear-dialog')
+Raffler.elements.footer = $('.footer-container')
 
 // clicky things
-Raffler.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
-Raffler.btnTestTTS = $('button#btnTestTTS')
-Raffler.btnTestSuccess = $('a#button-test-success')
-Raffler.btnTestNotice = $('a#button-test-notice')
-Raffler.btnTestWarning = $('a#button-test-warning')
-Raffler.btnTestError = $('a#button-test-error')
-Raffler.btnTimerStart = $('a#button-timer-start')
-Raffler.btnTimerStop = $('a#button-timer-stop')
-Raffler.btnDataReset = $('a#button-data-reset')
-Raffler.btnUserItemsAdd = $('a#button-user-items-add')
-Raffler.btnUserItemsClear = $('a#button-user-items-clear')
-Raffler.btnRaffle = $('a#button-raffle')
-Raffler.divChosenConfirm = $('#winner-confirm')
-Raffler.btnChosenConfirmYes = $('button#button-confirm-yes')
-Raffler.btnChosenConfirmNo = $('button#button-confirm-no')
-Raffler.btnExportResults = $('a#button-export-results')
+Raffler.elements.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
+Raffler.elements.btnTestSuccess = $('a#button-test-success')
+Raffler.elements.btnTestNotice = $('a#button-test-notice')
+Raffler.elements.btnTestWarning = $('a#button-test-warning')
+Raffler.elements.btnTestError = $('a#button-test-error')
+
+if (!Raffler.notifierEnabled) {
+  Raffler.elements.btnTestSuccess.attr('disabled', true)
+  Raffler.elements.btnTestSuccess.attr('title', 'Raffler.options.notifierEnabled is false')
+  Raffler.elements.btnTestSuccess.addClass('disabled')
+  Raffler.elements.btnTestNotice.attr('disabled', true)
+  Raffler.elements.btnTestNotice.attr('title', 'Raffler.options.notifierEnabled is false')
+  Raffler.elements.btnTestNotice.addClass('disabled')
+  Raffler.elements.btnTestWarning.attr('disabled', true)
+  Raffler.elements.btnTestWarning.attr('title', 'Raffler.options.notifierEnabled is false')
+  Raffler.elements.btnTestWarning.addClass('disabled')
+  Raffler.elements.btnTestError.attr('disabled', true)
+  Raffler.elements.btnTestError.attr('title', 'Raffler.options.notifierEnabled is false')
+  Raffler.elements.btnTestError.addClass('disabled')
+}
+
+Raffler.elements.btnTimerStart = $('a#button-timer-start')
+Raffler.elements.btnTimerStop = $('a#button-timer-stop')
+Raffler.elements.btnDataReset = $('a#button-data-reset')
+Raffler.elements.btnUserItemsAdd = $('a#button-user-items-add')
+Raffler.elements.btnUserItemsClear = $('a#button-user-items-clear')
+Raffler.elements.btnRaffle = $('a#button-raffle')
+Raffler.elements.btnChosenConfirmYes = $('button#button-confirm-yes')
+Raffler.elements.btnChosenConfirmNo = $('button#button-confirm-no')
+Raffler.elements.btnExportResults = $('a#button-export-results')
 
 // optiony things
-Raffler.ckOptShowGraph = $('input#check-option-show-graph')
-Raffler.ckOptResize = $('input#check-option-resize')
-Raffler.ckOptSoundCountdown = $('input#check-option-sound-countdown')
-Raffler.ckOptSoundVictory = $('input#check-option-sound-winner')
-Raffler.ckOptSoundName = $('input#check-option-sound-name')
-Raffler.ckOptSoundNameLabel = $('label#check-option-sound-name-label')
-Raffler.ckOptFireworks = $('input#check-option-fireworks')
-Raffler.ckOptShowDebug = $('input#check-option-show-debug')
+Raffler.elements.ckOptShowGraph = $('input#check-option-show-graph')
+Raffler.elements.ckOptResize = $('input#check-option-resize')
+Raffler.elements.ckOptSoundCountdown = $('input#check-option-sound-countdown')
+Raffler.elements.ckOptSoundVictory = $('input#check-option-sound-winner')
+Raffler.elements.ckOptSoundName = $('input#check-option-sound-name')
+Raffler.elements.ckOptSoundNameLabel = $('label#check-option-sound-name-label')
+Raffler.elements.ckOptFireworks = $('input#check-option-fireworks')
+Raffler.elements.ckOptShowDebug = $('input#check-option-show-debug')
 
 // input things
-Raffler.inputUserItemsAddName = $('input#text-user-items-add-name')
-Raffler.inputUserItemsAddAffl = $('input#text-user-items-add-affl')
-Raffler.textAvailableItems = $('div#items-available textarea')
-Raffler.textAvailableItemsCount = $('div#items-available .title span')
-Raffler.textChosenItems = $('div#items-chosen textarea')
-Raffler.textChosenItemsCount = $('div#items-chosen .title span')
+Raffler.elements.inputUserItemsAddName = $('input#text-user-items-add-name')
+Raffler.elements.inputUserItemsAddAffl = $('input#text-user-items-add-affl')
+Raffler.elements.textAvailableItems = $('div#items-available textarea')
+Raffler.elements.textAvailableItemsCount = $('div#items-available .title span')
+Raffler.elements.textChosenItems = $('div#items-chosen textarea')
+Raffler.elements.textChosenItemsCount = $('div#items-chosen .title span')
 
-// audio
-Raffler.sndBeep = $('audio#beep')
-Raffler.sndBeep.attr('src', './assets/audio/beep.mp3')
-Raffler.sndVictory = $('audio#victory')
-Raffler.sndVictory.attr('src', './assets/audio/victory.mp3')
+// load audio files
+$('audio#beep').attr('src', './assets/audio/beep2.mp3')
+$('audio#victory').attr('src', './assets/audio/victory2.mp3')
 
 // debug
 Raffler.divStageValue = $('#stage-value span')
@@ -131,27 +145,27 @@ Raffler.divTimesRunValue = $('#timesrun-value span')
 
 // if we aren't doing the "resize as the raffle counts down" thing
 // then fast track display to final level
-if (!Raffler.ckOptResize.is(':checked')) {
-  Raffler.body.removeClass()
-  Raffler.body.addClass('level4')
-  Raffler.divItemsCycle.removeClass()
-  Raffler.divItemsCycle.addClass('level4')
+if (!Raffler.elements.ckOptResize.is(':checked')) {
+  Raffler.elements.body.removeClass()
+  Raffler.elements.body.addClass('level4')
+  Raffler.elements.itemsCycle.removeClass()
+  Raffler.elements.itemsCycle.addClass('level4')
 }
 
 // talkify
 talkify.config.debug = false
 talkify.config.remoteService.enabled = false
 talkify.config.remoteService.host = 'https://talkify.net'
-talkify.config.remoteService.apiKey = Raffler.talkifyKey
+talkify.config.remoteService.apiKey = Raffler.options.talkifyKey
 talkify.config.ui.audioControls = {
   enabled: false,
   container: document.getElementById('#talkify-audio')
 }
 
-if (Raffler.talkifyKey === null || Raffler.talkifyKey === '') {
-  Raffler.ckOptSoundName.attr('disabled', true)
-  Raffler.ckOptSoundName.attr('title', 'Currently disabled as no valid Talkify API Key was found')
-  Raffler.ckOptSoundNameLabel.attr('title', 'Currently disabled as no valid Talkify API Key was found')
+if (Raffler.options.talkifyKey === null || Raffler.options.talkifyKey === '') {
+  Raffler.elements.ckOptSoundName.attr('disabled', true)
+  Raffler.elements.ckOptSoundName.attr('title', 'Currently disabled as no valid Talkify API Key was found')
+  Raffler.elements.ckOptSoundNameLabel.attr('title', 'Currently disabled as no valid Talkify API Key was found')
 }
 
 // jQuery extension to parse url querystring

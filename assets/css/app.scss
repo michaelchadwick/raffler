@@ -131,6 +131,7 @@ a {
     padding: 24px 32px;
     text-decoration: none;
     text-shadow: 2px 2px 0 $text-shadow;
+    transition: 250ms;
     width: 80%;
 
     &.disabled {
@@ -321,31 +322,35 @@ a {
       min-height: 1085px;
     }
 
-    div {
-      text-align: left;
-
+    div,
+    label {
       &.title {
         background: $gray-dark;
         border-bottom: 1px solid $black;
         border-left: 0;
         border-top: 1px solid darken($gray, 2%);
         clear: left;
-        float: none;
+        float: left;
         font-size: 1.2em;
         height: 23px;
         padding: 0 5px 2px 7px;
         text-transform: uppercase;
         width: 100%;
+      }
+    }
 
+    div {
+      text-align: left;
+
+      &.title {
         &.title-with-checkbox {
-          width: auto;
-
-          span,
-          input {
+          label {
             float: left;
+            width: auto;
           }
 
           input {
+            float: left;
             margin: 0 0 2px 5px;
           }
         }
@@ -509,6 +514,12 @@ a {
         & > a {
           float: left;
           width: 25%;
+
+          &.disabled {
+            background-color: $gray;
+            color: $gray-light;
+            cursor: not-allowed;
+          }
         }
       }
     }
@@ -519,6 +530,7 @@ a {
   margin: 0;
   min-height: 100%;
   position: relative;
+  transition: 200ms;
   width: 100%;
 
   &.with-menu {
@@ -664,7 +676,7 @@ a {
       margin-top: 0;
       padding: 10px;
       text-transform: uppercase;
-      transition: all 1s ease;
+      transition: 1s;
       width: 100%;
       word-break: break-word;
       word-wrap: break-word;
@@ -759,6 +771,7 @@ a {
 
     #winner-confirm {
       display: none;
+      height: 40px;
       margin: 0 auto 100px;
       padding: 0 20px;
       width: 80%;
@@ -852,7 +865,12 @@ a {
     padding: 10px 0;
     position: fixed;
     text-align: center;
+    transition: 200ms;
     width: 100%;
+
+    &.with-menu {
+      width: calc(100% - 225px);
+    }
 
     footer {
       padding: 0;

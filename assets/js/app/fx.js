@@ -5,10 +5,10 @@
 Raffler._playSound = function (soundId) {
   var sound = document.getElementById(soundId)
   if (sound) {
-    if (soundId === 'beep' && Raffler.ckOptSoundCountdown.is(':checked')) {
+    if (soundId === 'beep' && Raffler.elements.ckOptSoundCountdown.is(':checked')) {
       sound.play()
     }
-    if (soundId === 'victory' && Raffler.ckOptSoundVictory.is(':checked')) {
+    if (soundId === 'victory' && Raffler.elements.ckOptSoundVictory.is(':checked')) {
       sound.play()
     }
   } else {
@@ -17,7 +17,7 @@ Raffler._playSound = function (soundId) {
 }
 
 Raffler._readName = function (itemChosen) {
-  if (Raffler.ckOptSoundName.is(':checked')) {
+  if (Raffler.elements.ckOptSoundName.is(':checked')) {
     var player = new talkify.TtsPlayer()
     // var player = new talkify.Html5Player()
     player.setRate(0.9)

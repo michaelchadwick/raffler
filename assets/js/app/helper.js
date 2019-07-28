@@ -3,44 +3,44 @@
 /* global $, Raffler */
 
 Raffler._disableRaffle = function () {
-  Raffler.body.removeClass()
-  Raffler.btnRaffle.prop('disabled', true)
-  Raffler.btnRaffle.addClass('disabled')
+  Raffler.elements.body.removeClass()
+  Raffler.elements.btnRaffle.prop('disabled', true)
+  Raffler.elements.btnRaffle.addClass('disabled')
 }
 Raffler._enableRaffle = function () {
-  Raffler.btnRaffle.removeClass('disabled')
-  Raffler.btnRaffle.prop('disabled', false)
+  Raffler.elements.btnRaffle.removeClass('disabled')
+  Raffler.elements.btnRaffle.prop('disabled', false)
 }
 Raffler._disableTimerStart = function () {
-  Raffler.btnTimerStart.prop('disabled', true)
-  Raffler.btnTimerStart.addClass('disabled')
+  Raffler.elements.btnTimerStart.prop('disabled', true)
+  Raffler.elements.btnTimerStart.addClass('disabled')
 }
 Raffler._enableTimerStart = function () {
-  Raffler.btnTimerStart.prop('disabled', false)
-  Raffler.btnTimerStart.removeClass('disabled')
+  Raffler.elements.btnTimerStart.prop('disabled', false)
+  Raffler.elements.btnTimerStart.removeClass('disabled')
 }
 Raffler._disableTimerStop = function () {
-  Raffler.btnTimerStop.prop('disabled', true)
-  Raffler.btnTimerStop.addClass('disabled')
+  Raffler.elements.btnTimerStop.prop('disabled', true)
+  Raffler.elements.btnTimerStop.addClass('disabled')
 }
 Raffler._enableTimerStop = function () {
-  Raffler.btnTimerStop.prop('disabled', false)
-  Raffler.btnTimerStop.removeClass('disabled')
+  Raffler.elements.btnTimerStop.prop('disabled', false)
+  Raffler.elements.btnTimerStop.removeClass('disabled')
 }
 Raffler._disableChosenConfirm = function () {
-  Raffler.divChosenConfirm.hide()
-  Raffler.btnChosenConfirmYes.addClass('disabled')
-  Raffler.btnChosenConfirmNo.addClass('disabled')
-  Raffler.btnChosenConfirmYes.prop('disabled', true)
-  Raffler.btnChosenConfirmNo.prop('disabled', true)
+  Raffler.elements.chosenConfirm.hide()
+  Raffler.elements.btnChosenConfirmYes.addClass('disabled')
+  Raffler.elements.btnChosenConfirmNo.addClass('disabled')
+  Raffler.elements.btnChosenConfirmYes.prop('disabled', true)
+  Raffler.elements.btnChosenConfirmNo.prop('disabled', true)
   Raffler._enableTimerStop()
 }
 Raffler._enableChosenConfirm = function () {
-  Raffler.divChosenConfirm.show()
-  Raffler.btnChosenConfirmYes.removeClass('disabled')
-  Raffler.btnChosenConfirmNo.removeClass('disabled')
-  Raffler.btnChosenConfirmYes.prop('disabled', false)
-  Raffler.btnChosenConfirmNo.prop('disabled', false)
+  Raffler.elements.chosenConfirm.show()
+  Raffler.elements.btnChosenConfirmYes.removeClass('disabled')
+  Raffler.elements.btnChosenConfirmNo.removeClass('disabled')
+  Raffler.elements.btnChosenConfirmYes.prop('disabled', false)
+  Raffler.elements.btnChosenConfirmNo.prop('disabled', false)
   Raffler._disableTimerStart()
   Raffler._disableTimerStop()
 }
@@ -92,7 +92,7 @@ Raffler._setLocalStorageItem = function (lsKey, obj) {
 }
 // app notifications
 Raffler._notify = function (msg, type, notifyUser) {
-  if (Raffler.notifierEnabled) {
+  if (Raffler.options.notifierEnabled) {
     type = (typeof type) === 'undefined' ? '' : type
     notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
 
