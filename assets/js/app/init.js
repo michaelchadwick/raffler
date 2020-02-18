@@ -88,7 +88,7 @@ Raffler.elements.btnTestNotice = $('a#button-test-notice')
 Raffler.elements.btnTestWarning = $('a#button-test-warning')
 Raffler.elements.btnTestError = $('a#button-test-error')
 
-if (!Raffler.notifierEnabled) {
+if (!Raffler.options.notifierEnabled) {
   Raffler.elements.btnTestSuccess.attr('disabled', true)
   Raffler.elements.btnTestSuccess.attr('title', 'Raffler.options.notifierEnabled is false')
   Raffler.elements.btnTestSuccess.addClass('disabled')
