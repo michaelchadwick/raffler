@@ -22,7 +22,7 @@ const jsAppFiles = [
   'assets/js/app/main.js'
 ]
 const jsLibFiles = [ 'assets/js/lib/*.js' ]
-const scssAppFiles = [ 'assets/css/app.scss' ]
+const scssAppFiles = [ 'assets/scss/app.scss' ]
 
 // error function
 const onError = function (err) {
