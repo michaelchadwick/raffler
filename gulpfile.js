@@ -7,7 +7,6 @@ const uglify = require('gulp-uglify')
 const concat = require('gulp-concat')
 const babel = require('gulp-babel')
 const rename = require('gulp-rename')
-const notify = require('gulp-notify')
 const pump = require('pump')
 
 // where to build public app files
@@ -26,13 +25,7 @@ const scssAppFiles = [ 'assets/scss/app.scss' ]
 
 // error function
 const onError = function (err) {
-  notify({
-    title: 'Gulp Task Error',
-    message: 'Check the console.',
-    emitError: true
-  }).write(err)
-
-  console.log(err.toString())
+  console.error(err.toString())
 
   this.emit('end')
 }
@@ -48,11 +41,7 @@ gulp.task('sub_jscompress-app', function (cb) {
     ),
     rename('all-app.min.js'),
     uglify(),
-    gulp.dest(DIR_JS_BUILD),
-    notify({
-      title: 'JS Concat/Uglify (App)',
-      message: 'JS Concat/Uglify (App) Passed'
-    })
+    gulp.dest(DIR_JS_BUILD)
   ], cb)
 })
 gulp.task('sub_jscompress-lib', function (cb) {
@@ -65,11 +54,7 @@ gulp.task('sub_jscompress-lib', function (cb) {
     ),
     rename('all-lib.min.js'),
     uglify(),
-    gulp.dest(DIR_JS_BUILD),
-    notify({
-      title: 'JS Compress (Lib)',
-      message: 'JS Compress (Lib) Passed'
-    })
+    gulp.dest(DIR_JS_BUILD)
   ], cb)
 })
 gulp.task('sub_compile-sass', function (cb) {
@@ -78,22 +63,14 @@ gulp.task('sub_compile-sass', function (cb) {
     sass(),
     concat('app.css'),
     cleanCSS(),
-    gulp.dest(DIR_CSS_BUILD),
-    notify({
-      title: 'SASS',
-      message: 'SASS Compiled'
-    })
+    gulp.dest(DIR_CSS_BUILD)
   ], cb)
 })
 gulp.task('sub_clean-css', function (cb) {
   pump([
     gulp.src(DIR_CSS_BUILD),
     cleanCSS(),
-    gulp.dest(DIR_CSS_BUILD),
-    notify({
-      title: 'CSS',
-      message: 'CSS Minified'
-    })
+    gulp.dest(DIR_CSS_BUILD)
   ], cb)
 })
 
@@ -121,11 +98,7 @@ gulp.task('build',
   function (cb) {
     pump([
       gulp.src('/'),
-      gulp.on('error', onError),
-      notify({
-        title: 'Task Builder',
-        message: 'app built successfully'
-      })
+      gulp.on('error', onError)
     ], cb)
   }
 )
