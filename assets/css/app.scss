@@ -1,6 +1,7 @@
 $blue: #006e90;
 $orange: #f18f01;
 $blue-sky: #adcad6;
+$blue-sky2: #71d6ff;
 $green: #99c24d;
 $white: #fff;
 $black: #000;
@@ -29,6 +30,29 @@ body {
 
   &.level4 {
     background: lighten($blue, 15%);
+  }
+}
+
+section {
+  &#init-raffler-cycle {
+    align-items: center;
+    background-color: $gray-dark;
+    display: flex;
+    height: 5em;
+    justify-content: center;
+    width: 100%;
+
+    a {
+      color: $blue-sky2;
+      display: block;
+      font-size: 2em;
+      text-decoration: none;
+      text-shadow: 2px 2px 2px $text-shadow;
+
+      &:hover {
+        color: $white;
+      }
+    }
   }
 }
 
@@ -119,7 +143,7 @@ a {
 
   // main raffle! button
   &.raffle {
-    background-color: darken($blue, 5%);
+    background-color: darken($blue, 15%);
     border-radius: 10px;
     box-shadow: 0 9px lighten($black, 20%);
     clear: left;
@@ -147,7 +171,7 @@ a {
     }
 
     &:hover {
-      background-color: darken($blue, 15%);
+      background-color: darken($blue, 5%);
     }
 
     &:active {
@@ -680,7 +704,7 @@ a {
       line-height: 0.8;
       margin-bottom: 20px;
       margin-top: 0;
-      padding: 10px;
+      // padding: 10px;
       text-transform: uppercase;
       transition: 1s;
       width: 100%;

@@ -33,6 +33,9 @@ Raffler.initApp = function () {
   Raffler.elements.intervalValue.text(Raffler.elements.intervalRange.val())
 
   Raffler._disableTimerStart()
+  // set cycler to init text
+  Raffler._initCycleText()
+  Raffler.timerStop()
   Raffler.elements.btnRaffle.focus()
 
   Raffler._notify('Raffler init', 'notice')
@@ -40,6 +43,11 @@ Raffler.initApp = function () {
 
 // attach event handlers to button and such
 Raffler.setEventHandlers = function () {
+  Raffler.elements.itemsCycle.click(function () {
+    Raffler._notify('starting the cycle')
+    Raffler._enableRaffle()
+    Raffler.timerStart()
+  })
   Raffler.elements.btnAdminMenuToggle.click(function () {
     $(this).toggleClass('button-open')
     Raffler.elements.adminMenu.toggleClass('menu-show')
@@ -104,21 +112,13 @@ Raffler.setEventHandlers = function () {
   Raffler.elements.btnTimerStart.click(function (e) {
     e.preventDefault()
     if (Raffler.elements.btnTimerStart.prop('disabled', false)) {
-      window.countdownTimer.start()
-      Raffler.elements.itemsCycle.removeClass('stopped')
-      Raffler._disableTimerStart()
-      Raffler._enableTimerStop()
-      Raffler._notify('window.countdownTimer started', 'notice')
+      Raffler.timerStart()
     }
   })
   Raffler.elements.btnTimerStop.click(function (e) {
     e.preventDefault()
     if (Raffler.elements.btnTimerStop.prop('disabled', false)) {
-      window.countdownTimer.stop()
-      Raffler.elements.itemsCycle.addClass('stopped')
-      Raffler._disableTimerStop()
-      Raffler._enableTimerStart()
-      Raffler._notify('window.countdownTimer stopped', 'notice')
+      Raffler.timerStop()
     }
   })
   Raffler.elements.btnDataReset.click(function (e) {
@@ -695,6 +695,7 @@ Raffler.timer = function (callbackFunc, timing) {
     }
 
     return variableInterval.start()
+    // return variableInterval
   }
 }
 
@@ -794,6 +795,22 @@ window.countdownTimer = Raffler.timer(function () {
     return newInterval
   }
 }, Raffler.initInterval)
+
+Raffler.timerStart = function() {
+  window.countdownTimer.start()
+  Raffler.elements.itemsCycle.removeClass('stopped')
+  Raffler._disableTimerStart()
+  Raffler._enableTimerStop()
+  Raffler._notify('window.countdownTimer started', 'notice')
+}
+
+Raffler.timerStop = function() {
+  window.countdownTimer.stop()
+  Raffler.elements.itemsCycle.addClass('stopped')
+  Raffler._disableTimerStop()
+  Raffler._enableTimerStart()
+  Raffler._notify('window.countdownTimer stopped', 'notice')
+}
 
 // you hit the big raffle button
 Raffler.raffleButtonSmash = function () {

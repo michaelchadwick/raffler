@@ -2,6 +2,10 @@
 /* methods to do little utility things */
 /* global $, Raffler */
 
+Raffler._initCycleText = function () {
+  Raffler.elements.itemsCycle.html('<section id="init-raffler-cycle"><a href="#">BEGIN RAFFLE!</a></section>')
+  Raffler._disableRaffle()
+}
 Raffler._disableRaffle = function () {
   Raffler.elements.body.removeClass()
   Raffler.elements.btnRaffle.prop('disabled', true).addClass('disabled')

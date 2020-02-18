@@ -153,7 +153,7 @@
         </div>
 
         <div id='the-button'>
-          <a href='#' class='button raffle' id='button-raffle'>RAFFLE!</a>
+          <a href='#' class='button raffle' id='button-raffle'>PICK A WINNER!</a>
         </div>
 
         <div id='results-wrapper'>
@@ -192,10 +192,10 @@
 
   <script src='./assets/js/lib/systemjs/dist/system.js'></script>
   <script src='./assets/js/lib/FileSaver.min.js'></script>
+  <script src='./assets/js/lib/analytics.js'></script>
   <script>SystemJS.import('./assets/js/lib/jquery.js')
     .then(jqueryui => SystemJS.import('./assets/js/lib/jquery-ui.js'))
     .then(createjs => SystemJS.import('./assets/js/lib/create.js'))
-    .then(ga => SystemJS.import('./assets/js/lib/analytics.js'))
     .then(talkify => SystemJS.import('./node_modules/talkify-tts/dist/talkify.min.js'))
     .then(app => SystemJS.import('./public/build/js/all-app.js'));
   </script>

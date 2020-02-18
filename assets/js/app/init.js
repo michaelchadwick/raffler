@@ -36,9 +36,9 @@ $.ajax({
   dataType: 'json',
   url: RAFFLER_OPTIONS_FILE,
   async: false,
-  success: function(options) {
-    Raffler.initOptionsObj = options
-    $.extend(Raffler.options, options)
+  success: function(data) {
+    Raffler.initOptionsObj = data
+    $.extend(Raffler.options, data)
   }
 })
 
@@ -48,9 +48,17 @@ const USER_OPTIONS_FILE = './config/raffler_options.user.json'
 $.ajax({
   dataType: 'json',
   url: USER_OPTIONS_FILE,
-  async: false,
-  success: function(options) {
-    $.extend(Raffler.options, options)
+  async: true,
+  success: function(data) {
+    $.extend(Raffler.options, data)
+  },
+  error: function(jqXHR) {
+    if (jqXHR.status == 404) {
+      console.log('no user options found. ignoring...')
+      return
+    } else {
+      console.log('user options found. merging...')
+    }
   }
 })
 
