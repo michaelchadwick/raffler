@@ -4,6 +4,7 @@
 
 // app entry point
 Raffler.initApp = function () {
+  console.log('Raffler.options', Raffler.options)
   // if admin passed, show hamburger menu
   if ((typeof $.QueryString.admin) !== 'undefined') {
     Raffler.elements.btnAdminMenuToggle.show().toggleClass('button-open')
@@ -18,6 +19,8 @@ Raffler.initApp = function () {
     Raffler.elements.title.append(`<a href='${Raffler.options.logoFileLink}' target='_blank'>`)
     Raffler.elements.title.append(`<img id='logo' src='${Raffler.options.logoFilePath}' />`)
     Raffler.elements.title.append('</a>')
+  } else {
+    Raffler._notify('raffler_options.user: no custom logo or link found')
   }
 
   Raffler.setEventHandlers()
@@ -63,6 +66,11 @@ Raffler.setEventHandlers = function () {
     Raffler.elements.itemsGraph.toggle()
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
     curObj.showGraph = !curObj.showGraph
+    Raffler._setLocalStorageItem('rafflerOptions', curObj)
+  })
+  Raffler.elements.ckOptAllowNotifications.on('change', function () {
+    var curObj = Raffler._getLocalStorageItem('rafflerOptions')
+    curObj.allowNotifications = !curObj.allowNotifications
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
   })
   Raffler.elements.ckOptResize.on('change', function () {
@@ -444,6 +452,11 @@ Raffler.syncOptionsToUI = function () {
   } else {
     Raffler.elements.ckOptShowGraph.prop('checked', false)
     Raffler.elements.itemsGraph.hide()
+  }
+  if (lsVals.allowNotifications) {
+    Raffler.elements.ckOptAllowNotifications.prop('checked', true)
+  } else {
+    Raffler.elements.ckOptAllowNotifications.prop('checked', false)
   }
   if (lsVals.boxResize) {
     Raffler.elements.ckOptResize.prop('checked', true)

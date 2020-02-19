@@ -115,6 +115,7 @@ Raffler.elements.btnExportResults = $('a#button-export-results')
 
 // optiony things
 Raffler.elements.ckOptShowGraph = $('input#check-option-show-graph')
+Raffler.elements.ckOptAllowNotifications = $('input#check-option-allow-notifications')
 Raffler.elements.ckOptResize = $('input#check-option-resize')
 Raffler.elements.ckOptSoundCountdown = $('input#check-option-sound-countdown')
 Raffler.elements.ckOptSoundVictory = $('input#check-option-sound-victory')
