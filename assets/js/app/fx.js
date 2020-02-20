@@ -21,7 +21,6 @@ Raffler._playSound = function (soundId) {
 
 Raffler._readName = function (itemChosen) {
   if (Raffler.elements.ckOptSoundName.is(':checked')) {
-    console.log('talkify', talkify.config)
     var player = new talkify.TtsPlayer()
     // var player = new talkify.Html5Player()
     player.setRate(0.9)

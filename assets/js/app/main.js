@@ -4,7 +4,6 @@
 
 // app entry point
 Raffler.initApp = function () {
-  console.log('Raffler.options', Raffler.options)
   // if admin passed, show hamburger menu
   if ((typeof $.QueryString.admin) !== 'undefined') {
     Raffler.elements.btnAdminMenuToggle.show().toggleClass('button-open')
@@ -70,8 +69,11 @@ Raffler.setEventHandlers = function () {
   })
   Raffler.elements.ckOptAllowNotifications.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
-    curObj.allowNotifications = !curObj.allowNotifications
+    curObj.notifierEnabled = !curObj.notifierEnabled
     Raffler._setLocalStorageItem('rafflerOptions', curObj)
+
+    Raffler.options.notifierEnabled = curObj.notifierEnabled
+    Raffler._toggleTestNotices()
   })
   Raffler.elements.ckOptResize.on('change', function () {
     var curObj = Raffler._getLocalStorageItem('rafflerOptions')
@@ -304,7 +306,7 @@ Raffler.checkForLocalStorage = function () {
     } else {
       // if our specific keys don't exist, then init
       if (!window.localStorage.getItem('rafflerOptions')) {
-        Raffler._setLocalStorageItem('rafflerOptions', Raffler.initOptionsObj)
+        Raffler._setLocalStorageItem('rafflerOptions', Raffler.defaults)
         Raffler._notify('checkForLocalStorage: rafflerOptions created', 'notice')
       } else {
         Raffler._notify('checkForLocalStorage: rafflerOptions already exists', 'notice')

@@ -37,7 +37,7 @@ $.ajax({
   url: RAFFLER_OPTIONS_FILE,
   async: false,
   success: function(data) {
-    Raffler.initOptionsObj = data
+    Raffler.defaults = data
     $.extend(Raffler.options, data)
   }
 })
@@ -48,17 +48,9 @@ const USER_OPTIONS_FILE = './config/raffler_options.user.json'
 $.ajax({
   dataType: 'json',
   url: USER_OPTIONS_FILE,
-  async: true,
+  async: false,
   success: function(data) {
-    $.extend(Raffler.options, data)
-  },
-  error: function(jqXHR) {
-    if (jqXHR.status == 404) {
-      console.log('no user options found. ignoring...')
-      return
-    } else {
-      console.log('user options found. merging...')
-    }
+    Raffler.options = $.extend({}, Raffler.options, data)
   }
 })
 
@@ -83,26 +75,11 @@ Raffler.elements.footer = $('.footer-container')
 
 // clicky things
 Raffler.elements.btnAdminMenuToggle = $('span#button-admin-menu-toggle')
+Raffler.elements.btnTests = $('#test-notify a')
 Raffler.elements.btnTestSuccess = $('a#button-test-success')
 Raffler.elements.btnTestNotice = $('a#button-test-notice')
 Raffler.elements.btnTestWarning = $('a#button-test-warning')
 Raffler.elements.btnTestError = $('a#button-test-error')
-
-if (!Raffler.options.notifierEnabled) {
-  Raffler.elements.btnTestSuccess.attr('disabled', true)
-  Raffler.elements.btnTestSuccess.attr('title', 'Raffler.options.notifierEnabled is false')
-  Raffler.elements.btnTestSuccess.addClass('disabled')
-  Raffler.elements.btnTestNotice.attr('disabled', true)
-  Raffler.elements.btnTestNotice.attr('title', 'Raffler.options.notifierEnabled is false')
-  Raffler.elements.btnTestNotice.addClass('disabled')
-  Raffler.elements.btnTestWarning.attr('disabled', true)
-  Raffler.elements.btnTestWarning.attr('title', 'Raffler.options.notifierEnabled is false')
-  Raffler.elements.btnTestWarning.addClass('disabled')
-  Raffler.elements.btnTestError.attr('disabled', true)
-  Raffler.elements.btnTestError.attr('title', 'Raffler.options.notifierEnabled is false')
-  Raffler.elements.btnTestError.addClass('disabled')
-}
-
 Raffler.elements.btnTimerStart = $('a#button-timer-start')
 Raffler.elements.btnTimerStop = $('a#button-timer-stop')
 Raffler.elements.btnDataReset = $('a#button-data-reset')
@@ -151,6 +128,14 @@ if (!Raffler.elements.ckOptResize.is(':checked')) {
   Raffler.elements.body.addClass('level4')
   Raffler.elements.itemsCycle.removeClass()
   Raffler.elements.itemsCycle.addClass('level4')
+}
+if (Raffler.options.showDebug) {
+  Raffler.elements.ckOptShowDebug.attr('checked', true)
+  Raffler.elements.debugOptions.toggleClass('show')
+  Raffler.elements.adminMenuInner.toggleClass('with-debug')
+}
+if (Raffler.options.notifierEnabled) {
+  Raffler.elements.ckOptAllowNotifications.attr('checked', 'checked')
 }
 
 // talkify

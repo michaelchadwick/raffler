@@ -13,6 +13,20 @@ Raffler._disableRaffle = function () {
 Raffler._enableRaffle = function () {
   Raffler.elements.btnRaffle.prop('disabled', false).removeClass('disabled')
 }
+Raffler._toggleTestNotices = function () {
+  var btns = Raffler.elements.btnTests
+  $.each(btns, function (key) {
+    if (!Raffler.options.notifierEnabled) {
+      $(btns[key]).attr('disabled', true)
+      $(btns[key]).attr('title', 'Raffler.options.notifierEnabled is false')
+      $(btns[key]).addClass('disabled')
+    } else {
+      $(btns[key]).attr('disabled')
+      $(btns[key]).attr('title', '')
+      $(btns[key]).removeClass('disabled')
+    }
+  })
+}
 Raffler._disableTimerStart = function () {
   Raffler.elements.btnTimerStart.prop('disabled', true).addClass('disabled')
 }
