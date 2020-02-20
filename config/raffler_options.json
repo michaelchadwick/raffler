@@ -3,7 +3,7 @@
 	"soundCountdown": false,
 	"soundVictory": false,
   "soundName": false,
-	"showDebug": true,
+	"showDebug": false,
 	"showGraph": false,
 	"notifierEnabled": true,
 	"dataFilePath": "./assets/json/raffler_data.json",
