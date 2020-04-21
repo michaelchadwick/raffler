@@ -27,13 +27,13 @@
   },
   "dependencies": {
     "acorn": "^7.1.1",
-    "talkify-tts": "^2.6.0"
+    "talkify-tts": "^2.7.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "ajv": "^6.12.0",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "ajv": "^6.12.2",
     "babel-preset-env": "^1.7.0",
     "eslint": "^6.8.0",
     "fsevents": "^2.1.2",
@@ -48,6 +48,6 @@
     "pump": "^3.0.0",
     "tslint": "^5.20.1",
     "typescript": "^3.8.3",
-    "uglify-js": "^3.8.0"
+    "uglify-js": "^3.9.1"
   }
 }
