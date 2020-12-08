@@ -1,2 +1,3 @@
-rsync-exclude.txt
+.git/*
 node_modules/*
+rsync-exclude.txt
