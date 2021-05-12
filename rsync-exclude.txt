@@ -1,3 +1,12 @@
 .git/*
+.eslintignore
+.eslintrc.json
+.gitignore
+.sass-lint.yml
+CONTRIBUTING.md
+LICENSE.md
+README.md
+Rakefile
 node_modules/*
+gulpfile.js
 rsync-exclude.txt
