@@ -47,6 +47,7 @@
     "gulp-uglify": "^3.0.2",
     "http-server": "^0.12.3",
     "pump": "^3.0.0",
+    "trim-newlines": ">=3.0.1",
     "tslint": "^5.20.1",
     "typescript": "^3.9.7",
     "uglify-js": "^3.11.2"
