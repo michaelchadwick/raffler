@@ -3,11 +3,11 @@ $orange: #f18f01;
 $blue-sky: #adcad6;
 $blue-sky2: #71d6ff;
 $green: #99c24d;
-$white: #fff;
-$black: #000;
-$gray-dark: #555;
-$gray: #999;
-$gray-light: #ccc;
+$white: #ffffff;
+$black: #000000;
+$gray-dark: #555555;
+$gray: #999999;
+$gray-light: #cccccc;
 $info: #2274a5;
 $warning: #fadf63;
 $danger: #632b30;
@@ -17,7 +17,7 @@ $text-shadow: rgba(0, 0, 0, 0.8);
 
 body {
   background: $blue;
-  font-family: 'Cabin';
+  font-family: 'Cabin', Arial, Helvetica, sans-serif;
   transition: all 200ms ease;
 
   &.level2 {
@@ -30,6 +30,22 @@ body {
 
   &.level4 {
     background: lighten($blue, 15%);
+  }
+}
+
+a,
+.button {
+  &.disabled {
+    background-color: $gray;
+    color: $gray-light;
+    cursor: not-allowed;
+    text-decoration: none;
+
+    &:hover {
+      background-color: lighten($gray, 5%);
+      color: $gray-light;
+      cursor: not-allowed;
+    }
   }
 }
 
@@ -86,29 +102,13 @@ audio {
   }
 }
 
-.button,
-a {
-  &.disabled {
-    background-color: $gray;
-    color: $gray-light;
-    cursor: not-allowed;
-    text-decoration: none;
-
-    &:hover {
-      background-color: lighten($gray, 5%);
-      color: $gray-light;
-      cursor: not-allowed;
-    }
-  }
-}
-
 .button {
   box-shadow: inset 0 -3px 1px $shadow-start, 0 2px 2px $shadow-end;
   box-sizing: border-box;
   color: $white;
   display: block;
   font-size: 24px;
-  margin: 0 ;
+  margin: 0;
   padding: 2px 15px 7px;
   text-decoration: none;
   width: 100%;
@@ -129,16 +129,28 @@ a {
   }
 
   // timer control buttons
-  &.start { background-color: $green;
-    &:hover { background-color: lighten($green, 5%); }
+  &.start {
+    background-color: $green;
+
+    &:hover {
+      background-color: lighten($green, 5%);
+    }
   }
 
-  &.reset { background-color: $danger;
-    &:hover { background-color: lighten($danger, 5%); }
+  &.reset {
+    background-color: $danger;
+
+    &:hover {
+      background-color: lighten($danger, 5%);
+    }
   }
 
-  &.stop { background-color: $danger;
-    &:hover { background-color: lighten($danger, 5%); }
+  &.stop {
+    background-color: $danger;
+
+    &:hover {
+      background-color: lighten($danger, 5%);
+    }
   }
 
   // main raffle! button
@@ -329,7 +341,7 @@ a {
   position: fixed;
   right: 0;
   top: 37px;
-  transition: .25s;
+  transition: 0.25s;
   width: 225px;
   z-index: 10;
 
@@ -608,7 +620,7 @@ a {
       position: fixed;
       right: 7px;
       top: 6px;
-      transition: .25s;
+      transition: 0.25s;
       width: 24px;
       z-index: 15;
 
@@ -619,7 +631,7 @@ a {
       .menu-bar {
         border-radius: 2px;
         position: absolute;
-        transition: .5s;
+        transition: 0.5s;
         width: 75%;
       }
 
@@ -647,18 +659,18 @@ a {
       .button-open {
         .menu-bar-top {
           transform: rotate(45deg) translate(6px, 7px);
-          transition: .5s;
+          transition: 0.5s;
         }
 
         .menu-bar-middle {
           opacity: 0;
           transform: translate(-230px);
-          transition: .1s ease-in;
+          transition: 0.1s ease-in;
         }
 
         .menu-bar-bottom {
           transform: rotate(-45deg) translate(5px, -7px);
-          transition: .5s;
+          transition: 0.5s;
         }
       }
     }
@@ -725,30 +737,58 @@ a {
       &.level1 {
         background: darken($white, 30%);
 
-        .item-name { color: $gray-light; font-size: 0.9em; }
-        .item-affl { color: $gray-light; font-size: 0.5em; }
+        .item-name {
+          color: $gray-light;
+          font-size: 0.9em;
+        }
+
+        .item-affl {
+          color: $gray-light;
+          font-size: 0.5em;
+        }
       }
 
       &.level2 {
         background: darken($white, 15%);
 
-        .item-name { color: saturate($danger, 10%); font-size: 1.05em; }
-        .item-affl { color: saturate($danger, 10%); font-size: 0.65em; }
+        .item-name {
+          color: saturate($danger, 10%);
+          font-size: 1.05em;
+        }
+
+        .item-affl {
+          color: saturate($danger, 10%);
+          font-size: 0.65em;
+        }
       }
 
       &.level3 {
         background: darken($white, 7%);
 
-        .item-name { color: saturate($blue, 10%); font-size: 1.25em; }
-        .item-affl { color: saturate($blue, 10%); font-size: 0.85em; }
+        .item-name {
+          color: saturate($blue, 10%);
+          font-size: 1.25em;
+        }
+
+        .item-affl {
+          color: saturate($blue, 10%);
+          font-size: 0.85em;
+        }
       }
 
       &.level4 {
         background: darken($white, 4%);
         box-shadow: 0 0 20px 7px lighten($gray, 5%);
 
-        .item-name { color: darken($blue, 5%); font-size: 1.5em; }
-        .item-affl { color: darken($blue, 5%); font-size: 1em; }
+        .item-name {
+          color: darken($blue, 5%);
+          font-size: 1.5em;
+        }
+
+        .item-affl {
+          color: darken($blue, 5%);
+          font-size: 1em;
+        }
       }
 
       &.level-win {
@@ -759,8 +799,15 @@ a {
         border-top: 5px solid darken($green, 7%);
         box-shadow: 0 0 20px 7px $gray;
 
-        .item-name { color: $green; font-size: 2em; }
-        .item-affl { color: darken($green, 5%); font-size: 1.5em; }
+        .item-name {
+          color: $green;
+          font-size: 2em;
+        }
+
+        .item-affl {
+          color: darken($green, 5%);
+          font-size: 1.5em;
+        }
       }
 
       &.stopped {
@@ -848,7 +895,6 @@ a {
       padding: 0;
       text-align: center;
       width: 80%;
-
 
       #results-header {
         color: $black;

@@ -101,34 +101,34 @@ Raffler._notify = function (msg, type, notifyUser) {
     type = (typeof type) === 'undefined' ? '' : type
     notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
 
-    var bgColor, fgColor, header, icon
+    var bgcolor, fgcolor, header, icon
     var speed = 1500
 
     switch (type) {
     case 'success':
-      bgColor = '#99c24d'
-      fgColor = '#000000'
+      bgcolor = '#99c24d'
+      fgcolor = '#000000'
       header = 'Success'
       speed = 4000
       icon = 'fa-smile'
       break
     case 'warning' || 'warn':
-      bgColor = '#fadf63'
-      fgColor = '#000000'
+      bgcolor = '#fadf63'
+      fgcolor = '#000000'
       header = 'Warning'
       speed = 6000
       icon = 'fa-exclamation-triangle'
       break
     case 'error' || 'err':
-      bgColor = '#632b30'
-      fgColor = '#ffffff'
+      bgcolor = '#632b30'
+      fgcolor = '#ffffff'
       header = 'Error'
       speed = 0
       icon = 'fa-times-circle'
       break
     default:
-      bgColor = '#006e90'
-      fgColor = '#ffffff'
+      bgcolor = '#006e90'
+      fgcolor = '#ffffff'
       header = 'Notice'
       speed = 4000
       icon = 'fa-info-circle'
@@ -136,24 +136,24 @@ Raffler._notify = function (msg, type, notifyUser) {
     }
 
     var label = function (raw) {
-      var [bgColor, fgColor, type, ...msg] = raw.split(' ')
+      var [bgcolor, fgcolor, type, ...msg] = raw.split(' ')
       return [
         `%c${type}%c ${msg.join(' ')}`,
-        `background-color: ${bgColor}; border-right: 3px solid #000; color: ${fgColor}; padding: 0.15em 0.35em 0.15em 0.5em`,
+        `background-color: ${bgcolor}; border-right: 3px solid #000; color: ${fgcolor}; padding: 0.15em 0.35em 0.15em 0.5em`,
         ''
       ]
     }
 
     // 1. notify admin
-    console.log.apply(console, label(`${bgColor} ${fgColor} ${header.toUpperCase()} ${msg}`))
+    console.log.apply(console, label(`${bgcolor} ${fgcolor} ${header.toUpperCase()} ${msg}`))
 
     // 2. also, optionally, notify user
     if (notifyUser) {
       var d = document.createElement('div')
       $(d).addClass('item-status')
         .css({
-          'background-color': bgColor,
-          'color': fgColor
+          'background-color': bgcolor,
+          'color': fgcolor
         })
         .html(`<i class='fas ${icon}'></i> <strong>${header}</strong>: ${msg}`)
         .prependTo('.main-container')
