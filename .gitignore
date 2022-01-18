@@ -2,6 +2,7 @@
 node_modules
 .DS_Store
 dandelion.yml
+npm-audit.html
 
 # configuration
 config/raffler_options.user.json
