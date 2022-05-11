@@ -3,6 +3,7 @@ node_modules
 .DS_Store
 dandelion.yml
 npm-audit.html
+!assets/icons
 
 # configuration
 config/raffler_options.user.json
