@@ -5,7 +5,7 @@
   "soundName": false,
 	"showDebug": false,
 	"showGraph": false,
-	"notifierEnabled": true,
+	"notifierEnabled": false,
 	"dataFilePath": "./assets/json/raffler_data.json",
 	"logoFilePath": "",
 	"logoFileLink": "",
