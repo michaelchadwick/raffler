@@ -28,7 +28,7 @@ html {
 }
 
 body {
-  background-color: $blue;
+  background-color: desaturate($blue, 35%);
   color: $black;
   font-family: 'Cabin', Arial, Helvetica, sans-serif;
   font-size: 1rem;
@@ -219,7 +219,7 @@ header {
 
       #nav-content {
         animation: SlideRight 200ms;
-        background-color: #fff;
+        background-color: $cloudy-sky;
         border-radius: 0;
         box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.15);
         box-sizing: border-box;
@@ -278,8 +278,8 @@ header {
         }
 
         #footer-neb-host {
-          background: darken($blue, 5%);
-          border-top: 2px solid darken($blue, 10%);
+          background: darken($blue, 10%);
+          border-top: 2px solid darken($blue, 20%);
           bottom: 0;
           color: $white;
           font-family: 'Consolas', sans-serif;
