@@ -4,6 +4,8 @@ node_modules
 dandelion.yml
 npm-audit.html
 !assets/icons
+!assets/css/vendor
+!assets/js/vendor
 
 # configuration
 config/raffler_options.user.json

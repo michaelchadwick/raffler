@@ -2,19 +2,34 @@
 /* methods to do little utility things */
 /* global $, Raffler */
 
+// jQuery extension to parse url querystring
+$.QueryString = (function (a) {
+  if (a === '') return {}
+  var b = {}
+  for (var i = 0; i < a.length; ++i) {
+    var p = a[i].split('=', 2)
+    if (p.length !== 2) {
+      continue
+    }
+    b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' '))
+  }
+  return b
+})(window.location.search.substr(1).split('&'))
+
+
 Raffler._initCycleText = function () {
-  Raffler.elements.itemsCycle.html('<section id="init-raffler-cycle"><a href="#">BEGIN RAFFLE!</a></section>')
+  Raffler.dom.itemsCycle.html('<section id="init-raffler-cycle"><a href="#">BEGIN RAFFLE!</a></section>')
   Raffler._disableRaffle()
 }
 Raffler._disableRaffle = function () {
-  Raffler.elements.body.removeClass()
-  Raffler.elements.btnRaffle.prop('disabled', true).addClass('disabled')
+  Raffler.dom.body.removeClass()
+  Raffler.dom.interactive.btnRaffle.prop('disabled', true).addClass('disabled')
 }
 Raffler._enableRaffle = function () {
-  Raffler.elements.btnRaffle.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.interactive.btnRaffle.prop('disabled', false).removeClass('disabled')
 }
 Raffler._toggleTestNotices = function () {
-  var btns = Raffler.elements.btnTests
+  var btns = Raffler.dom.interactive.btnTests
   $.each(btns, function (key) {
     if (!Raffler.options.notifierEnabled) {
       $(btns[key]).attr('disabled', true)
@@ -28,27 +43,27 @@ Raffler._toggleTestNotices = function () {
   })
 }
 Raffler._disableTimerStart = function () {
-  Raffler.elements.btnTimerStart.prop('disabled', true).addClass('disabled')
+  Raffler.dom.admin.btnTimerStart.prop('disabled', true).addClass('disabled')
 }
 Raffler._enableTimerStart = function () {
-  Raffler.elements.btnTimerStart.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.admin.btnTimerStart.prop('disabled', false).removeClass('disabled')
 }
 Raffler._disableTimerStop = function () {
-  Raffler.elements.btnTimerStop.prop('disabled', true).addClass('disabled')
+  Raffler.dom.admin.btnTimerStop.prop('disabled', true).addClass('disabled')
 }
 Raffler._enableTimerStop = function () {
-  Raffler.elements.btnTimerStop.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.admin.btnTimerStop.prop('disabled', false).removeClass('disabled')
 }
 Raffler._disableChosenConfirm = function () {
-  Raffler.elements.chosenConfirm.hide()
-  Raffler.elements.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')
-  Raffler.elements.btnChosenConfirmNo.prop('disabled', true).addClass('disabled')
+  Raffler.dom.chosenConfirm.hide()
+  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')
+  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', true).addClass('disabled')
   Raffler._enableTimerStop()
 }
 Raffler._enableChosenConfirm = function () {
-  Raffler.elements.chosenConfirm.show()
-  Raffler.elements.btnChosenConfirmYes.prop('disabled', false).removeClass('disabled')
-  Raffler.elements.btnChosenConfirmNo.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.chosenConfirm.show()
+  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', false).removeClass('disabled')
   Raffler._disableTimerStart()
   Raffler._disableTimerStop()
 }
@@ -61,7 +76,7 @@ Raffler._sanitize = function (newEntry) {
 }
 // check for duplicate user entries
 Raffler._isDuplicateValue = function (newUserItem) {
-  $.each(Raffler._getLocalStorageItem('rafflerUserItems'), function (key, val) {
+  $.each(Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY), function (key, val) {
     if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
       return true
     }

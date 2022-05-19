@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
   <!-- BASIC
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -31,194 +32,131 @@
 
   <!-- FONTS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Cabin|Overpass+Mono|Roboto'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin|Overpass+Mono|Roboto">
 
   <!-- FONTAWESOME
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/solid.css' integrity='sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos' crossorigin='anonymous'>
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css' integrity='sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT' crossorigin='anonymous'>
+  <link rel="stylesheet" href="./assets/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="./assets/fontawesome/css/solid.min.css">
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <!--// VENDORS //-->
-  <link rel='stylesheet' href='./assets/css/vendor/normalize.min.css'>
-  <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.min.css'>
-  <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.structure.min.css'>
-  <link rel='stylesheet' href='./assets/css/vendor/jquery-ui.theme.min.css'>
-  <link rel='stylesheet' href='./assets/css/vendor/main.css'>
+  <link rel="stylesheet" href="./assets/css/vendor/jquery-ui.min.css">
+  <link rel="stylesheet" href="./assets/css/vendor/jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="./assets/css/vendor/jquery-ui.theme.min.css">
   <!--// CUSTOM //-->
-  <link rel='stylesheet' href='./public/build/css/app.css'>
+  <link rel="stylesheet" href="./public/build/css/modal.css">
+  <link rel="stylesheet" href="./public/build/css/app.css">
 </head>
 <body>
-  <nav id='admin-menu'>
-    <div class='menu'>
-      <div id='fancy-options'>
-        <label class='title'>Special Effects</label>
-        <div class='checkbox'>
-          <label for='check-option-resize'>box/text resize</label>
-          <input type='checkbox' id='check-option-resize' />
+  <header>
+    <div class="menu-left">
+
+      <div id="nav-links">
+        <button id="button-nav" class="icon" aria-label="Click for links to more apps by neb.host" tabindex="-1">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div id="nav-overlay">
+          <div id="nav-content">
+            <div class="container">
+
+              <div class="nav-header">More Apps By Neb</div>
+
+              <div class="nav-list">
+                <a href="https://ah.neb.host">Audio Hash</a>
+                <a href="https://bogdle.fun">Bogdle</a>
+                <a href="https://gw.neb.host">Gem Warrior</a>
+                <a href="https://sketchage.neb.host">Sketchage</a>
+              </div>
+
+              <div class="nav-footer">
+                <!-- vvv neb.host subsite footer -->
+                <footer id="footer-neb-host">site by <a href="https://neb.host">neb.host</a>
+                </footer>
+                <!-- ^^^ neb.host subsite footer -->
+              </div>
+            </div>
+
+            <div id="button-nav-close">
+              <a href="#">X</a>
+            </div>
+
+          </div>
         </div>
-        <div class='checkbox'>
-          <label for='check-option-sound-countdown'>sound: countdown</label>
-          <input type='checkbox' id='check-option-sound-countdown' />
-        </div>
-        <div class='checkbox'>
-          <label for='check-option-sound-victory'>sound: victory</label>
-          <input type='checkbox' id='check-option-sound-victory' />
-        </div>
-        <div class='checkbox'>
-          <label for='check-option-sound-name'>sound: name</label>
-          <input type='checkbox' id='check-option-sound-name' />
-        </div>
-      </div>
-      <div id='timer-controls'>
-        <label class='title'>Timer Controls</label>
-        <a href='#' class='button start' id='button-timer-start'><i class='fas fa-play'></i> start</a>
-        <a href='#' class='button stop' id='button-timer-stop'><i class='fas fa-stop'></i> stop</a>
-        <div class='title'>App Controls</div>
-        <a href='#' class='button reset confirmLink' id='button-data-reset'><i class='fas fa-redo-alt'></i> reset data</a>
-      </div>
-      <div id='user-items-manager'>
-        <label class='title'>User Items</label>
-        <input id='text-user-items-add-name' type='text' placeholder='name' />
-        <input id='text-user-items-add-affl' type='text' placeholder='affiliation' />
-        <a href='#' class='button disabled' id='button-user-items-add' disabled><i class='fas fa-plus'></i> add</a>
-        <a href='#' class='button disabled' id='button-user-items-clear' disabled><i class='fas fa-minus-circle'></i> clear</a>
-        <div id='user-items-display'><ul></ul></div>
       </div>
 
-      <div class='title title-with-checkbox'>
-        <label for='check-option-show-debug'>debug options?</label>
-        <input type='checkbox' id='check-option-show-debug' />
-      </div>
-      <div id='debug-options'>
-        <div id='debug-values'>
-          <div class='title'>Debug Values</div>
-          <div class='values' id='stage-value'>
-            <label>Stage:</label> <span></span>
-          </div>
-          <div class='values' id='interval-value'>
-            <label>Interval:</label> <span></span>
-            <input type='range' min='1' max='359' step='1' value='25' />
-          </div>
-          <div class='values' id='multiply-value'>
-            <label>Multiply:</label> <span></span>
-          </div>
-          <div class='values' id='timesrun-value'>
-            <label>Times Run:</label> <span></span>
-          </div>
-          <div class='checkbox'>
-            <label for='check-option-show-graph'>show graph</label>
-            <input type='checkbox' id='check-option-show-graph' />
-          </div>
-        </div>
-        <div id='test-notify'>
-          <div class='title'>Test Notifications</div>
-          <div class='checkbox'>
-            <label for='check-option-allow-notifications'>allow notifications</label>
-            <input type='checkbox' id='check-option-allow-notifications' />
-          </div>
-          <a href='#' class='button test notice' id='button-test-notice' title='notice'>
-            <i class='fas fa-info-circle'></i>
-          </a>
-          <a href='#' class='button test success' id='button-test-success' title='success'>
-            <i class='fas fa-smile'></i>
-          </a>
-          <a href='#' class='button test warning' id='button-test-warning' title='warning'>
-            <i class='fas fa-exclamation-triangle'></i>
-          </a>
-          <a href='#' class='button test error' id='button-test-error' title='error'>
-            <i class='fas fa-times-circle'></i>
-          </a>
-        </div>
-        <div id='items-available'>
-          <div class='title'>Available Items <span></span></div>
-          <textarea readonly></textarea>
-        </div>
-        <div id='items-chosen'>
-          <div class='title'>Chosen Items <span></span></div>
-          <textarea readonly></textarea>
-        </div>
-      </div>
+      <button id="button-help" class="icon" aria-label="Help" tabindex="-1">
+        <i class="fa-solid fa-question"></i>
+      </button>
+
     </div>
-  </nav> <!-- #admin-menu -->
 
-  <div id='main-content' role='main'>
+    <div class="title">
+      <h1>Raffler</h1>
+    </div>
 
-    <div class='header-container'>
-      <span id='button-admin-menu-toggle'>
-        <div class='menu-bar menu-bar-top'></div>
-        <div class='menu-bar menu-bar-middle'></div>
-        <div class='menu-bar menu-bar-bottom'></div>
-      </span>
-      <header class='wrapper clearfix'>
-        <h1 class='title'>Raffler</h1>
-      </header>
-    </div> <!-- #header-container -->
+    <div class="menu-right">
+      <button id="button-settings" class="icon" aria-label="Settings" tabindex="-1">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </div>
+  </header>
+
+  <section id="main-content" role="main">
 
     <!-- status messages, button, item results -->
-    <div class='main-container'>
-      <div class='main wrapper clearfix'>
 
-        <div id='items-cycle'></div>
+    <div class="main-container">
+      <div class="main wrapper clearfix">
 
-        <div id='items-graph'></div>
+        <div id="items-cycle"></div>
 
-        <div id='winner-confirm'>
+        <div id="items-graph"></div>
+
+        <div id="winner-confirm">
           <h2>Winner Present?</h2>
-          <button id='button-confirm-yes' class='button confirm'>
-            <i class='fas fa-check'></i> YES
+          <button id="button-confirm-yes" class="button confirm">
+            <i class="fas fa-check"></i> YES
           </button>
-          <button id='button-confirm-no' class='button deny'>
-            <i class='fas fa-frown'></i> NO
+          <button id="button-confirm-no" class="button deny">
+            <i class="fas fa-frown"></i> NO
           </button>
         </div>
 
-        <div id='the-button'>
-          <a href='#' class='button raffle' id='button-raffle'>PICK A WINNER!</a>
+        <div id="the-button">
+          <a href="#" class="button raffle" id="button-raffle">PICK A WINNER!</a>
         </div>
 
-        <div id='results-wrapper'>
-          <div id='results-header'>
+        <div id="results-wrapper">
+          <div id="results-header">
             <h3>Results (<span>0</span>)</h3>
-            <a href='#' id='button-export-results' title='Export Results' class='button export'>
-              <i class='fas fa-save'></i> Export Results
+            <a href="#" id="button-export-results" title="Export Results" class="button export">
+              <i class="fas fa-save"></i> Export Results
             </a>
           </div>
-          <div id='results-list'>
+          <div id="results-list">
             <ul></ul>
           </div>
         </div>
 
-      </div> <!-- #main -->
-    </div> <!-- #main-container -->
+      </div>
+    </div>
 
-    <!-- vvv neb.host subsite footer -->
-    <footer id="footer-neb-host" style="background: #484848; border-top: 2px solid #000000; bottom: 0; color: #aaaaaa; display: table; font-family: 'Consolas', sans-serif; font-size: 12px; height: 18px; letter-spacing: initial; margin-top: 20px; padding: 5px 10px; position: fixed; width: 100%; text-align: left; z-index: 2">site by <a style="color: #ffffff; font-family: 'Consolas', sans-serif; font-size: 12px;" href="https://neb.host">neb.host</a>
-    </footer>
-    <!-- ^^^ neb.host subsite footer -->
 
-  </div> <!-- main#wrapper -->
+  </section>
 
-  <!-- dialog templates -->
-  <div id='data-reset-dialog' class='dialog' title='Confirmation Required'>
-    Are you sure you want to reset Raffler? <em>(Note: all chosen and user items will be lost)</em>
-  </div>
-  <div id='user-items-clear-dialog' class='dialog' title='Confirmation Required'>
-    Are you sure you want to clear user-entered items?
-  </div>
+  <audio id="countdown" preload="auto" volume="0.5" type="audio/mp3"></audio>
+  <audio id="victory" preload="auto" volume="0.5" type="audio/mp3"></audio>
 
-  <audio id='countdown' preload='auto' volume='0.5' type='audio/mp3'></audio>
-  <audio id='victory' preload='auto' volume='0.5' type='audio/mp3'></audio>
-
-  <script src='./assets/js/lib/systemjs/dist/system.js'></script>
-  <script src='./assets/js/lib/FileSaver.min.js'></script>
-  <script src='./assets/js/lib/analytics.js'></script>
-  <script>SystemJS.import('./assets/js/lib/jquery.js')
-    .then(jqueryui => SystemJS.import('./assets/js/lib/jquery-ui.js'))
-    .then(createjs => SystemJS.import('./assets/js/lib/create.js'))
-    .then(talkify => SystemJS.import('./node_modules/talkify-tts/dist/talkify.min.js'))
-    .then(app => SystemJS.import('./public/build/js/all-app.js'));
+  <script src="./assets/js/vendor/systemjs/dist/system.js"></script>
+  <script src="./assets/js/vendor/FileSaver.min.js"></script>
+  <script src="./assets/js/vendor/analytics.js"></script>
+  <script>SystemJS.import("./assets/js/vendor/jquery.js")
+    .then(jqueryui => SystemJS.import("./assets/js/vendor/jquery-ui.js"))
+    .then(createjs => SystemJS.import("./assets/js/vendor/create.js"))
+    .then(talkify => SystemJS.import("./node_modules/talkify-tts/dist/talkify.min.js"))
+    .then(app => SystemJS.import("./public/build/js/all-app.js"));
   </script>
 </body>
 </html>

@@ -8,6 +8,7 @@ const concat = require('gulp-concat')
 const babel = require('gulp-babel')
 const rename = require('gulp-rename')
 const pump = require('pump')
+const sourcemaps = require('gulp-sourcemaps')
 
 // where to build public app files
 const DIR_JS_BUILD = 'public/build/js'
@@ -16,12 +17,15 @@ const DIR_CSS_BUILD = 'public/build/css'
 // order matters!
 const jsAppFiles = [
   'assets/js/app/init.js',
+  'assets/js/app/dom.js',
   'assets/js/app/helper.js',
   'assets/js/app/fx.js',
+  'assets/js/app/modal.js',
+  'assets/js/app/talkify.js',
   'assets/js/app/main.js'
 ]
-const jsLibFiles = [ 'assets/js/lib/*.js' ]
-const scssAppFiles = [ 'assets/scss/app.scss' ]
+const jsVendorFiles = [ 'assets/js/vendor/*.js' ]
+const scssAppFiles = [ 'assets/scss/*.scss' ]
 
 // error function
 const onError = function (err) {
@@ -46,7 +50,7 @@ gulp.task('sub_jscompress-app', function (cb) {
 })
 gulp.task('sub_jscompress-lib', function (cb) {
   pump([
-    gulp.src(jsLibFiles),
+    gulp.src(jsVendorFiles),
     concat('all-lib.js', {newLine: '\r\n'}),
     gulp.dest(DIR_JS_BUILD),
     babel(
@@ -60,9 +64,10 @@ gulp.task('sub_jscompress-lib', function (cb) {
 gulp.task('sub_compile-sass', function (cb) {
   pump([
     gulp.src(scssAppFiles),
+    sourcemaps.init(),
     sass(),
-    concat('app.css'),
     cleanCSS(),
+    sourcemaps.write('./'),
     gulp.dest(DIR_CSS_BUILD)
   ], cb)
 })

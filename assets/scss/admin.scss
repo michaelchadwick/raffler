@@ -1,0 +1,240 @@
+$blue: #006e90;
+$orange: #f18f01;
+$cloudy-sky: #adcad6;
+$blue-sky: #71d6ff;
+$green: #99c24d;
+$white: #ffffff;
+$black: #000000;
+$gray-dark: #555555;
+$gray: #999999;
+$gray-light: #cccccc;
+$info: #2274a5;
+$warning: #fadf63;
+$danger: #632b30;
+$debug: #715ec7;
+$shadow-start: rgba(0, 0, 0, 0.45);
+$shadow-end: rgba(0, 0, 0, 0.25);
+$text-shadow: rgba(0, 0, 0, 0.8);
+
+#admin-menu {
+  background-color: darken($cloudy-sky, 10%);
+  border-left: 1px solid $black;
+  color: $white;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  font-weight: 700;
+  transition: 0.25s;
+
+  &.menu-show {
+    box-shadow: -3px 3px 10px $gray-dark;
+    margin-right: 0;
+  }
+
+  div,
+  label {
+    &.title {
+      background: $gray-dark;
+      border-bottom: 1px solid $black;
+      border-left: 0;
+      border-top: 1px solid darken($gray, 2%);
+      clear: left;
+      float: left;
+      font-size: 1.2em;
+      height: 23px;
+      padding: 0 5px 2px 7px;
+      text-transform: uppercase;
+      width: 100%;
+    }
+  }
+
+  div {
+    text-align: left;
+
+    &.title {
+      &.title-with-checkbox {
+        label {
+          float: left;
+          width: auto;
+        }
+
+        input {
+          float: left;
+          margin: 0 0 2px 5px;
+        }
+      }
+    }
+  }
+
+  .fa,
+  .fas {
+    font-size: 16px;
+  }
+
+  #fancy-options {
+    float: left;
+    width: 100%;
+  }
+
+  #timer-controls {
+    clear: both;
+    display: block;
+    float: none;
+    width: 100%;
+
+    & > a {
+      font-size: 20px;
+      margin: 0;
+      width: 100%;
+
+      &#button-timer-start,
+      &#button-timer-stop {
+        float: left;
+        width: 50%;
+      }
+    }
+  }
+
+  #user-items-manager {
+    clear: left;
+
+    input,
+    button,
+    div {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+
+      &#text-user-items-add-name,
+      &#text-user-items-add-affl {
+        padding: 3px;
+      }
+    }
+
+    a {
+      color: $white;
+      font-size: 20px;
+      margin: 0;
+
+      &#button-user-items-add,
+      &#button-user-items-clear {
+        float: left;
+        width: 50%;
+      }
+
+      &#button-user-items-add {
+        background-color: $green;
+
+        &:hover {
+          background-color: lighten($green, 5%);
+        }
+
+        &.disabled {
+          background-color: $gray;
+          color: $gray-light;
+          cursor: not-allowed;
+          text-decoration: none;
+
+          &:hover {
+            background-color: lighten($gray, 5%);
+            color: $gray-light;
+            cursor: not-allowed;
+          }
+        }
+      }
+
+      &#button-user-items-clear {
+        background-color: $danger;
+
+        &.disabled {
+          background-color: $gray;
+          color: $gray-light;
+          cursor: not-allowed;
+          text-decoration: none;
+
+          &:hover {
+            background-color: lighten($gray, 5%);
+            color: $gray-light;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+
+    #user-items-display {
+      clear: left;
+      color: $white;
+      font-weight: bold;
+      margin: 4px 0 0;
+      padding: 2px 4px;
+
+      ul {
+        li {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  #debug-options {
+    display: none;
+
+    &.show {
+      display: block;
+    }
+
+    #items-available {
+      textarea {
+        background: darken($white, 10%);
+        border: none;
+        font-size: 0.9em;
+        height: 150px;
+        padding: 5px;
+        width: 100%;
+      }
+    }
+
+    #items-chosen {
+      textarea {
+        background: darken($white, 10%);
+        border: none;
+        font-size: 0.9em;
+        height: 150px;
+        padding: 5px;
+        width: 100%;
+      }
+    }
+
+    #debug-values {
+      div {
+        &.values {
+          background: lighten($blue, 10%);
+          padding: 0 10px;
+          transition: all 100ms ease;
+        }
+      }
+
+      input {
+        &[type='range'] {
+          width: 100%;
+        }
+      }
+    }
+
+    #test-notify {
+      clear: both;
+
+      & > a {
+        float: left;
+        width: 25%;
+
+        &.disabled {
+          background-color: $gray;
+          color: $gray-light;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

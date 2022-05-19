@@ -1,0 +1,263 @@
+$blue: #006e90;
+$orange: #f18f01;
+$cloudy-sky: #adcad6;
+$blue-sky: #71d6ff;
+$green: #99c24d;
+$white: #ffffff;
+$black: #000000;
+$gray-dark: #555555;
+$gray: #999999;
+$gray-light: #cccccc;
+$info: #2274a5;
+$warning: #fadf63;
+$danger: #632b30;
+$debug: #715ec7;
+$shadow-start: rgba(0, 0, 0, 0.45);
+$shadow-end: rgba(0, 0, 0, 0.25);
+$text-shadow: rgba(0, 0, 0, 0.8);
+
+.modal-dialog {
+  align-items: center;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  &.temp {
+    background-color: transparent;
+
+    .modal-window {
+      background-color: $blue;
+      border: 2px solid $black;
+      border-radius: 8px;
+      box-shadow: none;
+      color: $white;
+      pointer-events: none;
+      position: absolute;
+      top: 25%;
+      width: fit-content;
+    }
+  }
+}
+.modal-window {
+  --animate-duration: 100ms;
+  background-color: $white;
+  border: 4px solid lighten($blue, 5%);
+  border-top-width: 0;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15), 0 0 16px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-flow: column wrap;
+  margin: 0 1em;
+  max-height: 90%;
+  max-width: 500px;
+  width: 90%;
+
+  .modal-window.debug {
+    border-color: $debug;
+  }
+}
+
+.modal-title {
+  align-items: center;
+  background-color: $blue;
+  color: $white;
+  display: flex;
+  font-weight: 500;
+  justify-content: center;
+  padding: 4px 16px;
+  width: 100%;
+
+  &.debug {
+    background-color: $debug;
+  }
+}
+
+.modal-close {
+  background: none;
+  border: 0 none;
+  color: $white;
+  font-size: 26px;
+  font-weight: inherit;
+  font-family: inherit;
+  height: auto;
+  margin: 0;
+  margin-left: auto;
+  max-width: 26px;
+}
+
+.modal-text {
+  margin: 10px 0;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 0 16px;
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+
+    ul {
+      padding: 2px 10px;
+    }
+
+    li {
+      padding: 0;
+    }
+  }
+
+  dl {
+    dt {
+      margin-left: 1em;
+      min-height: 20px;
+    }
+
+    dl {
+      margin-left: 1em;
+    }
+  }
+}
+
+.modal-button-group {
+  margin: auto 0 16px 0;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  button {
+    font-weight: inherit;
+    font-family: inherit;
+  }
+}
+
+.modal-button {
+  font-family: inherit;
+  font-weight: 400;
+  display: inline-block;
+  width: fit-content;
+  position: relative;
+  white-space: break-spaces;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 0 none;
+  border-radius: 2px;
+  line-height: 1.3;
+
+  &:hover {
+    box-shadow: inset 0 99px 0 rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+  }
+}
+
+.modal-button-primary {
+  color: $white;
+  background-color: $blue;
+}
+.modal-button-secondary {
+  color: $black;
+  background-color: $blue-sky;
+}
+.modal-button-neutral {
+  color: $black;
+  background-color: $gray;
+}
+.modal-button-action {
+  color: $white;
+  background-color: var(--action);
+}
+.modal-button-mini {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.modal-button-small {
+  padding: 6px 18px;
+  font-size: 13px;
+}
+.modal-button-regular {
+  padding: 8px 24px;
+  font-size: 14px;
+}
+.modal-button-large {
+  padding: 12px 32px;
+  font-size: 16px;
+}
+.modal-button-giant {
+  padding: 16px 36px;
+  font-size: 20px;
+}
+.modal-button-hero {
+  padding: 16px 48px;
+  font-size: 18px;
+  border-radius: 38px;
+}
+.modal-button-rounded {
+  border-radius: 64px;
+}
+.modal-button-group {
+  &.debug {
+    button {
+      &.button-primary {
+        background-color: $debug;
+        color: $white;
+      }
+
+      &.button-secondary {
+        background-color: lighten($debug, 10%);
+        color: $black;
+      }
+    }
+  }
+}
+
+#settings {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .setting-row {
+    align-items: center;
+    border-bottom: 1px solid $gray-dark;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .text {
+      padding: 8px 8px 8px 0;
+
+      .title {
+        font-size: 18px;
+      }
+
+      .description {
+        color: $gray-dark;
+        font-size: 12px;
+      }
+    }
+
+    .control {
+      display: block;
+      margin-left: 1em;
+    }
+  }
+}
