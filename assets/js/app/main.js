@@ -1,6 +1,45 @@
 /* main */
 /* app entry point and main functions */
-/* global $, Raffler */
+/* global $, Raffler, talkify */
+
+// Raffler properties
+Raffler.itemsArr = []
+Raffler.itemsLeftArr = []
+Raffler.initItemsObj = []
+Raffler.initInterval = 25
+Raffler.initMult = 1
+Raffler.initTimesRun = 0
+Raffler.lastInterval = 361
+Raffler.hasLocalStorage = true
+Raffler.lastItemChosen = ''
+Raffler.lastItemChosenConfirmed = false
+Raffler.stages = {
+  INIT: 0,
+  BEGUN: 1,
+  SLOWED: 2,
+  SLOWEST: 3,
+  DONE: 4
+}
+
+// Raffler sub-property groups
+Raffler.options = {}
+
+// load options
+$.ajax({
+  dataType: 'json', url: RAFFLER_OPTIONS_FILE, async: false,
+  success: function(data) {
+    Raffler.defaults = data
+    $.extend(Raffler.options, data)
+  }
+})
+
+// load user options
+$.ajax({
+  dataType: 'json', url: USER_OPTIONS_FILE, async: false,
+  success: function(data) {
+    Raffler.options = $.extend({}, Raffler.options, data)
+  }
+})
 
 // app entry point
 Raffler.initApp = function () {

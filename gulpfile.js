@@ -16,7 +16,8 @@ const DIR_CSS_BUILD = 'public/build/css'
 
 // order matters!
 const jsAppFiles = [
-  'assets/js/app/init.js',
+  'assets/js/app.js',
+  'assets/js/app/constants.js',
   'assets/js/app/dom.js',
   'assets/js/app/helper.js',
   'assets/js/app/fx.js',

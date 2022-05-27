@@ -6,6 +6,10 @@ And the winner is...
 
 Click or tap the button and a cavalcade of pre-loaded items will begin to cycle more and more slowly as it finally comes to a stop, and a single choice is made. That item will then be added to a results list below the *Raffler*, and will not be chosen again if re-run (until a reset, naturally).
 
+## Dependencies
+
+* [SystemJS](https://github.com/systemjs/systemjs)
+
 ### Local Development
 
 To develop locally, a few simple steps need to be taken.
