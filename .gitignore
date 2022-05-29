@@ -8,4 +8,4 @@ npm-audit.html
 !assets/js/vendor
 
 # configuration
-config/raffler_options.user.json
+raffler_settings.user.json

@@ -225,7 +225,8 @@ $text-shadow: rgba(0, 0, 0, 0.8);
   }
 }
 
-#settings {
+#settings,
+#settings-debug {
   align-content: center;
   display: flex;
   flex-direction: column;
@@ -258,6 +259,41 @@ $text-shadow: rgba(0, 0, 0, 0.8);
     .control {
       display: block;
       margin-left: 1em;
+
+      .container {
+        &.buttons {
+          display: flex;
+
+          button {
+            display: inherit;
+          }
+        }
+      }
+    }
+  }
+
+  #settings-debug {
+    background-color: lighten($debug, 5%);
+    color: $white;
+    display: none;
+    padding: 10px;
+
+    &.show {
+      display: flex;
+    }
+
+    .setting-row {
+      border-bottom: 1px solid #eee;
+
+      .text {
+        .description {
+          color: darken($white, 5%);
+        }
+      }
+
+      .control {
+        margin-left: 0;
+      }
     }
   }
 }

@@ -23,6 +23,8 @@
   ],
   "main": "index.html",
   "scripts": {
+    "build": "gulp build",
+    "watch": "gulp watch",
     "serve": "http-server ./ -a 0.0.0.0 -p 3000",
     "preinstall": "npx force-resolutions"
   },

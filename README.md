@@ -60,7 +60,7 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 ]
 ```
 
-Override this data with your own names and affiliations in order to successfully raffle off your items. Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the admin menu (`?admin=1` in querystring). The admin menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
+Override this data with your own names and affiliations in order to successfully raffle off your items. Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
 
 ### User Options
 

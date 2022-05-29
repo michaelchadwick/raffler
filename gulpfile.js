@@ -19,11 +19,10 @@ const jsAppFiles = [
   'assets/js/app.js',
   'assets/js/app/constants.js',
   'assets/js/app/dom.js',
-  'assets/js/app/helper.js',
-  'assets/js/app/fx.js',
   'assets/js/app/modal.js',
-  'assets/js/app/talkify.js',
-  'assets/js/app/main.js'
+  'assets/js/app/main.js',
+  'assets/js/app/fx/audio.js',
+  'assets/js/app/fx/talkify.js'
 ]
 const jsVendorFiles = [ 'assets/js/vendor/*.js' ]
 const scssAppFiles = [ 'assets/scss/*.scss' ]
@@ -80,6 +79,7 @@ gulp.task('sub_clean-css', function (cb) {
   ], cb)
 })
 
+// main tasks
 gulp.task('watch-files', function () {
   gulp.watch(jsAppFiles,
     gulp.series(
@@ -115,5 +115,5 @@ gulp.task('watch',
   )
 )
 
-// set default task
+// default task
 gulp.task('default', gulp.series('build'))
