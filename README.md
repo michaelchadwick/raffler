@@ -10,7 +10,7 @@ Click or tap the button and a cavalcade of pre-loaded items will begin to cycle 
 
 * [SystemJS](https://github.com/systemjs/systemjs)
 
-### Local Development
+### Contributing
 
 To develop locally, a few simple steps need to be taken.
 
