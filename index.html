@@ -90,6 +90,21 @@
         <i class="fa-solid fa-question"></i>
       </button>
 
+      <div id="debug-buttons" class="debug">
+        <nav class="ddmenu">
+          <div class="ddgroup">
+            <button id="button-debug-dropdown" class="icon debug">
+              <i class="fa-solid fa-bug"></i>
+            </button>
+            <div class="ddsub">
+              <button id="button-show-config" class="icon">
+                <i class="fa-solid fa-gears"></i>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+
     </div>
 
     <div class="title">
@@ -148,8 +163,7 @@
 
   </section>
 
-  <audio id="countdown" preload="auto" volume="0.5" type="audio/mp3"></audio>
-  <audio id="victory" preload="auto" volume="0.5" type="audio/mp3"></audio>
+  <div id="talkify-audio"></div>
 
   <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -159,9 +173,9 @@
   <script src="./assets/js/vendor/systemjs/dist/system.js"></script>
   <script src="./assets/js/vendor/FileSaver.min.js"></script>
   <!--<script src="./assets/js/vendor/analytics.js"></script>-->
-  <script>SystemJS.import("./assets/js/vendor/jquery.js")
-    .then(jqueryui => SystemJS.import("./assets/js/vendor/jquery-ui.js"))
-    .then(createjs => SystemJS.import("./assets/js/vendor/create.js"))
+  <script>SystemJS.import("./assets/js/vendor/jquery.min.js")
+    .then(jqueryui => SystemJS.import("./assets/js/vendor/jquery-ui.min.js"))
+    .then(createjs => SystemJS.import("./assets/js/vendor/create.min.js"))
     .then(talkify => SystemJS.import("./node_modules/talkify-tts/dist/talkify.min.js"))
     .then(app => SystemJS.import("./public/build/js/all-app.js"));
   </script>

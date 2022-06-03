@@ -2,27 +2,30 @@
 /* sounds and name reading */
 /* global Raffler, talkify */
 
-// Try to get data from the cache, but fall back to fetching it live.
-async function getAudio(cacheName, url) {
-  let cachedAudio = await getCachedAudio(cacheName, url);
+const RAFFLER_CACHE_AUDIO_KEY = 'raffler-cache-audio'
+const RAFFLER_ASSET_DATA_PATH = '/assets/audio'
 
-  if (cachedAudio) {
-    // console.log('Retrieved cached audio', cachedAudio);
-    return cachedAudio;
+// Try to get data from the cache, but fall back to fetching it live.
+async function getData(cacheName, url) {
+  let cachedData = await getCachedData(cacheName, url);
+
+  if (cachedData) {
+    // console.log('Retrieved cached data', cachedData);
+    return cachedData;
   }
 
   // console.log('Fetching fresh data');
 
   const cacheStorage = await caches.open(cacheName);
   await cacheStorage.add(url);
-  cachedAudio = await getCachedAudio(cacheName, url);
+  cachedData = await getCachedData(cacheName, url);
   await deleteOldCaches(cacheName);
 
-  return cachedAudio;
+  return cachedData;
 }
 
 // Get data from the cache.
-async function getCachedAudio(cacheName, url) {
+async function getCachedData(cacheName, url) {
   const cacheStorage = await caches.open(cacheName);
   const cachedResponse = await cacheStorage.match(url);
 
@@ -38,7 +41,7 @@ async function deleteOldCaches(currentCache) {
   const keys = await caches.keys();
 
   for (const key of keys) {
-    const isOurCache = CACHE_AUDIO_KEY;
+    const isOurCache = RAFFLER_CACHE_AUDIO_KEY;
 
     if (currentCache === key || !isOurCache) {
       continue;
@@ -55,7 +58,7 @@ async function useCache(url) {
   const source = context.createBufferSource();
 
   try {
-    const audioBuffer = await getAudio(CACHE_AUDIO_KEY, url)
+    const audioBuffer = await getData(RAFFLER_CACHE_AUDIO_KEY, url)
 
     gainNode.gain.value = 0.3;
     source.buffer = await context.decodeAudioData(audioBuffer);
@@ -88,28 +91,55 @@ async function useFetch(url) {
     source.start();
 }
 
-Raffler._playSound = async soundId => {
-  const path = '/assets/audio';
+Raffler._initData = async function() {
+  const path = RAFFLER_ASSET_DATA_PATH
+
+  await caches.open(RAFFLER_CACHE_AUDIO_KEY).then(cache => {
+    cache.keys().then(function(keys) {
+      if (!keys.length) {
+        // console.info(`${RAFFLER_CACHE_AUDIO_KEY} is empty. Adding files to it...`)
+
+        cache.addAll([
+          `${path}/countdown.mp3`,
+          `${path}/victory.mp3`
+        ])
+      } else {
+        // console.info(`${RAFFLER_CACHE_AUDIO_KEY} is full, so need to initialize.`)
+      }
+    })
+  })
+}
+
+// audio file playing
+Raffler._playSound = async function(soundId) {
+  const path = RAFFLER_ASSET_DATA_PATH;
   const format = 'mp3';
-  let url = ''
+  const url = `${path}/${soundId}.${format}`
 
   switch (soundId) {
     case 'countdown':
       if (Raffler.settings.soundCountdown) {
-        url = `${path}/${sound}.${format}`
-        useCache(url)
+        if ('caches' in self) {
+          useCache(url)
+        } else {
+          useFetch(url)
+        }
       }
       break
 
     case 'victory':
       if(Raffler.settings.soundVictory) {
-        url = `${path}/${sound}.${format}`
-        useCache(url)
+        if ('caches' in self) {
+          useCache(url)
+        } else {
+          useFetch(url)
+        }
       }
       break
   }
 };
 
+// talkify: read name on choice
 Raffler._readName = function (itemChosen) {
   if (Raffler.settings.soundName) {
     const player = new talkify.TtsPlayer()

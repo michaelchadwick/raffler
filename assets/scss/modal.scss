@@ -294,6 +294,12 @@ $text-shadow: rgba(0, 0, 0, 0.8);
       .control {
         margin-left: 0;
       }
+
+      #debug-items-available,
+      #debug-items-chosen {
+        height: 200px;
+        padding: 5px;
+      }
     }
   }
 }

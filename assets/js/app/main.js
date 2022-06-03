@@ -2,10 +2,7 @@
 /* app entry point and main functions */
 /* global $, Raffler, talkify */
 
-Raffler.audioContext = new (window.AudioContext || window.webkitAudioContext)()
-
-// main app settings
-// feel free to change to suit particular usage
+// settings: saved in LOCAL STORAGE
 Raffler.settings = {
   "boxResize": true,
   "dataFilePath": './assets/json/raffler_data.json',
@@ -16,27 +13,29 @@ Raffler.settings = {
   "showGraph": false,
   "soundCountdown": false,
   "soundVictory": false,
-  "soundName": false,
-  "talkifyKey": ""
+  "soundName": false
 }
 Raffler.settings.debug = {
   "allowNotifications": true,
-  "intervalRange": RAFFLER_SETTINGS_INTERVAL_DEFAULT,
-  "multiply": RAFFLER_SETTINGS_MULTIPLY_DEFAULT,
+  "intervalRange": RAFFLER_DEFAULT_INTERVAL,
+  "itemsAvailable": [],
+  "multiply": RAFFLER_DEFAULT_MULTIPLY,
   "stage": 0,
   "textAvailableItems": [],
   "textChosenItems": [],
   "timesRun": 0
 }
 
-// Raffler properties
-Raffler.hasLocalStorage = true
-Raffler.itemsArr = []
-Raffler.itemsLeftArr = []
-Raffler.initItemsObj = []
-Raffler.lastItemChosen = ''
-Raffler.lastItemChosenConfirmed = false
-Raffler.lastInterval = 361
+// config: only saved while game is loaded
+Raffler.config = {
+  "hasLocalStorage": true,
+  "itemsArr": [],
+  "itemsLeftArr": [],
+  "lastItemChosen": null,
+  "lastItemChosenConfirmed": false,
+  "lastInterval": 361,
+  "talkifyKey": ""
+}
 
 /*************************************************************************
  * public methods *
@@ -125,30 +124,6 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
-            <!-- timer: start -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Timer: Start</div>
-                <div class="description">Start the countdown timer.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <a href="#" class="button start" id="button-timer-start"><i class="fas fa-play"></i> start</a>
-                </div>
-              </div>
-            </div>
-            <!-- timer: stop -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Timer: Stop</div>
-                <div class="description">Stop the countdown timer.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <a href="#" class="button stop" id="button-timer-stop"><i class="fas fa-play"></i> stop</a>
-                </div>
-              </div>
-            </div>
             <!-- user items -->
             <div class="setting-row">
               <div class="text">
@@ -175,8 +150,8 @@ async function modalOpen(type) {
             <!-- show debug -->
             <div class="setting-row">
               <div class="text">
-                <div class="title">Debug Options</div>
-                <div class="description">Show additional helpful debugging settings.</div>
+                <div class="title">Debug Settings</div>
+                <div class="description">Show additional debugging settings.</div>
               </div>
               <div class="control">
                 <div class="container">
@@ -190,6 +165,30 @@ async function modalOpen(type) {
             <!-- DEBUG DEBUG DEBUG -->
             <div id="settings-debug">
 
+              <!-- timer: start -->
+              <div class="setting-row">
+                <div class="text">
+                  <div class="title">Timer: Start</div>
+                  <div class="description">Start the cycling timer.</div>
+                </div>
+                <div class="control">
+                  <div class="container">
+                    <a href="#" class="button start" id="button-timer-start"><i class="fas fa-play"></i> start</a>
+                  </div>
+                </div>
+              </div>
+              <!-- timer: stop -->
+              <div class="setting-row">
+                <div class="text">
+                  <div class="title">Timer: Stop</div>
+                  <div class="description">Stop the cycling timer.</div>
+                </div>
+                <div class="control">
+                  <div class="container">
+                    <a href="#" class="button stop" id="button-timer-stop"><i class="fas fa-play"></i> stop</a>
+                  </div>
+                </div>
+              </div>
               <!-- stage value -->
               <div class="setting-row">
                 <div class="text">
@@ -252,7 +251,7 @@ async function modalOpen(type) {
               <div class="setting-row">
                 <div class="text">
                   <div class="title">Show Graph</div>
-                  <div class="description">Show a graph</div>
+                  <div class="description">Show a graph of items being cycled over.</div>
                 </div>
                 <div class-"control">
                   <div class="container">
@@ -299,12 +298,12 @@ async function modalOpen(type) {
 
               <div class="setting-row">
                 <div class="text">
-                  <div class="title">Available Items <span></span></div>
-                  <div class="description"></div>
+                  <div class="title">Available Items <span id="debug-items-available-count"></span></div>
+                  <div class="description">Items currently in the pool to be chosen during a countdown.</div>
                 </div>
                 <div class="control">
                   <div class="container">
-                    <textarea readonly></textarea>
+                    <textarea readonly id="debug-items-available"></textarea>
                   </div>
                 </div>
               </div>
@@ -312,11 +311,11 @@ async function modalOpen(type) {
               <div class="setting-row">
                 <div class="text">
                   <div class="title">Chosen Items</div>
-                  <div class="description"></div>
+                  <div class="description">Items in the pool that have been chosen.</div>
                 </div>
                 <div class="control">
                   <div class="container">
-                    <textarea readonly></textarea>
+                    <textarea readonly id="debug-items-chosen"></textarea>
                   </div>
                 </div>
               </div>
@@ -324,6 +323,17 @@ async function modalOpen(type) {
 
           </div>
         `,
+        null,
+        null
+      )
+
+      Raffler._loadSettings()
+
+      break
+
+    case 'show-config':
+      this.myModal = new Modal('perm-debug', 'Raffler.config',
+        Raffler._displayAppConfig(),
         null,
         null
       )
@@ -350,10 +360,12 @@ async function modalOpen(type) {
 // app entry point
 Raffler.initApp = function () {
   // set env
-  Raffler.env = ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
+  Raffler.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
   // if local dev, show debug stuff
   if (Raffler.env == 'local') {
+    Raffler._initDebug()
+
     document.title = '(LH) ' + document.title
   }
 
@@ -382,7 +394,7 @@ Raffler.initApp = function () {
 
   Raffler.resetApp()
   Raffler._refreshDebugValues()
-  Raffler._refreshItemsGraph(Raffler.itemsLeftArr)
+  Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
 
   if (Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY).length) {
     Raffler._refreshChosenItemsDisplay()
@@ -403,7 +415,7 @@ Raffler.initApp = function () {
 Raffler.resetApp = function () {
   Raffler._initItemsArr()
 
-  Raffler.lastItemChosen = ''
+  Raffler.config.lastItemChosen = ''
   Raffler.timesRun = 0
 
   Raffler._refreshAvailableItemsDisplay()
@@ -428,15 +440,13 @@ Raffler.resetCountdown = function () {
   Raffler._resetUserItems()
 
   Raffler.dom.resultsContent.text('')
-  Raffler._clearUserItemsInput()
-  Raffler.dom.admin.textAvailableItems.text('')
-  Raffler.dom.admin.textChosenItems.text('')
   Raffler.dom.resultsWrapper.hide()
+
   Raffler._enableRaffle()
 
   window.countdownTimer.startCountdown = false
-  window.countdownTimer.interval = RAFFLER_SETTINGS_INTERVAL_DEFAULT
-  window.countdownTimer.mult = RAFFLER_SETTINGS_MULTIPLY_DEFAULT
+  window.countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL
+  window.countdownTimer.mult = RAFFLER_DEFAULT_MULTIPLY
   window.countdownTimer.stage = RAFFLER_STAGES.INIT
   window.countdownTimer.start()
 
@@ -449,13 +459,25 @@ Raffler.resetCountdown = function () {
  * _private methods *
  *************************************************************************/
 
-Raffler._loadSettings = function() {
-  if (localStorage.getItem(LS_SETTINGS_KEY)) {
-    var lsConfig = JSON.parse(localStorage.getItem(LS_SETTINGS_KEY))
+Raffler._initDebug = function() {
+  if (Raffler.dom.interactive.debug.all) {
+    // show debug buttons
+    Raffler.dom.interactive.debug.all.css('display', 'flex')
 
-    if (lsConfig) {
-      if (lsConfig.boxResize) {
-        Raffler.settings.boxResize = lsConfig.boxResize
+    // make header buttons smaller to fit in debug buttons
+    document.querySelectorAll('button.icon').forEach((btn) => {
+      btn.style.fontSize = '16px'
+    })
+  }
+}
+
+Raffler._loadSettings = function() {
+  if (localStorage.getItem(RAFFLER_SETTINGS_KEY)) {
+    var lsSettings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
+
+    if (lsSettings) {
+      if (lsSettings.boxResize) {
+        Raffler.settings.boxResize = lsSettings.boxResize
 
         var setting = document.getElementById('button-setting-box-resize')
 
@@ -464,8 +486,8 @@ Raffler._loadSettings = function() {
         }
       }
 
-      if (lsConfig.soundCountdown) {
-        Raffler.settings.soundCountdown = lsConfig.soundCountdown
+      if (lsSettings.soundCountdown) {
+        Raffler.settings.soundCountdown = lsSettings.soundCountdown
 
         var setting = document.getElementById('button-setting-sound-countdown')
 
@@ -474,8 +496,8 @@ Raffler._loadSettings = function() {
         }
       }
 
-      if (lsConfig.soundVictory) {
-        Raffler.settings.soundVictory = lsConfig.soundVictory
+      if (lsSettings.soundVictory) {
+        Raffler.settings.soundVictory = lsSettings.soundVictory
 
         var setting = document.getElementById('button-setting-sound-victory')
 
@@ -484,8 +506,8 @@ Raffler._loadSettings = function() {
         }
       }
 
-      if (lsConfig.soundName) {
-        Raffler.settings.soundName = lsConfig.soundName
+      if (lsSettings.soundName) {
+        Raffler.settings.soundName = lsSettings.soundName
 
         var setting = document.getElementById('button-setting-sound-name')
 
@@ -494,8 +516,20 @@ Raffler._loadSettings = function() {
         }
       }
 
-      if (lsConfig.allowNotifications) {
-        Raffler.settings.allowNotifications = lsConfig.allowNotifications
+      /* DEBUG */
+
+      if (lsSettings.showGraph) {
+        Raffler.settings.showGraph = lsSettings.showGraph
+
+        var setting = document.getElementById('button-setting-show-graph')
+
+        if (setting) {
+          setting.dataset.status = 'true'
+        }
+      }
+
+      if (lsSettings.allowNotifications) {
+        Raffler.settings.allowNotifications = lsSettings.allowNotifications
 
         var setting = document.getElementById('button-setting-allow-notifications')
 
@@ -503,22 +537,36 @@ Raffler._loadSettings = function() {
           setting.dataset.status = 'true'
         }
       }
+
+      if (Raffler.config.itemsArr) {
+        const items = Raffler.config.itemsArr
+
+        var itemsDisplay = document.getElementById('debug-items-available')
+        var itemsCount = document.getElementById('debug-items-available-count')
+
+        if (itemsDisplay) {
+          itemsDisplay.value = JSON.stringify(items)
+        }
+        if (itemsCount) {
+          itemsCount.innerText = `(${items.length})`
+        }
+      }
     }
   } else {
-    Raffler._setLocalStorageItem(LS_SETTINGS_KEY, Raffler.settings)
+    Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, Raffler.settings)
   }
 
   if (localStorage.getItem(RAFFLER_USER_ITEMS_KEY)) {
     Raffler._notify('raffler-user-items already exists', 'notice')
   } else {
-    Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, Raffler.initItemsObj)
+    Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, [])
     Raffler._notify('raffler-user-items created', 'notice')
   }
 
   if (localStorage.getItem(RAFFLER_CHOSEN_ITEMS_KEY)) {
     Raffler._notify('raffler-chosen-items already exists', 'notice')
   } else {
-    Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, Raffler.initItemsObj)
+    Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, [])
     Raffler._notify('raffler-chosen-items created!', 'notice')
   }
 }
@@ -671,7 +719,7 @@ Raffler._changeSetting = function(setting, event = null) {
 Raffler._saveSetting = function(setting, value) {
   // console.log('saving setting to LS...', setting, value)
 
-  var settings = JSON.parse(localStorage.getItem(LS_SETTINGS_KEY))
+  var settings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
 
   if (settings) {
     // set internal code model
@@ -681,10 +729,57 @@ Raffler._saveSetting = function(setting, value) {
     settings[setting] = value
 
     // save all settings to LS
-    localStorage.setItem(LS_SETTINGS_KEY, JSON.stringify(settings))
+    localStorage.setItem(RAFFLER_SETTINGS_KEY, JSON.stringify(settings))
   }
 
   // console.log('!global setting saved!', Raffler.settings)
+}
+
+// modal: debug: prettily display Raffler.config
+Raffler._displayAppConfig = function() {
+  let config = Raffler.config
+
+  var html = ''
+
+  html += `<h4>GLOBAL (ENV: ${Raffler.env})</h4>`
+  html += '<h4>----------------------------</h4>'
+
+  html += '<dl>'
+
+  Object.keys(config).sort().forEach(key => {
+    // if value is an object, dig in
+    if (
+      (typeof config[key] == 'object'
+        && !Array.isArray(config[key])
+        && config[key] != null
+      )
+    ) {
+      html += `<dd><code>${key}: {</code><dl>`
+
+      Object.keys(config[key]).forEach(k => {
+        var label = k
+        var value = config[key][k]
+
+        if (Object.keys(value)) {
+          // console.log('found another object', key, label, value)
+        } else {
+          html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
+        }
+      })
+
+      html += '</dl><code>}</code></dd>'
+    }
+    else {
+      var label = key
+      var value = config[key]
+
+      html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+    }
+  })
+
+  html += '</dl>'
+
+  return html
 }
 
 // handle both clicks and touches outside of modals
@@ -717,6 +812,16 @@ Raffler._attachEventListeners = function () {
   Raffler.dom.interactive.btnHelp.click(() => modalOpen('help'))
   Raffler.dom.interactive.btnSettings.click(() => modalOpen('settings'))
 
+  // local debug buttons
+  if (Raffler.env == 'local') {
+    if (Raffler.dom.interactive.debug.all) {
+      // ⚙ show current Raffler config
+      Raffler.dom.interactive.debug.btnShowConfig.addEventListener('click', () => {
+        modalOpen('show-config')
+      })
+    }
+  }
+
   // main raffling events
   Raffler.dom.itemsCycle.click(function () {
     Raffler._notify('starting the cycle')
@@ -730,11 +835,11 @@ Raffler._attachEventListeners = function () {
     }
   })
   Raffler.dom.interactive.btnChosenConfirmYes.click(function () {
-    Raffler.lastItemChosenConfirmed = true
+    Raffler.config.lastItemChosenConfirmed = true
     Raffler._continueRaffling()
   })
   Raffler.dom.interactive.btnChosenConfirmNo.click(function () {
-    Raffler.lastItemChosenConfirmed = false
+    Raffler.config.lastItemChosenConfirmed = false
     Raffler._continueRaffling()
   })
   Raffler.dom.interactive.btnExportResults.click(function (e) {
@@ -843,7 +948,6 @@ Raffler._attachEventListeners = function () {
   //         Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, tempUserItemObj)
   //         // show status bubble
   //         Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" added!', 'success', true)
-  //         Raffler._clearUserItemsInput()
   //         Raffler._syncUserItemsWithItemsArr()
   //       } else {
   //         Raffler._notify('user item "' + newUserItem.name + ' (' + newUserItem.affl + ')" not added: duplicate.', 'error', true)
@@ -866,8 +970,6 @@ Raffler._attachEventListeners = function () {
   //         buttons: {
   //           'Clear them!': function () {
   //             Raffler._resetUserItems()
-
-  //             Raffler._clearUserItemsInput()
 
   //             Raffler.dom.admin.btnUserItemsClear.prop('disabled', true)
   //             Raffler.dom.admin.btnUserItemsClear.addClass('disabled')
@@ -896,7 +998,7 @@ Raffler._checkForLocalStorage = function () {
   var LSsupport = (typeof window.localStorage !== 'undefined')
 
   if (!LSsupport && !SSsupport) {
-    Raffler.hasLocalStorage = false
+    Raffler.config.hasLocalStorage = false
     Raffler.dom.userItemsManager.hide()
     Raffler._notify('No localStorage support, so no user items or saving of chosen items. Please don\'t reload!', 'error', true)
   }
@@ -905,7 +1007,7 @@ Raffler._checkForLocalStorage = function () {
 // reset raffler-chosen-items localStorage to nothing and update displays
 Raffler._resetChosenItems = function () {
   try {
-    Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, Raffler.initItemsObj)
+    Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, [])
     Raffler._refreshChosenItemsDisplay()
 
     Raffler._notify('resetChosenItems: reset', 'warning')
@@ -919,16 +1021,16 @@ Raffler._resetUserItems = function () {
     var lsUserItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
     var itemsSpliced = [] // eslint-disable-line
 
-    for (var i = 0; i < Raffler.itemsArr.length; i++) {
+    for (var i = 0; i < Raffler.config.itemsArr.length; i++) {
       for (var j = 0; j < lsUserItems.length; j++) {
-        if (Raffler.itemsArr[i].name === lsUserItems[j].name &&
-            Raffler.itemsArr[i].affl === lsUserItems[j].affl) {
-          itemsSpliced = Raffler.itemsArr.splice(i, 1)[0]
+        if (Raffler.config.itemsArr[i].name === lsUserItems[j].name &&
+            Raffler.config.itemsArr[i].affl === lsUserItems[j].affl) {
+          itemsSpliced = Raffler.config.itemsArr.splice(i, 1)[0]
         }
       }
     }
 
-    Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, Raffler.initItemsObj)
+    Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, [])
     Raffler._refreshUserItemsDisplay()
     Raffler._refreshAvailableItemsDisplay()
 
@@ -937,29 +1039,25 @@ Raffler._resetUserItems = function () {
     Raffler._notify('resetUserItems: ' + e, 'error')
   }
 }
-Raffler._clearUserItemsInput = function () {
-  Raffler.dom.admin.inputUserItemsAddName.val('')
-  Raffler.dom.admin.inputUserItemsAddAffl.val('')
-}
 
 // fill in-memory itemsArr with server JSON
 Raffler._initItemsArr = function () {
   $.getJSON(Raffler.settings.dataFilePath, function () {})
     .done(function (data) {
-      while (Raffler.itemsArr.length) {
-        Raffler.itemsArr.pop()
+      while (Raffler.config.itemsArr.length) {
+        Raffler.config.itemsArr.pop()
       }
 
-      Raffler.itemsArr.length = 0
+      Raffler.config.itemsArr.length = 0
 
-      if (Raffler.itemsArr) {
+      if (Raffler.config.itemsArr) {
         $.each(data, function (key, val) {
-          Raffler.itemsArr.push(val)
+          Raffler.config.itemsArr.push(val)
         })
 
-        Raffler._shuffleArray(Raffler.itemsArr)
-        Raffler.itemsLeftArr = Raffler.itemsArr
-        Raffler._refreshItemsGraph(Raffler.itemsLeftArr)
+        Raffler._shuffleArray(Raffler.config.itemsArr)
+        Raffler.config.itemsLeftArr = Raffler.config.itemsArr
+        Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
         Raffler._syncChosenItemsWithItemsArr()
         Raffler._syncUserItemsWithItemsArr()
       }
@@ -972,7 +1070,7 @@ Raffler._initItemsArr = function () {
 // remove previously chosen items from in-memory itemsArr
 Raffler._syncChosenItemsWithItemsArr = function () {
   try {
-    var items = Raffler.itemsArr
+    var items = Raffler.config.itemsArr
     var itemsSpliced = [] // eslint-disable-line
     var chosenItems = Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY)
 
@@ -987,8 +1085,8 @@ Raffler._syncChosenItemsWithItemsArr = function () {
           }
         }
       }
-      Raffler.itemsLeftArr = items
-      Raffler._refreshItemsGraph(Raffler.itemsLeftArr)
+      Raffler.config.itemsLeftArr = items
+      Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
 
       Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
@@ -1010,14 +1108,14 @@ Raffler._syncChosenItemsWithItemsArr = function () {
 // add user items to in-memory itemsArr
 Raffler._syncUserItemsWithItemsArr = function () {
   try {
-    var items = Raffler.itemsArr
+    var items = Raffler.config.itemsArr
     var userItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
     var userItemWillBeAdded = true
 
     // if we've previously added user items
     if (userItems && userItems.length > 0) {
-      Raffler.dom.admin.btnUserItemsClear.prop('disabled', false)
-      Raffler.dom.admin.btnUserItemsClear.removeClass('disabled')
+      // Raffler.dom.admin.btnUserItemsClear.prop('disabled', false)
+      // Raffler.dom.admin.btnUserItemsClear.removeClass('disabled')
 
       for (var i = 0; i < userItems.length; i++) {
         for (var j = 0; j < items.length; j++) {
@@ -1027,7 +1125,7 @@ Raffler._syncUserItemsWithItemsArr = function () {
           }
         }
         if (userItemWillBeAdded) {
-          Raffler.itemsArr.push(userItems[i])
+          Raffler.config.itemsArr.push(userItems[i])
         }
       }
       Raffler._refreshUserItemsDisplay()
@@ -1056,7 +1154,7 @@ Raffler._refreshItemsGraph = function (items) {
 }
 // refresh dem debug values in the settings
 Raffler._refreshDebugValues = function () {
-  Raffler.settings.debug.intervalRange = RAFFLER_SETTINGS_INTERVAL_DEFAULT
+  Raffler.settings.debug.intervalRange = RAFFLER_DEFAULT_INTERVAL
 }
 // refresh number of raffle results with localStorage values
 Raffler._refreshResultsCount = function () {
@@ -1070,22 +1168,19 @@ Raffler._refreshResultsCount = function () {
 Raffler._refreshChosenItemsDisplay = function () {
   try {
     var lsChosenItems = Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY)
+
     if (lsChosenItems && lsChosenItems.length > 0) {
       var ordinal = 1
 
-      Raffler.dom.admin.textChosenItems.text('')
       Raffler.dom.resultsContent.text('')
       Raffler.dom.resultsWrapper.show()
 
       $.each(lsChosenItems, function (key, val) {
         Raffler.dom.resultsContent.prepend('<li>' + ordinal++ + '. ' + val.name + ' (' + val.affl + ')</li>')
-        Raffler.dom.admin.textChosenItems.prepend(val.name + ' (' + val.affl + `)\n`)
       })
-      Raffler.dom.admin.textChosenItemsCount.text(`(${lsChosenItems.length})`)
 
       Raffler._notify('refreshChosenItemsDisplay: display updated')
     } else {
-      Raffler.dom.admin.textChosenItems.text('')
       Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
     }
   } catch (e) {
@@ -1112,8 +1207,8 @@ Raffler._refreshUserItemsDisplay = function () {
 }
 // re-display available items from in-memory itemsArr
 Raffler._refreshAvailableItemsDisplay = function () {
-  Raffler.itemsArr.forEach(function (item) {
-    Raffler.settings.debug.textAvailableItems.prepend(item.name + ' (' + item.affl + `)\n`)
+  Raffler.config.itemsArr.forEach(function (item) {
+    Raffler.settings.debug.itemsAvailable.push(item.name + ' (' + item.affl + ')')
   })
 
   Raffler._notify('refreshAvailableItems: display updated', 'notice')
@@ -1167,9 +1262,9 @@ Raffler._raffleButtonSmash = function () {
 
   // we got a choice
   // start a countdown
-  if (Raffler.itemsArr.length > 1) {
-    window.countdownTimer.interval = RAFFLER_SETTINGS_INTERVAL_DEFAULT
-    window.countdownTimer.index = Math.floor(Math.random() * Raffler.itemsArr.length)
+  if (Raffler.config.itemsArr.length > 1) {
+    window.countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL
+    window.countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
     window.countdownTimer.stage = RAFFLER_STAGES.INIT
 
     // Raffler.dom.admin.stageValue.text(this.stage)
@@ -1180,19 +1275,19 @@ Raffler._raffleButtonSmash = function () {
   }
   // we got 1 choice, so no choice, really
   // no countdown
-  if (Raffler.itemsArr.length === 1) {
+  if (Raffler.config.itemsArr.length === 1) {
     Raffler._notify('Only one item to raffle!<br /><strong>instant winner!</strong>', 'warning', true)
 
     // add lone item to items-cycle
     var loneItemHTML = ''
-    loneItemHTML += '<div class=\'item-name\'>' + Raffler.itemsArr[0].name + `</div>\n`
-    loneItemHTML += '<div class=\'item-affl\'>' + Raffler.itemsArr[0].affl + '</div>'
+    loneItemHTML += '<div class=\'item-name\'>' + Raffler.config.itemsArr[0].name + `</div>\n`
+    loneItemHTML += '<div class=\'item-affl\'>' + Raffler.config.itemsArr[0].affl + '</div>'
 
     Raffler.dom.itemsCycle.html(loneItemHTML)
     Raffler.dom.itemsCycle.addClass('level4')
 
     // grab lone item
-    Raffler.lastItemChosen = {
+    Raffler.config.lastItemChosen = {
       'name': $('div.item-name').text(),
       'affl': $('div.item-affl').text()
     }
@@ -1205,35 +1300,34 @@ Raffler._raffleButtonSmash = function () {
     Raffler.dom.itemsCycle.addClass('level-win')
     Raffler.dom.body.addClass('level4')
     Raffler._playSound('victory')
-    Raffler._readName(Raffler.lastItemChosen)
+    Raffler._readName(Raffler.config.lastItemChosen)
 
-    // remove last chosen item from Raffler.itemsArr if anything picked
-    if (Raffler.lastItemChosen !== '') {
+    // remove last chosen item from Raffler.config.itemsArr if anything picked
+    if (Raffler.config.lastItemChosen !== '') {
       // add chosen item to localStorage
-      Raffler._addChosenItemToLocalStorage(Raffler.lastItemChosen)
+      Raffler._addChosenItemToLocalStorage(Raffler.config.lastItemChosen)
       // add to list of chosen items and update displays
       Raffler._refreshChosenItemsDisplay()
       // update results count
       Raffler._refreshResultsCount()
 
-      var item = Raffler.lastItemChosen
-      var items = Raffler.itemsArr
+      var item = Raffler.config.lastItemChosen
+      var items = Raffler.config.itemsArr
 
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
           items.splice(i, 1)
-          Raffler.itemsLeftArr = items
-          Raffler._refreshItemsGraph(Raffler.itemsLeftArr)
+          Raffler.config.itemsLeftArr = items
+          Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
           Raffler._refreshAvailableItemsDisplay()
           break
         }
       }
     }
-    Raffler._notify('Raffled successfully! ' + Raffler.lastItemChosen.name + ' chosen!', 'success')
+    Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
 
     // increment counter of times run
-    Raffler.timesRun++
-    Raffler.dom.admin.timesRunValue.text(Raffler.timesRun)
+    Raffler.settings.debug.timesRun++
   }
 
   Raffler._refreshDebugValues()
@@ -1242,34 +1336,34 @@ Raffler._raffleButtonSmash = function () {
 // after confirming a winner or not, go back to raffling
 Raffler._continueRaffling = function () {
   // if we have confirmed, then take out of raffle
-  if (Raffler.lastItemChosenConfirmed) {
-    Raffler.lastItemChosen = {
+  if (Raffler.config.lastItemChosenConfirmed) {
+    Raffler.config.lastItemChosen = {
       'name': $('div.item-name').text(),
       'affl': $('div.item-affl').text()
     }
 
-    if (Raffler.lastItemChosen !== '') {
+    if (Raffler.config.lastItemChosen !== '') {
       // add chosen item to localStorage
-      Raffler._addChosenItemToLocalStorage(Raffler.lastItemChosen)
+      Raffler._addChosenItemToLocalStorage(Raffler.config.lastItemChosen)
       // add to list of chosen items and update displays
       Raffler._refreshChosenItemsDisplay()
       // update results count
       Raffler._refreshResultsCount()
 
-      var item = Raffler.lastItemChosen
-      var items = Raffler.itemsArr
+      var item = Raffler.config.lastItemChosen
+      var items = Raffler.config.itemsArr
 
       for (var i = 0; i < items.length; i++) {
         if (items[i].name === item.name && items[i].affl === item.affl) {
           items.splice(i, 1)
-          Raffler.itemsLeftArr = items
-          Raffler._refreshItemsGraph(Raffler.itemsLeftArr)
+          Raffler.config.itemsLeftArr = items
+          Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
           Raffler._refreshAvailableItemsDisplay()
           break
         }
       }
 
-      Raffler._notify('Raffled successfully! ' + Raffler.lastItemChosen.name + ' chosen!', 'success')
+      Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
     } else {
       Raffler._notify('Choice could not be made. Pool of choices unchanged.', 'warning')
     }
@@ -1283,12 +1377,12 @@ Raffler._continueRaffling = function () {
   Raffler._enableRaffle()
 
   // start an infinite cycle
-  window.countdownTimer.interval = RAFFLER_SETTINGS_INTERVAL_DEFAULT
+  window.countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL
   window.countdownTimer.mult = 1
   window.countdownTimer.stage = RAFFLER_STAGES.INIT
-  window.countdownTimer.index = Math.floor(Math.random() * Raffler.itemsArr.length)
+  window.countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
 
-  Raffler.settings.debug.intervalRange = RAFFLER_SETTINGS_INTERVAL_DEFAULT
+  Raffler.settings.debug.intervalRange = RAFFLER_DEFAULT_INTERVAL
   // Raffler.dom.settings.debug.intervalValue.text(Raffler.dom.settings.debug.intervalRange.val())
 
   // Raffler.dom.admin.stageValue.text(this.stage)
@@ -1490,16 +1584,16 @@ Raffler._notify = function (msg, type, notifyUser) {
 
 // timer object to keep track of countdown
 Raffler._timer = function (callbackFunc, timing) {
-  if (Raffler.itemsArr) {
+  if (Raffler.config.itemsArr) {
     var variableInterval = {
-      items: Raffler.itemsArr,
-      mult: RAFFLER_SETTINGS_MULTIPLY_DEFAULT,
+      items: Raffler.config.itemsArr,
+      mult: RAFFLER_DEFAULT_MULTIPLY,
       stage: 0,
       interval: timing,
       callback: callbackFunc,
       stopped: false,
       startCountdown: false,
-      index: Math.floor(Math.random() * Raffler.itemsArr.length),
+      index: Math.floor(Math.random() * Raffler.config.itemsArr.length),
       runLoop: function () {
         if (variableInterval.stopped) return
         // check to see if the time interval is at the end of a raffle
@@ -1601,16 +1695,16 @@ window.countdownTimer = Raffler._timer(function () {
 
     // finally, stop and pick an item!
     if (this.interval > 325) {
-      this.mult = RAFFLER_SETTINGS_MULTIPLY_DEFAULT
+      this.mult = RAFFLER_DEFAULT_MULTIPLY
       if (this.interval > 350) {
         this.mult = this.mult++
       }
 
       // adjust for odd time drift
-      // if (Raffler.timesRun > 0) Raffler.lastInterval = 349
+      // if (Raffler.timesRun > 0) Raffler.config.lastInterval = 349
 
       // WINNER WINNER CHICKEN DINNER
-      if (this.interval >= Raffler.lastInterval) {
+      if (this.interval >= Raffler.config.lastInterval) {
         this.stage = RAFFLER_STAGES.DONE
 
         // Raffler.dom.admin.stageValue.text(this.stage)
@@ -1626,12 +1720,12 @@ window.countdownTimer = Raffler._timer(function () {
         Raffler.dom.body.addClass('level4')
         Raffler._playSound('victory')
 
-        Raffler.lastItemChosen = {
+        Raffler.config.lastItemChosen = {
           'name': $('div.item-name').text(),
           'affl': $('div.item-affl').text()
         }
 
-        Raffler._readName(Raffler.lastItemChosen)
+        Raffler._readName(Raffler.config.lastItemChosen)
 
         // confirm winner
         Raffler._enableChosenConfirm()
@@ -1671,7 +1765,7 @@ window.countdownTimer = Raffler._timer(function () {
 
     return newInterval
   }
-}, RAFFLER_SETTINGS_INTERVAL_DEFAULT)
+}, RAFFLER_DEFAULT_INTERVAL)
 
 /************************************************************************
  * ON PAGE LOAD, DO THIS *

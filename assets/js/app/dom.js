@@ -24,6 +24,7 @@ Raffler.dom = {
 
 // DOM > interactive elements
 Raffler.dom.interactive = {
+  "all": $('#debug-buttons'),
   "btnNav": $('#button-nav'),
   "btnNavClose": $('#button-nav-close'),
   "btnHelp": $('#button-help'),
@@ -35,6 +36,7 @@ Raffler.dom.interactive = {
   "btnExportResults": $('a#button-export-results')
 }
 
-// load audio files
-$('audio#countdown').attr('src', './assets/audio/countdown.mp3')
-$('audio#victory').attr('src', './assets/audio/victory.mp3')
+Raffler.dom.interactive.debug = {
+  "all": $('#debug-buttons'),
+  "btnShowConfig": document.getElementById('button-show-config')
+}
