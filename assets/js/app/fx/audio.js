@@ -110,8 +110,7 @@ Raffler._initData = async function() {
   })
 }
 
-// audio file playing
-Raffler._playSound = async function(soundId) {
+Raffler._audioPlay = async function(soundId) {
   const path = RAFFLER_ASSET_DATA_PATH;
   const format = 'mp3';
   const url = `${path}/${soundId}.${format}`

@@ -1299,7 +1299,7 @@ Raffler._raffleButtonSmash = function () {
     Raffler.dom.itemsCycle.removeClass()
     Raffler.dom.itemsCycle.addClass('level-win')
     Raffler.dom.body.addClass('level4')
-    Raffler._playSound('victory')
+    Raffler._audioPlay('victory')
     Raffler._readName(Raffler.config.lastItemChosen)
 
     // remove last chosen item from Raffler.config.itemsArr if anything picked
@@ -1718,7 +1718,7 @@ window.countdownTimer = Raffler._timer(function () {
 
         Raffler.dom.itemsCycle.addClass('level-win')
         Raffler.dom.body.addClass('level4')
-        Raffler._playSound('victory')
+        Raffler._audioPlay('victory')
 
         Raffler.config.lastItemChosen = {
           'name': $('div.item-name').text(),
@@ -1753,7 +1753,7 @@ window.countdownTimer = Raffler._timer(function () {
       Raffler.dom.itemsCycle.addClass('level1')
     }
 
-    Raffler._playSound('countdown')
+    Raffler._audioPlay('countdown')
   }
   // if we've started countdown and we haven't reached end
   // then keep cycling with increased multiplier
