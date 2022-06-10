@@ -93,13 +93,6 @@ ul {
   }
 }
 
-button,
-input {
-  box-sizing: border-box;
-  font-family: 'Overpass Mono', monospace;
-  height: 26px;
-}
-
 audio {
   &#talkify-audio {
     border-radius: 0;
@@ -108,6 +101,13 @@ audio {
     position: fixed;
     width: calc(100% - 227px);
   }
+}
+
+button,
+input {
+  box-sizing: border-box;
+  font-family: 'Overpass Mono', monospace;
+  height: 26px;
 }
 
 button {

@@ -68,6 +68,7 @@ async function modalOpen(type) {
       this.myModal = new Modal('perm', 'Settings',
         `
           <div id="settings">
+
             <!-- box resize -->
             <div class="setting-row">
               <div class="text">
@@ -82,6 +83,7 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
             <!-- sound: countdown -->
             <div class="setting-row">
               <div class="text">
@@ -96,6 +98,7 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
             <!-- sound: victory -->
             <div class="setting-row">
               <div class="text">
@@ -110,6 +113,7 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
             <!-- sound: name -->
             <div class="setting-row">
               <div class="text">
@@ -124,21 +128,26 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
             <!-- user items -->
             <div class="setting-row">
               <div class="text">
                 <div class="title">User Items</div>
                 <div class="description">Additional items to raffle.</div>
               </div>
-            </div>
-            <div class="setting-row">
               <div class="control">
                 <div class="container">
                   <input id="text-user-items-add-name" type="text" placeholder="name" />
                   <input id="text-user-items-add-affl" type="text" placeholder="affiliation" />
 
-                  <a href="#" class="button disabled" id="button-user-items-add" disabled><i class="fas fa-plus"></i> add</a>
-                  <a href="#" class="button disabled" id="button-user-items-clear" disabled><i class="fas fa-minus-circle"></i> clear</a>
+                  <div class="buttons">
+                    <button class="icon" id="button-user-items-add" onclick="Raffler._addUserItem()">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="icon" id="button-user-items-clear" onclick="Raffler._removeUserItem()">
+                      <i class="fas fa-minus-circle"></i>
+                    </button>
+                  </div>
 
                   <div id="user-items-display">
                     <ul></ul>
@@ -396,14 +405,16 @@ Raffler.initApp = function () {
   Raffler._refreshDebugValues()
   Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
 
+  // we have previously-chosen items
+  // add them to in-memory list
   if (Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY).length) {
     Raffler._refreshChosenItemsDisplay()
     Raffler.dom.resultsWrapper.show()
   }
 
-  // Raffler._disableTimerStart()
+  // Raffler.__disableTimerStart()
 
-  Raffler._initCycleText()
+  Raffler.__initCycleText()
 
   Raffler._timerStop()
   Raffler.dom.interactive.btnRaffle.focus()
@@ -442,7 +453,7 @@ Raffler.resetCountdown = function () {
   Raffler.dom.resultsContent.text('')
   Raffler.dom.resultsWrapper.hide()
 
-  Raffler._enableRaffle()
+  Raffler.__enableRaffle()
 
   window.countdownTimer.startCountdown = false
   window.countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL
@@ -469,6 +480,32 @@ Raffler._initDebug = function() {
       btn.style.fontSize = '16px'
     })
   }
+}
+// fill in-memory itemsArr with server JSON
+Raffler._initItemsArr = function () {
+  $.getJSON(Raffler.settings.dataFilePath, function () {})
+    .done(function (data) {
+      while (Raffler.config.itemsArr.length) {
+        Raffler.config.itemsArr.pop()
+      }
+
+      Raffler.config.itemsArr.length = 0
+
+      if (Raffler.config.itemsArr) {
+        $.each(data, function (key, val) {
+          Raffler.config.itemsArr.push(val)
+        })
+
+        Raffler.__shuffleArray(Raffler.config.itemsArr)
+        Raffler.config.itemsLeftArr = Raffler.config.itemsArr
+        Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
+        Raffler._syncChosenItemsWithItemsArr()
+        Raffler._syncUserItemsWithItemsArr()
+      }
+    })
+    .fail(function (jqxhr, textStatus, e) {
+      Raffler._notify('Failed initial data load: ' + e, 'error', true)
+    })
 }
 
 Raffler._loadSettings = function() {
@@ -704,14 +741,14 @@ Raffler._changeSetting = function(setting, event = null) {
         // save to code/LS
         Raffler._saveSetting('allowNotifications', true)
 
-        Raffler._toggleTestNotices()
+        Raffler.__toggleTestNotices()
       } else {
         // update setting DOM
         document.getElementById('button-setting-allow-notifications').dataset.status = 'false'
 
         Raffler._saveSetting('allowNotifications', false)
 
-        Raffler._toggleTestNotices()
+        Raffler.__toggleTestNotices()
       }
       break
   }
@@ -735,7 +772,7 @@ Raffler._saveSetting = function(setting, value) {
   // console.log('!global setting saved!', Raffler.settings)
 }
 
-// modal: debug: prettily display Raffler.config
+// modal: debug: display Raffler.config
 Raffler._displayAppConfig = function() {
   let config = Raffler.config
 
@@ -825,7 +862,7 @@ Raffler._attachEventListeners = function () {
   // main raffling events
   Raffler.dom.itemsCycle.click(function () {
     Raffler._notify('starting the cycle')
-    Raffler._enableRaffle()
+    Raffler.__enableRaffle()
     Raffler._timerStart()
   })
   Raffler.dom.interactive.btnRaffle.click(function (e) {
@@ -940,8 +977,8 @@ Raffler._attachEventListeners = function () {
   //     if (newUserItem !== undefined) {
   //       var tempUserItemObj = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
 
-  //       if (!Raffler._isDuplicateValue(newUserItem)) {
-  //         tempUserItemObj.push(Raffler._sanitize(newUserItem))
+  //       if (!Raffler.__isDuplicateValue(newUserItem)) {
+  //         tempUserItemObj.push(Raffler.__sanitize(newUserItem))
   //         Raffler.dom.admin.btnUserItemsClear.prop('disabled', false)
   //         Raffler.dom.admin.btnUserItemsClear.removeClass('disabled')
   //         // update localStorage with temp tempUserItemObj
@@ -1040,31 +1077,18 @@ Raffler._resetUserItems = function () {
   }
 }
 
-// fill in-memory itemsArr with server JSON
-Raffler._initItemsArr = function () {
-  $.getJSON(Raffler.settings.dataFilePath, function () {})
-    .done(function (data) {
-      while (Raffler.config.itemsArr.length) {
-        Raffler.config.itemsArr.pop()
-      }
+// TODO
+Raffler._addUserItem = function() {
+  const name = document.getElementById('text-user-items-add-name').value
+  const affl = document.getElementById('text-user-items-add-affl').value
 
-      Raffler.config.itemsArr.length = 0
+  if (name != '' && affl != '') {
+    $('#user-items-display ul').append(`<li>${name} - ${affl}</li>`)
+  }
+}
+// TODO
+Raffler._removeUserItem = function() {
 
-      if (Raffler.config.itemsArr) {
-        $.each(data, function (key, val) {
-          Raffler.config.itemsArr.push(val)
-        })
-
-        Raffler._shuffleArray(Raffler.config.itemsArr)
-        Raffler.config.itemsLeftArr = Raffler.config.itemsArr
-        Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
-        Raffler._syncChosenItemsWithItemsArr()
-        Raffler._syncUserItemsWithItemsArr()
-      }
-    })
-    .fail(function (jqxhr, textStatus, e) {
-      Raffler._notify('Failed initial data load: ' + e, 'error', true)
-    })
 }
 
 // remove previously chosen items from in-memory itemsArr
@@ -1096,7 +1120,7 @@ Raffler._syncChosenItemsWithItemsArr = function () {
     // all items have been chosen on reload
     if (items.length === 0) {
       window.countdownTimer.stop()
-      Raffler._disableRaffle()
+      Raffler.__disableRaffle()
       Raffler.dom.itemsCycle.html('<div>:\'(<br /><br />Nothing to raffle!</div>')
       Raffler.dom.body.addClass('level4')
       Raffler._notify('syncChosenItemsWithItemsArr: all items chosen', 'warning')
@@ -1191,6 +1215,7 @@ Raffler._refreshChosenItemsDisplay = function () {
 Raffler._refreshUserItemsDisplay = function () {
   try {
     var lsUserItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
+
     if (lsUserItems && lsUserItems.length > 0) {
       $.each(lsUserItems, function (key, val) {
         Raffler.dom.userItemsDisplay.children().append('<li>' + val.name + ' (' + val.affl + ')</li>')
@@ -1218,7 +1243,9 @@ Raffler._refreshAvailableItemsDisplay = function () {
 Raffler._addChosenItemToLocalStorage = function (lastChosenItem) {
   try {
     var localChosenItemsObj = Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY)
+
     localChosenItemsObj.push(lastChosenItem)
+
     Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, localChosenItemsObj)
     Raffler._refreshAvailableItemsDisplay()
     Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
@@ -1231,9 +1258,8 @@ Raffler._timerStart = function() {
   window.countdownTimer.start()
   Raffler.dom.itemsCycle.removeClass('stopped')
 
-  // Raffler._disableTimerStart()
-
-  // Raffler._enableTimerStop()
+  // Raffler.__disableTimerStart()
+  // Raffler.__enableTimerStop()
 
   Raffler._notify('window.countdownTimer started', 'notice')
 }
@@ -1242,8 +1268,8 @@ Raffler._timerStop = function() {
   window.countdownTimer.stop()
   Raffler.dom.itemsCycle.addClass('stopped')
 
-  // Raffler._disableTimerStop()
-  // Raffler._enableTimerStart()
+  // Raffler.__disableTimerStop()
+  // Raffler.__enableTimerStart()
 
   Raffler._notify('window.countdownTimer stopped', 'notice')
 }
@@ -1251,7 +1277,7 @@ Raffler._timerStop = function() {
 // you hit the big raffle button
 Raffler._raffleButtonSmash = function () {
   Raffler._notify('BUTTON SMASH', 'notice')
-  Raffler._disableRaffle()
+  Raffler.__disableRaffle()
 
   if (Raffler.settings.boxResize) {
     Raffler.dom.itemsCycle.removeClass()
@@ -1279,7 +1305,7 @@ Raffler._raffleButtonSmash = function () {
     Raffler._notify('Only one item to raffle!<br /><strong>instant winner!</strong>', 'warning', true)
 
     // add lone item to items-cycle
-    var loneItemHTML = ''
+    let loneItemHTML = ''
     loneItemHTML += '<div class=\'item-name\'>' + Raffler.config.itemsArr[0].name + `</div>\n`
     loneItemHTML += '<div class=\'item-affl\'>' + Raffler.config.itemsArr[0].affl + '</div>'
 
@@ -1324,6 +1350,7 @@ Raffler._raffleButtonSmash = function () {
         }
       }
     }
+
     Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
 
     // increment counter of times run
@@ -1373,8 +1400,8 @@ Raffler._continueRaffling = function () {
 
   // either way, disable confirm buttons
   // and re-enable raffler
-  Raffler._disableChosenConfirm()
-  Raffler._enableRaffle()
+  Raffler.__disableChosenConfirm()
+  Raffler.__enableRaffle()
 
   // start an infinite cycle
   window.countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL
@@ -1402,87 +1429,7 @@ Raffler._continueRaffling = function () {
   window.countdownTimer.start()
 }
 
-// helper functions
-Raffler._initCycleText = function () {
-  Raffler.dom.itemsCycle.html('<section id="init-raffler-cycle"><a href="#">BEGIN RAFFLE!</a></section>')
-  Raffler._disableRaffle()
-}
-Raffler._disableRaffle = function () {
-  Raffler.dom.body.removeClass()
-  Raffler.dom.interactive.btnRaffle.prop('disabled', true).addClass('disabled')
-}
-Raffler._enableRaffle = function () {
-  Raffler.dom.interactive.btnRaffle.prop('disabled', false).removeClass('disabled')
-}
-Raffler._toggleTestNotices = function () {
-  var btns = Raffler.dom.interactive.btnTests
 
-  $.each(btns, function (key) {
-    if (!Raffler.settings.notifierEnabled) {
-      $(btns[key]).attr('disabled', true)
-      $(btns[key]).attr('title', 'Raffler.settings.notifierEnabled is false')
-      $(btns[key]).addClass('disabled')
-    } else {
-      $(btns[key]).attr('disabled')
-      $(btns[key]).attr('title', '')
-      $(btns[key]).removeClass('disabled')
-    }
-  })
-}
-// Raffler._disableTimerStart = function () {
-//   Raffler.dom.admin.btnTimerStart.prop('disabled', true).addClass('disabled')
-// }
-// Raffler._enableTimerStart = function () {
-//   Raffler.dom.admin.btnTimerStart.prop('disabled', false).removeClass('disabled')
-// }
-// Raffler._disableTimerStop = function () {
-//   Raffler.dom.admin.btnTimerStop.prop('disabled', true).addClass('disabled')
-// }
-// Raffler._enableTimerStop = function () {
-//   Raffler.dom.admin.btnTimerStop.prop('disabled', false).removeClass('disabled')
-// }
-Raffler._disableChosenConfirm = function () {
-  Raffler.dom.chosenConfirm.hide()
-  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')
-  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', true).addClass('disabled')
-
-  // Raffler._enableTimerStop()
-}
-Raffler._enableChosenConfirm = function () {
-  Raffler.dom.chosenConfirm.show()
-  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', false).removeClass('disabled')
-  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', false).removeClass('disabled')
-
-  // Raffler._disableTimerStart()
-  // Raffler._disableTimerStop()
-}
-
-// encode user entries html
-Raffler._sanitize = function (newEntry) {
-  $.each(newEntry, function (key, val) {
-    newEntry.val = val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/""/g, '&quot;')
-  })
-  return newEntry
-}
-// check for duplicate user entries
-Raffler._isDuplicateValue = function (newUserItem) {
-  $.each(Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY), function (key, val) {
-    if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
-      return true
-    }
-  })
-
-  return false
-}
-// shuffle array
-Raffler._shuffleArray = function (array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1))
-    var temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
-}
 // localStorage getter/setter
 Raffler._getLocalStorageItem = function (lsKey) {
   try {
@@ -1728,7 +1675,7 @@ window.countdownTimer = Raffler._timer(function () {
         Raffler._readName(Raffler.config.lastItemChosen)
 
         // confirm winner
-        Raffler._enableChosenConfirm()
+        Raffler.__enableChosenConfirm()
 
         // increment counter of times run
         Raffler.timesRun++
@@ -1767,9 +1714,100 @@ window.countdownTimer = Raffler._timer(function () {
   }
 }, RAFFLER_DEFAULT_INTERVAL)
 
+/*************************************************************************
+ * _private __helper methods *
+ *************************************************************************/
+
+Raffler.__initCycleText = function () {
+  Raffler.dom.itemsCycle.html('<section id="init-raffler-cycle"><a href="#">BEGIN RAFFLE!</a></section>')
+  Raffler.__disableRaffle()
+}
+
+// encode user entries html
+Raffler.__sanitize = function (newEntry) {
+  $.each(newEntry, function (key, val) {
+    newEntry.val = val.replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/""/g, '&quot;')
+  })
+
+  return newEntry
+}
+
+// check for duplicate user entries
+Raffler.__isDuplicateValue = function (newUserItem) {
+  $.each(Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY), function (key, val) {
+    if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
+      return true
+    }
+  })
+
+  return false
+}
+
+Raffler.__shuffleArray = function (array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1))
+    var temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+}
+
+Raffler.__disableRaffle = function () {
+  Raffler.dom.body.removeClass()
+  Raffler.dom.interactive.btnRaffle.prop('disabled', true).addClass('disabled')
+}
+Raffler.__enableRaffle = function () {
+  Raffler.dom.interactive.btnRaffle.prop('disabled', false).removeClass('disabled')
+}
+Raffler.__disableChosenConfirm = function () {
+  Raffler.dom.chosenConfirm.hide()
+  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')
+  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', true).addClass('disabled')
+
+  // Raffler.__enableTimerStop()
+}
+Raffler.__enableChosenConfirm = function () {
+  Raffler.dom.chosenConfirm.show()
+  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', false).removeClass('disabled')
+
+  // Raffler.__disableTimerStart()
+  // Raffler.__disableTimerStop()
+}
+// Raffler.__disableTimerStart = function () {
+//   Raffler.dom.admin.btnTimerStart.prop('disabled', true).addClass('disabled')
+// }
+// Raffler.__enableTimerStart = function () {
+//   Raffler.dom.admin.btnTimerStart.prop('disabled', false).removeClass('disabled')
+// }
+// Raffler.__disableTimerStop = function () {
+//   Raffler.dom.admin.btnTimerStop.prop('disabled', true).addClass('disabled')
+// }
+// Raffler.__enableTimerStop = function () {
+//   Raffler.dom.admin.btnTimerStop.prop('disabled', false).removeClass('disabled')
+// }
+
+Raffler.__toggleTestNotices = function () {
+  var btns = Raffler.dom.interactive.btnTests
+
+  $.each(btns, function (key) {
+    if (!Raffler.settings.notifierEnabled) {
+      $(btns[key]).attr('disabled', true)
+      $(btns[key]).attr('title', 'Raffler.settings.notifierEnabled is false')
+      $(btns[key]).addClass('disabled')
+    } else {
+      $(btns[key]).attr('disabled')
+      $(btns[key]).attr('title', '')
+      $(btns[key]).removeClass('disabled')
+    }
+  })
+}
+
 /************************************************************************
- * ON PAGE LOAD, DO THIS *
+ * START THE ENGINE *
  ************************************************************************/
 
-// get the whole show going!
-Raffler.initApp()
+window.onload = Raffler.initApp()

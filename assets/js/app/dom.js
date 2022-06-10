@@ -17,7 +17,6 @@ Raffler.dom = {
   "chosenConfirm": $('#winner-confirm'),
   "dataResetDialog": $('#data-reset-dialog'),
   "userItemsManager": $('#user-items-manager'),
-  "userItemsDisplay": $('#user-items-display'),
   "userItemsClearDialog": $('#user-items-clear-dialog'),
   "footer": $('.footer-container')
 }
