@@ -3,7 +3,7 @@
 /* global $, Raffler */
 
 // settings: saved in LOCAL STORAGE
-Raffler.settings = RAFFLER_FEFAULTS.settings
+Raffler.settings = RAFFLER_DEFAULTS.settings
 
 // config: only saved while game is loaded
 Raffler.config = RAFFLER_DEFAULTS.config
@@ -1149,7 +1149,7 @@ Raffler._refreshItemsGraph = function (items) {
 }
 // refresh dem debug values in the settings
 Raffler._refreshDebugValues = function () {
-  Raffler.settings.debug.intervalRange = RAFFLER_DEFAULT_INTERVAL
+  Raffler.settings.intervalRange = RAFFLER_DEFAULT_INTERVAL
 }
 // refresh number of raffle results with localStorage values
 Raffler._refreshResultsCount = function () {
@@ -1204,7 +1204,7 @@ Raffler._refreshUserItemsDisplay = function () {
 // re-display available items from in-memory itemsArr
 Raffler._refreshAvailableItemsDisplay = function () {
   Raffler.config.itemsArr.forEach(function (item) {
-    Raffler.settings.debug.itemsAvailable.push(item.name + ' (' + item.affl + ')')
+    Raffler.config.itemsAvailable.push(item.name + ' (' + item.affl + ')')
   })
 
   Raffler._notify('refreshAvailableItems: display updated', 'notice')
@@ -1325,7 +1325,7 @@ Raffler._raffleButtonSmash = function () {
     Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
 
     // increment counter of times run
-    Raffler.settings.debug.timesRun++
+    Raffler.config.timesRun++
   }
 
   Raffler._refreshDebugValues()
@@ -1380,8 +1380,8 @@ Raffler._continueRaffling = function () {
   window.countdownTimer.stage = RAFFLER_STAGES.INIT
   window.countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
 
-  Raffler.settings.debug.intervalRange = RAFFLER_DEFAULT_INTERVAL
-  // Raffler.dom.settings.debug.intervalValue.text(Raffler.dom.settings.debug.intervalRange.val())
+  Raffler.config.intervalRange = RAFFLER_DEFAULT_INTERVAL
+  // Raffler.dom.config.intervalValue.text(Raffler.dom.config.intervalRange.val())
 
   // Raffler.dom.admin.stageValue.text(this.stage)
 
@@ -1522,7 +1522,7 @@ Raffler._timer = function (callbackFunc, timing) {
           variableInterval.interval = result
         }
 
-        // Raffler.dom.settings.debug.intervalValue.text(result)
+        // Raffler.dom.config.intervalValue.text(result)
 
         // switch to next item if countdown not done
         if (variableInterval.stage !== 4 && variableInterval.items.length) {
@@ -1650,11 +1650,11 @@ window.countdownTimer = Raffler._timer(function () {
 
         // increment counter of times run
         Raffler.timesRun++
-        Raffler.settings.debug.timesRunValue = Raffler.timesRun
+        Raffler.config.timesRunValue = Raffler.timesRun
       } else {
         var intervalMult = interval + this.mult
 
-        Raffler.settings.debug.intervalRange = intervalMult
+        Raffler.config.intervalRange = intervalMult
 
         return intervalMult
       }
@@ -1678,8 +1678,8 @@ window.countdownTimer = Raffler._timer(function () {
   if (this.stage > RAFFLER_STAGES.INIT && this.stage !== RAFFLER_STAGES.DONE) {
     var newInterval = interval + (1.75 ^ this.mult++)
 
-    Raffler.settings.debug.multiplyValue = this.mult
-    Raffler.settings.debug.intervalRange = newInterval
+    Raffler.config.multiplyValue = this.mult
+    Raffler.config.intervalRange = newInterval
 
     return newInterval
   }

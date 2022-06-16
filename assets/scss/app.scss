@@ -209,7 +209,6 @@ header {
       z-index: 10;
 
       #nav-content {
-        animation: SlideRight 200ms;
         background-color: $cloudy-sky;
         border-radius: 0;
         box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.15);
@@ -1125,28 +1124,3 @@ section {
       transition: transform 0.3s;
       width: 50%;
     }
-
-/* animation */
-@keyFrames SlideRight {
-  0% {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0px);
-  }
-}
-@keyFrames SlideLeft {
-  0% {
-    opacity: 1;
-    transform: translateX(0px);
-  }
-  90% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-200px);
-  }
-}

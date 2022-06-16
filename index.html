@@ -46,8 +46,8 @@
   <link rel="stylesheet" href="./assets/css/vendor/jquery-ui.structure.min.css">
   <link rel="stylesheet" href="./assets/css/vendor/jquery-ui.theme.min.css">
   <!--// CUSTOM //-->
-  <link rel="stylesheet" href="./public/build/css/modal.css">
-  <link rel="stylesheet" href="./public/build/css/app.css">
+  <link rel="stylesheet" href="./assets/css/modal.css">
+  <link rel="stylesheet" href="./assets/css/app.css">
 </head>
 <body>
   <header>
@@ -170,14 +170,20 @@
 
   <!-- JAVASCRIPTS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="./assets/js/vendor/systemjs/dist/system.js"></script>
-  <script src="./assets/js/vendor/FileSaver.min.js"></script>
-  <!--<script src="./assets/js/vendor/analytics.js"></script>-->
-  <script>SystemJS.import("./assets/js/vendor/jquery.min.js")
-    .then(jqueryui => SystemJS.import("./assets/js/vendor/jquery-ui.min.js"))
-    .then(createjs => SystemJS.import("./assets/js/vendor/create.min.js"))
-    .then(talkify => SystemJS.import("./node_modules/talkify-tts/dist/talkify.min.js"))
-    .then(app => SystemJS.import("./public/build/js/all-app.js"));
-  </script>
+  <!-- VENDOR -->
+  <script type="text/javascript" src="./assets/js/vendor/FileSaver.min.js"></script>
+  <!--<script type="text/javascript" src="./assets/js/vendor/analytics.js"></script>-->
+  <script type="text/javascript" src="./assets/js/vendor/jquery.min.js"></script>
+  <script type="text/javascript" src="./assets/js/vendor/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="./assets/js/vendor/create.min.js"></script>
+  <script type="text/javascript" src="./assets/js/vendor/talkify.min.js"></script>
+  <!-- CUSTOM -->
+  <script type="text/javascript" src="./assets/js/app.js"></script>
+  <script type="text/javascript" src="./assets/js/app/constants.js"></script>
+  <script type="text/javascript" src="./assets/js/app/dom.js"></script>
+  <script type="text/javascript" src="./assets/js/app/modal.js"></script>
+  <script type="text/javascript" src="./assets/js/app/main.js"></script>
+  <script type="text/javascript" src="./assets/js/app/fx/audio.js"></script>
+  <script type="text/javascript" src="./assets/js/app/fx/talkify.js"></script>
 </body>
 </html>

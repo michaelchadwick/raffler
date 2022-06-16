@@ -38,7 +38,7 @@ const RAFFLER_DEFAULTS = {
     "lastInterval": 361,
     "multiply": RAFFLER_DEFAULT_MULTIPLY,
     "stage": 0,
-    "talkifyKey": null,
+    "talkifyKey": '',
     "textAvailableItems": [],
     "textChosenItems": [],
     "timesRun": 0
