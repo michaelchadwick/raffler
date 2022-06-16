@@ -24,3 +24,35 @@ const RAFFLER_STAGES = {
   SLOWEST: 3,
   DONE: 4
 }
+
+const RAFFLER_DEFAULTS = {
+  "config": {
+    "allowNotifications": true,
+    "hasLocalStorage": true,
+    "intervalRange": RAFFLER_DEFAULT_INTERVAL,
+    "itemsArr": [],
+    "itemsAvailable": [],
+    "itemsLeftArr": [],
+    "lastItemChosen": null,
+    "lastItemChosenConfirmed": false,
+    "lastInterval": 361,
+    "multiply": RAFFLER_DEFAULT_MULTIPLY,
+    "stage": 0,
+    "talkifyKey": null,
+    "textAvailableItems": [],
+    "textChosenItems": [],
+    "timesRun": 0
+  },
+  "settings": {
+    "boxResize": true,
+    "dataFilePath": './assets/json/raffler_data.json',
+    "logoFileLink": '',
+    "logoFilePath": '',
+    "notifierEnabled": false,
+    "showDebug": false,
+    "showGraph": false,
+    "soundCountdown": false,
+    "soundVictory": false,
+    "soundName": false
+  }
+}

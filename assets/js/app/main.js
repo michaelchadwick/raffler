@@ -1,41 +1,12 @@
 /* main */
 /* app entry point and main functions */
-/* global $, Raffler, talkify */
+/* global $, Raffler */
 
 // settings: saved in LOCAL STORAGE
-Raffler.settings = {
-  "boxResize": true,
-  "dataFilePath": './assets/json/raffler_data.json',
-  "logoFileLink": '',
-  "logoFilePath": '',
-  "notifierEnabled": false,
-  "showDebug": false,
-  "showGraph": false,
-  "soundCountdown": false,
-  "soundVictory": false,
-  "soundName": false
-}
-Raffler.settings.debug = {
-  "allowNotifications": true,
-  "intervalRange": RAFFLER_DEFAULT_INTERVAL,
-  "itemsAvailable": [],
-  "multiply": RAFFLER_DEFAULT_MULTIPLY,
-  "stage": 0,
-  "textAvailableItems": [],
-  "textChosenItems": [],
-  "timesRun": 0
-}
+Raffler.settings = RAFFLER_FEFAULTS.settings
 
 // config: only saved while game is loaded
-Raffler.config = {
-  "hasLocalStorage": true,
-  "itemsArr": [],
-  "itemsLeftArr": [],
-  "lastItemChosen": null,
-  "lastItemChosenConfirmed": false,
-  "lastInterval": 361,
-  "talkifyKey": ""
-}
+Raffler.config = RAFFLER_DEFAULTS.config
 
 /*************************************************************************
  * public methods *
@@ -118,7 +89,7 @@ async function modalOpen(type) {
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Name</div>
-                <div class="description">Read choice out loud (using talkify) when chosen.</div>
+                <div class="description">Read choice out loud when chosen (requires <code>talkifyKey</code>.</div>
               </div>
               <div class="control">
                 <div class="container">
