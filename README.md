@@ -6,10 +6,6 @@ And the winner is...
 
 Click or tap the button and a cavalcade of pre-loaded items will begin to cycle more and more slowly as it finally comes to a stop, and a single choice is made. That item will then be added to a results list below the *Raffler*, and will not be chosen again if re-run (until a reset, naturally).
 
-## Dependencies
-
-* [SystemJS](https://github.com/systemjs/systemjs)
-
 ### Contributing
 
 To develop locally, a few simple steps need to be taken.
@@ -87,5 +83,4 @@ Simply copy `config/raffler_options.user.dist` to `config/raffler_options.user.j
 * [Javascript Standard Style Guide](https://github.com/standard/standard)
 * [JS File Saving](https://github.com/eligrey/FileSaver.js)
 * [CSV to JSON](https://github.com/Keyang/node-csvtojson)
-* [Gulp](https://gulpjs.com)
 * [Talkify](https://talkify.net)
