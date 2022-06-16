@@ -62,7 +62,6 @@ ul {
 }
   ul li {
     line-height: 1.3em;
-    margin: 0 0 0 -21px;
   }
 
 audio#talkify-audio {
@@ -262,7 +261,6 @@ header {
         z-index: 10;
       }
         header .menu-left #debug-buttons .ddmenu .ddgroup {
-          border: 1px solid transparent;
           position: relative;
           text-decoration: none;
           width: 100%;
@@ -292,16 +290,15 @@ header {
           }
           header .menu-left #debug-buttons .ddmenu .ddgroup .ddsub button {
             background-color: #e3e0f3;
-            border: 1px solid transparent;
+            border: none;
             border-radius: 0;
             height: 20px;
             padding: 5px;
             width: 26px;
           }
-          header .menu-left #debug-buttons .ddmenu .ddgroup .ddsub button:hover {
-            background: #e1ddf7;
-            border: 1px solid #8c85ae;
-          }
+            header .menu-left #debug-buttons .ddmenu .ddgroup .ddsub button:hover {
+              background: #f3f1ff;
+            }
 @media screen and (max-width: 640px) {
   header .menu-left #debug-buttons .ddmenu .ddgroup .ddmenu {
     flex-wrap: wrap;
@@ -344,12 +341,15 @@ header {
 }
 
 .button {
+  align-items: center;
   border-radius: 4px;
   box-shadow: inset 0 -3px 1px rgba(0, 0, 0, 0.45), 0 2px 2px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   color: #ffffff;
-  display: block;
+  display: flex;
   font-size: 1rem;
+  gap: 10px;
+  justify-content: center;
   margin: 0;
   padding: 10px;
   text-decoration: none;
@@ -361,10 +361,11 @@ header {
   .button.export {
     background-color: #00475d;
     border-radius: 10px;
-    font-size: 16px;
-    height: auto;
+    font-size: 1.1rem;
+    height: 40px;
+    margin: 0 auto;
     padding: 2px;
-    width: auto;
+    width: 175px;
   }
     .button.export:hover {
       background-color: #003b4e;
@@ -679,8 +680,7 @@ section#init-raffler-cycle {
         margin-bottom: 20px;
         margin-top: 0;
         text-transform: uppercase;
-        transition: 1s;
-        width: 100%;
+        transition: 500ms;
         word-break: break-word;
         word-wrap: break-word;
       }
@@ -818,20 +818,18 @@ section#init-raffler-cycle {
               background-color: #873a41;
             }
           #main-content .main-container #results-wrapper {
-            clear: all;
             color: #050505;
             display: none;
             float: none;
-            margin-top: 20px;
+            margin: 20px auto 0;
             min-height: 40px;
             overflow: hidden;
             padding: 0;
             text-align: center;
-            width: 80%;
           }
             #main-content .main-container #results-wrapper #results-header {
               color: #000000;
-              margin: 0;
+              margin: 0 auto;
               padding: 5px;
               text-align: center;
             }
@@ -841,23 +839,21 @@ section#init-raffler-cycle {
                 text-transform: uppercase;
               }
             #main-content .main-container #results-wrapper #results-list {
-              height: 110px;
+              background-color: #ffffff22;
               margin: 0 auto;
+              max-height: 110px;
               overflow: auto;
               padding: 8px 10px 20px;
               text-transform: uppercase;
-              width: 100%;
             }
               #main-content .main-container #results-wrapper #results-list ul {
                 font-size: 1.3em;
                 margin: auto;
                 padding: 0 15%;
                 text-align: center;
-                width: 45vw;
               }
                 #main-content .main-container #results-wrapper #results-list ul li {
                   list-style-type: none;
-                  margin-right: 10px;
                 }
     #main-content .footer-container {
       background: #005b77;
