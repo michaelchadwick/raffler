@@ -2,9 +2,9 @@
 /* set any global constants */
 
 const RAFFLER_ENV_PROD_URL = [
-  'https://neb.host/raffler',
-  'https://raffler.neb.host',
-  'https://raffler.me'
+  'neb.host/raffler',
+  'raffler.neb.host',
+  'raffler.me'
 ]
 
 const RAFFLER_SETTINGS_KEY = 'raffler-settings'
