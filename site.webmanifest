@@ -16,6 +16,6 @@
     "background_color": "#ffffff",
     "description": "Pick a name",
     "display": "standalone",
-    "start_url": "https://raffler.neb.host",
+    "start_url": "https://neb.host/raffler",
     "theme_color": "#ffffff"
 }
