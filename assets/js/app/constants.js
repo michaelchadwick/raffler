@@ -2,6 +2,7 @@
 /* set any global constants */
 
 const RAFFLER_ENV_PROD_URL = [
+  'neb.host',
   'neb.host/raffler',
   'raffler.neb.host',
   'raffler.me'
