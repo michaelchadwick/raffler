@@ -56,7 +56,6 @@ async function modalOpen(type) {
             </div>
 
             <!-- sound: countdown -->
-            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Countdown</div>
@@ -70,10 +69,8 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
-            -->
 
             <!-- sound: victory -->
-            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Victory</div>
@@ -87,7 +84,6 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
-            -->
 
             <!-- sound: name -->
             <!--
