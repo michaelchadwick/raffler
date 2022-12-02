@@ -56,6 +56,7 @@ async function modalOpen(type) {
             </div>
 
             <!-- sound: countdown -->
+            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Countdown</div>
@@ -69,8 +70,10 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+            -->
 
             <!-- sound: victory -->
+            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Victory</div>
@@ -84,8 +87,10 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+            -->
 
             <!-- sound: name -->
+            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Name</div>
@@ -99,8 +104,10 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+            -->
 
             <!-- user items -->
+            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">User Items</div>
@@ -126,8 +133,10 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+            -->
 
             <!-- show debug -->
+            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Debug Settings</div>
@@ -141,6 +150,7 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+            -->
 
             <!-- DEBUG DEBUG DEBUG -->
             <div id="settings-debug">
