@@ -1,5 +1,6 @@
 /* main */
 /* app entry point and main functions */
+/* eslint-disable no-undef */
 /* global $, Raffler */
 
 // settings: saved in LOCAL STORAGE
@@ -487,13 +488,14 @@ Raffler._initItemsArr = function () {
 
 Raffler._loadSettings = function() {
   if (localStorage.getItem(RAFFLER_SETTINGS_KEY)) {
+    var setting = null;
     var lsSettings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
 
     if (lsSettings) {
       if (lsSettings.boxResize) {
         Raffler.settings.boxResize = lsSettings.boxResize
 
-        var setting = document.getElementById('button-setting-box-resize')
+        setting = document.getElementById('button-setting-box-resize')
 
         if (setting) {
           setting.dataset.status = 'true'
@@ -503,7 +505,7 @@ Raffler._loadSettings = function() {
       if (lsSettings.soundCountdown) {
         Raffler.settings.soundCountdown = lsSettings.soundCountdown
 
-        var setting = document.getElementById('button-setting-sound-countdown')
+        setting = document.getElementById('button-setting-sound-countdown')
 
         if (setting) {
           setting.dataset.status = 'true'
@@ -513,7 +515,7 @@ Raffler._loadSettings = function() {
       if (lsSettings.soundVictory) {
         Raffler.settings.soundVictory = lsSettings.soundVictory
 
-        var setting = document.getElementById('button-setting-sound-victory')
+        setting = document.getElementById('button-setting-sound-victory')
 
         if (setting) {
           setting.dataset.status = 'true'
@@ -523,7 +525,7 @@ Raffler._loadSettings = function() {
       if (lsSettings.soundName) {
         Raffler.settings.soundName = lsSettings.soundName
 
-        var setting = document.getElementById('button-setting-sound-name')
+        setting = document.getElementById('button-setting-sound-name')
 
         if (setting) {
           setting.dataset.status = 'true'
@@ -535,7 +537,7 @@ Raffler._loadSettings = function() {
       if (lsSettings.showGraph) {
         Raffler.settings.showGraph = lsSettings.showGraph
 
-        var setting = document.getElementById('button-setting-show-graph')
+        setting = document.getElementById('button-setting-show-graph')
 
         if (setting) {
           setting.dataset.status = 'true'
@@ -545,7 +547,7 @@ Raffler._loadSettings = function() {
       if (lsSettings.allowNotifications) {
         Raffler.settings.allowNotifications = lsSettings.allowNotifications
 
-        var setting = document.getElementById('button-setting-allow-notifications')
+        setting = document.getElementById('button-setting-allow-notifications')
 
         if (setting) {
           setting.dataset.status = 'true'
@@ -585,9 +587,11 @@ Raffler._loadSettings = function() {
   }
 }
 Raffler._changeSetting = function(setting, event = null) {
+  let st = null;
+
   switch (setting) {
-    case 'boxResize':
-      var st = document.getElementById('button-setting-box-resize').dataset.status
+    case 'boxResize': {
+      st = document.getElementById('button-setting-box-resize').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -603,9 +607,9 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler._saveSetting('boxResize', false)
       }
       break
-
-    case 'soundCountdown':
-      var st = document.getElementById('button-setting-sound-countdown').dataset.status
+    }
+    case 'soundCountdown': {
+      st = document.getElementById('button-setting-sound-countdown').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -621,9 +625,9 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler._saveSetting('soundCountdown', false)
       }
       break
-
-    case 'soundVictory':
-      var st = document.getElementById('button-setting-sound-victory').dataset.status
+    }
+    case 'soundVictory': {
+      st = document.getElementById('button-setting-sound-victory').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -639,9 +643,9 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler._saveSetting('soundVictory', false)
       }
       break
-
-    case 'soundName':
-      var st = document.getElementById('button-setting-sound-name').dataset.status
+    }
+    case 'soundName': {
+      st = document.getElementById('button-setting-sound-name').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -657,9 +661,9 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler._saveSetting('soundName', false)
       }
       break
-
-    case 'showDebug':
-      var st = document.getElementById('button-setting-show-debug').dataset.status
+    }
+    case 'showDebug': {
+      st = document.getElementById('button-setting-show-debug').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -679,8 +683,8 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler._saveSetting('showDebug', false)
       }
       break
-
-    case 'intervalValue':
+    }
+    case 'intervalValue': {
       const val = parseInt(event.target.value)
 
       // update text setting DOM
@@ -690,9 +694,9 @@ Raffler._changeSetting = function(setting, event = null) {
       window.countdownTimer.interval = val
 
       break
-
-    case 'showGraph':
-      var st = document.getElementById('button-setting-show-graph').dataset.status
+    }
+    case 'showGraph': {
+      st = document.getElementById('button-setting-show-graph').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -707,9 +711,9 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler._saveSetting('showGraph', false)
       }
       break
-
-    case 'allowNotifications':
-      var st = document.getElementById('button-setting-allow-notifications').dataset.status
+    }
+    case 'allowNotifications': {
+      st = document.getElementById('button-setting-allow-notifications').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
@@ -728,6 +732,7 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler.__toggleTestNotices()
       }
       break
+    }
   }
 }
 Raffler._saveSetting = function(setting, value) {
@@ -863,7 +868,7 @@ Raffler._attachEventListeners = function () {
     var plainText = $('div#results-wrapper div ul')
       .html()
       .replace(/<li>/g, '')
-      .replace(/<\/li>/g, `\r\n`)
+      .replace(/<\/li>/g, '\r\n')
 
     var Blob = window.Blob
     var plainTextBlob = new Blob(
@@ -1039,7 +1044,7 @@ Raffler._resetUserItems = function () {
       for (var j = 0; j < lsUserItems.length; j++) {
         if (Raffler.config.itemsArr[i].name === lsUserItems[j].name &&
             Raffler.config.itemsArr[i].affl === lsUserItems[j].affl) {
-          itemsSpliced = Raffler.config.itemsArr.splice(i, 1)[0]
+          itemsSpliced = Raffler.config.itemsArr.splice(i, 1)[0] // eslint-disable-line
         }
       }
     }
@@ -1082,7 +1087,7 @@ Raffler._syncChosenItemsWithItemsArr = function () {
         for (var j = 0; j < items.length; j++) {
           if (chosenItems[i].name === items[j].name &&
               chosenItems[i].affl === items[j].affl) {
-            itemsSpliced = items.splice(j, 1)[0]
+            itemsSpliced = items.splice(j, 1)[0] // eslint-disable-line
           }
         }
       }
@@ -1283,7 +1288,7 @@ Raffler._raffleButtonSmash = function () {
 
     // add lone item to items-cycle
     let loneItemHTML = ''
-    loneItemHTML += '<div class=\'item-name\'>' + Raffler.config.itemsArr[0].name + `</div>\n`
+    loneItemHTML += '<div class=\'item-name\'>' + Raffler.config.itemsArr[0].name + '</div>\n'
     loneItemHTML += '<div class=\'item-affl\'>' + Raffler.config.itemsArr[0].affl + '</div>'
 
     Raffler.dom.itemsCycle.html(loneItemHTML)

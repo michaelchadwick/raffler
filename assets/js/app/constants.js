@@ -1,5 +1,6 @@
 /* constants */
-/* set any global constants */
+/* set any global app constants */
+/* eslint-disable no-unused-vars */
 
 const RAFFLER_ENV_PROD_URL = [
   'neb.host',
@@ -27,33 +28,33 @@ const RAFFLER_STAGES = {
 }
 
 const RAFFLER_DEFAULTS = {
-  "config": {
-    "allowNotifications": true,
-    "hasLocalStorage": true,
-    "intervalRange": RAFFLER_DEFAULT_INTERVAL,
-    "itemsArr": [],
-    "itemsAvailable": [],
-    "itemsLeftArr": [],
-    "lastItemChosen": null,
-    "lastItemChosenConfirmed": false,
-    "lastInterval": 361,
-    "multiply": RAFFLER_DEFAULT_MULTIPLY,
-    "stage": 0,
-    "talkifyKey": '',
-    "textAvailableItems": [],
-    "textChosenItems": [],
-    "timesRun": 0
+  'config': {
+    'allowNotifications': true,
+    'hasLocalStorage': true,
+    'intervalRange': RAFFLER_DEFAULT_INTERVAL,
+    'itemsArr': [],
+    'itemsAvailable': [],
+    'itemsLeftArr': [],
+    'lastItemChosen': null,
+    'lastItemChosenConfirmed': false,
+    'lastInterval': 361,
+    'multiply': RAFFLER_DEFAULT_MULTIPLY,
+    'stage': 0,
+    'talkifyKey': '',
+    'textAvailableItems': [],
+    'textChosenItems': [],
+    'timesRun': 0
   },
-  "settings": {
-    "boxResize": true,
-    "dataFilePath": './assets/json/raffler_data.json',
-    "logoFileLink": '',
-    "logoFilePath": '',
-    "notifierEnabled": false,
-    "showDebug": false,
-    "showGraph": false,
-    "soundCountdown": false,
-    "soundVictory": false,
-    "soundName": false
+  'settings': {
+    'boxResize': true,
+    'dataFilePath': './assets/json/raffler_data.json',
+    'logoFileLink': '',
+    'logoFilePath': '',
+    'notifierEnabled': false,
+    'showDebug': false,
+    'showGraph': false,
+    'soundCountdown': false,
+    'soundVictory': false,
+    'soundName': false
   }
 }
