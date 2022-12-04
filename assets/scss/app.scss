@@ -93,6 +93,10 @@ ul {
   }
 }
 
+hr {
+  margin: 5px 0;
+}
+
 audio {
   &#talkify-audio {
     border-radius: 0;
@@ -416,6 +420,10 @@ header {
   }
 }
 
+#the-button {
+  display: none;
+}
+
 .button {
   border-radius: 4px;
   box-shadow: inset 0 -3px 1px $shadow-start, 0 2px 2px $shadow-end;
@@ -647,7 +655,7 @@ section {
     a {
       color: $blue-sky;
       display: block;
-      font-size: 2em;
+      font-size: 1.5em;
       text-decoration: none;
       text-shadow: 2px 2px 2px $text-shadow;
 
@@ -776,7 +784,7 @@ section {
 
   .main-container {
     clear: both;
-    margin: 25px 0 0;
+    margin: 0;
     overflow: hidden;
     padding: 0 0 50px;
 
