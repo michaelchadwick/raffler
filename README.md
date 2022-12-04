@@ -67,13 +67,13 @@ There are four options that can be changed via an additional override file.
 * `logoFileLink` - click logo and go somewhere
 * `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
-Simply copy `config/raffler_options.user.dist` to `config/raffler_options.user.json` and fill in your specific information.
+Simply copy `config/raffler_settings.user.dist` to `config/raffler_settings.user.json` and fill in your specific information.
 
 ```json
 {
   "dataFilePath": "./assets/json/floobidy-hoo.json",
-  "logoFilePath": "./assets/images/jamma-mamma.png",
   "logoFileLink": "http://ohmanwhat.omg",
+  "logoFilePath": "./assets/images/jamma-mamma.png",
   "talkifyKey": "123456ABCDEF"
 }
 ```

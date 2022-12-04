@@ -12,7 +12,7 @@ const RAFFLER_ENV_PROD_URL = [
 
 const RAFFLER_SETTINGS_KEY = 'raffler-settings'
 
-const RAFFLER_USER_SETTINGS_FILE = './raffler_settings.user.json'
+const RAFFLER_USER_SETTINGS_FILE = '/config/raffler_settings.user.json'
 
 const RAFFLER_USER_ITEMS_KEY = 'raffler-user-items'
 const RAFFLER_CHOSEN_ITEMS_KEY = 'raffler-chosen-items'

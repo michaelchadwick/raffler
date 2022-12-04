@@ -85,11 +85,10 @@ async function modalOpen(type) {
             </div>
 
             <!-- sound: name -->
-            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Sound: Name</div>
-                <div class="description">Read choice out loud when chosen (requires <code>talkifyKey</code>.</div>
+                <div class="description">Read choice out loud when chosen (requires <code>talkifyKey</code>).</div>
               </div>
               <div class="control">
                 <div class="container">
@@ -99,7 +98,6 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
-            -->
 
             <!-- user items -->
             <!--
@@ -344,6 +342,7 @@ async function modalOpen(type) {
 
 // app entry point
 Raffler.initApp = function () {
+
   // set env
   Raffler.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
@@ -352,16 +351,6 @@ Raffler.initApp = function () {
     Raffler._initDebug()
 
     document.title = '(LH) ' + document.title
-  }
-
-  // add logo, if exists
-  if (Raffler.settings.logoFilePath !== '' && Raffler.settings.logoFileLink !== '') {
-    Raffler.dom.title.append('<span>at</span>')
-    Raffler.dom.title.append(`<a href='${Raffler.settings.logoFileLink}' target='_blank'>`)
-    Raffler.dom.title.append(`<img id='logo' src='${Raffler.settings.logoFilePath}' />`)
-    Raffler.dom.title.append('</a>')
-  } else {
-    Raffler._notify('raffler_options.user: no custom logo or link found')
   }
 
   // if we aren't doing the "resize as the raffle counts down" thing
@@ -376,6 +365,7 @@ Raffler.initApp = function () {
   Raffler._attachEventListeners()
 
   Raffler._loadSettings()
+  Raffler._loadUserSettings()
 
   Raffler.resetApp()
   Raffler._refreshDebugValues()
@@ -752,6 +742,30 @@ Raffler._saveSetting = function(setting, value) {
   // console.log('!global setting saved!', Raffler.settings)
 }
 
+Raffler._loadUserSettings = async function () {
+  const response = await fetch(RAFFLER_USER_SETTINGS_FILE)
+  const data = await response.json()
+
+  if (data) {
+    if (data.logoFileLink != '') {
+      Raffler.settings.logoFileLink = data.logoFileLink
+    }
+    if (data.logoFilePath != '') {
+      Raffler.settings.logoFilePath = data.logoFilePath
+
+      Raffler.dom.title.append(`
+        <span>at</span>
+        <a href='${Raffler.settings.logoFileLink}' target='_blank'>
+          <img id='logo' src='${Raffler.settings.logoFilePath}' />
+        </a>
+      `)
+    }
+    if (data.talkifyKey != '') {
+      Raffler.config.talkifyKey = data.talkifyKey
+    }
+  }
+}
+
 // modal: debug: display Raffler.config
 Raffler._displayAppConfig = function() {
   let config = Raffler.config
@@ -778,7 +792,7 @@ Raffler._displayAppConfig = function() {
         var value = config[key][k]
 
         if (Object.keys(value)) {
-          // console.log('found another object', key, label, value)
+          console.log('found another object', key, label, value)
         } else {
           html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
         }
@@ -790,7 +804,12 @@ Raffler._displayAppConfig = function() {
       var label = key
       var value = config[key]
 
-      html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+      if (label == 'itemsArr' || label == 'itemsLeftArr') {
+        html += `<dd><code>${label}:</code></dd>`
+        html += `<dt>${JSON.stringify(value)}</dt>`
+      } else {
+        html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+      }
     }
   })
 
@@ -1146,7 +1165,6 @@ Raffler._syncUserItemsWithItemsArr = function () {
   }
 }
 
-// refresh items graph
 Raffler._refreshItemsGraph = function (items) {
   var index = 0
 
@@ -1157,11 +1175,9 @@ Raffler._refreshItemsGraph = function (items) {
       .append('<span id=' + (index++) + '></span>')
   })
 }
-// refresh dem debug values in the settings
 Raffler._refreshDebugValues = function () {
   Raffler.settings.intervalRange = RAFFLER_DEFAULT_INTERVAL
 }
-// refresh number of raffle results with localStorage values
 Raffler._refreshResultsCount = function () {
   const chosenItems = Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY)
 
@@ -1169,7 +1185,6 @@ Raffler._refreshResultsCount = function () {
     Raffler.dom.resultsCount.text(chosenItems.length)
   }
 }
-// refresh chosen items with localStorage values
 Raffler._refreshChosenItemsDisplay = function () {
   try {
     var lsChosenItems = Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY)
@@ -1192,7 +1207,6 @@ Raffler._refreshChosenItemsDisplay = function () {
     Raffler._notify('refreshChosenItemsDisplay: ' + e, 'error')
   }
 }
-// refresh user items with localStorage values
 Raffler._refreshUserItemsDisplay = function () {
   try {
     var lsUserItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
@@ -1211,7 +1225,6 @@ Raffler._refreshUserItemsDisplay = function () {
     Raffler._notify('refreshUserItemsDisplay: ' + e, 'error')
   }
 }
-// re-display available items from in-memory itemsArr
 Raffler._refreshAvailableItemsDisplay = function () {
   Raffler.config.itemsArr.forEach(function (item) {
     Raffler.config.itemsAvailable.push(item.name + ' (' + item.affl + ')')
@@ -1244,7 +1257,6 @@ Raffler._timerStart = function() {
 
   Raffler._notify('window.countdownTimer started', 'notice')
 }
-
 Raffler._timerStop = function() {
   window.countdownTimer.stop()
   Raffler.dom.itemsCycle.addClass('stopped')

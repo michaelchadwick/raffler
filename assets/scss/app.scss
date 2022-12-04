@@ -378,7 +378,9 @@ header {
   }
 
   .title {
+    align-items: center;
     color: $white;
+    display: flex;
     font-size: 1rem;
     font-weight: 700;
     line-height: 100%;
@@ -387,6 +389,18 @@ header {
     text-align: center;
     text-shadow: 1px 1px 1px darken($blue, 20%);
     text-transform: uppercase;
+
+    span {
+      display: inline-block;
+      padding: 0 10px;
+    }
+
+    img {
+      &#logo {
+        border: 1px solid #000;
+        max-height: 30px;
+      }
+    }
   }
 
   .menu-right {
@@ -772,13 +786,6 @@ section {
     header {
       margin: 0;
       width: 100%;
-
-      img {
-        &#logo {
-          max-height: 30px;
-          padding-left: 5px;
-        }
-      }
     }
   }
 

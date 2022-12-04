@@ -5,7 +5,7 @@
 // DOM > main divs/elements
 Raffler.dom = {
   'body': $('body'),
-  'title': $('header'),
+  'title': $('header .title'),
   'navOverlay': $('#nav-overlay'),
   'navContent': ('$nav-content'),
   'mainContent': $('#main-content'),
