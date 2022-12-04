@@ -315,7 +315,7 @@ async function modalOpen(type) {
       break
 
     case 'show-config':
-      this.myModal = new Modal('perm-debug', 'Raffler.config',
+      this.myModal = new Modal('perm-debug', 'Raffler.config / Raffler.settings',
         Raffler._displayAppConfig(),
         null,
         null
@@ -747,6 +747,9 @@ Raffler._loadUserSettings = async function () {
   const data = await response.json()
 
   if (data) {
+    if (data.dataFilePath != '') {
+      Raffler.settings.dataFilePath = data.dataFilePath
+    }
     if (data.logoFileLink != '') {
       Raffler.settings.logoFileLink = data.logoFileLink
     }
@@ -766,13 +769,16 @@ Raffler._loadUserSettings = async function () {
   }
 }
 
-// modal: debug: display Raffler.config
+// modal: debug: display Raffler.config and Raffler.settings
 Raffler._displayAppConfig = function() {
   let config = Raffler.config
+  let settings = Raffler.settings
 
   var html = ''
 
   html += `<h4>GLOBAL (ENV: ${Raffler.env})</h4>`
+  html += '<h4>----------------------------</h4>'
+  html += '<h5>CONFIG</h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
@@ -810,6 +816,45 @@ Raffler._displayAppConfig = function() {
       } else {
         html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
       }
+    }
+  })
+
+  html += '</dl>'
+
+  html += '<h4>----------------------------</h4>'
+  html += '<h5>SETTINGS</h5>'
+  html += '<h4>----------------------------</h4>'
+
+  html += '<dl>'
+
+  Object.keys(settings).sort().forEach(key => {
+    // if value is an object, dig in
+    if (
+      (typeof settings[key] == 'object'
+        && !Array.isArray(config[key])
+        && settings[key] != null
+      )
+    ) {
+      html += `<dd><code>${key}: {</code><dl>`
+
+      Object.keys(settings[key]).forEach(k => {
+        var label = k
+        var value = settings[key][k]
+
+        if (Object.keys(value)) {
+          console.log('found another object', key, label, value)
+        } else {
+          html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
+        }
+      })
+
+      html += '</dl><code>}</code></dd>'
+    }
+    else {
+      var label = key
+      var value = settings[key]
+
+      html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
     }
   })
 
