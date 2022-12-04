@@ -3,12 +3,6 @@
 /* eslint-disable no-undef */
 /* global $, Raffler */
 
-// settings: saved in LOCAL STORAGE
-Raffler.settings = RAFFLER_DEFAULTS.settings
-
-// config: only saved while game is loaded
-Raffler.config = RAFFLER_DEFAULTS.config
-
 /*************************************************************************
  * public methods *
  *************************************************************************/
@@ -844,6 +838,7 @@ Raffler._attachEventListeners = function () {
   // main raffling events
   Raffler.dom.itemsCycle.click(function () {
     Raffler._notify('starting the cycle')
+    Raffler.__enableTheButton()
     Raffler.__enableRaffle()
     Raffler._timerStart()
   })
@@ -1701,7 +1696,11 @@ window.countdownTimer = Raffler._timer(function () {
  *************************************************************************/
 
 Raffler.__initCycleText = function () {
-  Raffler.dom.itemsCycle.html('<section id="init-raffler-cycle"><a href="#">BEGIN RAFFLE!</a></section>')
+  Raffler.dom.itemsCycle.html(`
+    <section id="init-raffler-cycle">
+      <a href="#" class="animate__animated animate__pulse animate__slow animate__delay-5s animate__infinite">CLICK TO BEGIN RAFFLE!</a>
+    </section>`
+  )
   Raffler.__disableRaffle()
 }
 
@@ -1744,6 +1743,10 @@ Raffler.__disableRaffle = function () {
 Raffler.__enableRaffle = function () {
   Raffler.dom.interactive.btnRaffle.prop('disabled', false).removeClass('disabled')
 }
+Raffler.__enableTheButton = function () {
+  document.querySelector('#the-button').style.display = 'block'
+}
+
 Raffler.__disableChosenConfirm = function () {
   Raffler.dom.chosenConfirm.hide()
   Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')

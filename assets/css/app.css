@@ -340,6 +340,10 @@ header {
   }
 }
 
+#the-button {
+  display: none;
+}
+
 .button {
   align-items: center;
   border-radius: 4px;
@@ -549,7 +553,7 @@ section#init-raffler-cycle {
   section#init-raffler-cycle a {
     color: #71d6ff;
     display: block;
-    font-size: 2em;
+    font-size: 1.5em;
     text-decoration: none;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
   }
@@ -656,7 +660,7 @@ section#init-raffler-cycle {
       }
     #main-content .main-container {
       clear: both;
-      margin: 25px 0 0;
+      margin: 0;
       overflow: hidden;
       padding: 0 0 50px;
     }

@@ -1,5 +1,6 @@
 /* constants */
 /* set any global app constants */
+/* global Raffler */
 /* eslint-disable no-unused-vars */
 
 const RAFFLER_ENV_PROD_URL = [
@@ -58,3 +59,9 @@ const RAFFLER_DEFAULTS = {
     'soundName': false
   }
 }
+
+// settings: saved in LOCAL STORAGE
+Raffler.settings = RAFFLER_DEFAULTS.settings
+
+// config: only saved while game is loaded
+Raffler.config = RAFFLER_DEFAULTS.config
