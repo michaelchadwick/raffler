@@ -13,7 +13,7 @@ async function modalOpen(type) {
     case 'help':
       this.myModal = new Modal('perm', 'How to use Raffler',
         `
-          <p>Draw something at random.</p>
+          <p>Pick something from a collection at random.</p>
 
           <ol class="help">
             <li>Press the main raffle area to get it going</li>
@@ -22,8 +22,12 @@ async function modalOpen(type) {
               <p>If the winner is present: Press "YES", the winner is removed from the pool, and the raffler goes again. If the winner is not present: Press "NO", the winner remains in the pool, and the raffler goes again.</p>
               </p>
             </li>
-            <li>Raffler will keep removing winners until it's left with one remaining item, and then it's done</li>
+            <li>Raffler will keep removing winners until it's left with one remaining item, and then it's done.</li>
           </ol>
+
+          <hr />
+
+          <p>Source can be found on <a href="https://github.com/michaelchadwick/raffler">Github</a>. Set up your own Raffler!</p>
         `,
         null,
         null

@@ -64,6 +64,10 @@ ul {
     line-height: 1.3em;
   }
 
+hr {
+  margin: 5px 0;
+}
+
 audio#talkify-audio {
   border-radius: 0;
   bottom: 0;
