@@ -11,15 +11,13 @@ Click or tap the button and a cavalcade of pre-loaded items will begin to cycle 
 To develop locally, a few simple steps need to be taken.
 
 * clone the project to your local computer
-`git clone git@github.com:michaelchadwick/raffler.git`
+`$ git clone git@github.com:michaelchadwick/raffler.git`
 * change into the new directory
-`cd raffler`
-* install NodeJS dependencies
-`npm install`
-* build the project files
-`gulp build`
+`$ cd raffler`
+* build sass files ([Dart Sass](https://sass-lang.com))
+`$ sass assets/scss:assets/css` or `sass -w assets/scss:assets/css` (for continuous dev)
 * run a local http server
-`npm run serve`
+`$ php -S 127.0.0.1:3000` or `$ python3 -m http.server 3000` or `$ ruby -run -e httpd . -p 3000`
 
 Finally, check out [http://localhost:3000](http://localhost:3000) in a browser for your running instance!
 
