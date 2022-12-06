@@ -3,6 +3,7 @@ node_modules
 .DS_Store
 dandelion.yml
 npm-audit.html
+assets/css
 !assets/icons
 !assets/css/vendor
 !assets/js/vendor
