@@ -10,6 +10,8 @@ const RAFFLER_ENV_PROD_URL = [
   'raffler.me'
 ]
 
+const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
+
 const RAFFLER_SETTINGS_KEY = 'raffler-settings'
 
 const RAFFLER_USER_SETTINGS_FILE = '/config/raffler_config.user.json'
