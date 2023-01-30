@@ -9,5 +9,5 @@ assets/css/*
 !assets/js/vendor
 
 # configuration
+raffler_config.user.json
 raffler_data.user.json
-raffler_settings.user.json

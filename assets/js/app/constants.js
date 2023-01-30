@@ -12,7 +12,7 @@ const RAFFLER_ENV_PROD_URL = [
 
 const RAFFLER_SETTINGS_KEY = 'raffler-settings'
 
-const RAFFLER_USER_SETTINGS_FILE = '/config/raffler_settings.user.json'
+const RAFFLER_USER_SETTINGS_FILE = '/config/raffler_config.user.json'
 
 const RAFFLER_USER_ITEMS_KEY = 'raffler-user-items'
 const RAFFLER_CHOSEN_ITEMS_KEY = 'raffler-chosen-items'
@@ -31,6 +31,7 @@ const RAFFLER_STAGES = {
 const RAFFLER_DEFAULTS = {
   'config': {
     'allowNotifications': true,
+    'dataFilePath': '/config/raffler_data.json',
     'hasLocalStorage': true,
     'intervalRange': RAFFLER_DEFAULT_INTERVAL,
     'itemsArr': [],
@@ -48,7 +49,6 @@ const RAFFLER_DEFAULTS = {
   },
   'settings': {
     'boxResize': true,
-    'dataFilePath': './assets/json/raffler_data.json',
     'logoFileLink': '',
     'logoFilePath': '',
     'notifierEnabled': false,

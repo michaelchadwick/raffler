@@ -36,6 +36,6 @@ Raffler.dom.interactive = {
 }
 
 Raffler.dom.interactive.debug = {
-  'all': $('#debug-buttons'),
-  'btnShowConfig': document.getElementById('button-show-config')
+  'btnShowConfig': document.querySelector('#button-show-config'),
+  'container': document.querySelector('#debug-buttons'),
 }
