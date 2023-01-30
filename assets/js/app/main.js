@@ -437,9 +437,9 @@ Raffler.resetCountdown = function () {
  *************************************************************************/
 
 Raffler._initDebug = function() {
-  if (Raffler.dom.interactive.debug.all) {
+  if (Raffler.dom.interactive.debug.container) {
     // show debug buttons
-    Raffler.dom.interactive.debug.all.css('display', 'flex')
+    Raffler.dom.interactive.debug.container.style.display = 'flex'
 
     // make header buttons smaller to fit in debug buttons
     document.querySelectorAll('button.icon').forEach((btn) => {
@@ -776,9 +776,10 @@ Raffler._displayAppConfig = function() {
 
   var html = ''
 
+  html += '<a name="config"></a>';
   html += `<h4>GLOBAL (ENV: ${Raffler.env})</h4>`
   html += '<h4>----------------------------</h4>'
-  html += '<h5>CONFIG</h5>'
+  html += '<h5>CONFIG | <a href="#settings">SETTINGS</a></h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
@@ -822,7 +823,8 @@ Raffler._displayAppConfig = function() {
   html += '</dl>'
 
   html += '<h4>----------------------------</h4>'
-  html += '<h5>SETTINGS</h5>'
+  html += '<a name="settings"></a>';
+  html += '<h5><a href="#config">CONFIG</a> | SETTINGS</h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
@@ -895,7 +897,7 @@ Raffler._attachEventListeners = function () {
 
   // local debug buttons
   if (Raffler.env == 'local') {
-    if (Raffler.dom.interactive.debug.all) {
+    if (Raffler.dom.interactive.debug.container) {
       // ⚙ show current Raffler config
       Raffler.dom.interactive.debug.btnShowConfig.addEventListener('click', () => {
         modalOpen('show-config')
