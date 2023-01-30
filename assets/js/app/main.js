@@ -386,6 +386,8 @@ Raffler.initApp = function () {
   Raffler.dom.interactive.btnRaffle.focus()
 
   Raffler._notify('Raffler init', 'notice')
+
+  Raffler._getNebyooApps()
 }
 
 // handy combo shortcut of methods to reset application
@@ -1644,6 +1646,20 @@ Raffler._timer = function (callbackFunc, timing) {
     return variableInterval.start()
     // return variableInterval
   }
+}
+
+Raffler._getNebyooApps = async function() {
+  const response = await fetch('https://dave.neb.host/?sites')
+  const json = await response.json()
+  const apps = json.body
+  const appList = document.querySelector('.nav-list')
+
+  Object.values(apps).forEach(app => {
+    const appLink = document.createElement('a')
+    appLink.href = app.url
+    appLink.innerText = app.title
+    appList.appendChild(appLink)
+  })
 }
 
 // main timer instance for raffler cycler
