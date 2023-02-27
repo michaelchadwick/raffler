@@ -32,7 +32,6 @@ const RAFFLER_STAGES = {
 
 const RAFFLER_DEFAULTS = {
   'config': {
-    'allowNotifications': true,
     'dataFilePath': '/config/raffler_data.json',
     'hasLocalStorage': true,
     'intervalRange': RAFFLER_DEFAULT_INTERVAL,
@@ -50,6 +49,7 @@ const RAFFLER_DEFAULTS = {
     'timesRun': 0
   },
   'settings': {
+    'allowNotifications': true,
     'boxResize': true,
     'logoFileLink': '',
     'logoFilePath': '',
