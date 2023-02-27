@@ -449,10 +449,15 @@ Raffler._initDebug = function() {
     })
   }
 }
+
 // fill in-memory itemsArr with server JSON
-Raffler._initItemsArr = function () {
-  $.getJSON(Raffler.settings.dataFilePath, function () {})
-    .done(function (data) {
+Raffler._initItemsArr = async function () {
+  const response = await fetch(Raffler.config.dataFilePath)
+
+  if (response) {
+    const data = await response.json()
+
+    if (data) {
       while (Raffler.config.itemsArr.length) {
         Raffler.config.itemsArr.pop()
       }
@@ -470,10 +475,12 @@ Raffler._initItemsArr = function () {
         Raffler._syncChosenItemsWithItemsArr()
         Raffler._syncUserItemsWithItemsArr()
       }
-    })
-    .fail(function (jqxhr, textStatus, e) {
-      Raffler._notify('Failed initial data load: ' + e, 'error', true)
-    })
+    } else {
+      Raffler._notify('Failed to process initial data load: ' + e, 'error', true)
+    }
+  } else {
+    Raffler._notify('Failed initial data load: ' + e, 'error', true)
+  }
 }
 
 Raffler._loadSettings = function() {
@@ -566,14 +573,14 @@ Raffler._loadSettings = function() {
     Raffler._notify('raffler-user-items already exists', 'notice')
   } else {
     Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, [])
-    Raffler._notify('raffler-user-items created', 'notice')
+    Raffler._notify('raffler-user-items not found, so created', 'notice')
   }
 
   if (localStorage.getItem(RAFFLER_CHOSEN_ITEMS_KEY)) {
     Raffler._notify('raffler-chosen-items already exists', 'notice')
   } else {
     Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, [])
-    Raffler._notify('raffler-chosen-items created!', 'notice')
+    Raffler._notify('raffler-chosen-items not found, so created', 'notice')
   }
 }
 Raffler._changeSetting = function(setting, event = null) {
@@ -750,7 +757,7 @@ Raffler._loadUserSettings = async function () {
 
   if (data) {
     if (data.dataFilePath != '') {
-      Raffler.settings.dataFilePath = data.dataFilePath
+      Raffler.config.dataFilePath = data.dataFilePath
     }
     if (data.logoFileLink != '') {
       Raffler.settings.logoFileLink = data.logoFileLink
@@ -1248,7 +1255,7 @@ Raffler._refreshChosenItemsDisplay = function () {
         Raffler.dom.resultsContent.prepend('<li>' + ordinal++ + '. ' + val.name + ' (' + val.affl + ')</li>')
       })
 
-      Raffler._notify('refreshChosenItemsDisplay: display updated')
+      Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
     } else {
       Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
     }
@@ -1298,6 +1305,8 @@ Raffler._addChosenItemToLocalStorage = function (lastChosenItem) {
 }
 
 Raffler._timerStart = function() {
+  // console.log('starting timer...')
+
   window.countdownTimer.start()
   Raffler.dom.itemsCycle.removeClass('stopped')
 
@@ -1490,8 +1499,8 @@ Raffler._setLocalStorageItem = function (lsKey, obj) {
   }
 }
 // app notifications
-Raffler._notify = function (msg, type, notifyUser) {
-  if (Raffler.settings.allowNotification) {
+Raffler._notify = function (msg, type, notifyUser, line) {
+  if (Raffler.settings.allowNotifications) {
     type = (typeof type) === 'undefined' ? '' : type
     notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
 
@@ -1539,7 +1548,7 @@ Raffler._notify = function (msg, type, notifyUser) {
     }
 
     // 1. notify admin
-    console.log.apply(console, label(`${bgcolor} ${fgcolor} ${header.toUpperCase()} ${msg}`))
+    console.log.apply(console, label(`${bgcolor} ${fgcolor} ${header.toUpperCase()} ${msg} ${line ? `(${line})` : ''}`))
 
     // 2. also, optionally, notify user
     if (notifyUser) {
