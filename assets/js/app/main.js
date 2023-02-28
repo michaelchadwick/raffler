@@ -342,6 +342,7 @@ async function modalOpen(type) {
 
 // app entry point
 Raffler.initApp = function () {
+  Raffler._notify('Raffler init', 'notice')
 
   // set env
   Raffler.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
@@ -371,8 +372,8 @@ Raffler.initApp = function () {
   Raffler._refreshDebugValues()
   Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
 
-  // we have previously-chosen items
-  // add them to in-memory list
+  // if previously-chosen items exit
+  // add them to the in-memory list
   if (Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY).length) {
     Raffler._refreshChosenItemsDisplay()
     Raffler.dom.resultsWrapper.show()
@@ -381,11 +382,9 @@ Raffler.initApp = function () {
   // Raffler.__disableTimerStart()
 
   Raffler.__initCycleText()
-
   Raffler._timerStop()
-  Raffler.dom.interactive.btnRaffle.focus()
 
-  Raffler._notify('Raffler init', 'notice')
+  Raffler.dom.interactive.btnRaffle.focus()
 
   Raffler._getNebyooApps()
 }
@@ -570,14 +569,14 @@ Raffler._loadSettings = function() {
   }
 
   if (localStorage.getItem(RAFFLER_USER_ITEMS_KEY)) {
-    Raffler._notify('raffler-user-items already exists', 'notice')
+    // Raffler._notify('raffler-user-items already exists', 'notice')
   } else {
     Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, [])
     Raffler._notify('raffler-user-items not found, so created', 'notice')
   }
 
   if (localStorage.getItem(RAFFLER_CHOSEN_ITEMS_KEY)) {
-    Raffler._notify('raffler-chosen-items already exists', 'notice')
+    // Raffler._notify('raffler-chosen-items already exists', 'notice')
   } else {
     Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, [])
     Raffler._notify('raffler-chosen-items not found, so created', 'notice')
@@ -916,10 +915,13 @@ Raffler._attachEventListeners = function () {
 
   // main raffling events
   Raffler.dom.itemsCycle.click(function () {
-    Raffler._notify('starting the cycle')
-    Raffler.__enableTheButton()
-    Raffler.__enableRaffle()
-    Raffler._timerStart()
+    Raffler._notify('clicked on the start button')
+
+    if (Raffler.config.itemsArr.length > 0) {
+      Raffler.__enableTheButton()
+      Raffler.__enableRaffle()
+      Raffler._timerStart()
+    }
   })
   Raffler.dom.interactive.btnRaffle.click(function (e) {
     e.preventDefault()
@@ -1168,18 +1170,33 @@ Raffler._syncChosenItemsWithItemsArr = function () {
       Raffler.config.itemsLeftArr = items
       Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
 
-      Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
+      // Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
-      Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'notice')
+      // Raffler._notify('syncChosenItemsWithItemsArr: none to sync', 'notice')
+    }
+
+    // all items but one have been chosen on reload
+    if (items.length === 1) {
+      Raffler._notify('only one item left!', 'notice')
+
+      window.countdownTimer.stop()
+      Raffler.__disableRaffle()
+
+      Raffler.config.lastItemChosenConfirmed = true
+      Raffler._continueRaffling()
     }
 
     // all items have been chosen on reload
     if (items.length === 0) {
+      Raffler._notify('no items left!', 'notice')
+
       window.countdownTimer.stop()
       Raffler.__disableRaffle()
+      Raffler.dom.itemsCycle.removeClass('stopped')
       Raffler.dom.itemsCycle.html('<div>:\'(<br /><br />Nothing to raffle!</div>')
       Raffler.dom.body.addClass('level4')
-      Raffler._notify('syncChosenItemsWithItemsArr: all items chosen', 'warning')
+
+      // Raffler._notify('syncChosenItemsWithItemsArr: all items chosen', 'warning')
     }
   } catch (e) {
     Raffler._notify('syncChosenItemsWithItemsArr: ' + e, 'error')
@@ -1210,9 +1227,9 @@ Raffler._syncUserItemsWithItemsArr = function () {
       }
       Raffler._refreshUserItemsDisplay()
 
-      Raffler._notify('syncUserItemsWithItemsArr: synced', 'notice')
+      // Raffler._notify('syncUserItemsWithItemsArr: synced', 'notice')
     } else {
-      Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'notice')
+      // Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'notice')
     }
 
     Raffler._refreshAvailableItemsDisplay()
@@ -1255,7 +1272,7 @@ Raffler._refreshChosenItemsDisplay = function () {
         Raffler.dom.resultsContent.prepend('<li>' + ordinal++ + '. ' + val.name + ' (' + val.affl + ')</li>')
       })
 
-      Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
+      // Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
     } else {
       Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
     }
@@ -1286,7 +1303,7 @@ Raffler._refreshAvailableItemsDisplay = function () {
     Raffler.config.itemsAvailable.push(item.name + ' (' + item.affl + ')')
   })
 
-  Raffler._notify('refreshAvailableItems: display updated', 'notice')
+  // Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
 
 // add last chosen item to localStorage
@@ -1826,6 +1843,8 @@ Raffler.__shuffleArray = function (array) {
 }
 
 Raffler.__disableRaffle = function () {
+  // Raffler._notify('disabling raffler until button is pressed')
+
   Raffler.dom.body.removeClass()
   Raffler.dom.interactive.btnRaffle.prop('disabled', true).addClass('disabled')
 }
