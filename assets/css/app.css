@@ -762,10 +762,11 @@ section#init-raffler-cycle {
     word-wrap: break-word;
   }
     #main-content .main-container #items-cycle .item-name {
-      font-size: calc(1.6rem + 1vh);
+      font-size: calc(2rem + 1vw);
     }
     #main-content .main-container #items-cycle .item-affl {
-      font-size: calc(1.2rem + 1vh);
+      font-size: calc(2rem + 0.5vw);
+      margin-top: 0.5rem;
     }
     #main-content .main-container #items-cycle.level1,
     #main-content .main-container #items-cycle.level2,
@@ -779,33 +780,33 @@ section#init-raffler-cycle {
     }
       #main-content .main-container #items-cycle.level1 .item-name {
         color: var(--gray-light);
-        font-size: calc(2rem + 1.5vw);
+        font-size: calc(2rem + 2vw);
       }
       #main-content .main-container #items-cycle.level1 .item-affl {
         color: var(--gray-light);
-        font-size: calc(2rem + 0.4vw);
+        font-size: calc(2rem + 0.75vw);
       }
     #main-content .main-container #items-cycle.level2 {
       background: #d9d9d9;
     }
       #main-content .main-container #items-cycle.level2 .item-name {
         color: #6a242a;
-        font-size: calc(2rem + 2.5vw);
+        font-size: calc(2rem + 3vw);
       }
       #main-content .main-container #items-cycle.level2 .item-affl {
         color: #6a242a;
-        font-size: calc(2rem + 0.8vw);
+        font-size: calc(2rem + 1.25vw);
       }
     #main-content .main-container #items-cycle.level3 {
       background: #ededed;
     }
       #main-content .main-container #items-cycle.level3 .item-name {
         color: #006e90;
-        font-size: calc(3rem + 4vw);
+        font-size: calc(2rem + 3.75vw);
       }
       #main-content .main-container #items-cycle.level3 .item-affl {
         color: #006e90;
-        font-size: calc(2rem + 1.5vw);
+        font-size: calc(2rem + 2vw);
       }
     #main-content .main-container #items-cycle.level4 {
       background: whitesmoke;
@@ -813,14 +814,22 @@ section#init-raffler-cycle {
     }
       #main-content .main-container #items-cycle.level4 .item-name {
         color: #005b77;
-        font-size: calc(2rem + 7.5vw);
+        font-size: calc(2rem + 4.25vw);
       }
       #main-content .main-container #items-cycle.level4 .item-affl {
         color: #005b77;
         font-size: calc(2rem + 3vw);
       }
+      @media (min-width: 768px) {
+        #main-content .main-container #items-cycle.level4 .item-name {
+          font-size: calc(2rem + 5vw);
+        }
+        #main-content .main-container #items-cycle.level4 .item-affl {
+          font-size: calc(2rem + 3.5vw);
+        }
+      }
     #main-content .main-container #items-cycle.level-win {
-      background: #fcfcfc;
+      background: var(--white-soft);
       border-bottom: 5px solid #7ea438;
       border-left: 5px solid #87af3c;
       border-right: 5px solid #7ea438;
@@ -828,12 +837,22 @@ section#init-raffler-cycle {
       box-shadow: 0 0 20px 7px #999999;
     }
       #main-content .main-container #items-cycle.level-win .item-name {
-        color: #99c24d;
-        font-size: calc(2rem + 10vw);
+        color: #749537;
+        font-size: calc(2rem + 5vw);
+        text-shadow: 1px 1px 2px #223108;
       }
       #main-content .main-container #items-cycle.level-win .item-affl {
-        color: #8db73f;
-        font-size: calc(2rem + 4vw);
+        color: #6a892f;
+        font-size: calc(2rem + 3.5vw);
+        text-shadow: 1px 1px 2px #192505;
+      }
+      @media (min-width: 768px) {
+        #main-content .main-container #items-cycle.level-win .item-name {
+          font-size: calc(2rem + 7vw);
+        }
+        #main-content .main-container #items-cycle.level-win .item-affl {
+          font-size: calc(2rem + 5vw);
+        }
       }
     #main-content .main-container #items-cycle.stopped div {
       opacity: 0.02;
