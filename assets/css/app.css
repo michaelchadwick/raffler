@@ -917,6 +917,7 @@ section#init-raffler-cycle {
               background-color: #873a41;
             }
           }
+
       #main-content .main-container #results-wrapper {
         clear: both;
         color: var(--white-mute);
@@ -942,25 +943,25 @@ section#init-raffler-cycle {
           }
           #main-content .main-container #results-wrapper #results-list {
             background-color: var(--gray-dark);
-            height: 110px;
+            border: 2px solid var(--black-mute);
             margin: 0 auto;
+            max-height: 150px;
             overflow: auto;
             padding: 10px;
             text-transform: uppercase;
-            width: 100%;
           }
             #main-content .main-container #results-wrapper #results-list ul {
               font-size: 2rem;
               margin: auto;
-              padding: 0 15%;
+              padding: 0;
               text-align: center;
               text-shadow: 1px 1px 2px #000;
-              width: 45vw;
             }
               #main-content .main-container #results-wrapper #results-list ul li {
                 list-style-type: none;
-                margin-right: 10px;
+                margin: 0;
               }
+
   #main-content .footer-container {
     background: #005b77;
     border-top: 5px solid #00475d;
