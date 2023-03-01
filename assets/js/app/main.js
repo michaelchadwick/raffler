@@ -938,40 +938,8 @@ Raffler._attachEventListeners = function () {
     Raffler._continueRaffling()
   })
   Raffler.dom.interactive.btnExportResults.click(function (e) {
-    e.preventDefault()
-    Raffler._notify('exporting results', 'notice')
-
-    var plainText = $('div#results-wrapper div ul')
-      .html()
-      .replace(/<li>/g, '')
-      .replace(/<\/li>/g, '\r\n')
-
-    var Blob = window.Blob
-    var plainTextBlob = new Blob(
-      [plainText],
-      {type: 'text/plain;charset=' + document.characterSet}
-    )
-
-    var today = new Date()
-
-    var yr = today.getFullYear()
-    var mo = today.getMonth() + 1
-    mo = (mo < 10) ? `0${mo}` : `${mo}`
-    var dy = today.getDate()
-    dy = (dy < 10) ? `0${dy}` : `${dy}`
-    var ymd = `${yr}${mo}${dy}`
-
-    var hr = today.getHours()
-    hr = (hr < 10) ? `0${hr}` : `${hr}`
-    var mi = today.getMinutes()
-    mi = (mi < 10) ? `0${mi}` : `${mi}`
-    var sc = today.getSeconds()
-    sc = (sc < 10) ? `0${sc}` : `${sc}`
-    var hms = hr + ':' + mi + ':' + sc
-
-    var filename = `raffler-export_${ymd}_${hms}.txt`
-
-    window.saveAs(plainTextBlob, filename)
+    // export.js
+    Raffler._exportResults()
   })
 
   // TODO: these elements don't exist until settings modal is triggered
@@ -1689,6 +1657,112 @@ Raffler._getNebyooApps = async function() {
   })
 }
 
+/*************************************************************************
+ * _private __helper methods *
+ *************************************************************************/
+
+Raffler.__initCycleText = function () {
+  Raffler.dom.itemsCycle.html(`
+    <section id="init-raffler-cycle">
+      <a href="#" class="animate__animated animate__pulse animate__slow animate__delay-5s animate__infinite">CLICK TO BEGIN RAFFLE!</a>
+    </section>`
+  )
+  Raffler.__disableRaffle()
+}
+
+// encode user entries html
+Raffler.__sanitize = function (newEntry) {
+  $.each(newEntry, function (key, val) {
+    newEntry.val = val.replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/""/g, '&quot;')
+  })
+
+  return newEntry
+}
+
+// check for duplicate user entries
+Raffler.__isDuplicateValue = function (newUserItem) {
+  $.each(Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY), function (key, val) {
+    if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
+      return true
+    }
+  })
+
+  return false
+}
+
+Raffler.__shuffleArray = function (array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1))
+    var temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+}
+
+Raffler.__disableRaffle = function () {
+  // Raffler._notify('disabling raffler until button is pressed')
+
+  Raffler.dom.body.removeClass()
+  Raffler.dom.interactive.btnRaffle.prop('disabled', true).addClass('disabled')
+}
+Raffler.__enableRaffle = function () {
+  Raffler.dom.interactive.btnRaffle.prop('disabled', false).removeClass('disabled')
+}
+Raffler.__enableTheButton = function () {
+  document.querySelector('#the-button').style.display = 'block'
+}
+
+Raffler.__disableChosenConfirm = function () {
+  Raffler.dom.chosenConfirm.hide()
+  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')
+  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', true).addClass('disabled')
+
+  // Raffler.__enableTimerStop()
+}
+Raffler.__enableChosenConfirm = function () {
+  Raffler.dom.chosenConfirm.show()
+  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', false).removeClass('disabled')
+  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', false).removeClass('disabled')
+
+  // Raffler.__disableTimerStart()
+  // Raffler.__disableTimerStop()
+}
+// Raffler.__disableTimerStart = function () {
+//   Raffler.dom.admin.btnTimerStart.prop('disabled', true).addClass('disabled')
+// }
+// Raffler.__enableTimerStart = function () {
+//   Raffler.dom.admin.btnTimerStart.prop('disabled', false).removeClass('disabled')
+// }
+// Raffler.__disableTimerStop = function () {
+//   Raffler.dom.admin.btnTimerStop.prop('disabled', true).addClass('disabled')
+// }
+// Raffler.__enableTimerStop = function () {
+//   Raffler.dom.admin.btnTimerStop.prop('disabled', false).removeClass('disabled')
+// }
+
+Raffler.__toggleTestNotices = function () {
+  var btns = Raffler.dom.interactive.btnTests
+
+  $.each(btns, function (key) {
+    if (!Raffler.settings.notifierEnabled) {
+      $(btns[key]).attr('disabled', true)
+      $(btns[key]).attr('title', 'Raffler.settings.notifierEnabled is false')
+      $(btns[key]).addClass('disabled')
+    } else {
+      $(btns[key]).attr('disabled')
+      $(btns[key]).attr('title', '')
+      $(btns[key]).removeClass('disabled')
+    }
+  })
+}
+
+/************************************************************************
+ * START THE ENGINE *
+ ************************************************************************/
+
 // main timer instance for raffler cycler
 window.countdownTimer = Raffler._timer(function () {
   // this is the variableInterval - so we can change/get the interval here:
@@ -1797,110 +1871,5 @@ window.countdownTimer = Raffler._timer(function () {
   }
 }, RAFFLER_DEFAULT_INTERVAL)
 
-/*************************************************************************
- * _private __helper methods *
- *************************************************************************/
-
-Raffler.__initCycleText = function () {
-  Raffler.dom.itemsCycle.html(`
-    <section id="init-raffler-cycle">
-      <a href="#" class="animate__animated animate__pulse animate__slow animate__delay-5s animate__infinite">CLICK TO BEGIN RAFFLE!</a>
-    </section>`
-  )
-  Raffler.__disableRaffle()
-}
-
-// encode user entries html
-Raffler.__sanitize = function (newEntry) {
-  $.each(newEntry, function (key, val) {
-    newEntry.val = val.replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/""/g, '&quot;')
-  })
-
-  return newEntry
-}
-
-// check for duplicate user entries
-Raffler.__isDuplicateValue = function (newUserItem) {
-  $.each(Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY), function (key, val) {
-    if (newUserItem.name === val.name && newUserItem.affl === val.affl) {
-      return true
-    }
-  })
-
-  return false
-}
-
-Raffler.__shuffleArray = function (array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1))
-    var temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
-}
-
-Raffler.__disableRaffle = function () {
-  // Raffler._notify('disabling raffler until button is pressed')
-
-  Raffler.dom.body.removeClass()
-  Raffler.dom.interactive.btnRaffle.prop('disabled', true).addClass('disabled')
-}
-Raffler.__enableRaffle = function () {
-  Raffler.dom.interactive.btnRaffle.prop('disabled', false).removeClass('disabled')
-}
-Raffler.__enableTheButton = function () {
-  document.querySelector('#the-button').style.display = 'block'
-}
-
-Raffler.__disableChosenConfirm = function () {
-  Raffler.dom.chosenConfirm.hide()
-  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', true).addClass('disabled')
-  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', true).addClass('disabled')
-
-  // Raffler.__enableTimerStop()
-}
-Raffler.__enableChosenConfirm = function () {
-  Raffler.dom.chosenConfirm.show()
-  Raffler.dom.interactive.btnChosenConfirmYes.prop('disabled', false).removeClass('disabled')
-  Raffler.dom.interactive.btnChosenConfirmNo.prop('disabled', false).removeClass('disabled')
-
-  // Raffler.__disableTimerStart()
-  // Raffler.__disableTimerStop()
-}
-// Raffler.__disableTimerStart = function () {
-//   Raffler.dom.admin.btnTimerStart.prop('disabled', true).addClass('disabled')
-// }
-// Raffler.__enableTimerStart = function () {
-//   Raffler.dom.admin.btnTimerStart.prop('disabled', false).removeClass('disabled')
-// }
-// Raffler.__disableTimerStop = function () {
-//   Raffler.dom.admin.btnTimerStop.prop('disabled', true).addClass('disabled')
-// }
-// Raffler.__enableTimerStop = function () {
-//   Raffler.dom.admin.btnTimerStop.prop('disabled', false).removeClass('disabled')
-// }
-
-Raffler.__toggleTestNotices = function () {
-  var btns = Raffler.dom.interactive.btnTests
-
-  $.each(btns, function (key) {
-    if (!Raffler.settings.notifierEnabled) {
-      $(btns[key]).attr('disabled', true)
-      $(btns[key]).attr('title', 'Raffler.settings.notifierEnabled is false')
-      $(btns[key]).addClass('disabled')
-    } else {
-      $(btns[key]).attr('disabled')
-      $(btns[key]).attr('title', '')
-      $(btns[key]).removeClass('disabled')
-    }
-  })
-}
-
-/************************************************************************
- * START THE ENGINE *
- ************************************************************************/
-
+// get it going
 window.onload = Raffler.initApp()
