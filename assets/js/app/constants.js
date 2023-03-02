@@ -32,6 +32,7 @@ const RAFFLER_STAGES = {
 
 const RAFFLER_DEFAULTS = {
   'config': {
+    'configFilePath': '/config/raffler_config.json',
     'dataFilePath': '/config/raffler_data.json',
     'hasLocalStorage': true,
     'intervalRange': RAFFLER_DEFAULT_INTERVAL,

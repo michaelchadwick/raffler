@@ -1,10 +1,13 @@
 /* main */
 /* app entry point and main functions */
 /* eslint-disable no-undef */
-/* global $, Raffler */
+/* global Raffler */
+
+// set to true if using /config/raffler_config.user.json
+Raffler.config.hasUserConfig = false
 
 /*************************************************************************
- * public methods *
+ * public methods (called from UI) *
  *************************************************************************/
 
 // modal opening functions
@@ -340,55 +343,6 @@ async function modalOpen(type) {
   }
 }
 
-// app entry point
-Raffler.initApp = function () {
-  Raffler._notify('Raffler init', 'notice')
-
-  // set env
-  Raffler.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
-
-  // if local dev, show debug stuff
-  if (Raffler.env == 'local') {
-    Raffler._initDebug()
-
-    document.title = '(LH) ' + document.title
-  }
-
-  // if we aren't doing the "resize as the raffle counts down" thing
-  // then fast track display to final level
-  if (!Raffler.settings.boxResize) {
-    Raffler.dom.body.className = ''
-    Raffler.dom.body.classList.add('level4')
-    Raffler.dom.itemsCycle.className = ''
-    Raffler.dom.itemsCycle.classList.add('level4')
-  }
-
-  Raffler._attachEventListeners()
-
-  Raffler._loadConfig()
-  Raffler._loadSettings()
-
-  Raffler.resetApp()
-  Raffler._refreshDebugValues()
-  Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
-
-  // if previously-chosen items exit
-  // add them to the in-memory list
-  if (Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY).length) {
-    Raffler._refreshChosenItemsDisplay()
-    Raffler.dom.resultsWrapper.style.display = 'block'
-  }
-
-  // Raffler.__disableTimerStart()
-
-  Raffler.__initCycleText()
-  Raffler._timerStop()
-
-  Raffler.dom.interactive.btnRaffle.focus()
-
-  Raffler._getNebyooApps()
-}
-
 // handy combo shortcut of methods to reset application
 Raffler.resetApp = function () {
   Raffler._initItemsArr()
@@ -437,6 +391,59 @@ Raffler.resetCountdown = function () {
  * _private methods *
  *************************************************************************/
 
+// app entry point
+Raffler._initApp = function () {
+  Raffler._notify('Raffler init', 'notice')
+
+  // set env
+  Raffler.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
+
+  // if local dev, show debug stuff
+  if (Raffler.env == 'local') {
+    Raffler._initDebug()
+
+    document.title = '(LH) ' + document.title
+  }
+
+  // if we aren't doing the "resize as the raffle counts down" thing
+  // then fast track display to final level
+  if (!Raffler.settings.boxResize) {
+    Raffler.dom.body.className = ''
+    Raffler.dom.body.classList.add('level4')
+    Raffler.dom.itemsCycle.className = ''
+    Raffler.dom.itemsCycle.classList.add('level4')
+  }
+
+  Raffler._attachEventListeners()
+
+  if (Raffler.config.hasUserConfig) {
+    Raffler._loadUserConfig()
+  } else {
+    Raffler.resetApp()
+  }
+
+  Raffler._loadSettings()
+
+  Raffler._refreshDebugValues()
+  Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
+
+  // if previously-chosen items exit
+  // add them to the in-memory list
+  if (Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY).length) {
+    Raffler._refreshChosenItemsDisplay()
+    Raffler.dom.resultsWrapper.style.display = 'block'
+  }
+
+  // Raffler.__disableTimerStart()
+
+  Raffler.__initCycleText()
+  Raffler._timerStop()
+
+  Raffler.dom.interactive.btnRaffle.focus()
+
+  Raffler._getNebyooApps()
+}
+
 Raffler._initDebug = function() {
   if (Raffler.dom.interactive.debug.container) {
     // show debug buttons
@@ -451,9 +458,11 @@ Raffler._initDebug = function() {
 
 // fill in-memory itemsArr with server JSON
 Raffler._initItemsArr = async function () {
+  Raffler._notify(`initializing itemsArr from: ${Raffler.config.dataFilePath}`, 'notice')
+
   const response = await fetch(Raffler.config.dataFilePath)
 
-  if (response) {
+  if (response.ok) {
     const data = await response.json()
 
     if (data) {
@@ -478,40 +487,56 @@ Raffler._initItemsArr = async function () {
       Raffler._notify('Failed to process initial data load: ' + e, 'error', true)
     }
   } else {
-    Raffler._notify('Failed initial data load: ' + e, 'error', true)
+    Raffler._notify('Failed initial data load', 'error', true)
   }
 }
 
 // load user config from extra json file, if exists
-Raffler._loadConfig = async function() {
-  const response = await fetch(RAFFLER_USER_CONFIG_FILE)
-  const data = await response.json()
+Raffler._loadUserConfig = function() {
+  Raffler._notify(`_loadUserConfig`, 'notice')
 
-  if (data) {
-    console.log('data', data)
-    if (data.dataFilePath != '') {
-      Raffler.config.dataFilePath = data.dataFilePath
-    }
-    if (data.logoFileLink != '') {
-      Raffler.settings.logoFileLink = data.logoFileLink
-    }
-    if (data.logoFilePath != '') {
-      Raffler.settings.logoFilePath = data.logoFilePath
+  fetch(RAFFLER_USER_CONFIG_FILE)
+    .then((response) => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error()
+      }
+    })
+    .then((data) => {
+      if (data.dataFilePath != '') {
+        Raffler.config.dataFilePath = data.dataFilePath
+      }
+      if (data.logoFileLink != '') {
+        Raffler.settings.logoFileLink = data.logoFileLink
+      }
+      if (data.logoFilePath != '') {
+        Raffler.settings.logoFilePath = data.logoFilePath
 
-      Raffler.dom.title.append(`
-        <span>at</span>
-        <a href='${Raffler.settings.logoFileLink}' target='_blank'>
-          <img id='logo' src='${Raffler.settings.logoFilePath}' />
-        </a>
-      `)
-    }
-    if (data.talkifyKey != '') {
-      Raffler.config.talkifyKey = data.talkifyKey
-    }
-  }
+        Raffler.dom.title.append(`
+          <span>at</span>
+          <a href='${Raffler.settings.logoFileLink}' target='_blank'>
+            <img id='logo' src='${Raffler.settings.logoFilePath}' />
+          </a>
+        `)
+      }
+      if (data.talkifyKey != '') {
+        Raffler.config.talkifyKey = data.talkifyKey
+      }
+
+      Raffler.resetApp()
+    })
+    .catch(error => {
+      Raffler._notify('User config not found at /config/raffler_config.user.json', 'error', true)
+
+      Raffler.resetApp()
+    })
 }
 
+// load app settings from LS
 Raffler._loadSettings = function() {
+  Raffler._notify(`_loadSettings`, 'notice')
+
   const settings = localStorage.getItem(RAFFLER_SETTINGS_KEY)
 
   if (settings) {
@@ -791,12 +816,12 @@ Raffler._displayAppConfig = function() {
   let config = Raffler.config
   let settings = Raffler.settings
 
-  var html = ''
+  let html = ''
 
   html += '<a name="config"></a>';
   html += `<h4>GLOBAL (ENV: ${Raffler.env})</h4>`
   html += '<h4>----------------------------</h4>'
-  html += '<h5>CONFIG | <a href="#settings">SETTINGS</a></h5>'
+  html += '<h5><strong>CONFIG</strong> | <a href="#settings">SETTINGS</a></h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
@@ -816,7 +841,13 @@ Raffler._displayAppConfig = function() {
         var value = config[key][k]
 
         if (Object.keys(value)) {
-          console.log('found another object', key, label, value)
+          if (key == 'sound') {
+            Object.entries(value).forEach((key, val) => {
+              console.log('key, val', key, val)
+            })
+          } else {
+            console.log('found another object', key, label, value)
+          }
         } else {
           html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
         }
@@ -861,7 +892,13 @@ Raffler._displayAppConfig = function() {
         var value = settings[key][k]
 
         if (Object.keys(value)) {
-          console.log('found another object', key, label, value)
+          if (key == 'sound') {
+            Object.entries(value).forEach((key, val) => {
+              console.log('key, val', key, val)
+            })
+          } else {
+            console.log('found another object', key, label, value)
+          }
         } else {
           html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
         }
@@ -1375,17 +1412,22 @@ Raffler._notify = function (msg, type, notifyUser, line) {
 
     // 2. also, optionally, notify user
     if (notifyUser) {
-      const notification = document.createElement('div')
+      const wrapper = document.createElement('div')
+      wrapper.classList.add('item-status-wrapper')
 
-      notification.classList.add('item-status')
-      notification.style.backgroundColor = bgcolor
-      notification.style.color = fgcolor
-      notification.innerHTML = `<i class='fas ${icon}'></i> <strong>${header}</strong>: ${msg}`
-      notification.addEventListener('click', () => this.remove())
+        const notification = document.createElement('div')
+
+        notification.classList.add('item-status')
+        notification.style.backgroundColor = bgcolor
+        notification.style.color = fgcolor
+        notification.innerHTML = `<i class='fas ${icon}'></i><strong> ${header}: </strong><span>${msg}</span>`
+        notification.onclick = function() { this.parentNode.removeChild(this) }
+
+        wrapper.appendChild(notification)
 
       const mainContainer = document.querySelector('.main-container')
 
-      mainContainer.prepend(notification)
+      mainContainer.prepend(wrapper)
     }
   }
 }
@@ -1897,4 +1939,4 @@ window.countdownTimer = Raffler._timer(function () {
 }, RAFFLER_DEFAULT_INTERVAL)
 
 // get it going
-window.onload = Raffler.initApp()
+window.onload = Raffler._initApp()

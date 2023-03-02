@@ -54,29 +54,32 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 ]
 ```
 
-Override this data with your own names and affiliations in order to successfully raffle off your items. You may change the values in the test data set, or add your own user data file, which can be done using the `dateFilePath` value in "User Options" below.
-
-Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
-
 ### User Options
 
-There are four options that can be changed via an additional override file.
+Change the values in the test data set, or add your own user data file, which can be done thusly:
+
+  1. Go to /assets/js/app/main.js and change the following line from `false` to `true`: `Raffler.config.hasUserConfig = false`
+  2. copying and renaming the `/config/raffler_config.user.dist` file to `/config/raffler_config.user.json`.
+
+An example of said file:
+
+```json
+{
+  "dataFilePath": "./config/floobidy-hoo.json",
+  "logoFilePath": "./assets/images/jamma-mamma.png",
+  "logoFileLink": "http://ohmanwhat.omg",
+  "talkifyKey": "123456ABCDEF"
+}
+```
+
+The options that can be changed are as follows:
 
 * `dataFilePath` - json file of Raffler items
 * `logoFilePath` - logo for your thingy
 * `logoFileLink` - click logo and go somewhere
 * `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
-Simply copy `config/raffler_config.user.dist` to `config/raffler_config.user.json` and fill in your specific information.
-
-```json
-{
-  "dataFilePath": "./config/floobidy-hoo.json",
-  "logoFileLink": "http://ohmanwhat.omg",
-  "logoFilePath": "./assets/images/jamma-mamma.png",
-  "talkifyKey": "123456ABCDEF"
-}
-```
+Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
 
 #### Third-Party Help
 

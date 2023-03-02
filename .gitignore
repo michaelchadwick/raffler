@@ -8,5 +8,6 @@ npm-audit.html
 !assets/js/vendor
 
 # configuration
+*.bak
 raffler_config.user.json
 raffler_data.user.json

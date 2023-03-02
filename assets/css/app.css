@@ -553,24 +553,41 @@ header {
     color: #fafafa;
   }
 
-.item-status {
-  background: #f18f01;
-  border: 2px solid #000000;
-  border-radius: 0 0 3px 3px;
-  border-top: 1px solid #000000;
+.item-status-wrapper {
+  align-items: baseline;
+  border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  left: 25%;
+  display: flex;
+  justify-content: center;
+  left: 0;
   margin: 0 auto 5px;
-  max-width: 50vw;
-  min-height: 30px;
-  min-width: 40px;
-  padding: 10px 20px;
   position: fixed;
-  text-align: center;
-  top: 32px;
-  z-index: 10000;
+  top: 7%;
+  width: 100%;
+  z-index: 1;
 }
+  .item-status {
+    align-items: center;
+    background: #f18f01;
+    border: 2px solid #000000;
+    border-radius: 0 0 3px 3px;
+    border-top: 1px solid #000000;
+    cursor: pointer;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    font-size: 2rem;
+    gap: 5px;
+    justify-content: center;
+    margin: 0 auto 5px;
+    max-height: 50px;
+    max-width: 640px;
+    min-height: 30px;
+    min-width: 200px;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+  }
 
 .checkbox {
   clear: both;
