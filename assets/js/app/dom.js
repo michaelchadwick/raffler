@@ -1,41 +1,41 @@
 /* dom */
 /* grab references to dom elements */
-/* global $, Raffler */
+/* global Raffler */
 
 // DOM > main divs/elements
 Raffler.dom = {
-  'body': $('body'),
-  'title': $('header .title'),
-  'navOverlay': $('#nav-overlay'),
-  'navContent': ('$nav-content'),
-  'mainContent': $('#main-content'),
-  'itemsCycle': $('#items-cycle'),
-  'itemsGraph': $('#items-graph'),
-  'resultsWrapper': $('#results-wrapper'),
-  'resultsCount': $('#results-wrapper h3 span'),
-  'resultsContent': $('#results-wrapper div ul'),
-  'chosenConfirm': $('#winner-confirm'),
-  'dataResetDialog': $('#data-reset-dialog'),
-  'userItemsManager': $('#user-items-manager'),
-  'userItemsClearDialog': $('#user-items-clear-dialog'),
-  'footer': $('.footer-container')
+  'body': document.querySelector('body'),
+  'title': document.querySelector('header .title'),
+  'navOverlay': document.getElementById('nav-overlay'),
+  'navContent': document.getElementById('nav-content'),
+  'mainContent': document.getElementById('main-content'),
+  'itemsCycle': document.getElementById('items-cycle'),
+  'itemsGraph': document.getElementById('items-graph'),
+  'resultsWrapper': document.getElementById('results-wrapper'),
+  'resultsCount': document.querySelector('#results-wrapper h3 span'),
+  'resultsContent': document.querySelector('#results-wrapper div ul'),
+  'chosenConfirm': document.getElementById('winner-confirm'),
+  'dataResetDialog': document.getElementById('data-reset-dialog'),
+  'userItemsManager': document.getElementById('user-items-manager'),
+  'userItemsClearDialog': document.getElementById('user-items-clear-dialog'),
+  'footer': document.querySelector('.footer-container')
 }
 
 // DOM > interactive elements
 Raffler.dom.interactive = {
-  'all': $('#debug-buttons'),
-  'btnNav': $('#button-nav'),
-  'btnNavClose': $('#button-nav-close'),
-  'btnHelp': $('#button-help'),
-  'btnSettings': $('#button-settings'),
-  'btnTests': $('#test-notify a'),
-  'btnRaffle': $('a#button-raffle'),
-  'btnChosenConfirmYes': $('button#button-confirm-yes'),
-  'btnChosenConfirmNo': $('button#button-confirm-no'),
-  'btnExportResults': $('a#button-export-results')
+  'all': document.getElementById('debug-buttons'),
+  'btnNav': document.getElementById('button-nav'),
+  'btnNavClose': document.getElementById('button-nav-close'),
+  'btnHelp': document.getElementById('button-help'),
+  'btnSettings': document.getElementById('button-settings'),
+  'btnTests': document.querySelector('#test-notify a'),
+  'btnRaffle': document.getElementById('button-raffle'),
+  'btnChosenConfirmYes': document.getElementById('button-confirm-yes'),
+  'btnChosenConfirmNo': document.getElementById('button-confirm-no'),
+  'btnExportResults': document.getElementById('button-export-results')
 }
 
 Raffler.dom.interactive.debug = {
-  'btnShowConfig': document.querySelector('#button-show-config'),
-  'container': document.querySelector('#debug-buttons'),
+  'btnShowConfig': document.getElementById('button-show-config'),
+  'container': document.getElementById('debug-buttons'),
 }

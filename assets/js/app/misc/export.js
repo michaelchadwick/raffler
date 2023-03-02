@@ -5,30 +5,37 @@
 Raffler._exportResults = function() {
   Raffler._notify('exporting results', 'notice')
 
-  const plainText = $('div#results-wrapper div ul')
-    .html()
-    .replace(/<li>/g, '')
-    .replace(/<\/li>/g, '\r\n')
+  let plainText = document.querySelector('div#results-wrapper div ul').innerHTML
 
-  var today = new Date()
+  // plainText.innerHTML = ''
+  plainText = plainText.replaceAll(/<li>/g, '')
+  plainText = plainText.replaceAll(/<\/li>/g, '\r\n')
 
-  var yr = today.getFullYear()
-  var mo = today.getMonth() + 1
+  const today = new Date()
+
+  const yr = today.getFullYear()
+
+  let mo = today.getMonth() + 1
   mo = (mo < 10) ? `0${mo}` : `${mo}`
-  var dy = today.getDate()
+
+  let dy = today.getDate()
   dy = (dy < 10) ? `0${dy}` : `${dy}`
-  var ymd = `${yr}${mo}${dy}`
 
-  var hr = today.getHours()
+  const ymd = `${yr}${mo}${dy}`
+
+  let hr = today.getHours()
   hr = (hr < 10) ? `0${hr}` : `${hr}`
-  var mi = today.getMinutes()
-  mi = (mi < 10) ? `0${mi}` : `${mi}`
-  var sc = today.getSeconds()
-  sc = (sc < 10) ? `0${sc}` : `${sc}`
-  var hms = hr + ':' + mi + ':' + sc
 
-  var filename = `raffler-export_${ymd}_${hms}.txt`
-  var blob = new Blob(
+  let mi = today.getMinutes()
+  mi = (mi < 10) ? `0${mi}` : `${mi}`
+
+  let sc = today.getSeconds()
+  sc = (sc < 10) ? `0${sc}` : `${sc}`
+
+  const hms = hr + ':' + mi + ':' + sc
+
+  const filename = `raffler-export_${ymd}-${hms}.txt`
+  const blob = new Blob(
     [plainText],
     {type: 'text/plain;charset=' + document.characterSet}
   )

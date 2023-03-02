@@ -27,7 +27,7 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 
 *Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep data and options stateful, even in the event of a browser reload or crash.
 
-*Raffler's* data set comes from `assets/json/raffler_data.json`, and it is structured as follows:
+*Raffler's* test data set comes from `config/raffler_data.json`, and it is structured as follows:
 
 ```json
 [
@@ -54,7 +54,9 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 ]
 ```
 
-Override this data with your own names and affiliations in order to successfully raffle off your items. Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
+Override this data with your own names and affiliations in order to successfully raffle off your items. You may change the values in the test data set, or add your own user data file, which can be done using the `dateFilePath` value in "User Options" below.
+
+Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
 
 ### User Options
 
@@ -65,11 +67,11 @@ There are four options that can be changed via an additional override file.
 * `logoFileLink` - click logo and go somewhere
 * `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
-Simply copy `config/raffler_settings.user.dist` to `config/raffler_settings.user.json` and fill in your specific information.
+Simply copy `config/raffler_config.user.dist` to `config/raffler_config.user.json` and fill in your specific information.
 
 ```json
 {
-  "dataFilePath": "./assets/json/floobidy-hoo.json",
+  "dataFilePath": "./config/floobidy-hoo.json",
   "logoFileLink": "http://ohmanwhat.omg",
   "logoFilePath": "./assets/images/jamma-mamma.png",
   "talkifyKey": "123456ABCDEF"
