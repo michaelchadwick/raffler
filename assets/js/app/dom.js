@@ -16,8 +16,7 @@ Raffler.dom = {
   'resultsWrapper': document.getElementById('results-wrapper'),
   'resultsCount': document.querySelector('#results-wrapper h3 span'),
   'resultsContent': document.querySelector('#results-wrapper div ul'),
-  'chosenConfirm': document.getElementById('winner-confirm'),
-  'dataResetDialog': document.getElementById('data-reset-dialog'),
+  'chosenConfirm': document.getElementById('chosen-confirm'),
   'userItemsManager': document.getElementById('user-items-manager'),
   'userItemsClearDialog': document.getElementById('user-items-clear-dialog'),
   'footer': document.querySelector('.footer-container')
@@ -37,7 +36,9 @@ Raffler.dom.interactive = {
   'btnExportResults': document.getElementById('button-export-results')
 }
 
-Raffler.dom.interactive.debug = {
+Raffler.dom.debug = {
   'btnShowConfig': document.getElementById('button-show-config'),
   'container': document.getElementById('debug-buttons'),
+  'btnTimerStart': document.getElementById('button-timer-start'),
+  'btnTimerStop': document.getElementById('button-timer-stop'),
 }

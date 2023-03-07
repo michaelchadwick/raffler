@@ -48,8 +48,8 @@ body {
   }
 
 a.disabled,
-.button.disabled {
-  background-color: var(--gray);
+.button:disabled {
+  background-color: var(--gray) !important;
   color: var(--gray-light);
   cursor: not-allowed;
   text-decoration: none;
@@ -1030,7 +1030,7 @@ section#init-raffler-cycle {
           background-color: #fadf63;
           height: 10px;
         }
-    #main-content .main-container #winner-confirm {
+    #main-content .main-container #chosen-confirm {
       display: none;
       height: 40px;
       margin: 0 auto 100px;

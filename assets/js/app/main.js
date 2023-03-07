@@ -154,7 +154,7 @@ Raffler._initApp = function () {
     Raffler.dom.resultsWrapper.style.display = 'block'
   }
 
-  // Raffler.__disableTimerStart()
+  Raffler.__disableTimerStart()
 
   Raffler.__initCycleText()
   Raffler._timerStop()
@@ -165,9 +165,9 @@ Raffler._initApp = function () {
 }
 
 Raffler._initDebug = function() {
-  if (Raffler.dom.interactive.debug.container) {
+  if (Raffler.dom.debug.container) {
     // show debug buttons
-    Raffler.dom.interactive.debug.container.style.display = 'flex'
+    Raffler.dom.debug.container.style.display = 'flex'
 
     // make header buttons smaller to fit in debug buttons
     document.querySelectorAll('button.icon').forEach((btn) => {
@@ -255,7 +255,7 @@ Raffler._loadUserConfig = function() {
 
 // load app settings from LS
 Raffler._loadSettings = function() {
-  Raffler._notify(`_loadSettings`, 'notice')
+  // Raffler._notify(`_loadSettings`, 'notice')
 
   const settings = localStorage.getItem(RAFFLER_SETTINGS_KEY)
 
@@ -773,8 +773,8 @@ Raffler._syncUserItemsWithItemsArr = function () {
 
     // if we've previously added user items
     if (userItems && userItems.length > 0) {
-      // Raffler.dom.admin.btnUserItemsClear.removeAttribute('disabled')
-      // Raffler.dom.admin.btnUserItemsClear.classList.remove('disabled')
+      // Raffler.dom.debug.btnUserItemsClear.removeAttribute('disabled')
+      // Raffler.dom.debug.btnUserItemsClear.classList.remove('disabled')
 
       for (var i = 0; i < userItems.length; i++) {
         for (var j = 0; j < items.length; j++) {
@@ -891,8 +891,8 @@ Raffler._timerStart = function() {
   window.countdownTimer.start()
   Raffler.dom.itemsCycle.classList.remove('stopped')
 
-  // Raffler.__disableTimerStart()
-  // Raffler.__enableTimerStop()
+  Raffler.__disableTimerStart()
+  Raffler.__enableTimerStop()
 
   Raffler._notify('window.countdownTimer started', 'notice')
 }
@@ -900,8 +900,8 @@ Raffler._timerStop = function() {
   window.countdownTimer.stop()
   Raffler.dom.itemsCycle.classList.add('stopped')
 
-  // Raffler.__disableTimerStop()
-  // Raffler.__enableTimerStart()
+  Raffler.__disableTimerStop()
+  Raffler.__enableTimerStart()
 
   Raffler._notify('window.countdownTimer stopped', 'notice')
 }
@@ -925,7 +925,7 @@ Raffler._raffleButtonSmash = function () {
     window.countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
     window.countdownTimer.stage = RAFFLER_STAGES.INIT
 
-    // Raffler.dom.admin.stageValue.text(this.stage)
+    // Raffler.dom.debug.stageValue.text(this.stage)
 
     window.countdownTimer.startCountdown = true
     window.countdownTimer.mult = 1
@@ -1044,7 +1044,7 @@ Raffler._continueRaffling = function () {
   Raffler.config.intervalRange = RAFFLER_DEFAULT_INTERVAL
   // Raffler.dom.config.intervalValue.text(Raffler.dom.config.intervalRange.val())
 
-  // Raffler.dom.admin.stageValue.text(this.stage)
+  // Raffler.dom.debug.stageValue.text(this.stage)
 
   if (Raffler.settings.boxResize) {
     Raffler.dom.body.className = ''
@@ -1303,9 +1303,9 @@ Raffler._attachEventListeners = function () {
 
   // local debug buttons
   if (Raffler.env == 'local') {
-    if (Raffler.dom.interactive.debug.container) {
+    if (Raffler.dom.debug.container) {
       // ⚙ show current Raffler config
-      Raffler.dom.interactive.debug.btnShowConfig.addEventListener('click', () => {
+      Raffler.dom.debug.btnShowConfig.addEventListener('click', () => {
         modalOpen('show-config')
       })
     }
@@ -1340,62 +1340,61 @@ Raffler._attachEventListeners = function () {
     Raffler._exportResults()
   })
 
-  // TODO: these elements don't exist until settings modal is triggered
-  // Raffler.dom.admin.btnDataReset.click(function (e) {
-  //   e.preventDefault()
-  //   Raffler.dom.dataResetDialog.dialog({
-  //     autoOpen: false,
-  //     modal: true,
-  //     resizeable: false,
-  //     height: 'auto',
-  //     buttons: {
-  //       'Reset it!': function () {
-  //         Raffler.resetCountdown()
-  //         $(this).dialog('close')
-  //       },
-  //       'Nevermind.': function () {
-  //         $(this).dialog('close')
-  //       }
-  //     }
-  //   })
+  // debug settings
+  Raffler.dom.debug.btnTimerStart.addEventListener('click', () => {
+    if (Raffler.dom.debug.btnTimerStart.getAttribute('disabled') !== 'true') {
+      Raffler._notify('starting timer', 'notice')
 
-  //   Raffler.dom.dataResetDialog.dialog('open')
-  // })
-  // Raffler.dom.admin.inputUserItemsAddName.keyup(function (e) {
+      Raffler.__enableTheButton()
+      Raffler.__enableRaffle()
+      Raffler._timerStart()
+    }
+  })
+  Raffler.dom.debug.btnTimerStop.addEventListener('click', () => {
+    if (Raffler.dom.debug.btnTimerStop.getAttribute('disabled') !== 'true') {
+      Raffler._notify('stopping timer', 'notice')
+
+      Raffler._timerStop()
+    }
+  })
+
+  // Raffler.dom.debug.inputUserItemsAddName.keyup(function (e) {
   //   var code = e.which
   //   if (code === 13) {
   //     e.preventDefault()
-  //     Raffler.dom.admin.btnUserItemsAdd.click()
+  //     Raffler.dom.debug.btnUserItemsAdd.click()
   //   }
 
-  //   if ($(this).val().length > 0 && Raffler.dom.admin.inputUserItemsAddAffl.val().length > 0) {
-  //     Raffler.dom.admin.btnUserItemsAdd.removeAttribute('disabled')
-  //     Raffler.dom.admin.btnUserItemsAdd.classList.remove('disabled')
+  //   if ($(this).val().length > 0 && Raffler.dom.debug.inputUserItemsAddAffl.val().length > 0) {
+  //     Raffler.dom.debug.btnUserItemsAdd.removeAttribute('disabled')
+  //     Raffler.dom.debug.btnUserItemsAdd.classList.remove('disabled')
   //   } else {
-  //     Raffler.dom.admin.btnUserItemsAdd.setAttribute('disabled', true)
-  //     Raffler.dom.admin.btnUserItemsAdd.classList.add('disabled')
+  //     Raffler.dom.debug.btnUserItemsAdd.setAttribute('disabled', true)
+  //     Raffler.dom.debug.btnUserItemsAdd.classList.add('disabled')
   //   }
   // })
-  // Raffler.dom.admin.inputUserItemsAddAffl.keyup(function (e) {
+
+  // Raffler.dom.debug.inputUserItemsAddAffl.keyup(function (e) {
   //   var code = e.which
   //   if (code === 13) {
   //     e.preventDefault()
-  //     Raffler.dom.admin.btnUserItemsAdd.click()
+  //     Raffler.dom.debug.btnUserItemsAdd.click()
   //   }
 
-  //   if ($(this).val().length > 0 && Raffler.dom.admin.inputUserItemsAddName.val().length > 0) {
-  //     Raffler.dom.admin.btnUserItemsAdd.removeAttribute('disabled')
-  //     Raffler.dom.admin.btnUserItemsAdd.classList.remove('disabled')
+  //   if ($(this).val().length > 0 && Raffler.dom.debug.inputUserItemsAddName.val().length > 0) {
+  //     Raffler.dom.debug.btnUserItemsAdd.removeAttribute('disabled')
+  //     Raffler.dom.debug.btnUserItemsAdd.classList.remove('disabled')
   //   } else {
-  //     Raffler.dom.admin.btnUserItemsAdd.setAttribute('disabled', true)
-  //     Raffler.dom.admin.btnUserItemsAdd.classList.add('disabled')
+  //     Raffler.dom.debug.btnUserItemsAdd.setAttribute('disabled', true)
+  //     Raffler.dom.debug.btnUserItemsAdd.classList.add('disabled')
   //   }
   // })
-  // Raffler.dom.admin.btnUserItemsAdd.click(function () {
-  //   if (Raffler.dom.admin.inputUserItemsAddName.val() !== '' && Raffler.dom.admin.inputUserItemsAddAffl.val() !== '') {
+
+  // Raffler.dom.debug.btnUserItemsAdd.click(function () {
+  //   if (Raffler.dom.debug.inputUserItemsAddName.val() !== '' && Raffler.dom.debug.inputUserItemsAddAffl.val() !== '') {
   //     var newUserItem = {
-  //       'name': Raffler.dom.admin.inputUserItemsAddName.val().trim(),
-  //       'affl': Raffler.dom.admin.inputUserItemsAddAffl.val().trim()
+  //       'name': Raffler.dom.debug.inputUserItemsAddName.val().trim(),
+  //       'affl': Raffler.dom.debug.inputUserItemsAddAffl.val().trim()
   //     }
 
   //     if (newUserItem !== undefined) {
@@ -1403,8 +1402,8 @@ Raffler._attachEventListeners = function () {
 
   //       if (!Raffler.__isDuplicateValue(newUserItem)) {
   //         tempUserItemObj.push(Raffler.__sanitize(newUserItem))
-  //         Raffler.dom.admin.btnUserItemsClear.removeAttribute('disabled')
-  //         Raffler.dom.admin.btnUserItemsClear.classList.remove('disabled')
+  //         Raffler.dom.debug.btnUserItemsClear.removeAttribute('disabled')
+  //         Raffler.dom.debug.btnUserItemsClear.classList.remove('disabled')
   //         // update localStorage with temp tempUserItemObj
   //         Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, tempUserItemObj)
   //         // show status bubble
@@ -1416,12 +1415,13 @@ Raffler._attachEventListeners = function () {
   //     }
   //   }
   // })
-  // Raffler.dom.admin.btnUserItemsClear.click(function (e) {
+
+  // Raffler.dom.debug.btnUserItemsClear.click(function (e) {
   //   e.preventDefault()
   //   try {
   //     if (Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY).length > 0) {
-  //       Raffler.dom.admin.btnUserItemsClear.removeAttribute('disabled')
-  //       Raffler.dom.admin.btnUserItemsClear.classList.remove('disabled')
+  //       Raffler.dom.debug.btnUserItemsClear.removeAttribute('disabled')
+  //       Raffler.dom.debug.btnUserItemsClear.classList.remove('disabled')
 
   //       Raffler.dom.userItemsClearDialog.dialog({
   //         autoOpen: false,
@@ -1432,8 +1432,8 @@ Raffler._attachEventListeners = function () {
   //           'Clear them!': function () {
   //             Raffler._resetUserItems()
 
-  //             Raffler.dom.admin.btnUserItemsClear.setAttribute('disabled', true)
-  //             Raffler.dom.admin.btnUserItemsClear.classList.add('disabled')
+  //             Raffler.dom.debug.btnUserItemsClear.setAttribute('disabled', true)
+  //             Raffler.dom.debug.btnUserItemsClear.classList.add('disabled')
 
   //             $(this).dialog('close')
   //           },
@@ -1539,7 +1539,7 @@ Raffler.__disableChosenConfirm = function () {
   Raffler.dom.interactive.btnChosenConfirmNo.setAttribute('disabled', true)
   Raffler.dom.interactive.btnChosenConfirmNo.classList.add('disabled')
 
-  // Raffler.__enableTimerStop()
+  Raffler.__enableTimerStop()
 }
 Raffler.__enableChosenConfirm = function () {
   Raffler._notify('showing confirmation question', 'notice')
@@ -1551,24 +1551,25 @@ Raffler.__enableChosenConfirm = function () {
   Raffler.dom.interactive.btnChosenConfirmNo.removeAttribute('disabled')
   Raffler.dom.interactive.btnChosenConfirmNo.classList.remove('disabled')
 
-  // Raffler.__disableTimerStart()
-  // Raffler.__disableTimerStop()
+  Raffler.__disableTimerStart()
+  Raffler.__disableTimerStop()
 }
-// Raffler.__disableTimerStart = function () {
-//   Raffler.dom.admin.btnTimerStart.setAttribute('disabled', true)
-//   Raffler.dom.admin.btnTimerStart.classList.add('disabled')
-// }
-// Raffler.__enableTimerStart = function () {
-//   Raffler.dom.admin.btnTimerStart.removeAttribute('disabled')
-//   Raffler.dom.admin.btnTimerStart.classList.remove('disabled')
-// }
-// Raffler.__disableTimerStop = function () {
-//   Raffler.dom.admin.btnTimerStop.setAttribute('disabled', true)
-//   Raffler.dom.admin.btnTimerStop.classList.add('disabled')
-// }
-// Raffler.__enableTimerStop = function () {
-//   Raffler.dom.admin.btnTimerStop.removeAttribute('disabled').classList.remove('disabled')
-// }
+Raffler.__disableTimerStart = function () {
+  Raffler.dom.debug.btnTimerStart.setAttribute('disabled', true)
+  Raffler.dom.debug.btnTimerStart.classList.add('disabled')
+}
+Raffler.__enableTimerStart = function () {
+  Raffler.dom.debug.btnTimerStart.removeAttribute('disabled')
+  Raffler.dom.debug.btnTimerStart.classList.remove('disabled')
+}
+Raffler.__disableTimerStop = function () {
+  Raffler.dom.debug.btnTimerStop.setAttribute('disabled', true)
+  Raffler.dom.debug.btnTimerStop.classList.add('disabled')
+}
+Raffler.__enableTimerStop = function () {
+  Raffler.dom.debug.btnTimerStop.removeAttribute('disabled')
+  Raffler.dom.debug.btnTimerStop.classList.remove('disabled')
+}
 
 Raffler.__toggleTestNotices = function () {
   var btns = Raffler.dom.interactive.btnTests
@@ -1600,7 +1601,7 @@ window.countdownTimer = Raffler._timer(function () {
     if (this.interval > 150 && this.interval <= 250) {
       this.stage = RAFFLER_STAGES.SLOWED
 
-      // Raffler.dom.admin.stageValue.text(this.stage)
+      // Raffler.dom.debug.stageValue.text(this.stage)
 
       if (Raffler.settings.boxResize) {
         Raffler.dom.itemsCycle.className = ''
@@ -1614,7 +1615,7 @@ window.countdownTimer = Raffler._timer(function () {
     if (this.interval > 250 && this.interval <= 325) {
       this.stage = RAFFLER_STAGES.SLOWEST
 
-      // Raffler.dom.admin.stageValue.text(this.stage)
+      // Raffler.dom.debug.stageValue.text(this.stage)
 
       if (Raffler.settings.boxResize) {
         Raffler.dom.itemsCycle.className = ''
@@ -1638,7 +1639,7 @@ window.countdownTimer = Raffler._timer(function () {
       if (this.interval >= Raffler.config.lastInterval) {
         this.stage = RAFFLER_STAGES.DONE
 
-        // Raffler.dom.admin.stageValue.text(this.stage)
+        // Raffler.dom.debug.stageValue.text(this.stage)
 
         this.startCountdown = false
         this.stop()
@@ -1678,7 +1679,7 @@ window.countdownTimer = Raffler._timer(function () {
   if (this.startCountdown && (this.stage === RAFFLER_STAGES.INIT || this.stage === RAFFLER_STAGES.BEGUN)) {
     this.stage = RAFFLER_STAGES.BEGUN
 
-    // Raffler.dom.admin.stageValue.text(this.stage)
+    // Raffler.dom.debug.stageValue.text(this.stage)
 
     if (!Raffler.dom.itemsCycle.classList.contains('level1')) {
       Raffler.dom.itemsCycle.classList.add('level1')
