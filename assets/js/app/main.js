@@ -37,286 +37,6 @@ async function modalOpen(type) {
       )
       break
 
-    case 'settings':
-      this.myModal = new Modal('perm', 'Settings',
-        `
-          <div id="settings">
-
-            <!-- box resize -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Box/Text Resize</div>
-                <div class="description">Allow raffle box and inner text to grow as the raffler counts down.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <div id="button-setting-box-resize" data-status="" class="switch" onclick="Raffler._changeSetting('boxResize')">
-                    <span class="knob"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- sound: countdown -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Sound: Countdown</div>
-                <div class="description">Play sound that kicks off raffler countdown.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <div id="button-setting-sound-countdown" data-status="" class="switch" onclick="Raffler._changeSetting('soundCountdown')">
-                    <span class="knob"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- sound: victory -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Sound: Victory</div>
-                <div class="description">Play sound when a choice is made.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <div id="button-setting-sound-victory" data-status="" class="switch" onclick="Raffler._changeSetting('soundVictory')">
-                    <span class="knob"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- sound: name -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Sound: Name</div>
-                <div class="description">Read choice out loud when chosen (requires <code>talkifyKey</code>).</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <div id="button-setting-sound-name" data-status="" class="switch" onclick="Raffler._changeSetting('soundName')">
-                    <span class="knob"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- user items -->
-            <!--
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">User Items</div>
-                <div class="description">Additional items to raffle.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <input id="text-user-items-add-name" type="text" placeholder="name" />
-                  <input id="text-user-items-add-affl" type="text" placeholder="affiliation" />
-
-                  <div class="buttons">
-                    <button class="icon" id="button-user-items-add" onclick="Raffler._addUserItem()">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="icon" id="button-user-items-clear" onclick="Raffler._removeUserItem()">
-                      <i class="fas fa-minus-circle"></i>
-                    </button>
-                  </div>
-
-                  <div id="user-items-display">
-                    <ul></ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            -->
-
-            <!-- show debug -->
-            <!--
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Debug Settings</div>
-                <div class="description">Show additional debugging settings.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <div id="button-setting-show-debug" data-status="" class="switch" onclick="Raffler._changeSetting('showDebug')">
-                    <span class="knob"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            -->
-
-            <!-- DEBUG DEBUG DEBUG -->
-            <div id="settings-debug">
-
-              <!-- timer: start -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Timer: Start</div>
-                  <div class="description">Start the cycling timer.</div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <a href="#" class="button start" id="button-timer-start"><i class="fas fa-play"></i> start</a>
-                  </div>
-                </div>
-              </div>
-              <!-- timer: stop -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Timer: Stop</div>
-                  <div class="description">Stop the cycling timer.</div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <a href="#" class="button stop" id="button-timer-stop"><i class="fas fa-play"></i> stop</a>
-                  </div>
-                </div>
-              </div>
-              <!-- stage value -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Stage</div>
-                  <div class="description"></div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <div class="values" id="text-setting-stage-value">
-                      <span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- interval value -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Interval</div>
-                  <div class="description"></div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <div class="values" id="text-setting-interval-value">
-                      <span></span>
-                      <input type="range" min="1" max="359" step="1" value="25" onchange="Raffler._changeSetting('intervalValue')" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- multiple value -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Multiply</div>
-                  <div class="description"></div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <div class="values" id="text-setting-multiply-value">
-                      <span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- timesrun value -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Times Run</div>
-                  <div class="description">Number of times this instance of Raffler has been run.</div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <div class="values" id="text-setting-timesrun-value">
-                      <span></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- show graph -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Show Graph</div>
-                  <div class="description">Show a graph of items being cycled over.</div>
-                </div>
-                <div class-"control">
-                  <div class="container">
-                    <div id="button-setting-show-graph" data-status="" class="switch" onclick="Raffler._changeSetting('showGraph')">
-                      <span class="knob"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- allow notifications -->
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Allow Notifications</div>
-                  <div class="description">Allow visual notifications for certain events.</div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <div id="button-setting-allow-notifications" data-status="" class="switch" onclick="Raffler._changeSetting('allowNotifications')">
-                      <span class="knob"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="setting-row">
-                <div class="control">
-                  <div class="container buttons">
-                    <button class="button test notice" id="button-test-notice" title="notice" onclick="Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)">
-                      <i class="fas fa-info-circle"></i>
-                    </button>
-                    <button class="button test success" id="button-test-success" title="success" onclick="Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)">
-                      <i class="fas fa-smile"></i>
-                    </button>
-                    <button class="button test warning" id="button-test-warning" title="warning" onclick="Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)">
-                      <i class="fas fa-exclamation-triangle"></i>
-                    </button>
-                    <button class="button test error" id="button-test-error" title="error" onclick="Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)">
-                      <i class="fas fa-times-circle"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Available Items <span id="debug-items-available-count"></span></div>
-                  <div class="description">Items currently in the pool to be chosen during a countdown.</div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <textarea readonly id="debug-items-available"></textarea>
-                  </div>
-                </div>
-              </div>
-
-              <div class="setting-row">
-                <div class="text">
-                  <div class="title">Chosen Items</div>
-                  <div class="description">Items in the pool that have been chosen.</div>
-                </div>
-                <div class="control">
-                  <div class="container">
-                    <textarea readonly id="debug-items-chosen"></textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        `,
-        null,
-        null
-      )
-
-      Raffler._loadSettings()
-
-      break
-
     case 'show-config':
       this.myModal = new Modal('perm-debug', 'Raffler.config / Raffler.settings',
         Raffler._displayAppConfig(),
@@ -1525,6 +1245,41 @@ Raffler._getNebyooApps = async function() {
   })
 }
 
+// show/hide settings panel
+Raffler._settingsPanelToggle = function() {
+  const currentVisibility = Raffler.dom.settingsPanel.style.display
+
+  if (currentVisibility == '' || currentVisibility == 'none') {
+    // Raffler._notify('showing settings panel', 'notice')
+
+    // show it
+    Raffler.dom.settingsPanel.style.display = 'block'
+    Raffler.dom.mainContent.classList.add('settings-panel-enabled')
+
+    // update stuff
+    Raffler._loadSettings()
+  } else {
+    // Raffler._notify('hiding settings panel', 'notice')
+
+    // hide it
+    Raffler.dom.settingsPanel.style.display = 'none'
+    Raffler.dom.mainContent.classList.remove('settings-panel-enabled')
+  }
+}
+
+// show/hide extra debug settings options
+Raffler._settingsShowDebugToggle = function() {
+  const currentVisibility = Raffler.dom.settingsDebug.style.display
+
+  if (currentVisibility == '' || currentVisibility == 'none') {
+    // show it
+    Raffler.dom.settingsDebug.style.display = 'block'
+  } else {
+    // hide it
+    Raffler.dom.settingsDebug.style.display = 'none'
+  }
+}
+
 // attach event handlers to buttons and such
 Raffler._attachEventListeners = function () {
   // {} header icons to open modals
@@ -1538,8 +1293,13 @@ Raffler._attachEventListeners = function () {
     modalOpen('help')
   })
   Raffler.dom.interactive.btnSettings.addEventListener('click', () => {
-    modalOpen('settings')
+    Raffler._settingsPanelToggle()
   })
+    if (Raffler.dom.interactive.switchShowDebug) {
+      Raffler.dom.interactive.switchShowDebug.addEventListener('click', () => {
+        Raffler._settingsShowDebugToggle()
+      })
+    }
 
   // local debug buttons
   if (Raffler.env == 'local') {

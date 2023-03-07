@@ -10,6 +10,9 @@
   --black: #181818;
   --black-soft: #222222;
   --black-mute: #282828;
+
+  --blue-primary: #196177;
+  --blue-light: #71d6ff;
 }
 
 * {
@@ -390,6 +393,117 @@ header {
   }
 }
 
+#settings-panel {
+  background-color: var(--blue-light);
+  border-left: 2px solid var(--blue-primary);
+  bottom: 0;
+  display: none;
+  height: 50vh;
+  min-width: 312px;
+  padding: 0;
+  position: fixed;
+  right: 0;
+  transition: all 0.5s ease;
+  width: 100%;
+  z-index: 1;
+}
+  @media (min-width: 768px) {
+    #settings-panel {
+      height: 100vh;
+      top: 53px;
+      width: 33%;
+    }
+  }
+  @media (min-width: 992px) {
+    #settings-panel {
+      width: 25%;
+    }
+  }
+  #settings-panel-header {
+    align-items: center;
+    background-color: var(--blue-primary);
+    color: var(--white);
+    font-size: 2rem;
+    font-weight: 700;
+    height: 20px;
+    justify-content: baseline;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+  }
+  #settings-panel-content {
+    bottom: 0;
+    left: 0;
+    margin-top: 30px;
+    overflow-y: auto;
+    padding: 10px;
+    top: 0;
+  }
+    @media (min-width: 768px) {
+      #settings-panel-content {
+        position: absolute;
+      }
+    }
+    #settings-panel-content #settings-debug {
+      display: none;
+    }
+    #settings-panel-content .setting-group {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    #settings-panel-content .control .container.buttons button {
+      width: 50px;
+    }
+
+    #settings-panel-content .setting-row {
+      align-items: center;
+      border-bottom: 1px solid #555555;
+      display: flex;
+      justify-content: space-between;
+      padding: 0;
+    }
+      #settings-panel-content .setting-row.tall {
+        display: block;
+      }
+        #settings-panel-content .setting-row.tall .control {
+          margin-left: 0;
+        }
+      #settings-panel-content .setting-row:last-of-type {
+        border-bottom: none;
+      }
+        #settings-panel-content .setting-row .text {
+          padding: 8px 8px 8px 0;
+        }
+          #settings-panel-content .setting-row .text .title {
+            font-size: 18px;
+          }
+          #settings-panel-content .setting-row .text .description {
+            color: #555555;
+            font-size: 12px;
+          }
+        #settings-panel-content .setting-row .control {
+          display: block;
+          margin-left: 1em;
+        }
+          #settings-panel-content .setting-row .control .container {
+          }
+            #settings-panel-content .setting-row .control .container textarea {
+              height: 50px;
+              width: 100%;
+            }
+            #settings-panel-content .setting-row .control .container input {
+              max-width: 100px;
+              min-width: 50px;
+            }
+            #settings-panel-content .setting-row .control .container.buttons {
+              display: flex;
+            }
+              #settings-panel-content .setting-row .control .container.buttons button {
+                display: inherit;
+              }
+
 #the-button {
   display: none;
 }
@@ -400,7 +514,7 @@ header {
   box-sizing: border-box;
   color: #ffffff;
   display: block;
-  font-size: 1rem;
+  font-size: 1.5rem;
   margin: 0;
   padding: 10px;
   text-decoration: none;
@@ -427,6 +541,13 @@ header {
         background-color: #003b4e;
       }
     }
+
+  .button.start > span,
+  .button.stop > span {
+    display: inline-block;
+    margin-left: 5px;
+  }
+
   .button.start {
     background-color: #006e90;
   }
@@ -648,7 +769,6 @@ section#init-raffler-cycle {
     text-decoration: none;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
   }
-
     @media (hover: hover) {
       section#init-raffler-cycle a:hover {
         color: #ffffff;
@@ -662,6 +782,17 @@ section#init-raffler-cycle {
   transition: 200ms;
   width: 100%;
 }
+  @media (min-width: 768px) {
+    #main-content.settings-panel-enabled {
+      width: 67%;
+    }
+  }
+  @media (min-width: 992px) {
+    #main-content.settings-panel-enabled {
+      width: 75%;
+    }
+  }
+
   #main-content .header-container {
     background: #006e90;
     border-bottom: 5px solid #005b77;

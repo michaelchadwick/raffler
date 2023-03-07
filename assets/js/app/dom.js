@@ -8,6 +8,8 @@ Raffler.dom = {
   'title': document.querySelector('header .title'),
   'navOverlay': document.getElementById('nav-overlay'),
   'navContent': document.getElementById('nav-content'),
+  'settingsPanel': document.getElementById('settings-panel'),
+  'settingsDebug': document.getElementById('settings-debug'),
   'mainContent': document.getElementById('main-content'),
   'itemsCycle': document.getElementById('items-cycle'),
   'itemsGraph': document.getElementById('items-graph'),
@@ -23,11 +25,11 @@ Raffler.dom = {
 
 // DOM > interactive elements
 Raffler.dom.interactive = {
-  'all': document.getElementById('debug-buttons'),
   'btnNav': document.getElementById('button-nav'),
   'btnNavClose': document.getElementById('button-nav-close'),
   'btnHelp': document.getElementById('button-help'),
   'btnSettings': document.getElementById('button-settings'),
+  'switchShowDebug': document.getElementById('button-setting-show-debug'),
   'btnTests': document.querySelector('#test-notify a'),
   'btnRaffle': document.getElementById('button-raffle'),
   'btnChosenConfirmYes': document.getElementById('button-confirm-yes'),
