@@ -123,6 +123,8 @@ Raffler._initApp = function() {
     Raffler._initDebug()
 
     document.title = '(LH) ' + document.title
+
+    Raffler.dom.settingsShowDebug.style.display = 'flex'
   }
 
   // if we aren't doing the "resize as the raffle counts down" thing

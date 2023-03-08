@@ -14,6 +14,7 @@
   --blue-primary: #196177;
   --blue-light: #92e0ff;
   --pink-light: #f9a4ff;
+  --pink-pale: #fcd0ff;
 }
 
 * {
@@ -446,9 +447,15 @@ header {
         position: absolute;
       }
     }
+    #settings-panel-content .setting-row.debug {
+      background-color: var(--pink-pale);
+      display: none;
+    }
     #settings-panel-content #settings-debug {
       background-color: var(--pink-light);
       display: none;
+    }
+    #settings-panel-content #settings-debug {
       padding-left: 10px;
       padding-right: 10px;
     }

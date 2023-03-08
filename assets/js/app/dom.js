@@ -9,6 +9,7 @@ Raffler.dom = {
   'navOverlay': document.getElementById('nav-overlay'),
   'navContent': document.getElementById('nav-content'),
   'settingsPanel': document.getElementById('settings-panel'),
+  'settingsShowDebug': document.querySelector('.setting-row.debug'),
   'settingsDebug': document.getElementById('settings-debug'),
   'mainContent': document.getElementById('main-content'),
   'itemsCycle': document.getElementById('items-cycle'),
