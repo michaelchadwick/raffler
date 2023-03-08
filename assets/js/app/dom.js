@@ -41,4 +41,5 @@ Raffler.dom.debug = {
   'container': document.getElementById('debug-buttons'),
   'btnTimerStart': document.getElementById('button-timer-start'),
   'btnTimerStop': document.getElementById('button-timer-stop'),
+  'stageValue': document.getElementById('text-setting-stage-value')
 }

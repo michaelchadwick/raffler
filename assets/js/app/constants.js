@@ -19,7 +19,7 @@ const RAFFLER_CHOSEN_ITEMS_KEY = 'raffler-chosen-items'
 const RAFFLER_USER_CONFIG_FILE = '/config/raffler_config.user.json'
 const RAFFLER_USER_DATA_FILE = '/config/raffler_data.user.json'
 
-const RAFFLER_DEFAULT_INTERVAL = 25
+const RAFFLER_DEFAULT_INTERVAL_RANGE = 25
 const RAFFLER_DEFAULT_MULTIPLY = 1
 
 const RAFFLER_STAGES = {
@@ -35,7 +35,8 @@ const RAFFLER_DEFAULTS = {
     'configFilePath': '/config/raffler_config.json',
     'dataFilePath': '/config/raffler_data.json',
     'hasLocalStorage': true,
-    'intervalRange': RAFFLER_DEFAULT_INTERVAL,
+    'hasUserConfig': false,
+    'intervalRange': RAFFLER_DEFAULT_INTERVAL_RANGE,
     'itemsArr': [],
     'itemsAvailable': [],
     'itemsLeftArr': [],
@@ -44,7 +45,7 @@ const RAFFLER_DEFAULTS = {
     'lastItemChosen': null,
     'lastItemChosenConfirmed': false,
     'lastInterval': 361,
-    'multiply': RAFFLER_DEFAULT_MULTIPLY,
+    'multiplyValue': RAFFLER_DEFAULT_MULTIPLY,
     'stage': 0,
     'talkifyKey': '',
     'textAvailableItems': [],
@@ -57,6 +58,7 @@ const RAFFLER_DEFAULTS = {
     'notifierEnabled': false,
     'showDebug': false,
     'showGraph': false,
+    'showSettingsPanel': false,
     'sound': {
       'countdown': false,
       'name': false,
