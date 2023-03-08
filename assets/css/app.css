@@ -1046,31 +1046,31 @@ section#init-raffler-cycle {
       padding: 0 20px;
       width: 80%;
     }
-      #main-content .main-container #winner-confirm h2 {
+      #main-content .main-container #chosen-confirm h2 {
         color: #ffffff;
         font-size: 3rem;
         margin-bottom: 10px;
         text-shadow: 1px 1px 1px #050505;
       }
-      #main-content .main-container #winner-confirm > button {
+      #main-content .main-container #chosen-confirm > button {
         float: left;
         font-size: 3.6rem;
         height: 70px;
         width: 50%;
       }
-        #main-content .main-container #winner-confirm > button.confirm {
+        #main-content .main-container #chosen-confirm > button.confirm {
           background-color: #7ea438;
         }
           @media (hover: hover) {
-            #main-content .main-container #winner-confirm > button.confirm:hover {
+            #main-content .main-container #chosen-confirm > button.confirm:hover {
               background-color: #99c24d;
             }
           }
-        #main-content .main-container #winner-confirm > button.deny {
+        #main-content .main-container #chosen-confirm > button.deny {
           background-color: #632b30;
         }
           @media (hover: hover) {
-            #main-content .main-container #winner-confirm > button.deny:hover {
+            #main-content .main-container #chosen-confirm > button.deny:hover {
               background-color: #873a41;
             }
           }
