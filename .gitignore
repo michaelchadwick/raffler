@@ -4,6 +4,7 @@ node_modules
 dandelion.yml
 npm-audit.html
 !assets/css/vendor
+assets/csv
 !assets/icons
 !assets/js/vendor
 
