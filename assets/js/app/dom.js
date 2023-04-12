@@ -40,6 +40,8 @@ Raffler.dom.interactive = {
 Raffler.dom.debug = {
   'btnShowConfig': document.getElementById('button-show-config'),
   'container': document.getElementById('debug-buttons'),
+  'btnTestsWrapper': document.getElementById('buttons-test'),
+  'btnTests': document.getElementsByClassName('button-test'),
   'btnTimerStart': document.getElementById('button-timer-start'),
   'btnTimerStop': document.getElementById('button-timer-stop'),
   'stageValue': document.getElementById('text-setting-stage-value')

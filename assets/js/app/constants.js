@@ -53,9 +53,9 @@ const RAFFLER_DEFAULTS = {
     'timesRun': 0
   },
   'settings': {
-    'allowNotifications': true,
+    'allowDebugNotifications': true,
+    'allowVisualNotifications': true,
     'boxResize': true,
-    'notifierEnabled': false,
     'showDebug': false,
     'showGraph': false,
     'showSettingsPanel': false,

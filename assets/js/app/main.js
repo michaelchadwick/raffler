@@ -201,6 +201,7 @@ Raffler._initItemsArr = async function() {
 
         Raffler.__shuffleArray(Raffler.config.itemsArr)
         Raffler.config.itemsLeftArr = Raffler.config.itemsArr
+
         Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
         Raffler._syncChosenItemsWithItemsArr()
         Raffler._syncUserItemsWithItemsArr()
@@ -268,13 +269,25 @@ Raffler._loadSettings = function() {
     // console.log('lsSettings', lsSettings)
 
     if (lsSettings) {
-      if (lsSettings.allowNotifications) {
-        Raffler.settings.allowNotifications = lsSettings.allowNotifications
+      if (lsSettings.allowDebugNotifications) {
+        Raffler.settings.allowDebugNotifications = lsSettings.allowDebugNotifications
 
-        setting = document.getElementById('button-setting-allow-notifications')
+        setting = document.getElementById('button-setting-allow-debug-notifications')
 
         if (setting) {
           setting.dataset.status = 'true'
+        }
+      }
+
+      if (lsSettings.allowVisualNotifications) {
+        Raffler.settings.allowVisualNotifications = lsSettings.allowVisualNotifications
+
+        setting = document.getElementById('button-setting-allow-visual-notifications')
+
+        if (setting) {
+          setting.dataset.status = 'true'
+
+          Raffler.__toggleTestVisualNotices()
         }
       }
 
@@ -371,43 +384,62 @@ Raffler._loadSettings = function() {
   const userItems = localStorage.getItem(RAFFLER_USER_ITEMS_KEY)
 
   if (userItems) {
-    // Raffler._notify('raffler-user-items already exists', 'notice')
+    Raffler._notify('[raffler-user-items] LS key already exists', 'notice')
+    console.log('%cHello', 'color: green; background: yellow;');
   } else {
     Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, [])
-    Raffler._notify('raffler-user-items not found, so created', 'notice')
+    Raffler._notify('[raffler-user-items] LS key not found, so created', 'notice')
   }
 
   const chosenItems = localStorage.getItem(RAFFLER_CHOSEN_ITEMS_KEY)
 
   if (chosenItems) {
-    // Raffler._notify('raffler-chosen-items already exists', 'notice')
+    Raffler._notify('[raffler-chosen-items] LS key already exists', 'notice')
   } else {
     Raffler._setLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY, [])
-    Raffler._notify('raffler-chosen-items not found, so created', 'notice')
+    Raffler._notify('[raffler-chosen-items] LS key not found, so created', 'notice')
   }
 }
 Raffler._changeSetting = function(setting, event = null) {
   let st = null;
 
   switch (setting) {
-    case 'allowNotifications': {
-      st = document.getElementById('button-setting-allow-notifications').dataset.status
+    case 'allowDebugNotifications': {
+      st = document.getElementById('button-setting-allow-debug-notifications').dataset.status
 
       if (st == '' || st == 'false') {
         // update setting DOM
-        document.getElementById('button-setting-allow-notifications').dataset.status = 'true'
+        document.getElementById('button-setting-allow-debug-notifications').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('allowNotifications', true)
-
-        Raffler.__toggleTestNotices()
+        Raffler._saveSetting('allowDebugNotifications', true)
       } else {
         // update setting DOM
-        document.getElementById('button-setting-allow-notifications').dataset.status = 'false'
+        document.getElementById('button-setting-allow-debug-notifications').dataset.status = 'false'
 
-        Raffler._saveSetting('allowNotifications', false)
+        Raffler._saveSetting('allowDebugNotifications', false)
+      }
+      break
+    }
 
-        Raffler.__toggleTestNotices()
+    case 'allowVisualNotifications': {
+      st = document.getElementById('button-setting-allow-visual-notifications').dataset.status
+
+      if (st == '' || st == 'false') {
+        // update setting DOM
+        document.getElementById('button-setting-allow-visual-notifications').dataset.status = 'true'
+
+        // save to code/LS
+        Raffler._saveSetting('allowVisualNotifications', true)
+
+        Raffler.__toggleTestVisualNotices()
+      } else {
+        // update setting DOM
+        document.getElementById('button-setting-allow-visual-notifications').dataset.status = 'false'
+
+        Raffler._saveSetting('allowVisualNotifications', false)
+
+        Raffler.__toggleTestVisualNotices()
       }
       break
     }
@@ -1121,75 +1153,83 @@ Raffler._setLocalStorageItem = function(lsKey, obj) {
 }
 
 // app notifications
-Raffler._notify = function(msg, type, notifyUser, line) {
-  if (Raffler.settings.allowNotifications) {
-    type = (typeof type) === 'undefined' ? '' : type
-    notifyUser = (typeof notifyUser) === 'undefined' ? '' : notifyUser
+Raffler._notify = function(msg, type, notifyVisually, line) {
+  type = (typeof type) === 'undefined' ? '' : type
+  notifyVisually = (typeof notifyVisually) === 'undefined' ? '' : notifyVisually
 
-    var bgcolor, fgcolor, header, icon
+  let bgcolor, fgcolor, header, icon
 
-    switch (type) {
-      case 'success':
-        bgcolor = '#99c24d'
-        fgcolor = '#000000'
-        header = 'Success'
-        speed = 4000
-        icon = 'fa-smile'
-        break
-      case 'warning' || 'warn':
-        bgcolor = '#fadf63'
-        fgcolor = '#000000'
-        header = 'Warning'
-        speed = 6000
-        icon = 'fa-exclamation-triangle'
-        break
-      case 'error' || 'err':
-        bgcolor = '#632b30'
-        fgcolor = '#ffffff'
-        header = 'Error'
-        speed = 0
-        icon = 'fa-times-circle'
-        break
-      default:
-        bgcolor = '#006e90'
-        fgcolor = '#ffffff'
-        header = 'Notice'
-        speed = 4000
-        icon = 'fa-info-circle'
-        break
-    }
+  switch (type) {
+    case 'success':
+      bgcolor = '#99c24d'
+      fgcolor = '#000000'
+      header = 'Success'
+      speed = 4000
+      icon = 'fa-smile'
+      break
+    case 'warning' || 'warn':
+      bgcolor = '#fadf63'
+      fgcolor = '#000000'
+      header = 'Warning'
+      speed = 6000
+      icon = 'fa-exclamation-triangle'
+      break
+    case 'error' || 'err':
+      bgcolor = '#632b30'
+      fgcolor = '#ffffff'
+      header = 'Error'
+      speed = 0
+      icon = 'fa-times-circle'
+      break
+    default:
+      bgcolor = '#006e90'
+      fgcolor = '#ffffff'
+      header = 'Notice'
+      speed = 4000
+      icon = 'fa-info-circle'
+      break
+  }
 
-    var label = function(raw) {
-      var [bgcolor, fgcolor, type, ...msg] = raw.split(' ')
-      return [
-        `%c${type}%c ${msg.join(' ')}`,
-        `background-color: ${bgcolor}; border-right: 3px solid #000; color: ${fgcolor}; padding: 0.15em 0.35em 0.15em 0.5em`,
-        ''
-      ]
-    }
+  const label = function(raw) {
+    var [bgcolor, fgcolor, type, ...msg] = raw.split(' ')
+    return [
+      `%c${type}%c ${msg.join(' ')}`,
+      `background-color: ${bgcolor}; border-right: 3px solid #000; color: ${fgcolor}; padding: 0.15em 0.35em 0.15em 0.5em`,
+      ''
+    ]
+  }
 
-    // 1. notify admin
+  // 1. notify admin
+  if (Raffler.settings.allowDebugNotifications) {
     console.log.apply(console, label(`${bgcolor} ${fgcolor} ${header.toUpperCase()} ${msg} ${line ? `(${line})` : ''}`))
+  }
 
-    // 2. also, optionally, notify user
-    if (notifyUser) {
-      const wrapper = document.createElement('div')
-      wrapper.classList.add('item-status-wrapper')
+  // 2. also, optionally, notify user visually if allowed and specified
+  if (Raffler.settings.allowVisualNotifications && notifyVisually) {
+    const wrapper = document.createElement('div')
+    wrapper.classList.add('item-status-wrapper')
 
-        const notification = document.createElement('div')
+    const notification = document.createElement('div')
 
-        notification.classList.add('item-status')
-        notification.style.backgroundColor = bgcolor
-        notification.style.color = fgcolor
-        notification.innerHTML = `<i class='fas ${icon}'></i><strong> ${header}: </strong><span>${msg}</span>`
-        notification.onclick = function() { this.parentNode.removeChild(this) }
+      notification.classList.add('item-status')
+      notification.style.backgroundColor = bgcolor
+      notification.style.color = fgcolor
 
-        wrapper.appendChild(notification)
+      notification.innerHTML  = `
+        <div class="item-status-type">
+          <i class='fas ${icon}'></i>
+          <span>${header}:</span>
+        </div>
+        <div class="item-status-msg">${msg}</div>
+      `
 
-      const mainContainer = document.querySelector('.main-container')
+      notification.onclick = function() { this.parentNode.parentNode.removeChild(this) }
 
-      mainContainer.prepend(wrapper)
-    }
+    wrapper.appendChild(notification)
+
+    const mainContainer = document.querySelector('.main-container')
+
+    mainContainer.prepend(wrapper)
   }
 }
 
@@ -1611,16 +1651,18 @@ Raffler.__enableTimerStop = function() {
   Raffler.dom.debug.btnTimerStop.classList.remove('disabled')
 }
 
-Raffler.__toggleTestNotices = function() {
-  var btns = Raffler.dom.interactive.btnTests
+Raffler.__toggleTestVisualNotices = function() {
+  console.log('Raffler.__toggleTestVisualNotices()')
+
+  const btns = Raffler.dom.debug.btnTests
 
   Object.keys(btns).forEach((key) => {
-    if (!Raffler.settings.notifierEnabled) {
+    if (!Raffler.settings.allowVisualNotifications) {
       btns[key].setAttribute('disabled', true)
-      btns[key].setAttribute('title', 'Raffler.settings.notifierEnabled is false')
+      btns[key].setAttribute('title', 'Raffler.settings.allowVisualNotifications is false')
       btns[key].classList.add('disabled')
     } else {
-      btns[key].setAttribute('disabled')
+      btns[key].removeAttribute('disabled')
       btns[key].setAttribute('title', '')
       btns[key].classList.remove('disabled')
     }

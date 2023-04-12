@@ -704,7 +704,7 @@ header {
   z-index: 1;
 }
   .item-status {
-    align-items: center;
+    align-items: baseline;
     background: #f18f01;
     border: 2px solid #000000;
     border-radius: 0 0 3px 3px;
@@ -722,9 +722,24 @@ header {
     min-height: 30px;
     min-width: 200px;
     padding: 10px;
-    text-align: center;
     width: 100%;
   }
+    @media (hover: hover) {
+      .item-status:hover {
+        box-shadow: 0 0 0 #111111;
+      }
+    }
+    .item-status-type {
+      align-items: center;
+      display: flex;
+      font-weight: bold;
+    }
+      .item-status-type span {
+        margin-left: 5px;
+      }
+    .item-status-msg {
+      text-align: left;
+    }
 
 .checkbox {
   clear: both;
