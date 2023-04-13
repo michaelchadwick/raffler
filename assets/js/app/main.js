@@ -136,8 +136,6 @@ Raffler._initApp = function() {
     Raffler.dom.itemsCycle.classList.add('level4')
   }
 
-  Raffler._attachEventListeners()
-
   if (Raffler.config.hasUserConfig) {
     Raffler._loadUserConfig()
   } else {
@@ -149,7 +147,7 @@ Raffler._initApp = function() {
   Raffler._refreshDebugValues()
   Raffler._refreshItemsGraph(Raffler.config.itemsLeftArr)
 
-  // if previously-chosen items exit
+  // if previously-chosen items exist
   // add them to the in-memory list
   if (Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY).length) {
     Raffler._refreshChosenItemsDisplay()
@@ -162,6 +160,8 @@ Raffler._initApp = function() {
   Raffler._timerStop()
 
   Raffler.dom.interactive.btnRaffle.focus()
+
+  Raffler._attachEventListeners()
 
   Raffler._getNebyooApps()
 }
@@ -322,6 +322,8 @@ Raffler._loadSettings = function() {
 
         if (setting) {
           setting.dataset.status = 'true'
+
+          document.getElementById('items-graph').classList.add('show')
         }
       }
 
@@ -505,11 +507,15 @@ Raffler._changeSetting = function(setting, event = null) {
         // update setting DOM
         document.getElementById('button-setting-show-graph').dataset.status = 'true'
 
+        document.getElementById('items-graph').classList.add('show')
+
         // save to code/LS
         Raffler._saveSetting('showGraph', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-show-graph').dataset.status = 'false'
+
+        document.getElementById('items-graph').classList.remove('show')
 
         Raffler._saveSetting('showGraph', false)
       }
@@ -874,17 +880,20 @@ Raffler._syncUserItemsWithItemsArr = function() {
 }
 
 Raffler._refreshItemsGraph = function(items) {
-  var index = 0
+  let index = 0
 
   Raffler.dom.itemsGraph.innerHTML = ''
 
   items.forEach(function() {
-    Raffler.dom.itemsGraph
-      .append('<span id=' + (index++) + '></span>')
+    const bar = document.createElement('span')
+    bar.id = index++
+
+    Raffler.dom.itemsGraph.appendChild(bar)
   })
 }
 Raffler._refreshDebugValues = function() {
-  Raffler.settings.intervalRange = RAFFLER_DEFAULT_INTERVAL_RANGE
+  Raffler.config.intervalRange = RAFFLER_DEFAULT_INTERVAL_RANGE
+  Raffler.config.multiplyValue = RAFFLER_DEFAULT_MULTIPLY
 }
 Raffler._refreshResultsCount = function() {
   const chosenItems = Raffler._getLocalStorageItem(RAFFLER_CHOSEN_ITEMS_KEY)
@@ -1116,7 +1125,7 @@ Raffler._continueRaffling = function() {
   window.countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
 
   Raffler.config.intervalRange = RAFFLER_DEFAULT_INTERVAL_RANGE
-  Raffler.dom.debug.intervalValue.innerText = Raffler.dom.config.intervalRange
+  Raffler.dom.debug.intervalValue.innerText = Raffler.config.intervalRange
 
   Raffler.dom.debug.stageValue.innerText = window.countdownTimer.stage
 
@@ -1271,7 +1280,7 @@ Raffler._timer = function(callbackFunc, timing) {
             Raffler.dom.itemsCycle.innerHTML = chosenItemHTML
 
             document.querySelectorAll('div#items-graph span').forEach((el, i) => {
-              if (variableInterval.index === parseInt(el[0].id)) {
+              if (variableInterval.index === parseInt(el.id)) {
                 el.classList.add('chosen')
               } else {
                 el.classList.remove('chosen')
@@ -1653,8 +1662,6 @@ Raffler.__enableTimerStop = function() {
 }
 
 Raffler.__toggleTestVisualNotices = function() {
-  console.log('Raffler.__toggleTestVisualNotices()')
-
   const btns = Raffler.dom.debug.btnTests
 
   Object.keys(btns).forEach((key) => {

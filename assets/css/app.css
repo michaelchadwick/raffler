@@ -1048,9 +1048,13 @@ section#init-raffler-cycle {
     }
     #main-content .main-container #items-graph {
       display: none;
+      margin-bottom: 15px;
       text-align: center;
       width: 80%;
     }
+      #main-content .main-container #items-graph.show {
+        display: block;
+      }
       #main-content .main-container #items-graph span {
         background-color: var(--gray-light);
         display: inline-block;
