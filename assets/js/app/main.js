@@ -188,6 +188,7 @@ Raffler._initItemsArr = async function() {
     const data = await response.json()
 
     if (data) {
+      // clear current config's itemsArr of all items
       while (Raffler.config.itemsArr.length) {
         Raffler.config.itemsArr.pop()
       }
@@ -195,6 +196,7 @@ Raffler._initItemsArr = async function() {
       Raffler.config.itemsArr.length = 0
 
       if (Raffler.config.itemsArr) {
+        // fill itemsArr back up again
         Object.values(data).forEach((val) => {
           Raffler.config.itemsArr.push(val)
         })
@@ -385,7 +387,6 @@ Raffler._loadSettings = function() {
 
   if (userItems) {
     Raffler._notify('[raffler-user-items] LS key already exists', 'notice')
-    console.log('%cHello', 'color: green; background: yellow;');
   } else {
     Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, [])
     Raffler._notify('[raffler-user-items] LS key not found, so created', 'notice')

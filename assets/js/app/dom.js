@@ -44,5 +44,10 @@ Raffler.dom.debug = {
   'btnTests': document.getElementsByClassName('button-test'),
   'btnTimerStart': document.getElementById('button-timer-start'),
   'btnTimerStop': document.getElementById('button-timer-stop'),
-  'stageValue': document.getElementById('text-setting-stage-value')
+  'stageValue': document.getElementById('text-setting-stage-value'),
+  'intervalValue': document.getElementById('text-setting-interval-value'),
+  'multValue': document.getElementById('text-setting-multiply-value'),
+  'timesRun': document.getElementById('text-setting-timesrun-value'),
+  'debugItemsAvailable': document.getElementById('debug-items-available'),
+  'debugItemsChosen': document.getElementById('debug-items-chosen')
 }
