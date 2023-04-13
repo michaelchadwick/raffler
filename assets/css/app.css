@@ -402,6 +402,7 @@ header {
   display: none;
   height: 50vh;
   min-width: 312px;
+  overflow-y: auto;
   padding: 0;
   position: fixed;
   right: 0;
@@ -435,21 +436,24 @@ header {
     z-index: 1;
   }
   #settings-panel-content {
-    bottom: 0;
-    left: 0;
     margin-top: 30px;
     overflow-y: auto;
-    padding: 10px;
-    top: 0;
+    padding: 10px 10px 0;
   }
     @media (min-width: 768px) {
       #settings-panel-content {
+        bottom: 0;
+        left: 0;
+        padding-bottom: 53px;
         position: absolute;
+        top: 0;
       }
     }
     #settings-panel-content .setting-row.debug {
       background-color: var(--pink-pale);
       display: none;
+      padding-left: 10px;
+      padding-right: 10px;
     }
     #settings-panel-content #settings-debug {
       background-color: var(--pink-light);
