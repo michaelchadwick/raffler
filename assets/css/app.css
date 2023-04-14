@@ -460,8 +460,7 @@ header {
       display: none;
     }
     #settings-panel-content #settings-debug {
-      padding-left: 10px;
-      padding-right: 10px;
+      padding: 0 10px 10px;
     }
       #settings-panel-content #settings-debug .setting-row .text .description {
         color: #242424;
@@ -560,6 +559,14 @@ header {
       .button.export:hover {
         background-color: #003b4e;
       }
+    }
+
+  .button-timers {
+    display: flex;
+  }
+    .button-timers .button {
+      align-items: center;
+      display: flex;
     }
 
   .button.start > span,
