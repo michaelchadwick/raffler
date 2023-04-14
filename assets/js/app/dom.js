@@ -49,5 +49,7 @@ Raffler.dom.debug = {
   'multValue': document.getElementById('text-setting-multiply-value'),
   'timesRun': document.getElementById('text-setting-timesrun-value'),
   'debugItemsAvailable': document.getElementById('debug-items-available'),
-  'debugItemsChosen': document.getElementById('debug-items-chosen')
+  'debugItemsAvailableCount': document.getElementById('debug-items-available-count'),
+  'debugItemsChosen': document.getElementById('debug-items-chosen'),
+  'debugItemsChosenCount': document.getElementById('debug-items-chosen-count')
 }
