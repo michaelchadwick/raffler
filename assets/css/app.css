@@ -15,6 +15,9 @@
   --blue-light: #92e0ff;
   --pink-light: #f9a4ff;
   --pink-pale: #fcd0ff;
+
+  --danger: #fc3434;
+  --danger-hover: #ff4949;
 }
 
 * {
@@ -523,7 +526,7 @@ header {
                 display: inherit;
               }
 
-#the-button {
+#pick-winner-container {
   display: none;
 }
 
@@ -597,6 +600,14 @@ header {
     @media (hover: hover) {
       .button.stop:hover {
         background-color: #753339;
+      }
+    }
+  .button.danger {
+    background-color: var(--danger);
+  }
+    @media(hover:hover) {
+      .button.danger:hover {
+        background-color: var(--danger-hover);
       }
     }
   .button.raffle {

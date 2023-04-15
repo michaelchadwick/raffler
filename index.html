@@ -249,7 +249,7 @@
 
         <div class="setting-row tall">
           <div class="text">
-            <div class="title">Chosen Items <span id="debug-items-chosen-count"></span></div>
+            <div class="title">Chosen Items <span id="debug-items-chosen-count">(0)</span></div>
             <div class="description">Items in the pool that have been chosen.</div>
           </div>
           <div class="control">
@@ -313,7 +313,13 @@
             <div class="container">
               <div class="values" id="text-setting-interval-value">
                 <span></span>
-                <input type="range" min="1" max="359" step="1" value="25" onchange="Raffler._changeSetting('intervalValue')" />
+                <input type="range" id="range-interval-value"
+                  min="1"
+                  max="400"
+                  step="1"
+                  value="25"
+                  onchange="Raffler._changeSetting('intervalValue', event)"
+                />
               </div>
             </div>
           </div>
@@ -397,6 +403,36 @@
             </div>
           </div>
         </div>
+
+        <div class="setting-row">
+          <div class="text">
+            <div class="title">Reset Countdown</div>
+            <div class="description">Reset Raffler back to initial countdown (i.e. no choices made).</div>
+          </div>
+          <div class="control">
+            <div class="container">
+              <a href="#" class="button danger disabled" id="button-reset-countdown" disabled="true">
+                <i class="fas fa-rotate-right"></i>
+                <span>Reset countdown</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="text">
+            <div class="title">Reset Raffler</div>
+            <div class="description">Reset Raffler back to initial state (i.e. first time loaded).</div>
+          </div>
+          <div class="control">
+            <div class="container">
+              <a href="#" class="button danger disabled" id="button-reset-all" disabled="true">
+                <i class="fas fa-power-off"></i>
+                <span>Reset Raffler</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -427,8 +463,8 @@
           </button>
         </div>
 
-        <div id="the-button">
-          <a href="#" class="button raffle" id="button-raffle">PICK A WINNER!</a>
+        <div id="pick-winner-container">
+          <a href="#" class="button raffle" id="button-pick-winner">PICK A WINNER!</a>
         </div>
 
         <div id="results-wrapper">
