@@ -4,7 +4,14 @@
 /* global Raffler */
 
 // set to true if using /config/raffler_config.user.json
-Raffler.config.hasUserConfig = true
+Raffler.config.enableUserConfig = false
+
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+if (params.enable_user_config) {
+  Raffler.config.enableUserConfig = true
+}
 
 /*************************************************************************
  * public methods (called from UI) *
@@ -95,7 +102,7 @@ Raffler._initApp = function() {
     Raffler.dom.itemsCycle.classList.add('level4')
   }
 
-  if (Raffler.config.hasUserConfig) {
+  if (Raffler.config.enableUserConfig) {
     Raffler._loadUserConfig()
   } else {
     Raffler._resetApp()

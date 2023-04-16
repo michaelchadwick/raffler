@@ -58,8 +58,9 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 
 Change the values in the test data set, or add your own user data file, which can be done thusly:
 
-  1. Go to /assets/js/app/main.js and change the following line from `false` to `true`: `Raffler.config.hasUserConfig = false`
-  2. copying and renaming the `/config/raffler_config.user.dist` file to `/config/raffler_config.user.json`.
+  1. Copy and rename the `/config/raffler_config.user.dist` file to `/config/raffler_config.user.json`.
+  2. Update the contents of `/config/raffler_config.user.json` to use your values
+  3. Use the following URL to enable: `https://example.domain/?enable_user_config=1`
 
 An example of said file:
 
