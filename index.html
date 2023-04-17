@@ -184,38 +184,24 @@
             </div>
           </div>
 
-        </div>
-
-      </div>
-
-      <!-- user items -->
-      <!--
-      <div class="setting-row">
-        <div class="text">
-          <div class="title">User Items</div>
-          <div class="description">Additional items to raffle.</div>
-        </div>
-        <div class="control">
-          <div class="container">
-            <input id="text-user-items-add-name" type="text" placeholder="name" />
-            <input id="text-user-items-add-affl" type="text" placeholder="affiliation" />
-
-            <div class="buttons">
-              <button class="icon" id="button-user-items-add" onclick="Raffler._addUserItem()">
-                <i class="fas fa-plus"></i>
-              </button>
-              <button class="icon" id="button-user-items-clear" onclick="Raffler._removeUserItem()">
-                <i class="fas fa-minus-circle"></i>
-              </button>
+          <div class="setting-row tall">
+            <div class="text">
+              <div class="title">User Items <span id="items-user-count">(0)</span></div>
+              <div class="description">Additional items to be added to the pool of choices. One item per line in the format <code>name,affiliation</code>.</div>
             </div>
-
-            <div id="user-items-display">
-              <ul></ul>
+            <div class="control">
+              <div class="container">
+                <textarea id="items-user"></textarea>
+                <div class="form-group">
+                  <button id="button-items-user-sync">Sync with choices</button>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
+
       </div>
-      -->
 
       <!-- debug settings -->
       <div class="setting-row debug">
@@ -238,7 +224,8 @@
         <div class="setting-row tall">
           <div class="text">
             <div class="title">Available Items <span id="debug-items-available-count"></span></div>
-            <div class="description">Items currently in the pool to be chosen during a countdown.</div>
+            <div class="description">Items currently in the pool to be chosen.<br />
+            <code>(config <span style="color: green">+</span> user) <span style="color: red">-</span> chosen</code></div>
           </div>
           <div class="control">
             <div class="container">

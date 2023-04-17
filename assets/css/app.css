@@ -127,7 +127,6 @@ button {
   flex: 1;
   font-family: inherit;
   font-weight: bold;
-  height: 50px;
   justify-content: center;
   margin: 0 6px 0 0;
   padding: 0;
@@ -461,10 +460,15 @@ header {
     #settings-panel-content #settings-debug {
       background-color: var(--pink-light);
       display: none;
-    }
-    #settings-panel-content #settings-debug {
       padding: 0 10px 10px;
     }
+      #settings-panel-content #settings-debug textarea {
+        min-width: 268px;
+      }
+        #settings-panel-content #settings-debug textarea:read-only {
+          background-color: var(--white-mute);
+          color: var(--gray);
+        }
       #settings-panel-content #settings-debug .setting-row .text .description {
         color: #242424;
       }
@@ -512,7 +516,7 @@ header {
           }
             #settings-panel-content .setting-row .control .container textarea {
               height: 92px;
-              min-width: 268px;
+              min-width: 288px;
               padding: 0.5rem;
             }
             #settings-panel-content .setting-row .control .container input {
@@ -1269,3 +1273,22 @@ section#init-raffler-cycle {
   transition: transform 0.3s;
   width: 50%;
 }
+
+.form-group {
+  display: flex;
+  gap: 4px;
+}
+  .form-group input {
+    border: 1px solid var(--black);
+    font-family: monospace;
+    padding: 2px;
+  }
+  .form-group button {
+    border: 1px solid #000;
+    font-size: 1.5rem;
+  }
+    @media (hover:hover) {
+      .form-group button:hover {
+        background-color: var(--white);
+      }
+    }

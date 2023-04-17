@@ -433,7 +433,7 @@ Raffler._changeSetting = function(setting, event = null) {
     }
 
     case 'intervalValue': {
-      console.log('intervalValue event', event.target.value)
+      // console.log('intervalValue event', event.target.value)
 
       const val = parseInt(event.target.value)
 
@@ -748,20 +748,6 @@ Raffler._clearUserItems = function() {
   }
 }
 
-// TODO
-Raffler._addUserItem = function() {
-  const name = document.getElementById('text-user-items-add-name').value
-  const affl = document.getElementById('text-user-items-add-affl').value
-
-  if (name != '' && affl != '') {
-    document.querySelectorAll('#user-items-display ul').forEach((el, i) => {
-      el.append(`<li>${name} - ${affl}</li>`)
-    });
-  }
-}
-// TODO
-Raffler._removeUserItem = function() {}
-
 // remove previously chosen items from in-memory itemsArr
 Raffler._syncChosenItemsWithItemsArr = function() {
   try {
@@ -819,35 +805,43 @@ Raffler._syncChosenItemsWithItemsArr = function() {
 }
 // add user items to in-memory itemsArr
 Raffler._syncUserItemsWithItemsArr = function() {
+  Raffler._notify('Syncing user items with pool of choices')
+
   try {
-    var items = Raffler.config.itemsArr
-    var userItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
-    var userItemWillBeAdded = true
+    const items = Raffler.config.itemsArr
+    const userItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
+    let userItemWillBeAdded = true
 
     // if we've previously added user items
     if (userItems && userItems.length > 0) {
-      // Raffler.dom.debug.btnUserItemsClear.removeAttribute('disabled')
-      // Raffler.dom.debug.btnUserItemsClear.classList.remove('disabled')
-
+      // make sure not to add duplicate item
       for (var i = 0; i < userItems.length; i++) {
         for (var j = 0; j < items.length; j++) {
-          if (userItems[i].name === items[j].name &&
-              userItems[i].affl === items[j].affl) {
+          if (
+            userItems[i].name.toUpperCase() === items[j].name.toUpperCase() &&
+            userItems[i].affl.toUpperCase() === items[j].affl.toUpperCase()
+          ) {
             userItemWillBeAdded = false
           }
         }
+
         if (userItemWillBeAdded) {
           Raffler.config.itemsArr.push(userItems[i])
+        } else {
+          userItemWillBeAdded = true
         }
       }
+
       Raffler._refreshUserItemsDisplay()
 
-      // Raffler._notify('syncUserItemsWithItemsArr: synced', 'notice')
+      Raffler._notify('syncUserItemsWithItemsArr: synced')
     } else {
-      // Raffler._notify('syncUserItemsWithItemsArr: none to sync', 'notice')
+      Raffler._notify('syncUserItemsWithItemsArr: none to sync')
     }
 
     Raffler._refreshAvailableItemsDisplay()
+
+    Raffler.dom.interactive.itemsUserCount.innerText = `(${Raffler.dom.interactive.itemsUser.value.split('\n').filter(item => item != '').length})`
   } catch (e) {
     Raffler._notify('syncUserItemsWithItemsArr: ' + e, 'error')
   }
@@ -925,16 +919,18 @@ Raffler._refreshChosenItemsDisplay = function() {
 }
 Raffler._refreshUserItemsDisplay = function() {
   try {
-    var lsUserItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
+    const lsUserItems = Raffler._getLocalStorageItem(RAFFLER_USER_ITEMS_KEY)
 
     if (lsUserItems && lsUserItems.length > 0) {
+      Raffler.dom.interactive.itemsUser.value = ''
+
       Object.values(lsUserItems).forEach((val) => {
-        Raffler.dom.userItemsDisplay.children().append('<li>' + val.name + ' (' + val.affl + ')</li>')
+        Raffler.dom.interactive.itemsUser.value += val.name + ',' + val.affl + '\n'
       })
 
       Raffler._notify('refreshUserItemsDisplay: display updated', 'notice')
     } else {
-      Raffler.dom.userItemsDisplay.innerHTML = ''
+      Raffler.dom.interactive.itemsUser.value = ''
       Raffler._notify('refreshUserItemsDisplay: none to display')
     }
   } catch (e) {
@@ -1396,6 +1392,20 @@ Raffler._resetCountdown = function() {
   Raffler.dom.interactive.btnPickWinner.focus()
 }
 
+Raffler._userItemsValid = function(items) {
+  let userItems = items.split('\n').filter(item => item != '')
+
+  if (userItems.length) {
+    if (userItems.every(item => item.split(',').length == 2)) {
+      return true
+    } else {
+      return false
+    }
+  } else {
+    return false
+  }
+}
+
 // attach event handlers to buttons and such
 Raffler._attachEventListeners = function() {
   // {} header icons to open modals
@@ -1438,6 +1448,28 @@ Raffler._attachEventListeners = function() {
       Raffler._timerStart()
     }
   })
+  Raffler.dom.interactive.btnItemsUserSync.addEventListener('click', () => {
+    if (Raffler.dom.interactive.itemsUser.value !== '') {
+      const items = Raffler.dom.interactive.itemsUser.value
+
+      if (Raffler._userItemsValid(items)) {
+        let itemsObjArr = []
+
+        // add each valid item (ignoring blank items)
+        items.split('\n').filter(item => item != '').map(item => {
+          const temp = item.split(',')
+          itemsObjArr.push({ 'name': temp[0], 'affl': temp[1] })
+        })
+
+        Raffler._setLocalStorageItem(RAFFLER_USER_ITEMS_KEY, itemsObjArr)
+        Raffler._syncUserItemsWithItemsArr()
+      } else {
+        Raffler._notify('User items formatting invalid', 'notice')
+      }
+    } else {
+      Raffler._notify('No user items to sync', 'notice')
+    }
+  })
   Raffler.dom.interactive.btnPickWinner.addEventListener('click', (e) => {
     e.preventDefault()
     if (!Raffler.dom.interactive.btnPickWinner.hasAttribute('disabled')) {
@@ -1461,6 +1493,7 @@ Raffler._attachEventListeners = function() {
     // export.js
     Raffler._exportResults()
   })
+
   if (!Raffler.dom.debug.btnResetCountdown.getAttribute('disabled')) {
     Raffler.dom.debug.btnResetCountdown.addEventListener('click', async () => {
       const resetConfirm = new Modal('confirm', 'Are you sure you want to reset choices?',
