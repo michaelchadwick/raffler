@@ -403,7 +403,7 @@ header {
   bottom: 0;
   display: none;
   height: 50vh;
-  min-width: 312px;
+  min-width: 320px;
   overflow-y: auto;
   padding: 0;
   position: fixed;
@@ -425,13 +425,11 @@ header {
     }
   }
   #settings-panel-header {
-    align-items: center;
     background-color: var(--blue-primary);
     color: var(--white);
     font-size: 2rem;
     font-weight: 700;
     height: 20px;
-    justify-content: baseline;
     padding: 10px;
     position: fixed;
     width: 100%;
@@ -451,34 +449,13 @@ header {
         top: 0;
       }
     }
-    #settings-panel-content .setting-row.debug {
-      background-color: var(--pink-pale);
-      display: none;
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    #settings-panel-content #settings-debug {
-      background-color: var(--pink-light);
-      display: none;
-      padding: 0 10px 10px;
-    }
-      #settings-panel-content #settings-debug textarea {
-        min-width: 268px;
-      }
-        #settings-panel-content #settings-debug textarea:read-only {
-          background-color: var(--white-mute);
-          color: var(--gray);
-        }
-      #settings-panel-content #settings-debug .setting-row .text .description {
-        color: #242424;
-      }
-
     #settings-panel-content .setting-group {
       display: flex;
       flex-direction: column;
       width: 100%;
     }
     #settings-panel-content .control .container.buttons button {
+      min-height: 40px;
       width: 50px;
     }
 
@@ -495,6 +472,14 @@ header {
         #settings-panel-content .setting-row.tall .control {
           margin-left: 0;
         }
+
+      #settings-panel-content .setting-row.debug {
+        background-color: var(--pink-pale);
+        display: none;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
       #settings-panel-content .setting-row:last-of-type {
         border-bottom: none;
       }
@@ -513,12 +498,28 @@ header {
           margin-left: 1em;
         }
           #settings-panel-content .setting-row .control .container {
+            width: 100%;
           }
-            #settings-panel-content .setting-row .control .container textarea {
-              height: 92px;
-              min-width: 288px;
-              padding: 0.5rem;
+            #settings-panel-content .setting-row .control .container.textarea {
+              margin-right: 12px;
+              width: inherit;
             }
+              #settings-panel-content .setting-row .control .container.textarea textarea {
+                height: 92px;
+                max-width: 100%;
+                padding: 0.5rem;
+                width: 100%;
+              }
+                @media (min-width: 768px) {
+                  #settings-panel-content .setting-row .control .container.textarea {
+                    margin-right: 0;
+                  }
+                    #settings-panel-content .setting-row .control .container.textarea textarea {
+                      max-width: none;
+                      min-width: auto;
+                      width: 288px;
+                    }
+                }
             #settings-panel-content .setting-row .control .container input {
               max-width: 100px;
               min-width: 50px;
@@ -529,6 +530,41 @@ header {
               #settings-panel-content .setting-row .control .container.buttons button {
                 display: inherit;
               }
+
+    #settings-panel-content #settings-debug {
+      background-color: var(--pink-light);
+      display: none;
+      padding: 0 10px 10px;
+    }
+      #settings-panel-content #settings-debug .setting-row {
+        width: 100%;
+      }
+        #settings-panel-content #settings-debug .setting-row .container.textarea {
+          margin-right: 12px;
+          width: inherit;
+        }
+          #settings-panel-content #settings-debug .setting-row .container.textarea textarea {
+            max-width: 100%;
+            width: 100%;
+          }
+            @media (min-width: 768px) {
+              #settings-panel-content #settings-debug .setting-row .container.textarea {
+                margin-right: 0;
+              }
+                #settings-panel-content #settings-debug .setting-row .container.textarea textarea {
+                  margin-right: 0;
+                  max-width: none;
+                  min-width: auto;
+                  width: 268px;
+                }
+            }
+          #settings-panel-content #settings-debug .setting-row textarea:read-only {
+            background-color: var(--white-mute);
+            color: var(--gray);
+          }
+          #settings-panel-content #settings-debug .setting-row .text .description {
+            color: #242424;
+          }
 
 #pick-winner-container {
   display: none;
@@ -1275,9 +1311,14 @@ section#init-raffler-cycle {
 }
 
 .form-group {
-  display: flex;
-  gap: 4px;
+  display: block;
 }
+  @media (min-width: 768px) {
+    .form-group {
+      display: flex;
+      gap: 4px;
+    }
+  }
   .form-group input {
     border: 1px solid var(--black);
     font-family: monospace;
@@ -1285,7 +1326,9 @@ section#init-raffler-cycle {
   }
   .form-group button {
     border: 1px solid #000;
+    display: flex;
     font-size: 1.5rem;
+    width: 100%;
   }
     @media (hover:hover) {
       .form-group button:hover {
