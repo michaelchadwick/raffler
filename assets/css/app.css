@@ -12,6 +12,7 @@
   --black-mute: #282828;
 
   --blue-primary: #196177;
+  --blue-primary-dark: #114554;
   --blue-light: #92e0ff;
   --pink-light: #f9a4ff;
   --pink-pale: #fcd0ff;
@@ -425,7 +426,7 @@ header {
     }
   }
   #settings-panel-header {
-    background-color: var(--blue-primary);
+    background-color: var(--blue-primary-dark);
     color: var(--white);
     font-size: 2rem;
     font-weight: 700;
