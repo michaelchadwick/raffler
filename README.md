@@ -84,7 +84,5 @@ Optionally, you can add additional user items on the fly (this functionality is 
 
 #### Third-Party Help
 
-* [Javascript Standard Style Guide](https://github.com/standard/standard)
-* [JS File Saving](https://github.com/eligrey/FileSaver.js)
-* [CSV to JSON](https://github.com/Keyang/node-csvtojson)
-* [Talkify](https://talkify.net)
+* [JS File Saving](https://github.com/eligrey/FileSaver.js) for exporting results to text
+* [Talkify](https://talkify.net) for reading the choice after a countdown
