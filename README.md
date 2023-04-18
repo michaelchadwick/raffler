@@ -14,8 +14,6 @@ To develop locally, a few simple steps need to be taken.
 `$ git clone git@github.com:michaelchadwick/raffler.git`
 * change into the new directory
 `$ cd raffler`
-* build sass files ([Dart Sass](https://sass-lang.com))
-`$ sass assets/scss:assets/css` or `sass -w assets/scss:assets/css` (for continuous dev)
 * run a local http server
 `$ php -S 127.0.0.1:3000` or `$ python3 -m http.server 3000` or `$ ruby -run -e httpd . -p 3000`
 
