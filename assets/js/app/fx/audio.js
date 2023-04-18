@@ -117,7 +117,7 @@ Raffler._audioPlay = async function(soundId) {
 
   switch (soundId) {
     case 'countdown':
-      if (Raffler.settings.soundCountdown) {
+      if (Raffler.settings.sound.countdown) {
         if ('caches' in self) {
           useCache(url)
         } else {
@@ -127,7 +127,7 @@ Raffler._audioPlay = async function(soundId) {
       break
 
     case 'victory':
-      if(Raffler.settings.soundVictory) {
+      if(Raffler.settings.sound.victory) {
         if ('caches' in self) {
           useCache(url)
         } else {
@@ -140,7 +140,7 @@ Raffler._audioPlay = async function(soundId) {
 
 // talkify: read name on choice
 Raffler._readName = function (itemChosen) {
-  if (Raffler.settings.soundName) {
+  if (Raffler.settings.sound.name) {
     const player = new talkify.TtsPlayer()
     // const player = new talkify.Html5Player()
 
