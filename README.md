@@ -71,8 +71,6 @@ An example of said file:
 }
 ```
 
-*Note*: There are a bunch of debug options you can play with if you're on local (or if you use the `?enable_debug_settings=1` query string flag).
-
 The options that can be changed are as follows:
 
 * `dataFilePath` - json file of Raffler items
@@ -80,7 +78,7 @@ The options that can be changed are as follows:
 * `logoFileLink` - click logo and go somewhere
 * `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
-Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to stop and start a raffler in-process, re-initialize all data, as well as toggle special effects.
+Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to toggle special effects and, if you're on local or use the `?enable_debug_settings=1` query string flag, other debug stuff like stopping and starting a raffler in-process, re-initializing all data, and seeing all the potential items to be chosen.
 
 #### Third-Party Help
 
