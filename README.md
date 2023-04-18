@@ -73,6 +73,8 @@ An example of said file:
 }
 ```
 
+*Note*: There are a bunch of debug options you can play with if you're on local (or if you use the `?enable_debug_settings=1` query string flag).
+
 The options that can be changed are as follows:
 
 * `dataFilePath` - json file of Raffler items
