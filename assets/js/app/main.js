@@ -12,6 +12,9 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 if (params.enable_user_config) {
   Raffler.config.enableUserConfig = true
 }
+if (params.enable_debug_settings) {
+  Raffler.dom.settingsShowDebug.style.display = 'flex'
+}
 
 /*************************************************************************
  * public methods (called from UI) *
@@ -84,7 +87,7 @@ Raffler._initApp = function() {
   // set env
   Raffler.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
-  // if local dev, show debug stuff
+  // if local, show debug stuff
   if (Raffler.env == 'local') {
     Raffler._initDebug()
 
