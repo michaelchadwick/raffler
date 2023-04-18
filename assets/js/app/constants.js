@@ -68,7 +68,7 @@ const RAFFLER_DEFAULTS = {
 }
 
 // settings: saved in LOCAL STORAGE
-Raffler.settings = RAFFLER_DEFAULTS.settings
+Raffler.settings = {...RAFFLER_DEFAULTS.settings}
 
 // config: only saved while game is loaded
-Raffler.config = RAFFLER_DEFAULTS.config
+Raffler.config = {...RAFFLER_DEFAULTS.config}
