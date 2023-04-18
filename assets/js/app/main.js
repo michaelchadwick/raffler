@@ -133,6 +133,7 @@ Raffler._initApp = function() {
   Raffler._attachEventListeners()
 
   Raffler._getNebyooApps()
+  Raffler._initData()
 }
 
 Raffler._initDebug = function() {
