@@ -134,7 +134,26 @@ Raffler._initApp = function() {
 
   Raffler._getNebyooApps()
   Raffler._initData()
+
+  // if (Raffler.myAudioWorker) {
+  //   Raffler.myAudioWorker.postMessage({
+  //     command: 'initData',
+  //     data: null
+  //   })
+  // } else {
+  //   Raffler._notify('Could not initialize audio Web Worker', 'warning')
+  // }
 }
+
+// Raffler._initAudioWorker = function() {
+//   if (window.Worker) {
+//     Raffler.myAudioWorker = new Worker('./assets/js/app/fx/audio.js')
+
+//     Raffler.myAudioWorker.onmessage = function(e) {
+//       console.log('Message received from worker', e.data)
+//     }
+//   }
+// }
 
 Raffler._initDebug = function() {
   if (Raffler.dom.debug.container) {
@@ -217,6 +236,8 @@ Raffler._loadUserConfig = function() {
       }
       if (data.talkifyKey != '') {
         Raffler.config.talkifyKey = data.talkifyKey
+
+        Raffler._initTalkifyConfig()
       }
 
       Raffler._resetApp()
@@ -1032,8 +1053,24 @@ Raffler._pickAWinner = function() {
     Raffler.dom.itemsCycle.className = ''
     Raffler.dom.itemsCycle.classList.add('level-win')
     Raffler.dom.body.classList.add('level4')
-    Raffler._audioPlay('victory')
-    Raffler._readName(Raffler.config.lastItemChosen)
+
+    if (Raffler.settings.sound.victory) {
+      Raffler._playAudio('victory')
+
+      // Raffler.myAudioWorker.postMessage({
+      //   command: 'playAudio',
+      //   data: 'victory'
+      // })
+    }
+
+    if (Raffler.settings.sound.name) {
+      Raffler._readName(Raffler.config.lastItemChosen)
+
+      // Raffler.myAudioWorker.postMessage({
+      //   command: 'readName',
+      //   data: Raffler.config.lastItemChosen
+      // })
+    }
 
     Raffler._addChosenItemToLocalStorage(Raffler.config.lastItemChosen)
     // add to list of chosen items and update displays
@@ -1673,7 +1710,7 @@ Raffler.__enableDebugTimerStop = function() {
 }
 
 Raffler.__toggleTestVisualNotices = function() {
-  const btns = Raffler.dom.debug.btnTests
+  const btns = Raffler.dom.debug.btnTestVisual
 
   Object.keys(btns).forEach((key) => {
     if (!Raffler.settings.allowVisualNotifications) {
@@ -1754,14 +1791,29 @@ window.countdownTimer = Raffler._timer(function() {
 
         Raffler.dom.itemsCycle.classList.add('level-win')
         Raffler.dom.body.classList.add('level4')
-        Raffler._audioPlay('victory')
+
+        if (Raffler.settings.sound.victory) {
+          Raffler._playAudio('victory')
+
+          // Raffler.myAudioWorker.postMessage({
+          //   command: 'playAudio',
+          //   data: 'victory'
+          // })
+        }
 
         Raffler.config.lastItemChosen = {
           'name': document.querySelector('div.item-name').innerText,
           'affl': document.querySelector('div.item-affl').innerText
         }
 
-        Raffler._readName(Raffler.config.lastItemChosen)
+        if (Raffler.settings.sound.name) {
+          Raffler._readName(Raffler.config.lastItemChosen)
+
+          // Raffler.myAudioWorker.postMessage({
+          //   command: 'readName',
+          //   data: Raffler.config.lastItemChosen
+          // })
+        }
 
         // confirm winner
         Raffler.__enableChosenConfirm()
@@ -1789,7 +1841,14 @@ window.countdownTimer = Raffler._timer(function() {
       Raffler.dom.itemsCycle.classList.add('level1')
     }
 
-    Raffler._audioPlay('countdown')
+    if (Raffler.settings.sound.countdown) {
+      Raffler._playAudio('countdown')
+
+      // Raffler.myAudioWorker.postMessage({
+      //   command: 'playAudio',
+      //   data: 'countdown'
+      // })
+    }
   }
 
   // if we've started countdown and we haven't reached end

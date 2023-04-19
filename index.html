@@ -374,18 +374,38 @@
             <div class="description">Test each kind of visual notification</div>
           </div>
           <div class="control">
-            <div class="container buttons" id="buttons-test">
-              <button class="button button-test test notice disabled" id="button-test-notice" title="notice" onclick="Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)" disabled="true">
+            <div class="container buttons buttons-test-visual" id="buttons-test-visual">
+              <button class="button button-test-visual test notice disabled" id="button-test-notice" title="notice" onclick="Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)" disabled="true">
                 <i class="fas fa-info-circle"></i>
               </button>
-              <button class="button button-test test success disabled" id="button-test-success" title="success" onclick="Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)" disabled="true">
+              <button class="button button-test-visual test success disabled" id="button-test-success" title="success" onclick="Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)" disabled="true">
                 <i class="fas fa-smile"></i>
               </button>
-              <button class="button button-test test warning disabled" id="button-test-warning" title="warning" onclick="Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)" disabled="true">
+              <button class="button button-test-visual test warning disabled" id="button-test-warning" title="warning" onclick="Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)" disabled="true">
                 <i class="fas fa-exclamation-triangle"></i>
               </button>
-              <button class="button button-test test error disabled" id="button-test-error" title="error" onclick="Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)" disabled="true">
+              <button class="button button-test-visual test error disabled" id="button-test-error" title="error" onclick="Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)" disabled="true">
                 <i class="fas fa-times-circle"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-row tall">
+          <div class="text">
+            <div class="title">Test Sounds</div>
+            <div class="description">Test each kind of sound</div>
+          </div>
+          <div class="control">
+            <div class="container buttons buttons-test-sound" id="buttons-test-sounds">
+              <button class="button button-test test countdown" id="button-test-sound-countdown" title="countdown" onclick="Raffler._playAudio('countdown')">
+                <i class="fas fa-stopwatch-20"></i> Raffle
+              </button>
+              <button class="button button-test test victory" id="button-test-sound-victory" title="victory" onclick="Raffler._playAudio('victory')">
+                <i class="fas fa-trophy"></i> Win
+              </button>
+              <button class="button button-test test name" id="button-test-sound-name" title="name" onclick="Raffler._readName('Winner McWinnington from Victoryland')">
+                <i class="fas fa-microphone"></i> Name
               </button>
             </div>
           </div>

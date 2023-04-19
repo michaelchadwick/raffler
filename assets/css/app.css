@@ -455,11 +455,6 @@ header {
       flex-direction: column;
       width: 100%;
     }
-    #settings-panel-content .control .container.buttons button {
-      min-height: 40px;
-      width: 50px;
-    }
-
     #settings-panel-content .setting-row {
       align-items: center;
       border-bottom: 1px solid #444444;
@@ -530,7 +525,16 @@ header {
             }
               #settings-panel-content .setting-row .control .container.buttons button {
                 display: inherit;
+                min-height: 40px;
+                width: 50px;
               }
+              #settings-panel-content .setting-row .control .container.buttons.buttons-test-sound button {
+                font-size: 1.5rem;
+                width: 80px;
+              }
+                #settings-panel-content .setting-row .control .container.buttons.buttons-test-sound button i {
+                  margin-right: 5px;
+                }
 
     #settings-panel-content #settings-debug {
       background-color: var(--pink-light);
@@ -737,6 +741,33 @@ header {
       @media (hover: hover) {
         .button.test.error:hover {
           background-color: #753339;
+        }
+      }
+
+    .button.test.countdown {
+      background-color: #442b63;
+    }
+      @media (hover: hover) {
+        .button.test.countdown:hover {
+          background-color: #5b3375;
+        }
+      }
+
+    .button.test.name {
+      background-color: #2b2e63;
+    }
+      @media (hover: hover) {
+        .button.test.name:hover {
+          background-color: #3b3375;
+        }
+      }
+
+    .button.test.victory {
+      background-color: #2b4863;
+    }
+      @media (hover: hover) {
+        .button.test.victory:hover {
+          background-color: #334775;
         }
       }
 

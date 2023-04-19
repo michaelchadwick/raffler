@@ -53,8 +53,8 @@ Raffler.dom.debug = {
   'stageValue': document.getElementById('text-setting-stage-value'),
   'intervalValue': document.getElementById('range-interval-value'),
   'multiplyValue': document.getElementById('text-setting-multiply-value'),
-  'btnTestsWrapper': document.getElementById('buttons-test'),
-  'btnTests': document.getElementsByClassName('button-test'),
+  'btnTestVisualWrapper': document.getElementById('buttons-test-visual'),
+  'btnTestVisual': document.getElementsByClassName('button-test-visual'),
   'btnResetCountdown': document.getElementById('button-reset-countdown'),
   'btnResetAll': document.getElementById('button-reset-all')
 }
