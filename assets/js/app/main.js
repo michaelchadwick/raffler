@@ -1773,9 +1773,6 @@ window.countdownTimer = Raffler._timer(function() {
         this.mult = this.mult++
       }
 
-      // adjust for odd time drift
-      if (Raffler.config.timesRun > 0) Raffler.config.lastInterval = 349
-
       // WINNER WINNER CHICKEN DINNER
       if (this.interval >= Raffler.config.lastInterval) {
         this.stage = RAFFLER_STAGES.DONE
