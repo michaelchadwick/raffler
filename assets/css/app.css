@@ -909,12 +909,7 @@ section#init-raffler-cycle {
 }
   @media (min-width: 768px) {
     #main-content.settings-panel-enabled {
-      width: 67%;
-    }
-  }
-  @media (min-width: 992px) {
-    #main-content.settings-panel-enabled {
-      width: 75%;
+      width: calc(100% - 320px);
     }
   }
 
