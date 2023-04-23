@@ -13,11 +13,10 @@ const RAFFLER_ENV_PROD_URL = [
 const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
 
 const RAFFLER_SETTINGS_KEY = 'raffler-settings'
-const RAFFLER_USER_ITEMS_KEY = 'raffler-user-items'
-const RAFFLER_CHOSEN_ITEMS_KEY = 'raffler-chosen-items'
+const RAFFLER_ITEMS_AVAIL_KEY = 'raffler-items-avail'
+const RAFFLER_ITEMS_CHOSEN_KEY = 'raffler-items-chosen'
 
-const RAFFLER_USER_CONFIG_FILE = '/config/raffler_config.user.json'
-const RAFFLER_USER_DATA_FILE = '/config/raffler_data.user.json'
+const RAFFLER_LOCAL_CONFIG_FILE = '/config/raffler_config.json'
 
 const RAFFLER_DEFAULT_INTERVAL_RANGE = 25
 const RAFFLER_DEFAULT_MULTIPLY = 1
@@ -32,13 +31,11 @@ const RAFFLER_STAGES = {
 
 const RAFFLER_DEFAULTS = {
   'config': {
-    'configFilePath': '/config/raffler_config.json',
-    'dataFilePath': '/config/raffler_data.json',
-    'hasLocalStorage': true,
-    'hasUserConfig': false,
+    'configFilePath': RAFFLER_LOCAL_CONFIG_FILE,
+    'dataFilePath': '',
+    'env': 'prod',
     'intervalRange': RAFFLER_DEFAULT_INTERVAL_RANGE,
     'itemsArr': [],
-    'itemsAvailable': [],
     'itemsLeftArr': [],
     'logoFileLink': '',
     'logoFilePath': '',
@@ -53,12 +50,12 @@ const RAFFLER_DEFAULTS = {
     'timesRun': 0
   },
   'settings': {
+    'allowBoxResize': true,
     'allowDebugNotifications': true,
     'allowVisualNotifications': true,
-    'boxResize': true,
     'showDebug': false,
     'showGraph': false,
-    'showSettingsPanel': false,
+    'showSettings': false,
     'sound': {
       'countdown': false,
       'name': false,

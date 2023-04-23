@@ -122,6 +122,31 @@
 
     <div id="settings-panel-content">
 
+      <div class="setting-row tall">
+        <div class="text">
+          <div class="title">Available Items <span id="items-available-count">(0)</span></div>
+          <div class="description">Items currently in the pool to be chosen. One item per line.<br />
+          <code>available <span style="color: red">-</span> chosen</code></div>
+        </div>
+        <div class="control">
+          <div class="container textarea">
+            <textarea id="items-available"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-row tall">
+        <div class="text">
+          <div class="title">Chosen Items <span id="items-chosen-count">(0)</span></div>
+          <div class="description">Items in the pool that have been chosen.</div>
+        </div>
+        <div class="control">
+          <div class="container textarea">
+            <textarea readonly id="items-chosen"></textarea>
+          </div>
+        </div>
+      </div>
+
       <!-- box resize -->
       <div class="setting-row">
         <div class="text">
@@ -130,7 +155,7 @@
         </div>
         <div class="control">
           <div class="container">
-            <div id="button-setting-box-resize" data-status="" class="switch" onclick="Raffler._changeSetting('boxResize')">
+            <div id="button-setting-allow-box-resize" data-status="" class="switch" onclick="Raffler._changeSetting('allowBoxResize')">
               <span class="knob"></span>
             </div>
           </div>
@@ -184,21 +209,6 @@
             </div>
           </div>
 
-          <div class="setting-row tall">
-            <div class="text">
-              <div class="title">User Items <span id="items-user-count">(0)</span></div>
-              <div class="description">Additional items to be added to the pool of choices. One item per line in the format <code>name,affiliation</code>.</div>
-            </div>
-            <div class="control">
-              <div class="container textarea">
-                <textarea id="items-user"></textarea>
-                <div class="form-group">
-                  <button id="button-items-user-sync">Sync with choices</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
 
       </div>
@@ -219,32 +229,7 @@
       </div>
 
 
-      <div id="settings-debug">
-
-        <div class="setting-row tall">
-          <div class="text">
-            <div class="title">Available Items <span id="debug-items-available-count"></span></div>
-            <div class="description">Items currently in the pool to be chosen.<br />
-            <code>(config <span style="color: green">+</span> user) <span style="color: red">-</span> chosen</code></div>
-          </div>
-          <div class="control">
-            <div class="container textarea">
-              <textarea readonly id="debug-items-available"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="setting-row tall">
-          <div class="text">
-            <div class="title">Chosen Items <span id="debug-items-chosen-count">(0)</span></div>
-            <div class="description">Items in the pool that have been chosen.</div>
-          </div>
-          <div class="control">
-            <div class="container textarea">
-              <textarea readonly id="debug-items-chosen"></textarea>
-            </div>
-          </div>
-        </div>
+      <div id="settings-debug-container">
 
         <div class="setting-row">
           <div class="text">
@@ -265,7 +250,7 @@
           </div>
           <div class="control">
             <div class="container button-timers">
-              <a href="#" class="button start" id="button-timer-start">
+              <a href="#" class="button start disabled" id="button-timer-start" disabled="true">
                 <i class="fas fa-play"></i>
                 <span> start</span>
               </a>
@@ -456,7 +441,21 @@
     <div class="main-container">
       <div class="main wrapper clearfix">
 
-        <div id="items-cycle"></div>
+        <div id="items-cycle">
+          <section id="init-raffler-cycle">
+            <a
+              href="#"
+              class="animate__animated animate__pulse animate__slow animate__delay-5s animate__infinite"
+              id="message-start"
+            >CLICK TO BEGIN RAFFLE!</a>
+            <span
+              id="message-limit"
+            >Add more than one item to raffle!</span>
+            <span
+              id="message-empty"
+            >Add some items to raffle!</span>
+          </section>
+        </div>
 
         <div id="items-graph"></div>
 
@@ -471,7 +470,7 @@
         </div>
 
         <div id="pick-winner-container">
-          <a href="#" class="button raffle" id="button-pick-winner">PICK A WINNER!</a>
+          <a href="#" class="button raffle disabled" id="button-pick-winner" disabled="true">PICK A WINNER!</a>
         </div>
 
         <div id="results-wrapper">

@@ -25,60 +25,48 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 
 *Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep data and options stateful, even in the event of a browser reload or crash.
 
-*Raffler's* test data set comes from `config/raffler_data.json`, and it is structured as follows:
+*Raffler* has no items to raffle by default, so click on the settings menu icon (gear in top-right) and add some to the Available Items section.
 
-```json
-[
-  {
-    "name": "Bavmorda",
-    "affl": "Nockmaar"
-  },
-  {
-    "name": "Elora Danan",
-    "affl": "Tir Asleen"
-  },
-  {
-    "name": "Madmartigan",
-    "affl": "Crossroads"
-  },
-  {
-    "name": "Sorsha",
-    "affl": "Nockmaar"
-  },
-  {
-    "name": "Willow Ufgood",
-    "affl": "Newlyn"
-  }
-]
-```
+### Server Options
 
-### User Options
+In order to change some of *Raffler*'s options, do the following:
 
-Change the values in the test data set, or add your own user data file, which can be done thusly:
-
-  1. Copy and rename the `/config/raffler_config.user.dist` file to `/config/raffler_config.user.json`.
-  2. Update the contents of `/config/raffler_config.user.json` to use your values
-  3. Use the following URL to enable: `https://example.domain/?enable_user_config=1`
-
-An example of said file:
+  1. Copy and rename the `/config/raffler_config.json.dist` file to `/config/raffler_config.json`.
+  2. Update the contents of `/config/raffler_config.json` to use your values
+  3. Use the following URL to enable: `https://example.domain/?local_config=1`
 
 ```json
 {
-  "dataFilePath": "./config/floobidy-hoo.json",
-  "logoFilePath": "./assets/images/jamma-mamma.png",
+  "dataFilePath": "/config/raffler_data.json",
+  "logoFilePath": "/assets/images/my-logo.png",
   "logoFileLink": "http://ohmanwhat.omg",
-  "talkifyKey": "123456ABCDEF"
+  "talkifyKey": "1234-56AB-CDEF"
 }
 ```
 
 The options that can be changed are as follows:
 
-* `dataFilePath` - json file of Raffler items
-* `logoFilePath` - logo for your thingy
-* `logoFileLink` - click logo and go somewhere
+* `dataFilePath` - json file of Raffler items that will automatically be added upon load
+* `logoFilePath` - logo for your thingy that appears next to the Raffler title
+* `logoFileLink` - somewhere to go to if you click the logo
 * `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
-Optionally, you can add additional user items on the fly (this functionality is hidden by default, however) by using the settings menu (gear icon). The settings menu will also allow you to toggle special effects and, if you're on local or use the `?enable_debug_settings=1` query string flag, other debug stuff like stopping and starting a raffler in-process, re-initializing all data, and seeing all the potential items to be chosen.
+An example file has been included as `/config/raffler_data.json.dist`:
+
+```json
+[
+  "Bavmorda, Nockmaar",
+  "Elora Danan, Tir Asleen",
+  "Madmartigan, Crossroads",
+  "Sorsha, Nockmaar",
+  "Willow Ufgood, Newlyn",
+  "Fin Raziel, Tir Asleen",
+  "Meegosh, Newlyn",
+  "Burglekutt, Newlyn",
+  "General Kael, Nockmaar"
+]
+
+The settings menu will also allow you to toggle special effects and other debug stuff like stopping and starting a raffler in-process, re-initializing all data, and seeing which items have been chosen.
 
 #### Third-Party Help
 

@@ -1,38 +1,11 @@
 [
-  {
-    "name": "Bavmorda",
-    "affl": "Nockmaar"
-  },
-  {
-    "name": "Elora Danan",
-    "affl": "Tir Asleen"
-  },
-  {
-    "name": "Madmartigan",
-    "affl": "Crossroads"
-  },
-  {
-    "name": "Sorsha",
-    "affl": "Nockmaar"
-  },
-  {
-    "name": "Willow Ufgood",
-    "affl": "Newlyn"
-  },
-  {
-    "name": "Fin Raziel",
-    "affl": "Tir Asleen"
-  },
-  {
-    "name": "Meegosh",
-    "affl": "Newlyn"
-  },
-  {
-    "name": "Burglekutt",
-    "affl": "Newlyn"
-  },
-  {
-    "name": "General Kael",
-    "affl": "Nockmaar"
-  }
+  "Bavmorda, Nockmaar",
+  "Elora Danan, Tir Asleen",
+  "Madmartigan, Crossroads",
+  "Sorsha, Nockmaar",
+  "Willow Ufgood, Newlyn",
+  "Fin Raziel, Tir Asleen",
+  "Meegosh, Newlyn",
+  "Burglekutt, Newlyn",
+  "General Kael, Nockmaar"
 ]
