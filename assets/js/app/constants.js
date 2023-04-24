@@ -36,7 +36,6 @@ const RAFFLER_DEFAULTS = {
     'env': 'prod',
     'intervalRange': RAFFLER_DEFAULT_INTERVAL_RANGE,
     'itemsArr': [],
-    'itemsLeftArr': [],
     'logoFileLink': '',
     'logoFilePath': '',
     'lastItemChosen': null,
@@ -45,8 +44,6 @@ const RAFFLER_DEFAULTS = {
     'multiplyValue': RAFFLER_DEFAULT_MULTIPLY,
     'stage': 0,
     'talkifyKey': '',
-    'textAvailableItems': [],
-    'textChosenItems': [],
     'timesRun': 0
   },
   'settings': {

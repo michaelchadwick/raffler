@@ -98,6 +98,7 @@
       padding: 0;
     }
     .modal-text dl dt {
+      font-family: monospace;
       margin-left: 1em;
       min-height: 20px;
     }

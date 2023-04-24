@@ -798,16 +798,16 @@ Raffler._syncItemsChosenWithItemsArr = function() {
 }
 
 Raffler._updateItemsAvailable = function() {
-  const value = Raffler.dom.itemsAvailable.value
-  const items = value.split('\n').filter(i => i !== '')
-
-  console.log('items', items)
+  const items = Raffler.dom.itemsAvailable.value
+    .split('\n')
+    .filter(i => i !== '')
 
   // update count
   Raffler.dom.itemsAvailableCount.innerText = `(${items.length})`
 
   // update internal model
   Raffler.config.itemsArr = items
+  window.countdownTimer.items = Raffler.config.itemsArr
 
   // save to local storage
   Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, Raffler.config.itemsArr)
