@@ -455,6 +455,10 @@ header {
       flex-direction: column;
       width: 100%;
     }
+      #settings-panel-content .setting-group .title {
+        font-size: 18px;
+        margin-top: 5px;
+      }
     #settings-panel-content .setting-row {
       align-items: center;
       border-bottom: 1px solid #444444;
@@ -479,6 +483,18 @@ header {
       #settings-panel-content .setting-row:last-of-type {
         border-bottom: none;
       }
+        #settings-panel-content .setting-row article {
+          align-items: center;
+          display: flex;
+          justify-content: space-between;
+        }
+          #settings-panel-content .setting-row article .text {
+            padding: 0 8px 4px 4px;
+          }
+            #settings-panel-content .setting-row article .text .title {
+              font-size: 16px;
+            }
+
         #settings-panel-content .setting-row .text {
           padding: 8px 8px 8px 0;
         }
