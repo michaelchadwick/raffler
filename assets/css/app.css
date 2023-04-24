@@ -434,12 +434,17 @@ header {
     font-weight: 700;
     height: 20px;
     justify-content: space-between;
-    max-width: 300px;
+    max-width: none;
     padding: 10px;
     position: fixed;
     width: 100%;
     z-index: 1;
   }
+    @media (min-width: 768px) {
+      #settings-panel-header {
+        max-width: 300px;
+      }
+    }
     #settings-panel-header button#button-settings-panel-close {
       background: none;
       border: 0 none;
@@ -447,7 +452,14 @@ header {
       font-size: 18px;
       height: 20px;
       max-width: 20px;
+      padding: 10px 20px 10px 10px;
     }
+      @media (min-width: 768px) {
+        #settings-panel-header button#button-settings-panel-close {
+          margin: 0;
+          padding: 0;
+        }
+      }
 
   #settings-panel-content {
     margin-top: 30px;
