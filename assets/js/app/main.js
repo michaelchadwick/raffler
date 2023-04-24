@@ -91,7 +91,7 @@ Raffler.initApp = async function() {
   Raffler._refreshDebugValues()
   Raffler._updateItemsGraph()
 
-  // if saved chosen items exist, add them to memory
+  // if saved chosen items exist, add them to memory and display list
   if (Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)) {
     if (Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY).length) {
       Raffler._syncItemsChosenWithItemsArr()
@@ -152,7 +152,18 @@ Raffler._initDebug = function() {
 Raffler._initItemsArr = async function() {
   Raffler._notify(`_initItemsArr(): ${Raffler.config.dataFilePath}`, 'notice')
 
-  if (Raffler.config.dataFilePath !== '') {
+  // check localStorage first
+  const lsItemsAvail = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY)
+
+  if (lsItemsAvail) {
+    lsItemsAvail.forEach(item => {
+      Raffler.config.itemsArr.push(item)
+
+      Raffler.dom.itemsAvailable.value += `${item}\n`
+    })
+  }
+  // next, check local data file
+  else if (Raffler.config.dataFilePath !== '') {
     const response = await fetch(Raffler.config.dataFilePath)
 
     if (response.ok) {
@@ -184,69 +195,72 @@ Raffler._initItemsArr = async function() {
         Raffler._notify('Failed to process initial data load: ' + e, 'error', true)
       }
     } else {
-      Raffler._notify(`Failed initial data load from <code>${Raffler.config.dataFilePath}</code>`, 'error', true)
+      Raffler._notify(`Failed local data load from <code>${Raffler.config.dataFilePath}</code>`, 'error', true)
     }
-  } else {
-    // Raffler._notify('No initial data exists. Please add items in settings panel.', 'notice', true)
   }
+  // nothing saved, and nothing in config, so no items yet
+  else {
+    Raffler._notify('No initial data exists. Please add items in settings panel.', 'notice')
 
-  const lsItemsAvail = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY)
+    Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, [])
 
-  if (lsItemsAvail) {
-    lsItemsAvail.forEach(item => {
-      Raffler.config.itemsArr.push(item)
+    const currentVisibility = Raffler.dom.settingsPanel.style.display
 
-      Raffler.dom.itemsAvailable.value += `${item}\n`
-    })
+    if (currentVisibility == '' || currentVisibility == 'none') {
+      Raffler.dom.settingsPanel.style.display = 'block'
+      Raffler.dom.mainContent.classList.add('settings-panel-enabled')
+
+      Raffler._saveSetting('showSettings', true)
+    }
   }
 }
 
 // load config from local json file, if querystring flag is true
-Raffler._loadLocalConfig = function() {
+Raffler._loadLocalConfig = async function() {
   Raffler._notify(`_loadLocalConfig()`, 'notice')
 
-  fetch(RAFFLER_LOCAL_CONFIG_FILE)
-    .then((response) => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error()
-      }
-    })
-    .then(async (data) => {
-      if (data.dataFilePath != '') {
-        Raffler.config.dataFilePath = data.dataFilePath
+  const config = await fetch(RAFFLER_LOCAL_CONFIG_FILE)
 
-        await Raffler._initItemsArr()
+  if (config) {
+    const data = await config.json()
 
-        Raffler._initCycleText()
-      }
-      if (data.logoFileLink != '') {
-        Raffler.settings.logoFileLink = data.logoFileLink
-      }
-      if (data.logoFilePath != '') {
-        Raffler.settings.logoFilePath = data.logoFilePath
+    if (data.dataFilePath !== '') {
+      Raffler.config.dataFilePath = data.dataFilePath
 
-        Raffler.dom.title.append(`
-          <span>at</span>
-          <a href='${Raffler.settings.logoFileLink}' target='_blank'>
-            <img id='logo' src='${Raffler.settings.logoFilePath}' />
-          </a>
-        `)
-      }
-      if (data.talkifyKey != '') {
-        Raffler.config.talkifyKey = data.talkifyKey
+      await Raffler._initItemsArr()
 
-        Raffler._initTalkifyConfig()
-      }
+      Raffler._initCycleText()
+    }
+    if (data.logoFileLink !== '') {
+      Raffler.settings.logoFileLink = data.logoFileLink
+    }
+    if (data.logoFilePath !== '') {
+      Raffler.settings.logoFilePath = data.logoFilePath
 
-      Raffler._resetApp()
-    })
-    .catch(() => {
-      Raffler._notify(`Local config not found at <code>${Raffler.config.configFilePath}</code>`, 'error', true)
+      const span = document.createElement('span')
+      span.innerText = 'at'
 
-      Raffler._resetApp()
-    })
+      const link = document.createElement('a')
+      link.href = Raffler.settings.logoFileLink
+      link.target = '_blank'
+
+      const img = document.createElement('img')
+      img.id = 'logo'
+      img.src = Raffler.settings.logoFilePath
+
+      link.appendChild(img)
+
+      Raffler.dom.title.appendChild(span)
+      Raffler.dom.title.appendChild(link)
+    }
+    if (data.talkifyKey !== '') {
+      Raffler.config.talkifyKey = data.talkifyKey
+
+      Raffler._initTalkifyConfig()
+    }
+  } else {
+    Raffler._notify(`Local config not found at <code>${Raffler.config.configFilePath}</code>`, 'error', true)
+  }
 }
 // load configuration flags from URL query string
 Raffler._loadQueryString = function() {
@@ -827,14 +841,8 @@ Raffler._refreshResultsCount = function() {
 }
 
 Raffler._refreshItemsAvailableDisplay = function() {
-  const choices = []
-
-  Raffler.config.itemsArr.forEach(function(item) {
-    choices.push(item)
-  })
-
-  Raffler.dom.itemsAvailable.value = choices.join('\n')
-  Raffler.dom.itemsAvailableCount.innerText = `(${choices.length})`
+  Raffler.dom.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
+  Raffler.dom.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
 
   Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
@@ -1388,6 +1396,9 @@ Raffler._attachEventListeners = function() {
 
   // top-right settings (gear) menu
   Raffler.dom.btnSettings.addEventListener('click', () => {
+    Raffler._toggleSettingsPanel()
+  })
+  Raffler.dom.btnSettingsPanelClose.addEventListener('click', () => {
     Raffler._toggleSettingsPanel()
   })
 

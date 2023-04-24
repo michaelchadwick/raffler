@@ -14,6 +14,7 @@ Raffler.dom = {
   'btnSettings': document.getElementById('button-settings'),
   'btnShowDebugSettings': document.getElementById('button-setting-show-debug'),
   'settingsPanel': document.getElementById('settings-panel'),
+  'btnSettingsPanelClose': document.getElementById('button-settings-panel-close'),
   'settingsShowDebug': document.querySelector('.setting-row.debug'),
   'settingsDebugContainer': document.getElementById('settings-debug-container'),
   'itemsAvailable': document.getElementById('items-available'),
