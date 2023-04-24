@@ -517,7 +517,7 @@ header {
               width: inherit;
             }
               #settings-panel-content .setting-row .control .container.textarea textarea {
-                height: 92px;
+                height: 184px;
                 max-width: 100%;
                 padding: 0.5rem;
                 width: 100%;
