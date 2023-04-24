@@ -426,16 +426,29 @@ header {
     }
   }
   #settings-panel-header {
+    align-items: center;
     background-color: var(--blue-primary-dark);
     color: var(--white);
+    display: flex;
     font-size: 2rem;
     font-weight: 700;
     height: 20px;
+    justify-content: space-between;
+    max-width: 300px;
     padding: 10px;
     position: fixed;
     width: 100%;
     z-index: 1;
   }
+    #settings-panel-header button#button-settings-panel-close {
+      background: none;
+      border: 0 none;
+      color: var(--white);
+      font-size: 18px;
+      height: 20px;
+      max-width: 20px;
+    }
+
   #settings-panel-content {
     margin-top: 30px;
     overflow-y: auto;
@@ -450,6 +463,7 @@ header {
         top: 0;
       }
     }
+
     #settings-panel-content .setting-group {
       display: flex;
       flex-direction: column;
@@ -483,6 +497,11 @@ header {
       #settings-panel-content .setting-row:last-of-type {
         border-bottom: none;
       }
+        #settings-panel-content .setting-row textarea:read-only {
+          background-color: var(--white-mute);
+          color: var(--gray);
+          cursor: not-allowed;
+        }
         #settings-panel-content .setting-row article {
           align-items: center;
           display: flex;
@@ -579,10 +598,6 @@ header {
                   width: 268px;
                 }
             }
-          #settings-panel-content #settings-debug-container .setting-row textarea:read-only {
-            background-color: var(--white-mute);
-            color: var(--gray);
-          }
           #settings-panel-content #settings-debug-container .setting-row .text .description {
             color: #242424;
           }
