@@ -886,6 +886,79 @@ Raffler._addItemChosenToLocalStorage = function(lastChosenItem) {
   }
 }
 
+// timer object to keep track of countdown
+Raffler._timer = function(callbackFunc, timing) {
+  if (Raffler.config.itemsArr) {
+    var variableInterval = {
+      items: Raffler.config.itemsArr,
+      mult: RAFFLER_DEFAULT_MULTIPLY,
+      stage: 0,
+      interval: timing,
+      callback: callbackFunc,
+      stopped: false,
+      startCountdown: false,
+      index: Math.floor(Math.random() * Raffler.config.itemsArr.length),
+      runLoop: function() {
+        if (variableInterval.stopped) return
+        // check to see if the time interval is at the end of a raffle
+        var result = variableInterval.callback(variableInterval)
+
+        if (typeof result === 'number') {
+          if (result === 0) { return }
+          variableInterval.interval = result
+        }
+
+        Raffler.config.intervalRange = result
+
+        // switch to next item if countdown not done
+        if (variableInterval.stage !== 4 && variableInterval.items.length) {
+          var curIndex = variableInterval.items[variableInterval.index]
+
+          // check for valid data
+          if (curIndex) {
+            var chosenItemHTML = `<div class='item'>${curIndex}</div>\n`
+
+            Raffler.dom.itemsCycle.innerHTML = chosenItemHTML
+
+            document.querySelectorAll('div#items-graph span').forEach((el, i) => {
+              if (variableInterval.index === parseInt(el.id)) {
+                el.classList.add('chosen')
+              } else {
+                el.classList.remove('chosen')
+              }
+            })
+
+            variableInterval.index++
+          } else {
+            variableInterval.index = 0
+          }
+        }
+        // reached the end of items array? back to beginning
+        if (variableInterval.index === variableInterval.items.length) {
+          variableInterval.index = 0
+        }
+        // loop
+        if (variableInterval.stage !== 4) {
+          variableInterval.loop()
+        }
+      },
+      stop: function() {
+        this.stopped = true
+        window.clearTimeout(this.timeout)
+      },
+      start: function() {
+        this.stopped = false
+        return this.loop()
+      },
+      loop: function() {
+        this.timeout = window.setTimeout(this.runLoop, this.interval)
+        return this
+      }
+    }
+
+    return variableInterval.start()
+  }
+}
 Raffler._timerStart = function() {
   window.countdownTimer.start()
   Raffler.dom.itemsCycle.classList.remove('stopped')
@@ -1194,80 +1267,6 @@ Raffler._notify = function(msg, type, notifyVisually, line) {
     const mainContainer = document.querySelector('.main-container')
 
     mainContainer.prepend(wrapper)
-  }
-}
-
-// timer object to keep track of countdown
-Raffler._timer = function(callbackFunc, timing) {
-  if (Raffler.config.itemsArr) {
-    var variableInterval = {
-      items: Raffler.config.itemsArr,
-      mult: RAFFLER_DEFAULT_MULTIPLY,
-      stage: 0,
-      interval: timing,
-      callback: callbackFunc,
-      stopped: false,
-      startCountdown: false,
-      index: Math.floor(Math.random() * Raffler.config.itemsArr.length),
-      runLoop: function() {
-        if (variableInterval.stopped) return
-        // check to see if the time interval is at the end of a raffle
-        var result = variableInterval.callback(variableInterval)
-
-        if (typeof result === 'number') {
-          if (result === 0) { return }
-          variableInterval.interval = result
-        }
-
-        Raffler.config.intervalRange = result
-
-        // switch to next item if countdown not done
-        if (variableInterval.stage !== 4 && variableInterval.items.length) {
-          var curIndex = variableInterval.items[variableInterval.index]
-
-          // check for valid data
-          if (curIndex) {
-            var chosenItemHTML = `<div class='item'>${curIndex}</div>\n`
-
-            Raffler.dom.itemsCycle.innerHTML = chosenItemHTML
-
-            document.querySelectorAll('div#items-graph span').forEach((el, i) => {
-              if (variableInterval.index === parseInt(el.id)) {
-                el.classList.add('chosen')
-              } else {
-                el.classList.remove('chosen')
-              }
-            })
-
-            variableInterval.index++
-          } else {
-            variableInterval.index = 0
-          }
-        }
-        // reached the end of items array? back to beginning
-        if (variableInterval.index === variableInterval.items.length) {
-          variableInterval.index = 0
-        }
-        // loop
-        if (variableInterval.stage !== 4) {
-          variableInterval.loop()
-        }
-      },
-      stop: function() {
-        this.stopped = true
-        window.clearTimeout(this.timeout)
-      },
-      start: function() {
-        this.stopped = false
-        return this.loop()
-      },
-      loop: function() {
-        this.timeout = window.setTimeout(this.runLoop, this.interval)
-        return this
-      }
-    }
-
-    return variableInterval.start()
   }
 }
 
