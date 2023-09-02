@@ -7,7 +7,8 @@ const RAFFLER_ENV_PROD_URL = [
   'neb.host',
   'neb.host/raffler',
   'raffler.neb.host',
-  'raffler.me'
+  'raffler.me',
+  'raffler.fun'
 ]
 
 const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
