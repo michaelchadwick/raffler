@@ -456,7 +456,7 @@ header {
   }
     @media (min-width: 768px) {
       #settings-panel-header {
-        max-width: 300px;
+        /* max-width: 300px; */
       }
     }
     #settings-panel-header button#button-settings-panel-close {
@@ -482,11 +482,11 @@ header {
   }
     @media (min-width: 768px) {
       #settings-panel-content {
-        bottom: 0;
-        left: 0;
+        /* bottom: 0; */
+        /* left: 0; */
         padding-bottom: 53px;
-        position: absolute;
-        top: 0;
+        /* position: absolute; */
+        /* top: 0; */
       }
     }
 
@@ -541,7 +541,7 @@ header {
             }
 
         #settings-panel-content .setting-row .text {
-          padding: 8px 8px 8px 0;
+          padding: 8px 0;
         }
           #settings-panel-content .setting-row .text .title {
             font-size: 18px;
@@ -558,25 +558,17 @@ header {
             width: 100%;
           }
             #settings-panel-content .setting-row .control .container.textarea {
-              margin-right: 12px;
+              margin-right: 0;
               width: inherit;
             }
               #settings-panel-content .setting-row .control .container.textarea textarea {
+                box-sizing: border-box;
                 height: 184px;
                 max-width: 100%;
                 padding: 0.5rem;
                 width: 100%;
               }
-                @media (min-width: 768px) {
-                  #settings-panel-content .setting-row .control .container.textarea {
-                    margin-right: 0;
-                  }
-                    #settings-panel-content .setting-row .control .container.textarea textarea {
-                      max-width: none;
-                      min-width: auto;
-                      width: 288px;
-                    }
-                }
+
             #settings-panel-content .setting-row .control .container input {
               max-width: 100px;
               min-width: 50px;
@@ -706,6 +698,7 @@ header {
     }
   .button.danger {
     background-color: var(--danger);
+    min-width: 100px;
   }
     @media(hover:hover) {
       .button.danger:hover {
