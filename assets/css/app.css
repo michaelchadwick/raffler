@@ -463,10 +463,10 @@ header {
       background: none;
       border: 0 none;
       color: var(--neutral-white);
-      font-size: 18px;
+      font-size: 2.5rem;
       height: 20px;
       max-width: 20px;
-      padding: 10px 20px 10px 10px;
+      padding: 10px 22px 10px 10px;
     }
       @media (min-width: 768px) {
         #settings-panel-header button#button-settings-panel-close {
@@ -563,7 +563,8 @@ header {
             }
               #settings-panel-content .setting-row .control .container.textarea textarea {
                 box-sizing: border-box;
-                height: 184px;
+                font-size: 1.5rem;
+                height: 189px;
                 max-width: 100%;
                 padding: 0.5rem;
                 width: 100%;
