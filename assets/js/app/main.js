@@ -24,7 +24,7 @@ async function modalOpen(type) {
             <li>Press the main raffle area to get it going</li>
             <li>Press the "PICK A WINNER!" button to start slowing down the raffler</li>
             <li>Announce the winner!
-              <p>If the winner is present: Press "YES", the winner is removed from the pool, and the raffler goes again. If the winner is not present: Press "NO", the winner remains in the pool, and the raffler goes again.</p>
+              <p>If the choice is accepted: Press "YES", the winning item is removed from the pool, and the raffler goes again. If the choice is not accepted: Press "NO", the winner remains in the pool, and the raffler goes again.</p>
               </p>
             </li>
             <li>Raffler will keep removing winners until it's left with one remaining item, and then it's done.</li>
