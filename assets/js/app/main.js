@@ -32,7 +32,7 @@ async function modalOpen(type) {
 
           <hr />
 
-          <p>Source can be found on <a href="https://github.com/michaelchadwick/raffler">Github</a>. Set up your own Raffler!</p>
+          <p>Dev: <a href="https://michaelchadwick.info">Michael Chadwick</a>. Source: <a href="https://github.com/michaelchadwick/raffler">Github</a>.</p>
         `,
         null,
         null
