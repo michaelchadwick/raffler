@@ -645,13 +645,13 @@ header {
   .button.export {
     background-color: #00475d;
     border-radius: 10px;
+    display: inline-block;
     font-size: 2rem;
     height: auto;
     margin: 0 auto;
-    max-width: 400px;
-    padding: 5px;
+    padding: 2px 10px;
     text-transform: uppercase;
-    width: 100%;
+    width: auto;
   }
     @media (hover: hover) {
       .button.export:hover {
@@ -1387,3 +1387,8 @@ section#init-raffler-cycle {
         background-color: var(--neutral-white);
       }
     }
+
+.fa-floppy-disk:before,
+.fa-save:before {
+  font-size: 3.1rem;
+}
