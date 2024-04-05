@@ -127,7 +127,7 @@
       <div class="setting-row tall">
         <div class="text">
           <div class="title">Available Items <span id="items-available-count">(0)</span></div>
-          <div class="description">Items in the pool to be chosen. One item per line.</div>
+          <div class="description">Items in the raffle to be chosen. One item per line.</div>
         </div>
         <div class="control">
           <div class="container textarea">
@@ -139,7 +139,7 @@
       <div class="setting-row tall">
         <div class="text">
           <div class="title">Chosen Items <span id="items-chosen-count">(0)</span></div>
-          <div class="description">Items in the pool that have been chosen.</div>
+          <div class="description">Items in the raffle that have been chosen.</div>
         </div>
         <div class="control">
           <div class="container textarea">
@@ -152,7 +152,7 @@
       <div class="setting-row">
         <div class="text">
           <div class="title">Box/Text Resize</div>
-          <div class="description">Allow raffle box and inner text to grow as the raffler counts down.</div>
+          <div class="description">Raffler box text will grow during countdown.</div>
         </div>
         <div class="control">
           <div class="container">
@@ -173,25 +173,11 @@
           <article>
             <div class="text">
               <div class="title">Countdown</div>
-              <div class="description">Play sound that kicks off raffler countdown.</div>
+              <div class="description">Play sound during countdown.</div>
             </div>
             <div class="control">
               <div class="container">
                 <div id="button-setting-sound-countdown" data-status="" class="switch" onclick="Raffler._changeSetting('soundCountdown')">
-                  <span class="knob"></span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article>
-            <div class="text">
-              <div class="title">Name</div>
-              <div class="description">Read chosen item out loud (requires <code>talkifyKey</code>).</div>
-            </div>
-            <div class="control">
-              <div class="container">
-                <div id="button-setting-sound-name" data-status="" class="switch" onclick="Raffler._changeSetting('soundName')">
                   <span class="knob"></span>
                 </div>
               </div>
@@ -206,6 +192,20 @@
             <div class="control">
               <div class="container">
                 <div id="button-setting-sound-victory" data-status="" class="switch" onclick="Raffler._changeSetting('soundVictory')">
+                  <span class="knob"></span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article>
+            <div class="text">
+              <div class="title">Name</div>
+              <div class="description">Read chosen item (req. <code>talkifyKey</code>).</div>
+            </div>
+            <div class="control">
+              <div class="container">
+                <div id="button-setting-sound-name" data-status="" class="switch" onclick="Raffler._changeSetting('soundName')">
                   <span class="knob"></span>
                 </div>
               </div>
@@ -234,10 +234,51 @@
 
       <div id="settings-debug-container">
 
+        <div class="setting-row tall">
+          <div class="text">
+            <div class="title">Test Sounds</div>
+          </div>
+          <div class="control">
+            <div class="container buttons buttons-test-sound" id="buttons-test-sounds">
+              <button class="button button-test test countdown" id="button-test-sound-countdown" title="countdown">
+                <i class="fas fa-stopwatch-20"></i> Raffle
+              </button>
+              <button class="button button-test test victory" id="button-test-sound-victory" title="victory">
+                <i class="fas fa-trophy"></i> Win
+              </button>
+              <button class="button button-test test name" id="button-test-sound-name" title="name" onclick="Raffler._readName('Winner McWinnington from Victoryland')">
+                <i class="fas fa-microphone"></i> Name
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-row tall">
+          <div class="text">
+            <div class="title">Test Visual Notifications</div>
+          </div>
+          <div class="control">
+            <div class="container buttons buttons-test-visual" id="buttons-test-visual">
+              <button class="button button-test-visual test notice disabled" id="button-test-notice" title="notice" onclick="Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)" disabled="true">
+                <i class="fas fa-info-circle"></i>
+              </button>
+              <button class="button button-test-visual test success disabled" id="button-test-success" title="success" onclick="Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)" disabled="true">
+                <i class="fas fa-smile"></i>
+              </button>
+              <button class="button button-test-visual test warning disabled" id="button-test-warning" title="warning" onclick="Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)" disabled="true">
+                <i class="fas fa-exclamation-triangle"></i>
+              </button>
+              <button class="button button-test-visual test error disabled" id="button-test-error" title="error" onclick="Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)" disabled="true">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="setting-row">
           <div class="text">
             <div class="title">Times Run</div>
-            <div class="description">Number of runs this instance of Raffler has.</div>
+            <div class="description">Number of times Raffler has run.</div>
           </div>
           <div class="control">
             <div class="container">
@@ -268,7 +309,7 @@
         <div class="setting-row">
           <div class="text">
             <div class="title">Stage</div>
-            <div class="description">Level raffler timer is currently at</div>
+            <div class="description">Level of current raffler timer</div>
           </div>
           <div class="control">
             <div class="container">
@@ -317,7 +358,7 @@
         <div class="setting-row">
           <div class="text">
             <div class="title">Show Graph</div>
-            <div class="description">Show a graph of items being cycled over.</div>
+            <div class="description">Show tiny version of items being cycled.</div>
           </div>
           <div class-"control">
             <div class="container">
@@ -331,7 +372,7 @@
         <div class="setting-row">
           <div class="text">
             <div class="title">Allow Debug Notifications</div>
-            <div class="description">Allow debug (dev console) notifications for certain events.</div>
+            <div class="description">Debug browser console notifications.</div>
           </div>
           <div class="control">
             <div class="container">
@@ -344,57 +385,14 @@
 
         <div class="setting-row">
           <div class="text">
-            <div class="title">Allow Visual Notifications</div>
-            <div class="description">Allow visual notifications for certain events.</div>
+            <div class="title">Allow Modal Notifications</div>
+            <div class="description">Visual modal notifications.</div>
           </div>
           <div class="control">
             <div class="container">
               <div id="button-setting-allow-visual-notifications" data-status="" class="switch" onclick="Raffler._changeSetting('allowVisualNotifications')">
                 <span class="knob"></span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="setting-row tall">
-          <div class="text">
-            <div class="title">Test Visual Notifications</div>
-            <div class="description">Test each kind of visual notification</div>
-          </div>
-          <div class="control">
-            <div class="container buttons buttons-test-visual" id="buttons-test-visual">
-              <button class="button button-test-visual test notice disabled" id="button-test-notice" title="notice" onclick="Raffler._notify('test notice msg that is long enough to actually go onto a second line because of width and such and thus.', 'notice', true)" disabled="true">
-                <i class="fas fa-info-circle"></i>
-              </button>
-              <button class="button button-test-visual test success disabled" id="button-test-success" title="success" onclick="Raffler._notify('test success msg that is long enough to actually go onto a second line because of width and such and thus.', 'success', true)" disabled="true">
-                <i class="fas fa-smile"></i>
-              </button>
-              <button class="button button-test-visual test warning disabled" id="button-test-warning" title="warning" onclick="Raffler._notify('test warning msg that is long enough to actually go onto a second line because of width and such and thus.', 'warning', true)" disabled="true">
-                <i class="fas fa-exclamation-triangle"></i>
-              </button>
-              <button class="button button-test-visual test error disabled" id="button-test-error" title="error" onclick="Raffler._notify('test error msg that is long enough to actually go onto a second line because of width and such and thus.', 'error', true)" disabled="true">
-                <i class="fas fa-times-circle"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="setting-row tall">
-          <div class="text">
-            <div class="title">Test Sounds</div>
-            <div class="description">Test each kind of sound</div>
-          </div>
-          <div class="control">
-            <div class="container buttons buttons-test-sound" id="buttons-test-sounds">
-              <button class="button button-test test countdown" id="button-test-sound-countdown" title="countdown" onclick="Raffler._playAudio('countdown')">
-                <i class="fas fa-stopwatch-20"></i> Raffle
-              </button>
-              <button class="button button-test test victory" id="button-test-sound-victory" title="victory" onclick="Raffler._playAudio('victory')">
-                <i class="fas fa-trophy"></i> Win
-              </button>
-              <button class="button button-test test name" id="button-test-sound-name" title="name" onclick="Raffler._readName('Winner McWinnington from Victoryland')">
-                <i class="fas fa-microphone"></i> Name
-              </button>
             </div>
           </div>
         </div>
