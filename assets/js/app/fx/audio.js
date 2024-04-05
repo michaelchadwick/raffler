@@ -53,7 +53,7 @@ async function deleteOldCaches(currentCache) {
 
 // Use CacheStorage to check cache.
 async function playFromCache(url) {
-  console.log(`playFromCache(${url}) playing...`)
+  Raffler._notify(`playFromCache(${url}) playing...`)
 
   const context = new AudioContext()
   const gainNode = context.createGain()
@@ -68,7 +68,7 @@ async function playFromCache(url) {
   // })
 
   source.onended = function() {
-    console.log(`playFromCache(${url}) source ended`)
+    Raffler._notify(`playFromCache(${url}) source ended`)
 
     // context.suspend()
     // console.log('context suspended', context)
@@ -89,13 +89,13 @@ async function playFromCache(url) {
       source.start()
     }
   } catch (error) {
-    console.error(`playFromFetch(${url}) failed to play audioBuffer`, error)
+    Raffler._notify(`playFromCache(${url}) failed to play audioBuffer: ${error}`, 'error')
   }
 }
 
 // Use direct fetch(url).
 async function playFromFetch(url) {
-  console.log(`playFromFetch(${url}) playing...`)
+  Raffler._notify(`playFromFetch(${url}) playing...`)
 
   const context = new AudioContext()
   const gainNode = context.createGain()
@@ -110,7 +110,7 @@ async function playFromFetch(url) {
   // })
 
   source.onended = function() {
-    console.log(`playFromFetch(${url}) source ended`)
+    Raffler._notify(`playFromFetch(${url}) source ended`)
 
     // context.suspend()
     // console.log('context suspended', context)
@@ -133,7 +133,7 @@ async function playFromFetch(url) {
       source.start()
     }
   } catch {
-    console.error('playFromFetch() failed to play audioBuffer', error)
+    Raffler._notify(`playFromFetch(${url}) failed to play audioBuffer: ${error}`, 'error')
   }
 }
 

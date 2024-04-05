@@ -8,6 +8,8 @@ Raffler.config.enableLocalConfig = false
 // set app environment
 Raffler.config.env = RAFFLER_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
+Raffler._currentAudioPlaying = null
+
 /*************************************************************************
  * public methods (called from UI) *
  *************************************************************************/
@@ -108,6 +110,18 @@ Raffler.initApp = async function() {
   Raffler._getNebyooApps()
 
   Raffler._attachEventListeners()
+}
+
+Raffler.queueAudio = async function(soundId) {
+  if (Raffler._currentAudioPlaying == null) {
+    Raffler._notify(`queueAudio(): no audio playing, so playing new sound: ${soundId}`)
+
+    Raffler._currentAudioPlaying = soundId
+    await Raffler._playAudio(soundId)
+    Raffler._currentAudioPlaying = null
+  } else {
+    Raffler._notify('queueAudio(): cannot play sound, because audio is already playing')
+  }
 }
 
 /*************************************************************************
@@ -987,7 +1001,7 @@ Raffler._timerStop = function() {
 }
 
 // user interacted with the "PICK A WINNER" button
-Raffler._pickAWinner = function() {
+Raffler._pickAWinner = async function() {
   Raffler._notify('PICKING A WINNER...', 'notice')
   Raffler.__disablePickWinnerButton()
 
@@ -1041,7 +1055,7 @@ Raffler._pickAWinner = function() {
     Raffler.dom.body.classList.add('level4')
 
     if (Raffler.settings.sound.victory) {
-      Raffler._playAudio('victory')
+      Raffler.queueAudio('victory')
 
       // Raffler.myAudioWorker.postMessage({
       //   command: 'playAudio',
@@ -1413,6 +1427,12 @@ Raffler._attachEventListeners = function() {
   })
 
   // debug settings
+  Raffler.dom.debug.btnTestSoundCountdown.addEventListener('click', () => {
+    Raffler.queueAudio('countdown')
+  })
+  Raffler.dom.debug.btnTestSoundVictory.addEventListener('click', () => {
+    Raffler.queueAudio('victory')
+  })
   Raffler.dom.debug.btnTimerStart.addEventListener('click', () => {
     if (Raffler.dom.debug.btnTimerStart.getAttribute('disabled') !== 'true') {
       Raffler._notify('starting timer', 'notice')
@@ -1620,7 +1640,7 @@ Raffler.__toggleTestVisualNotices = function() {
  ************************************************************************/
 
 // main timer instance for raffler cycler
-window.countdownTimer = Raffler._timer(function() {
+window.countdownTimer = Raffler._timer(async function() {
   // this is the variableInterval - so we can change/get the interval here:
   var interval = this.interval
 
@@ -1680,7 +1700,7 @@ window.countdownTimer = Raffler._timer(function() {
         Raffler.dom.body.classList.add('level4')
 
         if (Raffler.settings.sound.victory) {
-          Raffler._playAudio('victory')
+          Raffler.queueAudio('victory')
 
           // Raffler.myAudioWorker.postMessage({
           //   command: 'playAudio',
@@ -1726,7 +1746,7 @@ window.countdownTimer = Raffler._timer(function() {
     }
 
     if (Raffler.settings.sound.countdown) {
-      Raffler._playAudio('countdown')
+      Raffler.queueAudio('countdown')
 
       // Raffler.myAudioWorker.postMessage({
       //   command: 'playAudio',
