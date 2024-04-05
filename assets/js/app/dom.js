@@ -42,14 +42,16 @@ Raffler.dom = {
 Raffler.dom.debug = {
   'btnShowConfig': document.getElementById('button-show-config'),
   'container': document.getElementById('debug-buttons'),
+  'btnTestVisualWrapper': document.getElementById('buttons-test-visual'),
+  'btnTestVisual': document.getElementsByClassName('button-test-visual'),
+  'btnTestSoundCountdown': document.getElementById('button-test-sound-countdown'),
+  'btnTestSoundVictory': document.getElementById('button-test-sound-victory'),
   'timesRun': document.getElementById('text-setting-timesrun-value'),
   'btnTimerStart': document.getElementById('button-timer-start'),
   'btnTimerStop': document.getElementById('button-timer-stop'),
   'stageValue': document.getElementById('text-setting-stage-value'),
   'intervalValue': document.getElementById('range-interval-value'),
   'multiplyValue': document.getElementById('text-setting-multiply-value'),
-  'btnTestVisualWrapper': document.getElementById('buttons-test-visual'),
-  'btnTestVisual': document.getElementsByClassName('button-test-visual'),
   'btnResetCountdown': document.getElementById('button-reset-countdown'),
   'btnResetAll': document.getElementById('button-reset-all')
 }
