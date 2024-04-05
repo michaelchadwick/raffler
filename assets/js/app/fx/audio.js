@@ -51,21 +51,24 @@ async function deleteOldCaches(currentCache) {
   }
 }
 
-// use CacheStorage to check cache
-async function useCache(url) {
+// Use CacheStorage to check cache.
+async function playFromCache(url) {
+  console.log(`playFromCache(${url}) playing...`)
+
   const context = new AudioContext()
   const gainNode = context.createGain()
   const source = context.createBufferSource()
 
-  await context.audioWorklet.addModule('/assets/js/app/fx/audio-processor.js')
-  const audioNode = new AudioWorkletNode(context, 'audio-processor')
+  // WIP: AudioWorklet
+  // await context.audioWorklet.addModule('/assets/js/app/fx/audio-processor.js')
+  // const audioProcNode = new AudioWorkletNode(context, 'audio-processor')
 
-  audioNode.addEventListener('processorerror', (event) => {
-    console.error('processor error from audioNode', event)
-  })
+  // audioProcNode.addEventListener('processorerror', (event) => {
+    // console.error(`playFromCache(${url}) processor error from audioNode`, event)
+  // })
 
   source.onended = function() {
-    // console.log('source ended')
+    console.log(`playFromCache(${url}) source ended`)
 
     // context.suspend()
     // console.log('context suspended', context)
@@ -80,35 +83,61 @@ async function useCache(url) {
 
       source
         .connect(gainNode)
-        .connect(audioNode)
+        // .connect(audioProcNode)
         .connect(context.destination)
 
       source.start()
     }
   } catch (error) {
-    console.error('failed to play audioBuffer', error)
+    console.error(`playFromFetch(${url}) failed to play audioBuffer`, error)
   }
 }
 
-// use direct fetch(url)
-async function useFetch(url) {
+// Use direct fetch(url).
+async function playFromFetch(url) {
+  console.log(`playFromFetch(${url}) playing...`)
+
   const context = new AudioContext()
   const gainNode = context.createGain()
   const source = context.createBufferSource()
 
-  const audioBuffer = await fetch(url)
-    .then(response => response.arrayBuffer())
-    .then(ArrayBuffer => context.decodeAudioData(ArrayBuffer))
+  // WIP: AudioWorklet
+  // await context.audioWorklet.addModule('/assets/js/app/fx/audio-processor.js')
+  // const audioProcNode = new AudioWorkletNode(context, 'audio-processor')
 
-    gainNode.gain.value = 0.3
-    source.buffer = audioBuffer
+  // audioProcNode.addEventListener('processorerror', (event) => {
+    // console.error(`playFromFetch(${url}) processor error from audioProcNode`, event)
+  // })
 
-    source.connect(gainNode)
-    gainNode.connect(context.destination)
+  source.onended = function() {
+    console.log(`playFromFetch(${url}) source ended`)
 
-    source.start()
+    // context.suspend()
+    // console.log('context suspended', context)
+  }
+
+  try {
+    const audioBuffer = await fetch(url)
+      .then(response => response.arrayBuffer())
+      .then(ArrayBuffer => context.decodeAudioData(ArrayBuffer))
+
+    if (audioBuffer) {
+      gainNode.gain.value = 0.3
+      source.buffer = audioBuffer
+
+      source
+        .connect(gainNode)
+        // .connect(audioProcNode)
+        .connect(context.destination)
+
+      source.start()
+    }
+  } catch {
+    console.error('playFromFetch() failed to play audioBuffer', error)
+  }
 }
 
+// Add audio assets into cache.
 Raffler._initData = async function() {
   const path = RAFFLER_ASSET_DATA_PATH
 
@@ -119,7 +148,9 @@ Raffler._initData = async function() {
 
         cache.addAll([
           `${path}/countdown.mp3`,
-          `${path}/victory.mp3`
+          `${path}/countdown.wav`,
+          `${path}/victory.mp3`,
+          `${path}/victory.wav`
         ])
       } else {
         // console.info(`${RAFFLER_CACHE_AUDIO_KEY} is full, so need to initialize.`)
@@ -128,27 +159,15 @@ Raffler._initData = async function() {
   })
 }
 
-Raffler._playAudio = function(soundId) {
+// Play audio file by soundId, using cache or fetch to access it.
+Raffler._playAudio = async function(soundId, format = 'wav') {
   const path = RAFFLER_ASSET_DATA_PATH
-  const format = 'mp3'
   const url = `${path}/${soundId}.${format}`
 
-  switch (soundId) {
-    case 'countdown':
-      if ('caches' in self) {
-        useCache(url)
-      } else {
-        useFetch(url)
-      }
-      break
-
-    case 'victory':
-      if ('caches' in self) {
-        useCache(url)
-      } else {
-        useFetch(url)
-      }
-      break
+  if ('caches' in self) {
+    playFromCache(url)
+  } else {
+    playFromFetch(url)
   }
 }
 
