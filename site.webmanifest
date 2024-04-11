@@ -14,7 +14,7 @@
         }
     ],
     "background_color": "#ffffff",
-    "description": "Pick a name",
+    "description": "Pick something",
     "display": "standalone",
     "start_url": "https://neb.host/raffler",
     "theme_color": "#ffffff"
