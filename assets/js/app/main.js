@@ -892,22 +892,6 @@ Raffler._refreshItemsChosenDisplay = function() {
   }
 }
 
-// add last chosen item to localStorage
-Raffler._addItemChosenToLocalStorage = function(lastChosenItem) {
-  try {
-    var localChosenItemsObj = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
-
-    localChosenItemsObj.push(lastChosenItem)
-
-    Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, localChosenItemsObj)
-    Raffler._refreshItemsAvailableDisplay()
-
-    Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
-  } catch (e) {
-    Raffler._notify('addChosenItemToLocalStorage: ' + e, 'error')
-  }
-}
-
 // timer object to keep track of countdown
 Raffler._timer = function(callbackFunc, timing) {
   if (Raffler.config.itemsArr) {
@@ -1180,118 +1164,6 @@ Raffler._continueRaffling = function() {
   }
 }
 
-// localStorage getter/setter
-Raffler._getLocalStorageItem = function(lsKey) {
-  try {
-    return JSON.parse(localStorage.getItem(lsKey))
-  } catch (e) {
-    console.error('_getLocalStorageItem: ' + e)
-    return false
-  }
-}
-Raffler._setLocalStorageItem = function(lsKey, obj) {
-  try {
-    localStorage.setItem(lsKey, JSON.stringify(obj))
-  } catch (e) {
-    console.error('_setLocalStorageItem: ' + e)
-    return false
-  }
-}
-Raffler._save = function() {
-  Raffler._notify('_save()')
-
-  try {
-    localStorage.setItem(RAFFLER_SETTINGS_KEY, JSON.stringify(Raffler.settings))
-    localStorage.setItem(RAFFLER_ITEMS_AVAIL_KEY, JSON.stringify(Raffler.config.itemsArr))
-  } catch (e) {
-    console.error('_save: ' + e)
-    return false
-  }
-}
-
-// app notifications
-Raffler._notify = function(msg, type, notifyVisually, line) {
-  type = (typeof type) === 'undefined' ? '' : type
-  notifyVisually = (typeof notifyVisually) === 'undefined' ? '' : notifyVisually
-
-  let bgcolor, fgcolor, header, icon
-
-  switch (type) {
-    case 'success':
-      bgcolor = '#99c24d'
-      fgcolor = '#000000'
-      header = 'Success'
-      speed = 4000
-      icon = 'fa-smile'
-      break
-    case 'warning' || 'warn':
-      bgcolor = '#fadf63'
-      fgcolor = '#000000'
-      header = 'Warning'
-      speed = 6000
-      icon = 'fa-exclamation-triangle'
-      break
-    case 'error' || 'err':
-      bgcolor = '#632b30'
-      fgcolor = '#ffffff'
-      header = 'Error'
-      speed = 0
-      icon = 'fa-times-circle'
-      break
-    default:
-      bgcolor = '#006e90'
-      fgcolor = '#ffffff'
-      header = 'Notice'
-      speed = 4000
-      icon = 'fa-info-circle'
-      break
-  }
-
-  const label = function(raw) {
-    var [bgcolor, fgcolor, type, ...msg] = raw.split(' ')
-    return [
-      `%c${type}%c ${msg.join(' ')}`,
-      `background-color: ${bgcolor}; border-right: 3px solid #000; color: ${fgcolor}; padding: 0.15em 0.35em 0.15em 0.5em`,
-      ''
-    ]
-  }
-
-  // 1. notify admin
-  if (Raffler.settings.allowDebugNotifications) {
-    console.log.apply(console, label(`${bgcolor} ${fgcolor} ${header.toUpperCase()} ${msg} ${line ? `(${line})` : ''}`))
-  }
-
-  // 2. also, optionally, notify user visually if allowed and specified
-  if (Raffler.settings.allowVisualNotifications && notifyVisually) {
-    const wrapper = document.createElement('div')
-    wrapper.classList.add('item-status-wrapper')
-
-    const notification = document.createElement('div')
-
-      notification.classList.add('item-status')
-      notification.style.backgroundColor = bgcolor
-      notification.style.color = fgcolor
-
-      notification.innerHTML  = `
-        <div class="item-status-type">
-          <i class='fas ${icon}'></i>
-          <span>${header}:</span>
-        </div>
-        <div class="item-status-msg">${msg}</div>
-      `
-
-      notification.onclick = function() {
-        this.parentNode.removeChild(this)
-      }
-
-    wrapper.appendChild(notification)
-
-    const mainContainer = document.querySelector('.main-container')
-
-    mainContainer.prepend(wrapper)
-  }
-}
-
 // get list of other existing NebyooApps for sidebar
 Raffler._getNebyooApps = async function() {
   const response = await fetch(NEBYOOAPPS_SOURCE_URL)
@@ -1306,42 +1178,6 @@ Raffler._getNebyooApps = async function() {
     appLink.target = '_blank'
     appList.appendChild(appLink)
   })
-}
-
-// show/hide settings panel
-Raffler._toggleSettingsPanel = function() {
-  const currentVisibility = Raffler.dom.settingsPanel.style.display
-
-  if (currentVisibility == '' || currentVisibility == 'none') {
-    // Raffler._notify('showing settings panel', 'notice')
-
-    // show it
-    Raffler.dom.settingsPanel.style.display = 'block'
-    Raffler.dom.mainContent.classList.add('settings-panel-enabled')
-
-    Raffler._saveSetting('showSettings', true)
-  } else {
-    // Raffler._notify('hiding settings panel', 'notice')
-
-    // hide it
-    Raffler.dom.settingsPanel.style.display = 'none'
-    Raffler.dom.mainContent.classList.remove('settings-panel-enabled')
-
-    Raffler._saveSetting('showSettings', false)
-  }
-}
-
-// show/hide extra debug settings options
-Raffler._toggleSettingsShowDebug = function() {
-  const currentVisibility = Raffler.dom.settingsDebugContainer.style.display
-
-  if (currentVisibility == '' || currentVisibility == 'none') {
-    // show it
-    Raffler.dom.settingsDebugContainer.style.display = 'block'
-  } else {
-    // hide it
-    Raffler.dom.settingsDebugContainer.style.display = 'none'
-  }
 }
 
 // handy combo shortcut of methods to reset application
