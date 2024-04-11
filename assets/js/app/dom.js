@@ -26,7 +26,6 @@ Raffler.dom = {
   'itemsCycleStart': document.getElementById('message-start'),
   'itemsCycleEmpty': document.getElementById('message-empty'),
   'itemsCycleLimit': document.getElementById('message-limit'),
-  'itemsGraph': document.getElementById('items-graph'),
   'pickWinnerContainer': document.getElementById('pick-winner-container'),
   'btnPickWinner': document.getElementById('button-pick-winner'),
   'btnChosenConfirmYes': document.getElementById('button-confirm-yes'),
@@ -42,6 +41,7 @@ Raffler.dom = {
 Raffler.dom.debug = {
   'btnShowConfig': document.getElementById('button-show-config'),
   'container': document.getElementById('debug-buttons'),
+  'itemsGraph': document.getElementById('items-graph'),
   'btnTestVisualWrapper': document.getElementById('buttons-test-visual'),
   'btnTestVisual': document.getElementsByClassName('button-test-visual'),
   'btnTestSoundCountdown': document.getElementById('button-test-sound-countdown'),

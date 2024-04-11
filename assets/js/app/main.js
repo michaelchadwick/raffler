@@ -43,7 +43,7 @@ async function modalOpen(type) {
 
     case 'show-config':
       this.myModal = new Modal('perm-debug', 'Raffler.config / Raffler.settings',
-        Raffler._displayAppConfig(),
+        Raffler._debugDisplayAppConfig(),
         null,
         null
       )
@@ -90,8 +90,8 @@ Raffler.initApp = async function() {
     Raffler._resetApp()
   }
 
-  Raffler._refreshDebugValues()
-  Raffler._updateItemsGraph()
+  Raffler._debugRefreshValues()
+  Raffler._debugUpdateItemsGraph()
 
   // if saved chosen items exist, add them to memory and display list
   if (Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)) {
@@ -150,18 +150,6 @@ Raffler._initCycleText = function() {
   }
 }
 
-Raffler._initDebug = function() {
-  if (Raffler.dom.debug.container) {
-    // show debug buttons
-    Raffler.dom.debug.container.style.display = 'flex'
-
-    // make header buttons smaller to fit in debug buttons
-    document.querySelectorAll('button.icon').forEach((btn) => {
-      btn.style.fontSize = '16px'
-    })
-  }
-}
-
 // fill in-memory itemsArr with server JSON
 Raffler._initItemsArr = async function() {
   Raffler._notify(`_initItemsArr(): ${Raffler.config.dataFilePath}`, 'notice')
@@ -201,7 +189,7 @@ Raffler._initItemsArr = async function() {
 
           Raffler.__shuffleArray(Raffler.config.itemsArr)
 
-          Raffler._updateItemsGraph()
+          Raffler._debugUpdateItemsGraph()
           Raffler._refreshItemsAvailableDisplay()
           Raffler._syncItemsChosenWithItemsArr()
         }
@@ -290,114 +278,6 @@ Raffler._loadQueryString = function() {
 }
 
 
-// modal: debug: display Raffler.config and Raffler.settings
-Raffler._displayAppConfig = function() {
-  const config = Raffler.config
-  const settings = Raffler.settings
-
-  let html = ''
-
-  html += '<a name="config"></a>';
-  html += `<h4>GLOBAL (ENV: ${Raffler.config.env})</h4>`
-  html += '<h4>----------------------------</h4>'
-  html += '<h5><strong>CONFIG</strong> | <a href="#settings">SETTINGS</a></h5>'
-  html += '<h4>----------------------------</h4>'
-
-  html += '<dl>'
-
-  Object.keys(config).sort().forEach(key => {
-    // if value is an object, dig in
-    if (
-      (typeof config[key] == 'object'
-        && !Array.isArray(config[key])
-        && config[key] != null
-      )
-    ) {
-      html += `<dd><code>${key}: {</code><dl>`
-
-      Object.keys(config[key]).forEach(k => {
-        var label = k
-        var value = config[key][k]
-
-        if (Object.keys(value)) {
-          if (key == 'sound') {
-            Object.entries(value).forEach((key, val) => {
-              Raffler._notify(`key: ${key}, val: ${val}`)
-            })
-          } else {
-            Raffler._notify(`found another object: key: ${key}, label: ${label}, value: ${value}`)
-          }
-        } else {
-          html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
-        }
-      })
-
-      html += '</dl><code>}</code></dd>'
-    }
-    else {
-      var label = key
-      var value = config[key]
-
-      if (label == 'itemsArr') {
-        html += `<dd><code>${label}:</code></dd>`
-        html += `<dt>${JSON.stringify(value)}</dt>`
-      } else {
-        html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
-      }
-    }
-  })
-
-  html += '</dl>'
-
-  html += '<h4>----------------------------</h4>'
-  html += '<a name="settings"></a>';
-  html += '<h5><a href="#config">CONFIG</a> | SETTINGS</h5>'
-  html += '<h4>----------------------------</h4>'
-
-  html += '<dl>'
-
-  Object.keys(settings).sort().forEach(key => {
-    // if value is an object, dig in
-    if (
-      (typeof settings[key] == 'object'
-        && !Array.isArray(config[key])
-        && settings[key] != null
-      )
-    ) {
-      html += `<dd><code>${key}: {</code><dl>`
-
-      Object.keys(settings[key]).forEach(k => {
-        var label = k
-        var value = settings[key][k]
-
-        if (Object.keys(value)) {
-          if (key == 'sound') {
-            Object.entries(value).forEach((key, val) => {
-              Raffler._notify(`key: ${key}, val: ${val}`)
-            })
-          } else {
-            Raffler._notify(`found another object: key: ${key}, label: ${label}, value: ${value}`)
-          }
-        } else {
-          html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
-        }
-      })
-
-      html += '</dl><code>}</code></dd>'
-    }
-    else {
-      var label = key
-      var value = settings[key]
-
-      html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
-    }
-  })
-
-  html += '</dl>'
-
-  return html
-}
-
 // handle both clicks and touches outside of modals
 Raffler._handleClickTouch = function(event) {
   var dialog = document.getElementsByClassName('modal-dialog')[0]
@@ -459,7 +339,7 @@ Raffler._syncItemsChosenWithItemsArr = function() {
       }
 
       Raffler._refreshItemsAvailableDisplay()
-      Raffler._updateItemsGraph()
+      Raffler._debugUpdateItemsGraph()
 
       // Raffler._notify('syncChosenItemsWithItemsArr: synced', 'notice')
     } else {
@@ -516,23 +396,7 @@ Raffler._updateItemsAvailable = function() {
   // update main section accordingly
   Raffler._initCycleText()
 }
-// update debug items graph with current cycle information
-Raffler._updateItemsGraph = function() {
-  let index = 0
 
-  Raffler.dom.itemsGraph.innerHTML = ''
-
-  Raffler.config.itemsArr.forEach(function() {
-    const bar = document.createElement('span')
-    bar.id = index++
-
-    Raffler.dom.itemsGraph.appendChild(bar)
-  })
-}
-Raffler._refreshDebugValues = function() {
-  Raffler.dom.debug.intervalValue.value = Raffler.config.intervalRange
-  Raffler.dom.debug.multiplyValue.innerText = Raffler.config.multiplyValue
-}
 Raffler._refreshResultsCount = function() {
   const lsChosenItems = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
@@ -750,7 +614,7 @@ Raffler._pickAWinner = async function() {
     Raffler._refreshResultsCount()
 
     Raffler.config.itemsArr = []
-    Raffler._updateItemsGraph()
+    Raffler._debugUpdateItemsGraph()
     Raffler._refreshItemsAvailableDisplay()
 
     Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
@@ -760,7 +624,7 @@ Raffler._pickAWinner = async function() {
     Raffler.dom.debug.timesRun.innerText = Raffler.config.timesRun
   }
 
-  Raffler._refreshDebugValues()
+  Raffler._debugRefreshValues()
 }
 
 // after confirming a winner or not, go back to raffling
@@ -781,7 +645,7 @@ Raffler._continueRaffling = function() {
       for (var i = 0; i < items.length; i++) {
         if (items[i].toUpperCase() === item.toUpperCase()) {
           items.splice(i, 1)
-          Raffler._updateItemsGraph()
+          Raffler._debugUpdateItemsGraph()
           Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, Raffler.config.itemsArr)
           Raffler._refreshItemsAvailableDisplay()
           break
@@ -827,7 +691,7 @@ Raffler._continueRaffling = function() {
     Raffler.dom.itemsCycle.classList.add('level4')
   }
 
-  Raffler._refreshDebugValues()
+  Raffler._debugRefreshValues()
 
   Raffler.countdownTimer.startCountdown = false
 
@@ -876,7 +740,7 @@ Raffler._resetApp = function() {
 
   Raffler._refreshItemsAvailableDisplay()
   Raffler._refreshResultsCount()
-  Raffler._refreshDebugValues()
+  Raffler._debugRefreshValues()
 
   Raffler._notify('Raffler reset', 'notice')
 }
@@ -900,7 +764,7 @@ Raffler._resetCountdown = function() {
   Raffler.__showPickWinnerButton()
   Raffler.__enablePickWinnerButton()
 
-  Raffler._refreshDebugValues()
+  Raffler._debugRefreshValues()
 
   Raffler._initItemsArr()
 
@@ -1253,7 +1117,7 @@ Raffler.countdownTimer = Raffler._timer(async function() {
     Raffler.config.multiplyValue = this.mult
     Raffler.config.intervalRange = newInterval
 
-    Raffler._refreshDebugValues()
+    Raffler._debugRefreshValues()
 
     return newInterval
   }
