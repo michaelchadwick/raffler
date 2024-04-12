@@ -60,7 +60,7 @@ async function playFromCache(url) {
   const source = context.createBufferSource()
 
   // WIP: AudioWorklet
-  // await context.audioWorklet.addModule('/assets/js/app/fx/audio-processor.js')
+  // await context.audioWorklet.addModule('/assets/js/app/lib/audio-processor.js')
   // const audioProcNode = new AudioWorkletNode(context, 'audio-processor')
 
   // audioProcNode.addEventListener('processorerror', (event) => {
@@ -109,7 +109,7 @@ async function playFromFetch(url) {
   const source = context.createBufferSource()
 
   // WIP: AudioWorklet
-  // await context.audioWorklet.addModule('/assets/js/app/fx/audio-processor.js')
+  // await context.audioWorklet.addModule('/assets/js/app/lib/audio-processor.js')
   // const audioProcNode = new AudioWorkletNode(context, 'audio-processor')
 
   // audioProcNode.addEventListener('processorerror', (event) => {

@@ -123,15 +123,13 @@ Raffler.queueAudio = async function(soundId) {
     
     Raffler._notify(`queueAudio(): no audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`)
 
-    const audioDone = await Raffler._playAudio(soundId)
+    await Raffler._playAudio(soundId)
 
-    if (audioDone) {
-      Raffler._notify(`queueAudio(): audio concluded`)
+    // Raffler._notify(`queueAudio(): audio concluded`)
 
-      Raffler._currentAudioPlaying = null
+    Raffler._currentAudioPlaying = null
 
-      Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
-    }
+    Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
   } else {
     Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
 
@@ -604,7 +602,10 @@ Raffler.countdownTimer = Raffler._timer(function() {
     }
 
     if (Raffler.settings.sound.countdown) {
-      Raffler.queueAudio('countdown')
+      // only trigger the countdown sound once
+      if (this.interval == 25) {
+        Raffler.queueAudio('countdown')
+      }
 
       // Raffler.myAudioWorker.postMessage({
       //   command: 'playAudio',
