@@ -119,7 +119,7 @@ Raffler.queueAudio = async function(soundId) {
 
   if (Raffler._currentAudioPlaying == null) {
     Raffler._currentAudioPlaying = soundId
-    Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔈'
+    // Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔈'
     
     Raffler._notify(`queueAudio(): no audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`)
 
@@ -129,9 +129,9 @@ Raffler.queueAudio = async function(soundId) {
 
     Raffler._currentAudioPlaying = null
 
-    Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
+    // Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
   } else {
-    Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
+    // Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
 
     Raffler._notify('queueAudio(): cannot play sound, because audio is already playing')
   }

@@ -67,9 +67,9 @@ async function playFromCache(url) {
     // console.error(`playFromCache(${url}) processor error from audioNode`, event)
   // })
 
-  context.onstatechange = () => {
-    console.log('playFromCache AudioContext changed', context.state)
-  }
+  // context.onstatechange = () => {
+  //   console.log('playFromCache AudioContext changed', context.state)
+  // }
 
   source.onended = function() {
     Raffler._notify(`playFromCache(${url}) source ended`)
@@ -116,9 +116,9 @@ async function playFromFetch(url) {
     // console.error(`playFromFetch(${url}) processor error from audioProcNode`, event)
   // })
 
-  context.onstatechange = () => {
-    console.log('playFromFetch AudioContext changed', context.state)
-  }
+  // context.onstatechange = () => {
+  //   console.log('playFromFetch AudioContext changed', context.state)
+  // }
 
   source.onended = function() {
     Raffler._notify(`playFromFetch(${url}) source ended`)
