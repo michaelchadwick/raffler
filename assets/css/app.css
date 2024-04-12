@@ -875,6 +875,7 @@ header {
     border: 2px solid var(--neutral-black);
     border-radius: 0 0 3px 3px;
     border-top: 1px solid var(--neutral-black);
+    box-shadow: 2px 2px 4px var(--neutral-black-soft);
     cursor: pointer;
     display: flex;
     flex-flow: row;
