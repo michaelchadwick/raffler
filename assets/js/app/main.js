@@ -269,11 +269,6 @@ Raffler._loadLocalConfig = async function() {
       Raffler.dom.title.appendChild(span)
       Raffler.dom.title.appendChild(link)
     }
-    if (data.talkifyKey !== '') {
-      Raffler.config.talkifyKey = data.talkifyKey
-
-      Raffler._initTalkifyConfig()
-    }
   } else {
     Raffler._notify(`Local config not found at <code>${Raffler.config.configFilePath}</code>`, 'error', true)
   }

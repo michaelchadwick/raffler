@@ -1,6 +1,6 @@
 /* audio worker */
 /* sounds and name reading */
-/* global Raffler, talkify */
+/* global Raffler */
 
 const RAFFLER_CACHE_AUDIO_KEY = 'raffler-cache-audio'
 const RAFFLER_ASSET_DATA_PATH = '/assets/audio'
@@ -185,18 +185,13 @@ Raffler._playAudio = async function(soundId, format = 'wav') {
   }
 }
 
-// talkify: read name on choice
-Raffler._readName = function(itemChosen) {
-  const player = new talkify.TtsPlayer()
-  // const player = new talkify.Html5Player()
+// SpeechSynthesis API: read name on choice
+Raffler._readName = function(itemChosen = 'testing, 1..2..3') {
+  const utterance = new SpeechSynthesisUtterance()
+  utterance.rate = 0.5
+  utterance.text = typeof itemChosen == 'object' ? itemChosen.name : itemChosen
 
-  player.setRate(0.9)
-
-  if (typeof itemChosen == 'object') {
-    player.playText(`${itemChosen.name} from ${itemChosen.affl}`)
-  } else {
-    player.playText(itemChosen)
-  }
+  speechSynthesis.speak(utterance);
 }
 
 // receive message from main thread if used as Web Worker

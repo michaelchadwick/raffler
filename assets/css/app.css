@@ -116,14 +116,6 @@ hr {
   margin: 5px 0;
 }
 
-audio#talkify-audio {
-  border-radius: 0;
-  bottom: 0;
-  display: none;
-  position: fixed;
-  width: calc(100% - 227px);
-}
-
 button,
 input {
   box-sizing: border-box;

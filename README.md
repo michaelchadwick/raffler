@@ -39,8 +39,7 @@ In order to change some of *Raffler*'s options, do the following:
 {
   "dataFilePath": "/config/raffler_data.json",
   "logoFilePath": "/assets/images/my-logo.png",
-  "logoFileLink": "http://ohmanwhat.omg",
-  "talkifyKey": "1234-56AB-CDEF"
+  "logoFileLink": "http://ohmanwhat.omg"
 }
 ```
 
@@ -49,7 +48,6 @@ The options that can be changed are as follows:
 * `dataFilePath` - json file of Raffler items that will automatically be added upon load
 * `logoFilePath` - logo for your thingy that appears next to the Raffler title
 * `logoFileLink` - somewhere to go to if you click the logo
-* `talkifyKey` - API key for your [Talkify](https://manage.talkify.net) account (note: you must get a Talkify API key in order to have Raffler honor the "SOUND: NAME" option, which reads items as they are picked)
 
 An example file has been included as `/config/raffler_data.json.dist`:
 
@@ -71,5 +69,3 @@ The settings menu will also allow you to toggle special effects and other debug 
 #### Third-Party Help
 
 * [JS File Saving](https://github.com/eligrey/FileSaver.js) for exporting results to text
-* [Talkify](https://talkify.net) for reading the choice after a countdown
-    * [Talkify JS library](https://github.com/Hagsten/Talkify)
