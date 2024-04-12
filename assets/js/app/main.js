@@ -498,7 +498,7 @@ Raffler._timerStop = function() {
   Raffler._notify('Raffler.countdownTimer stopped', 'notice')
 }
 // main timer instance for raffler cycler
-Raffler.countdownTimer = Raffler._timer(async function() {
+Raffler.countdownTimer = Raffler._timer(function() {
   // this is the variableInterval - so we can change/get the interval here:
   var interval = this.interval
 
