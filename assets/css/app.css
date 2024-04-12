@@ -446,11 +446,11 @@ header {
     width: 100%;
     z-index: 1;
   }
-    @media (min-width: 768px) {
+    /* @media (min-width: 768px) {
       #settings-panel-header {
-        /* max-width: 300px; */
+        max-width: 300px;
       }
-    }
+    } */
     #settings-panel-header button#button-settings-panel-close {
       background: none;
       border: 0 none;
@@ -1332,7 +1332,6 @@ section#init-raffler-cycle {
   display: block;
   height: 20px;
   position: relative;
-  vertical-align: middle;
   width: 32px;
 }
   .switch[data-status=true] {
