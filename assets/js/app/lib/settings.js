@@ -31,6 +31,54 @@ Raffler._save = function() {
   }
 }
 
+// localStorage previous results count -> UI
+Raffler._refreshResultsCount = function() {
+  const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
+
+  if (lsItemsChosen) {
+    Raffler.dom.resultsCount.innerText = lsItemsChosen.length
+  }
+}
+// localStorage Available Items -> UI
+Raffler._refreshItemsAvailableDisplay = function() {
+  Raffler.dom.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
+  Raffler.dom.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
+
+  Raffler._notify('refreshAvailableItems: display updated', 'notice')
+}
+// localStorage Chosen Items > UI
+Raffler._refreshItemsChosenDisplay = function() {
+  try {
+    const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
+
+    if (lsItemsChosen && lsItemsChosen.length > 0) {
+      let ordinal = 1
+      let itemsChosen = []
+
+      Raffler.dom.resultsContent.innerText = ''
+      Raffler.dom.resultsWrapper.style.display = 'block'
+
+      Object.values(lsItemsChosen).forEach((val) => {
+        const li = document.createElement('li')
+
+        li.innerHTML = ordinal++ + '. ' + val
+        Raffler.dom.resultsContent.prepend(li)
+
+        itemsChosen.push(val)
+      })
+
+      Raffler.dom.itemsChosenCount.innerText = `(${itemsChosen.length})`
+      Raffler.dom.itemsChosen.value = itemsChosen.join('\n')
+
+      Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
+    } else {
+      Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
+    }
+  } catch (e) {
+    Raffler._notify('refreshChosenItemsDisplay: ' + e, 'error')
+  }
+}
+
 // load app settings from LS
 Raffler._loadSettings = function() {
   Raffler._notify(`_loadSettings()`, 'notice')

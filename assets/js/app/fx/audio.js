@@ -53,7 +53,7 @@ async function deleteOldCaches(currentCache) {
 
 // Use CacheStorage to check cache.
 async function playFromCache(url) {
-  Raffler._notify(`playFromCache(${url}) playing...`)
+  Raffler._notify(`playFromCache(${url})`)
 
   const context = new AudioContext()
   const gainNode = context.createGain()
@@ -67,8 +67,13 @@ async function playFromCache(url) {
     // console.error(`playFromCache(${url}) processor error from audioNode`, event)
   // })
 
+  context.onstatechange = () => {
+    console.log('playFromCache AudioContext changed', context.state)
+  }
+
   source.onended = function() {
     Raffler._notify(`playFromCache(${url}) source ended`)
+    Raffler._currentAudioPlaying = null
 
     // context.suspend()
     // console.log('context suspended', context)
@@ -87,6 +92,8 @@ async function playFromCache(url) {
         .connect(context.destination)
 
       source.start()
+
+      Raffler._notify(`playFromCache(${url}) source started`)
     }
   } catch (error) {
     Raffler._notify(`playFromCache(${url}) failed to play audioBuffer: ${error}`, 'error')
@@ -95,7 +102,7 @@ async function playFromCache(url) {
 
 // Use direct fetch(url).
 async function playFromFetch(url) {
-  Raffler._notify(`playFromFetch(${url}) playing...`)
+  Raffler._notify(`playFromFetch(${url})`)
 
   const context = new AudioContext()
   const gainNode = context.createGain()
@@ -109,8 +116,13 @@ async function playFromFetch(url) {
     // console.error(`playFromFetch(${url}) processor error from audioProcNode`, event)
   // })
 
+  context.onstatechange = () => {
+    console.log('playFromFetch AudioContext changed', context.state)
+  }
+
   source.onended = function() {
     Raffler._notify(`playFromFetch(${url}) source ended`)
+    Raffler._currentAudioPlaying = null
 
     // context.suspend()
     // console.log('context suspended', context)
@@ -131,6 +143,8 @@ async function playFromFetch(url) {
         .connect(context.destination)
 
       source.start()
+
+      Raffler._notify(`playFromFetch(${url}) source started`)
     }
   } catch {
     Raffler._notify(`playFromFetch(${url}) failed to play audioBuffer: ${error}`, 'error')
@@ -165,9 +179,9 @@ Raffler._playAudio = async function(soundId, format = 'wav') {
   const url = `${path}/${soundId}.${format}`
 
   if ('caches' in self) {
-    playFromCache(url)
+    await playFromCache(url)
   } else {
-    playFromFetch(url)
+    await playFromFetch(url)
   }
 }
 

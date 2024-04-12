@@ -113,13 +113,28 @@ Raffler.initApp = async function() {
 }
 
 Raffler.queueAudio = async function(soundId) {
-  if (Raffler._currentAudioPlaying == null) {
-    Raffler._notify(`queueAudio(): no audio playing, so playing new sound: ${soundId}`)
-
-    Raffler._currentAudioPlaying = soundId
-    await Raffler._playAudio(soundId)
+  if (typeof Raffler._currentAudioPlaying == 'undefined') {
     Raffler._currentAudioPlaying = null
+  }
+
+  if (Raffler._currentAudioPlaying == null) {
+    Raffler._currentAudioPlaying = soundId
+    Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔈'
+    
+    Raffler._notify(`queueAudio(): no audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`)
+
+    const audioDone = await Raffler._playAudio(soundId)
+
+    if (audioDone) {
+      Raffler._notify(`queueAudio(): audio concluded`)
+
+      Raffler._currentAudioPlaying = null
+
+      Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
+    }
   } else {
+    Raffler.dom.debug.spanAudioPlaying.innerHTML = '🔇'
+
     Raffler._notify('queueAudio(): cannot play sound, because audio is already playing')
   }
 }
@@ -149,10 +164,9 @@ Raffler._initCycleText = function() {
     Raffler.dom.itemsCycleEmpty.style.display = 'block'
   }
 }
-
 // fill in-memory itemsArr with server JSON
 Raffler._initItemsArr = async function() {
-  Raffler._notify(`_initItemsArr(): ${Raffler.config.dataFilePath}`, 'notice')
+  Raffler._notify(`_initItemsArr(): '${Raffler.config.dataFilePath}'`, 'notice')
 
   // check localStorage first
   const lsItemsAvail = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY)
@@ -277,7 +291,6 @@ Raffler._loadQueryString = function() {
   }
 }
 
-
 // handle both clicks and touches outside of modals
 Raffler._handleClickTouch = function(event) {
   var dialog = document.getElementsByClassName('modal-dialog')[0]
@@ -378,6 +391,7 @@ Raffler._syncItemsChosenWithItemsArr = function() {
   }
 }
 
+// update internal model when Items Available textarea changes
 Raffler._updateItemsAvailable = function() {
   const items = Raffler.dom.itemsAvailable.value
     .split('\n')
@@ -395,52 +409,6 @@ Raffler._updateItemsAvailable = function() {
 
   // update main section accordingly
   Raffler._initCycleText()
-}
-
-Raffler._refreshResultsCount = function() {
-  const lsChosenItems = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
-
-  if (lsChosenItems) {
-    Raffler.dom.resultsCount.innerText = lsChosenItems.length
-  }
-}
-
-Raffler._refreshItemsAvailableDisplay = function() {
-  Raffler.dom.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
-  Raffler.dom.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
-
-  Raffler._notify('refreshAvailableItems: display updated', 'notice')
-}
-Raffler._refreshItemsChosenDisplay = function() {
-  try {
-    const lsChosenItems = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
-
-    if (lsChosenItems && lsChosenItems.length > 0) {
-      let ordinal = 1
-      let itemsChosen = []
-
-      Raffler.dom.resultsContent.innerText = ''
-      Raffler.dom.resultsWrapper.style.display = 'block'
-
-      Object.values(lsChosenItems).forEach((val) => {
-        const li = document.createElement('li')
-
-        li.innerHTML = ordinal++ + '. ' + val
-        Raffler.dom.resultsContent.prepend(li)
-
-        itemsChosen.push(val)
-      })
-
-      Raffler.dom.itemsChosenCount.innerText = `(${itemsChosen.length})`
-      Raffler.dom.itemsChosen.value = itemsChosen.join('\n')
-
-      Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
-    } else {
-      Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
-    }
-  } catch (e) {
-    Raffler._notify('refreshChosenItemsDisplay: ' + e, 'error')
-  }
 }
 
 // timer object to keep track of countdown
@@ -534,6 +502,135 @@ Raffler._timerStop = function() {
 
   Raffler._notify('Raffler.countdownTimer stopped', 'notice')
 }
+// main timer instance for raffler cycler
+Raffler.countdownTimer = Raffler._timer(async function() {
+  // this is the variableInterval - so we can change/get the interval here:
+  var interval = this.interval
+
+  // console.log('Raffler._timer interval', interval)
+
+  if (this.startCountdown) {
+    // slow down at a certain point
+    if (this.interval > 150 && this.interval <= 250) {
+      this.stage = RAFFLER_STAGES.SLOWED
+
+      Raffler.dom.debug.stageValue.innerText = this.stage
+
+      if (Raffler.settings.allowBoxResize) {
+        Raffler.dom.itemsCycle.className = ''
+        Raffler.dom.itemsCycle.classList.add('level2')
+        Raffler.dom.body.className = ''
+        Raffler.dom.body.classList.add('level2')
+      }
+    }
+
+    // slow down more at a certain point
+    if (this.interval > 250 && this.interval <= 325) {
+      this.stage = RAFFLER_STAGES.SLOWEST
+
+      Raffler.dom.debug.stageValue.innerText = this.stage
+
+      if (Raffler.settings.allowBoxResize) {
+        Raffler.dom.itemsCycle.className = ''
+        Raffler.dom.itemsCycle.classList.add('level3')
+        Raffler.dom.body.className = ''
+        Raffler.dom.body.classList.add('level3')
+      }
+    }
+
+    // finally, stop and pick an item!
+    if (this.interval > 325) {
+      this.mult = RAFFLER_DEFAULT_MULTIPLY
+
+      if (this.interval > 350) {
+        this.mult = this.mult++
+      }
+
+      // WINNER WINNER CHICKEN DINNER
+      if (this.interval >= Raffler.config.lastInterval) {
+        this.stage = RAFFLER_STAGES.DONE
+
+        Raffler.dom.debug.stageValue.innerText = this.stage
+
+        this.startCountdown = false
+        this.stop()
+
+        if (Raffler.settings.allowBoxResize) {
+          Raffler.dom.itemsCycle.className = ''
+        }
+
+        Raffler.dom.itemsCycle.classList.add('level-win')
+        Raffler.dom.body.classList.add('level4')
+
+        if (Raffler.settings.sound.victory) {
+          Raffler.queueAudio('victory')
+
+          // Raffler.myAudioWorker.postMessage({
+          //   command: 'playAudio',
+          //   data: 'victory'
+          // })
+        }
+
+        Raffler.config.lastItemChosen = document.querySelector('div.item').innerText
+
+        if (Raffler.settings.sound.name) {
+          Raffler._readName(Raffler.config.lastItemChosen)
+
+          // Raffler.myAudioWorker.postMessage({
+          //   command: 'readName',
+          //   data: Raffler.config.lastItemChosen
+          // })
+        }
+
+        // confirm winner
+        Raffler.__enableChosenConfirm()
+
+        // increment counter of times run
+        Raffler.config.timesRun++
+        Raffler.dom.debug.timesRun.innerText = Raffler.config.timesRun
+      } else {
+        var intervalMult = interval + this.mult
+
+        Raffler.config.intervalRange = intervalMult
+
+        return intervalMult
+      }
+    }
+  }
+
+  // start countdown!
+  if (this.startCountdown && (this.stage === RAFFLER_STAGES.INIT || this.stage === RAFFLER_STAGES.BEGUN)) {
+    this.stage = RAFFLER_STAGES.BEGUN
+
+    Raffler.dom.debug.stageValue.innerText = this.stage
+
+    if (!Raffler.dom.itemsCycle.classList.contains('level1')) {
+      Raffler.dom.itemsCycle.classList.add('level1')
+    }
+
+    if (Raffler.settings.sound.countdown) {
+      Raffler.queueAudio('countdown')
+
+      // Raffler.myAudioWorker.postMessage({
+      //   command: 'playAudio',
+      //   data: 'countdown'
+      // })
+    }
+  }
+
+  // if we've started countdown and we haven't reached end
+  // then keep cycling with increased multiplier
+  if (this.stage > RAFFLER_STAGES.INIT && this.stage !== RAFFLER_STAGES.DONE) {
+    var newInterval = interval + (1.75 ^ this.mult++)
+
+    Raffler.config.multiplyValue = this.mult
+    Raffler.config.intervalRange = newInterval
+
+    Raffler._debugRefreshValues()
+
+    return newInterval
+  }
+}, RAFFLER_DEFAULT_INTERVAL_RANGE)
 
 // user interacted with the "PICK A WINNER" button
 Raffler._pickAWinner = async function() {
@@ -713,22 +810,6 @@ Raffler._continueRaffling = function() {
 
     Raffler.__disablePickWinnerButton()
   }
-}
-
-// get list of other existing NebyooApps for sidebar
-Raffler._getNebyooApps = async function() {
-  const response = await fetch(NEBYOOAPPS_SOURCE_URL)
-  const json = await response.json()
-  const apps = json.body
-  const appList = document.querySelector('.nav-list')
-
-  Object.values(apps).forEach(app => {
-    const appLink = document.createElement('a')
-    appLink.href = app.url
-    appLink.innerText = app.title
-    appLink.target = '_blank'
-    appList.appendChild(appLink)
-  })
 }
 
 // handy combo shortcut of methods to reset application
@@ -992,136 +1073,6 @@ Raffler.__enableChosenConfirm = function() {
 /************************************************************************
  * START THE ENGINE *
  ************************************************************************/
-
-// main timer instance for raffler cycler
-Raffler.countdownTimer = Raffler._timer(async function() {
-  // this is the variableInterval - so we can change/get the interval here:
-  var interval = this.interval
-
-  // console.log('Raffler._timer interval', interval)
-
-  if (this.startCountdown) {
-    // slow down at a certain point
-    if (this.interval > 150 && this.interval <= 250) {
-      this.stage = RAFFLER_STAGES.SLOWED
-
-      Raffler.dom.debug.stageValue.innerText = this.stage
-
-      if (Raffler.settings.allowBoxResize) {
-        Raffler.dom.itemsCycle.className = ''
-        Raffler.dom.itemsCycle.classList.add('level2')
-        Raffler.dom.body.className = ''
-        Raffler.dom.body.classList.add('level2')
-      }
-    }
-
-    // slow down more at a certain point
-    if (this.interval > 250 && this.interval <= 325) {
-      this.stage = RAFFLER_STAGES.SLOWEST
-
-      Raffler.dom.debug.stageValue.innerText = this.stage
-
-      if (Raffler.settings.allowBoxResize) {
-        Raffler.dom.itemsCycle.className = ''
-        Raffler.dom.itemsCycle.classList.add('level3')
-        Raffler.dom.body.className = ''
-        Raffler.dom.body.classList.add('level3')
-      }
-    }
-
-    // finally, stop and pick an item!
-    if (this.interval > 325) {
-      this.mult = RAFFLER_DEFAULT_MULTIPLY
-
-      if (this.interval > 350) {
-        this.mult = this.mult++
-      }
-
-      // WINNER WINNER CHICKEN DINNER
-      if (this.interval >= Raffler.config.lastInterval) {
-        this.stage = RAFFLER_STAGES.DONE
-
-        Raffler.dom.debug.stageValue.innerText = this.stage
-
-        this.startCountdown = false
-        this.stop()
-
-        if (Raffler.settings.allowBoxResize) {
-          Raffler.dom.itemsCycle.className = ''
-        }
-
-        Raffler.dom.itemsCycle.classList.add('level-win')
-        Raffler.dom.body.classList.add('level4')
-
-        if (Raffler.settings.sound.victory) {
-          Raffler.queueAudio('victory')
-
-          // Raffler.myAudioWorker.postMessage({
-          //   command: 'playAudio',
-          //   data: 'victory'
-          // })
-        }
-
-        Raffler.config.lastItemChosen = document.querySelector('div.item').innerText
-
-        if (Raffler.settings.sound.name) {
-          Raffler._readName(Raffler.config.lastItemChosen)
-
-          // Raffler.myAudioWorker.postMessage({
-          //   command: 'readName',
-          //   data: Raffler.config.lastItemChosen
-          // })
-        }
-
-        // confirm winner
-        Raffler.__enableChosenConfirm()
-
-        // increment counter of times run
-        Raffler.config.timesRun++
-        Raffler.dom.debug.timesRun.innerText = Raffler.config.timesRun
-      } else {
-        var intervalMult = interval + this.mult
-
-        Raffler.config.intervalRange = intervalMult
-
-        return intervalMult
-      }
-    }
-  }
-
-  // start countdown!
-  if (this.startCountdown && (this.stage === RAFFLER_STAGES.INIT || this.stage === RAFFLER_STAGES.BEGUN)) {
-    this.stage = RAFFLER_STAGES.BEGUN
-
-    Raffler.dom.debug.stageValue.innerText = this.stage
-
-    if (!Raffler.dom.itemsCycle.classList.contains('level1')) {
-      Raffler.dom.itemsCycle.classList.add('level1')
-    }
-
-    if (Raffler.settings.sound.countdown) {
-      Raffler.queueAudio('countdown')
-
-      // Raffler.myAudioWorker.postMessage({
-      //   command: 'playAudio',
-      //   data: 'countdown'
-      // })
-    }
-  }
-
-  // if we've started countdown and we haven't reached end
-  // then keep cycling with increased multiplier
-  if (this.stage > RAFFLER_STAGES.INIT && this.stage !== RAFFLER_STAGES.DONE) {
-    var newInterval = interval + (1.75 ^ this.mult++)
-
-    Raffler.config.multiplyValue = this.mult
-    Raffler.config.intervalRange = newInterval
-
-    Raffler._debugRefreshValues()
-
-    return newInterval
-  }
-}, RAFFLER_DEFAULT_INTERVAL_RANGE)
 
 // get it going
 window.onload = Raffler.initApp()
