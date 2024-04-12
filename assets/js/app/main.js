@@ -710,7 +710,7 @@ Raffler._pickAWinner = async function() {
     Raffler._debugUpdateItemsGraph()
     Raffler._refreshItemsAvailableDisplay()
 
-    Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
+    Raffler._notify(`Raffled successfully! '${Raffler.config.lastItemChosen}' chosen!`, 'success')
 
     // increment counter of times run
     Raffler.config.timesRun++
@@ -745,7 +745,7 @@ Raffler._continueRaffling = function() {
         }
       }
 
-      Raffler._notify('Raffled successfully! ' + Raffler.config.lastItemChosen.name + ' chosen!', 'success')
+      Raffler._notify(`Raffled successfully! '${Raffler.config.lastItemChosen}' chosen!`, 'success')
     } else {
       Raffler._notify('Choice could not be made. Pool of choices unchanged.', 'warning')
     }
