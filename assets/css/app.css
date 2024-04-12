@@ -538,6 +538,9 @@ header {
           #settings-panel-content .setting-row .text .title {
             font-size: 18px;
           }
+            #settings-panel-content .setting-row .text .title.toggle {
+              margin-left: 18px;
+            }
           #settings-panel-content .setting-row .text .description {
             color: #2b2b2b;
             font-size: 12px;
@@ -546,6 +549,32 @@ header {
           display: block;
           margin-left: 1em;
         }
+          #settings-panel-content .setting-row .control details > summary {
+            cursor: pointer;
+            list-style-type: none;
+            margin-left: 20px;
+            position: relative;
+          }
+          #settings-panel-content .setting-row .control details > summary:before, 
+          #settings-panel-content .setting-row .control details[open] > summary:before {
+            background-image: url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L7 7.5L13 1.5' stroke='%230039A6' stroke-width='2'/%3E%3C/svg%3E%0A");
+            background-position: center center;
+            background-repeat: no-repeat;
+            bottom: 27px;
+            content: '';
+            height: 16px;
+            left: -21px;
+            position: absolute;
+            transform: rotate(-90deg);
+            transition: .2s;
+            width: 16px;
+          }
+            #settings-panel-content .setting-row .control.open details[open] > summary:before {
+              transform: rotate(0deg);
+            }
+          #settings-panel-content .setting-row .control details[open] > summary:before {
+            transform: rotate(0deg);
+          }
           #settings-panel-content .setting-row .control .container {
             width: 100%;
           }

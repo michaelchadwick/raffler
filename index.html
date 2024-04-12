@@ -126,25 +126,31 @@
 
       <div class="setting-row tall">
         <div class="text">
-          <div class="title">Available Items <span id="items-available-count">(0)</span></div>
+          <div class="title toggle">Available Items <span id="items-available-count">(0)</span></div>
           <div class="description">Items in the raffle to be chosen. One item per line.</div>
         </div>
         <div class="control">
-          <div class="container textarea">
-            <textarea id="items-available" spellcheck="false"></textarea>
-          </div>
+          <details open>
+            <div class="container textarea">
+              <textarea id="items-available" spellcheck="false"></textarea>
+            </div>
+            <summary></summary>
+          </details>
         </div>
       </div>
 
       <div class="setting-row tall">
         <div class="text">
-          <div class="title">Chosen Items <span id="items-chosen-count">(0)</span></div>
+          <div class="title toggle">Chosen Items <span id="items-chosen-count">(0)</span></div>
           <div class="description">Items in the raffle that have been chosen.</div>
         </div>
         <div class="control">
-          <div class="container textarea">
-            <textarea readonly id="items-chosen" spellcheck="false"></textarea>
-          </div>
+          <details>
+            <div class="container textarea">
+              <textarea readonly id="items-chosen" spellcheck="false"></textarea>
+            </div>
+            <summary></summary>
+          </details>
         </div>
       </div>
 
@@ -230,7 +236,6 @@
           </div>
         </div>
       </div>
-
 
       <div id="settings-debug-container">
 
@@ -426,6 +431,7 @@
             </div>
           </div>
         </div>
+      
       </div>
 
     </div>
