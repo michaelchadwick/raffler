@@ -4,7 +4,7 @@ And the winner is...
 
 ## Description
 
-Click or tap the button and a cavalcade of pre-loaded items will begin to cycle more and more slowly as it finally comes to a stop, and a single choice is made. That item will then be added to a results list below the *Raffler*, and will not be chosen again if re-run (until a reset, naturally).
+*Raffler* is a web app designed to help make a decision. Add your items, start the machine, and then click or tap the button to watch the countdown of your cavalcade of choices. Cycling slowly ramps down to a complete stop, and a single item is selected.
 
 ### Contributing
 
