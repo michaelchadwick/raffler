@@ -63,6 +63,7 @@ An example file has been included as `/config/raffler_data.json.dist`:
   "Burglekutt, Newlyn",
   "General Kael, Nockmaar"
 ]
+```
 
 The settings menu will also allow you to toggle special effects and other debug stuff like stopping and starting a raffler in-process, re-initializing all data, and seeing which items have been chosen.
 
