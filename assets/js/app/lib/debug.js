@@ -2,10 +2,10 @@
 /* debug functions */
 /* global Raffler */
 
-Raffler._initDebug = function() {
-  if (Raffler.dom.debug.container) {
+Raffler._initDebug = function () {
+  if (Raffler.dom.header.debug.container) {
     // show debug buttons
-    Raffler.dom.debug.container.style.display = 'flex'
+    Raffler.dom.header.debug.container.style.display = 'flex'
 
     // make header buttons smaller to fit in debug buttons
     document.querySelectorAll('button.icon').forEach((btn) => {
@@ -15,13 +15,13 @@ Raffler._initDebug = function() {
 }
 
 // modal: debug: display Raffler.config and Raffler.settings
-Raffler._debugDisplayAppConfig = function() {
+Raffler._debugDisplayAppConfig = function () {
   const config = Raffler.config
   const settings = Raffler.settings
 
   let html = ''
 
-  html += '<a name="config"></a>';
+  html += '<a name="config"></a>'
   html += `<h4>GLOBAL (ENV: ${Raffler.config.env})</h4>`
   html += '<h4>----------------------------</h4>'
   html += '<h5><strong>CONFIG</strong> | <a href="#settings">SETTINGS</a></h5>'
@@ -29,93 +29,89 @@ Raffler._debugDisplayAppConfig = function() {
 
   html += '<dl>'
 
-  Object.keys(config).sort().forEach(key => {
-    // if value is an object, dig in
-    if (
-      (typeof config[key] == 'object'
-        && !Array.isArray(config[key])
-        && config[key] != null
-      )
-    ) {
-      html += `<dd><code>${key}: {</code><dl>`
+  Object.keys(config)
+    .sort()
+    .forEach((key) => {
+      // if value is an object, dig in
+      if (typeof config[key] == 'object' && !Array.isArray(config[key]) && config[key] != null) {
+        html += `<dd><code>${key}: {</code><dl>`
 
-      Object.keys(config[key]).forEach(k => {
-        var label = k
-        var value = config[key][k]
+        Object.keys(config[key]).forEach((k) => {
+          var label = k
+          var value = config[key][k]
 
-        if (Object.keys(value)) {
-          if (key == 'sound') {
-            Object.entries(value).forEach((key, val) => {
-              Raffler._notify(`key: ${key}, val: ${val}`)
-            })
+          if (Object.keys(value)) {
+            if (key == 'sound') {
+              Object.entries(value).forEach((key, val) => {
+                Raffler._notify(`key: ${key}, val: ${val}`)
+              })
+            } else {
+              Raffler._notify(`found another object: key: ${key}, label: ${label}, value: ${value}`)
+            }
           } else {
-            Raffler._notify(`found another object: key: ${key}, label: ${label}, value: ${value}`)
+            html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
           }
-        } else {
-          html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
-        }
-      })
+        })
 
-      html += '</dl><code>}</code></dd>'
-    }
-    else {
-      var label = key
-      var value = config[key]
-
-      if (label == 'itemsArr') {
-        html += `<dd><code>${label}:</code></dd>`
-        html += `<dt>${JSON.stringify(value)}</dt>`
+        html += '</dl><code>}</code></dd>'
       } else {
-        html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+        var label = key
+        var value = config[key]
+
+        if (label == 'itemsArr') {
+          html += `<dd><code>${label}:</code></dd>`
+          html += `<dt>${JSON.stringify(value)}</dt>`
+        } else {
+          html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+        }
       }
-    }
-  })
+    })
 
   html += '</dl>'
 
   html += '<h4>----------------------------</h4>'
-  html += '<a name="settings"></a>';
+  html += '<a name="settings"></a>'
   html += '<h5><a href="#config">CONFIG</a> | SETTINGS</h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
 
-  Object.keys(settings).sort().forEach(key => {
-    // if value is an object, dig in
-    if (
-      (typeof settings[key] == 'object'
-        && !Array.isArray(config[key])
-        && settings[key] != null
-      )
-    ) {
-      html += `<dd><code>${key}: {</code><dl>`
+  Object.keys(settings)
+    .sort()
+    .forEach((key) => {
+      // if value is an object, dig in
+      if (
+        typeof settings[key] == 'object' &&
+        !Array.isArray(config[key]) &&
+        settings[key] != null
+      ) {
+        html += `<dd><code>${key}: {</code><dl>`
 
-      Object.keys(settings[key]).forEach(k => {
-        var label = k
-        var value = settings[key][k]
+        Object.keys(settings[key]).forEach((k) => {
+          var label = k
+          var value = settings[key][k]
 
-        if (Object.keys(value)) {
-          if (key == 'sound') {
-            Object.entries(value).forEach((key, val) => {
-              Raffler._notify(`key: ${key}, val: ${val}`)
-            })
+          if (Object.keys(value)) {
+            if (key == 'sound') {
+              Object.entries(value).forEach((key, val) => {
+                Raffler._notify(`key: ${key}, val: ${val}`)
+              })
+            } else {
+              Raffler._notify(`found another object: key: ${key}, label: ${label}, value: ${value}`)
+            }
           } else {
-            Raffler._notify(`found another object: key: ${key}, label: ${label}, value: ${value}`)
+            html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
           }
-        } else {
-          html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
-        }
-      })
+        })
 
-      html += '</dl><code>}</code></dd>'
-    }
-    else {
-      var label = key
-      var value = settings[key]
+        html += '</dl><code>}</code></dd>'
+      } else {
+        var label = key
+        var value = settings[key]
 
-      html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
-    }
-  })
+        html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+      }
+    })
 
   html += '</dl>'
 
@@ -123,12 +119,12 @@ Raffler._debugDisplayAppConfig = function() {
 }
 
 // update debug items graph with current cycle information
-Raffler._debugUpdateItemsGraph = function() {
+Raffler._debugUpdateItemsGraph = function () {
   let index = 0
 
   Raffler.dom.debug.itemsGraph.innerHTML = ''
 
-  Raffler.config.itemsArr.forEach(function() {
+  Raffler.config.itemsArr.forEach(function () {
     const bar = document.createElement('span')
     bar.id = index++
 
@@ -137,30 +133,30 @@ Raffler._debugUpdateItemsGraph = function() {
 }
 
 // update debug settings interval range and multiple value
-Raffler._debugRefreshValues = function() {
-  Raffler.dom.debug.intervalValue.value = Raffler.config.intervalRange
-  Raffler.dom.debug.multiplyValue.innerText = Raffler.config.multiplyValue
+Raffler._debugRefreshValues = function () {
+  Raffler.dom.settings.debug.intervalValue.value = Raffler.config.intervalRange
+  Raffler.dom.settings.debug.multiplyValue.innerText = Raffler.config.multiplyValue
 }
 
-Raffler.__debugDisableTimerStart = function() {
-  Raffler.dom.debug.btnTimerStart.setAttribute('disabled', true)
-  Raffler.dom.debug.btnTimerStart.classList.add('disabled')
+Raffler.__debugDisableTimerStart = function () {
+  Raffler.dom.settings.debug.btnTimerStart.setAttribute('disabled', true)
+  Raffler.dom.settings.debug.btnTimerStart.classList.add('disabled')
 }
-Raffler.__debugEnableTimerStart = function() {
-  Raffler.dom.debug.btnTimerStart.removeAttribute('disabled')
-  Raffler.dom.debug.btnTimerStart.classList.remove('disabled')
+Raffler.__debugEnableTimerStart = function () {
+  Raffler.dom.settings.debug.btnTimerStart.removeAttribute('disabled')
+  Raffler.dom.settings.debug.btnTimerStart.classList.remove('disabled')
 }
-Raffler.__debugDisableTimerStop = function() {
-  Raffler.dom.debug.btnTimerStop.setAttribute('disabled', true)
-  Raffler.dom.debug.btnTimerStop.classList.add('disabled')
+Raffler.__debugDisableTimerStop = function () {
+  Raffler.dom.settings.debug.btnTimerStop.setAttribute('disabled', true)
+  Raffler.dom.settings.debug.btnTimerStop.classList.add('disabled')
 }
-Raffler.__debugEnableTimerStop = function() {
-  Raffler.dom.debug.btnTimerStop.removeAttribute('disabled')
-  Raffler.dom.debug.btnTimerStop.classList.remove('disabled')
+Raffler.__debugEnableTimerStop = function () {
+  Raffler.dom.settings.debug.btnTimerStop.removeAttribute('disabled')
+  Raffler.dom.settings.debug.btnTimerStop.classList.remove('disabled')
 }
 
-Raffler.__debugToggleTestVisualNotices = function() {
-  const btns = Raffler.dom.debug.btnTestVisual
+Raffler.__debugToggleTestVisualNotices = function () {
+  const btns = Raffler.dom.settings.debug.btnTestVisual
 
   Object.keys(btns).forEach((key) => {
     if (!Raffler.settings.allowVisualNotifications) {

@@ -40,14 +40,14 @@ Raffler._refreshResultsCount = function() {
   }
 }
 // localStorage Available Items -> UI
-Raffler._refreshItemsAvailableDisplay = function() {
-  Raffler.dom.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
-  Raffler.dom.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
+Raffler._refreshItemsAvailableDisplay = function () {
+  Raffler.dom.settings.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
+  Raffler.dom.settings.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
 
   Raffler._notify('refreshAvailableItems: display updated', 'notice')
 }
 // localStorage Chosen Items > UI
-Raffler._refreshItemsChosenDisplay = function() {
+Raffler._refreshItemsChosenDisplay = function () {
   try {
     const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
@@ -67,8 +67,8 @@ Raffler._refreshItemsChosenDisplay = function() {
         itemsChosen.push(val)
       })
 
-      Raffler.dom.itemsChosenCount.innerText = `(${itemsChosen.length})`
-      Raffler.dom.itemsChosen.value = itemsChosen.join('\n')
+      Raffler.dom.settings.itemsChosenCount.innerText = `(${itemsChosen.length})`
+      Raffler.dom.settings.itemsChosen.value = itemsChosen.join('\n')
 
       Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
     } else {
@@ -80,7 +80,7 @@ Raffler._refreshItemsChosenDisplay = function() {
 }
 
 // load app settings from LS
-Raffler._loadSettings = function() {
+Raffler._loadSettings = function () {
   Raffler._notify(`_loadSettings()`, 'notice')
 
   const settings = localStorage.getItem(RAFFLER_SETTINGS_KEY)
@@ -200,8 +200,8 @@ Raffler._loadSettings = function() {
   }
 }
 // change app setting
-Raffler._changeSetting = function(setting, event = null) {
-  let st = null;
+Raffler._changeSetting = function (setting, event = null) {
+  let st = null
 
   switch (setting) {
     case 'allowBoxResize': {
@@ -254,7 +254,8 @@ Raffler._changeSetting = function(setting, event = null) {
         Raffler.__debugToggleTestVisualNotices()
       } else {
         // update setting DOM
-        document.getElementById('button-setting-allow-visual-notifications').dataset.status = 'false'
+        document.getElementById('button-setting-allow-visual-notifications').dataset.status =
+          'false'
 
         Raffler._saveSetting('allowVisualNotifications', false)
 
@@ -364,7 +365,7 @@ Raffler._changeSetting = function(setting, event = null) {
   }
 }
 // save app setting to LS
-Raffler._saveSetting = function(setting, value) {
+Raffler._saveSetting = function (setting, value) {
   // console.log('saving setting to LS...', setting, value)
 
   var settings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
@@ -397,7 +398,7 @@ Raffler._saveSetting = function(setting, value) {
 }
 
 // add last chosen item to localStorage
-Raffler._addItemChosenToLocalStorage = function(lastChosenItem) {
+Raffler._addItemChosenToLocalStorage = function (lastChosenItem) {
   try {
     var localChosenItemsObj = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
@@ -406,14 +407,17 @@ Raffler._addItemChosenToLocalStorage = function(lastChosenItem) {
     Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, localChosenItemsObj)
     Raffler._refreshItemsAvailableDisplay()
 
-    Raffler._notify('addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS', 'notice')
+    Raffler._notify(
+      'addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS',
+      'notice'
+    )
   } catch (e) {
     Raffler._notify('addChosenItemToLocalStorage: ' + e, 'error')
   }
 }
 
 // show/hide settings panel
-Raffler._toggleSettingsPanel = function() {
+Raffler._toggleSettingsPanel = function () {
   const currentVisibility = Raffler.dom.settingsPanel.style.display
 
   if (currentVisibility == '' || currentVisibility == 'none') {
@@ -436,14 +440,14 @@ Raffler._toggleSettingsPanel = function() {
 }
 
 // show/hide extra debug settings options
-Raffler._toggleSettingsShowDebug = function() {
-  const currentVisibility = Raffler.dom.settingsDebugContainer.style.display
+Raffler._toggleSettingsShowDebug = function () {
+  const currentVisibility = Raffler.dom.settings.debug.container.style.display
 
   if (currentVisibility == '' || currentVisibility == 'none') {
     // show it
-    Raffler.dom.settingsDebugContainer.style.display = 'block'
+    Raffler.dom.settings.debug.container.style.display = 'block'
   } else {
     // hide it
-    Raffler.dom.settingsDebugContainer.style.display = 'none'
+    Raffler.dom.settings.debug.container.style.display = 'none'
   }
 }
