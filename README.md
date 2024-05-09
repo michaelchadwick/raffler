@@ -29,7 +29,7 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 
 ### Server Options
 
-In order to change some of *Raffler*'s options, do the following:
+In order to change some of *Raffler*'s options, such as pre-loading raffle items or adding a logo, do the following:
 
   1. Copy and rename the `/config/raffler_config.json.dist` file to `/config/raffler_config.json`.
   2. Update the contents of `/config/raffler_config.json` to use your values
