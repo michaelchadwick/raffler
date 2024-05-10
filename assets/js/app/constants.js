@@ -31,34 +31,33 @@ const RAFFLER_STAGES = {
 }
 
 const RAFFLER_DEFAULTS = {
-  'config': {
-    'configFilePath': RAFFLER_LOCAL_CONFIG_FILE,
-    'dataFilePath': '',
-    'env': 'prod',
-    'intervalRange': RAFFLER_DEFAULT_INTERVAL_RANGE,
-    'itemsArr': [],
-    'logoFileLink': '',
-    'logoFilePath': '',
-    'lastItemChosen': null,
-    'lastItemChosenConfirmed': false,
-    'lastInterval': 361,
-    'multiplyValue': RAFFLER_DEFAULT_MULTIPLY,
-    'stage': 0,
-    'timesRun': 0
+  config: {
+    configFilePath: RAFFLER_LOCAL_CONFIG_FILE,
+    env: 'prod',
+    intervalRange: RAFFLER_DEFAULT_INTERVAL_RANGE,
+    itemsArr: [],
+    logoFileLink: '',
+    logoFilePath: '',
+    lastItemChosen: null,
+    lastItemChosenConfirmed: false,
+    lastInterval: 361,
+    multiplyValue: RAFFLER_DEFAULT_MULTIPLY,
+    stage: 0,
+    timesRun: 0,
   },
-  'settings': {
-    'allowBoxResize': true,
-    'allowDebugNotifications': true,
-    'allowVisualNotifications': true,
-    'showDebug': false,
-    'showGraph': false,
-    'showSettings': false,
-    'sound': {
-      'countdown': false,
-      'name': false,
-      'victory': false,
-    }
-  }
+  settings: {
+    allowBoxResize: true,
+    allowDebugNotifications: true,
+    allowVisualNotifications: true,
+    showDebug: false,
+    showGraph: false,
+    showSettings: false,
+    sound: {
+      countdown: false,
+      name: false,
+      victory: false,
+    },
+  },
 }
 
 // settings: saved in LOCAL STORAGE

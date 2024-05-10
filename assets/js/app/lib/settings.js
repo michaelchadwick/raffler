@@ -19,35 +19,38 @@ Raffler._setLocalStorageItem = function(lsKey, obj) {
     return false
   }
 }
-Raffler._save = function() {
-  Raffler._notify('_save()')
+// Raffler._save = function() {
+//   Raffler._notify('_save()')
 
-  try {
-    localStorage.setItem(RAFFLER_SETTINGS_KEY, JSON.stringify(Raffler.settings))
-    localStorage.setItem(RAFFLER_ITEMS_AVAIL_KEY, JSON.stringify(Raffler.config.itemsArr))
-  } catch (e) {
-    console.error('_save: ' + e)
-    return false
-  }
-}
+//   try {
+//     localStorage.setItem(RAFFLER_SETTINGS_KEY, JSON.stringify(Raffler.settings))
+//     localStorage.setItem(RAFFLER_ITEMS_AVAIL_KEY, JSON.stringify(Raffler.config.itemsArr))
+//   } catch (e) {
+//     console.error('_save: ' + e)
+//     return false
+//   }
+// }
 
-// localStorage previous results count -> UI
-Raffler._refreshResultsCount = function() {
+// localStorage Items Chosen count -> Results Count UI
+Raffler._loadLocalStorageResultsCount = function () {
   const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
   if (lsItemsChosen) {
     Raffler.dom.resultsCount.innerText = lsItemsChosen.length
   }
 }
-// localStorage Available Items -> UI
-Raffler._refreshItemsAvailableDisplay = function () {
-  Raffler.dom.settings.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
-  Raffler.dom.settings.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
+// inMemory Items Available -> Settings UI
+Raffler._loadInMemoryItemsAvailable = function () {
+  Raffler._notify('_loadInMemoryItemsAvailable: Items Available updating...', 'notice')
 
-  Raffler._notify('_refreshItemsAvailableDisplay: display updated', 'notice')
+  Raffler.dom.settings.itemsAvailable.value = ''
+  Raffler.dom.settings.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
+  // Raffler.dom.settings.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
+
+  Raffler._notify('_loadInMemoryItemsAvailable: Items Available updated!', 'notice')
 }
-// localStorage Chosen Items > UI
-Raffler._refreshItemsChosenDisplay = function () {
+// localStorage Chosen Items > Settings UI
+Raffler._loadLocalStorageItemsChosen = function () {
   try {
     const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
@@ -70,18 +73,18 @@ Raffler._refreshItemsChosenDisplay = function () {
       Raffler.dom.settings.itemsChosenCount.innerText = `(${itemsChosen.length})`
       Raffler.dom.settings.itemsChosen.value = itemsChosen.join('\n')
 
-      Raffler._notify('refreshChosenItemsDisplay: display updated', 'notice')
+      Raffler._notify('_loadLocalStorageItemsChosen: display updated', 'notice')
     } else {
-      Raffler._notify('refreshChosenItemsDisplay: none to display', 'warning')
+      Raffler._notify('_loadLocalStorageItemsChosen: none to display', 'warning')
     }
   } catch (e) {
-    Raffler._notify('refreshChosenItemsDisplay: ' + e, 'error')
+    Raffler._notify('_loadLocalStorageItemsChosen: ' + e, 'error')
   }
 }
 
 // load app settings from LS
-Raffler._loadSettings = function () {
-  Raffler._notify(`_loadSettings()`, 'notice')
+Raffler._loadLocalStorageSettings = function () {
+  Raffler._notify(`_loadLocalStorageSettings()`, 'notice')
 
   const settings = localStorage.getItem(RAFFLER_SETTINGS_KEY)
 
@@ -200,7 +203,7 @@ Raffler._loadSettings = function () {
   }
 }
 // change app setting
-Raffler._changeSetting = function (setting, event = null) {
+Raffler._changeAppSetting = function (setting, event = null) {
   let st = null
 
   switch (setting) {
@@ -400,12 +403,12 @@ Raffler._saveSetting = function (setting, value) {
 // add last chosen item to localStorage
 Raffler._addItemChosenToLocalStorage = function (lastChosenItem) {
   try {
-    var localChosenItemsObj = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
+    var localItemsChosenObj = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
-    localChosenItemsObj.push(lastChosenItem)
+    localItemsChosenObj.push(lastChosenItem)
 
-    Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, localChosenItemsObj)
-    Raffler._refreshItemsAvailableDisplay()
+    Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, localItemsChosenObj)
+    Raffler._loadInMemoryItemsAvailable()
 
     Raffler._notify(
       'addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS',

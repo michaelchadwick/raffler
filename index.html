@@ -126,8 +126,8 @@
 
       <div class="setting-row tall">
         <div class="text">
-          <div class="title toggle">Available Items <span id="items-available-count">(0)</span></div>
-          <div class="description">Items in the raffle to be chosen. One item per line.</div>
+          <div class="title toggle">Items Available <span id="items-available-count">(0)</span></div>
+          <div class="description">Items available to be chosen. One item per line.</div>
         </div>
         <div class="control">
           <details open>
@@ -141,8 +141,8 @@
 
       <div class="setting-row tall">
         <div class="text">
-          <div class="title toggle">Chosen Items <span id="items-chosen-count">(0)</span></div>
-          <div class="description">Items in the raffle that have been chosen.</div>
+          <div class="title toggle">Items Chosen <span id="items-chosen-count">(0)</span></div>
+          <div class="description">Items that have already been chosen.</div>
         </div>
         <div class="control">
           <details>
@@ -162,7 +162,7 @@
         </div>
         <div class="control">
           <div class="container">
-            <div id="button-setting-allow-box-resize" data-status="" class="switch" onclick="Raffler._changeSetting('allowBoxResize')">
+            <div id="button-setting-allow-box-resize" data-status="" class="switch" onclick="Raffler._changeAppSetting('allowBoxResize')">
               <span class="knob"></span>
             </div>
           </div>
@@ -183,7 +183,7 @@
             </div>
             <div class="control">
               <div class="container">
-                <div id="button-setting-sound-countdown" data-status="" class="switch" onclick="Raffler._changeSetting('soundCountdown')">
+                <div id="button-setting-sound-countdown" data-status="" class="switch" onclick="Raffler._changeAppSetting('soundCountdown')">
                   <span class="knob"></span>
                 </div>
               </div>
@@ -197,7 +197,7 @@
             </div>
             <div class="control">
               <div class="container">
-                <div id="button-setting-sound-victory" data-status="" class="switch" onclick="Raffler._changeSetting('soundVictory')">
+                <div id="button-setting-sound-victory" data-status="" class="switch" onclick="Raffler._changeAppSetting('soundVictory')">
                   <span class="knob"></span>
                 </div>
               </div>
@@ -211,7 +211,7 @@
             </div>
             <div class="control">
               <div class="container">
-                <div id="button-setting-sound-name" data-status="" class="switch" onclick="Raffler._changeSetting('soundName')">
+                <div id="button-setting-sound-name" data-status="" class="switch" onclick="Raffler._changeAppSetting('soundName')">
                   <span class="knob"></span>
                 </div>
               </div>
@@ -230,7 +230,7 @@
         </div>
         <div class="control">
           <div class="container">
-            <div id="button-setting-show-debug" data-status="" class="switch" onclick="Raffler._changeSetting('showDebug')">
+            <div id="button-setting-show-debug" data-status="" class="switch" onclick="Raffler._changeAppSetting('showDebug')">
               <span class="knob"></span>
             </div>
           </div>
@@ -339,7 +339,7 @@
                   max="400"
                   step="1"
                   value="25"
-                  onchange="Raffler._changeSetting('intervalValue', event)"
+                  onchange="Raffler._changeAppSetting('intervalValue', event)"
                 />
               </div>
             </div>
@@ -367,7 +367,7 @@
           </div>
           <div class-"control">
             <div class="container">
-              <div id="button-setting-show-graph" data-status="" class="switch" onclick="Raffler._changeSetting('showGraph')">
+              <div id="button-setting-show-graph" data-status="" class="switch" onclick="Raffler._changeAppSetting('showGraph')">
                 <span class="knob"></span>
               </div>
             </div>
@@ -381,7 +381,7 @@
           </div>
           <div class="control">
             <div class="container">
-              <div id="button-setting-allow-debug-notifications" data-status="" class="switch" onclick="Raffler._changeSetting('allowDebugNotifications')">
+              <div id="button-setting-allow-debug-notifications" data-status="" class="switch" onclick="Raffler._changeAppSetting('allowDebugNotifications')">
                 <span class="knob"></span>
               </div>
             </div>
@@ -395,7 +395,7 @@
           </div>
           <div class="control">
             <div class="container">
-              <div id="button-setting-allow-visual-notifications" data-status="" class="switch" onclick="Raffler._changeSetting('allowVisualNotifications')">
+              <div id="button-setting-allow-visual-notifications" data-status="" class="switch" onclick="Raffler._changeAppSetting('allowVisualNotifications')">
                 <span class="knob"></span>
               </div>
             </div>
@@ -409,7 +409,7 @@
           </div>
           <div class="control">
             <div class="container">
-              <a href="#" class="button danger disabled" id="button-reset-countdown" disabled="true">
+              <a href="#" class="button danger" id="button-reset-countdown">
                 <i class="fas fa-rotate-right"></i>
                 <span>Reset countdown</span>
               </a>

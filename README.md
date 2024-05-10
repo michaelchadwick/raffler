@@ -25,19 +25,17 @@ To stop the local instance, issue a `Ctrl-C` at the command line where it's runn
 
 *Raffler* uses [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to keep data and options stateful, even in the event of a browser reload or crash.
 
-*Raffler* has no items to raffle by default, so click on the settings menu icon (gear in top-right) and add some to the Available Items section.
+*Raffler* has no items to raffle by default, so click on the settings menu icon (gear in top-right) and add some to the Items Available section.
 
 ### Server Options
 
-In order to change some of *Raffler*'s options, such as pre-loading raffle items or adding a logo, do the following:
+In order to change some of *Raffler*'s options, such as adding a logo, do the following:
 
   1. Copy and rename the `/config/raffler_config.json.dist` file to `/config/raffler_config.json`.
   2. Update the contents of `/config/raffler_config.json` to use your values
-  3. Use the following URL to enable: `https://example.domain/?local_config=1`
 
 ```json
 {
-  "dataFilePath": "/config/raffler_data.json",
   "logoFilePath": "/assets/images/my-logo.png",
   "logoFileLink": "http://ohmanwhat.omg"
 }
@@ -49,23 +47,21 @@ The options that can be changed are as follows:
 * `logoFilePath` - logo for your thingy that appears next to the Raffler title
 * `logoFileLink` - somewhere to go to if you click the logo
 
-An example file has been included as `/config/raffler_data.json.dist`:
+An example file has been included as `/config/raffler_data.txt`:
 
-```json
-[
-  "Bavmorda, Nockmaar",
-  "Elora Danan, Tir Asleen",
-  "Madmartigan, Crossroads",
-  "Sorsha, Nockmaar",
-  "Willow Ufgood, Newlyn",
-  "Fin Raziel, Tir Asleen",
-  "Meegosh, Newlyn",
-  "Burglekutt, Newlyn",
-  "General Kael, Nockmaar"
-]
+```txt
+Bavmorda, Nockmaar
+Elora Danan, Tir Asleen
+Madmartigan, Crossroads
+Sorsha, Nockmaar
+Willow Ufgood, Newlyn
+Fin Raziel, Tir Asleen
+Meegosh, Newlyn
+Burglekutt, Newlyn
+General Kael, Nockmaar
 ```
 
-The settings menu will also allow you to toggle special effects and other debug stuff like stopping and starting a raffler in-process, re-initializing all data, and seeing which items have been chosen.
+The settings menu will also allow you to toggle special effects and other debug stuff like stopping and starting a raffler in-process or re-initializing all data.
 
 #### Third-Party Help
 

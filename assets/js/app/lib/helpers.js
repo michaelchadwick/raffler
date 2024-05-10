@@ -2,6 +2,45 @@
 /* general purpose functions */
 /* global Raffler */
 
+Raffler.__disablePickWinnerButton = function () {
+  Raffler.dom.body.className = ''
+  Raffler.dom.btnPickWinner.setAttribute('disabled', true)
+  Raffler.dom.btnPickWinner.classList.add('disabled')
+}
+Raffler.__enablePickWinnerButton = function () {
+  Raffler.dom.btnPickWinner.removeAttribute('disabled')
+  Raffler.dom.btnPickWinner.classList.remove('disabled')
+}
+Raffler.__showPickWinnerButton = function () {
+  Raffler.dom.pickWinnerContainer.style.display = 'block'
+}
+
+Raffler.__disableChosenConfirm = function () {
+  Raffler._notify('hiding confirmation question', 'notice')
+
+  Raffler.dom.chosenConfirm.style.display = 'none'
+
+  Raffler.dom.btnChosenConfirmYes.setAttribute('disabled', true)
+  Raffler.dom.btnChosenConfirmYes.classList.add('disabled')
+  Raffler.dom.btnChosenConfirmNo.setAttribute('disabled', true)
+  Raffler.dom.btnChosenConfirmNo.classList.add('disabled')
+
+  Raffler.__debugEnableTimerStop()
+}
+Raffler.__enableChosenConfirm = function () {
+  Raffler._notify('showing confirmation question', 'notice')
+
+  Raffler.dom.chosenConfirm.style.display = 'block'
+
+  Raffler.dom.btnChosenConfirmYes.removeAttribute('disabled')
+  Raffler.dom.btnChosenConfirmYes.classList.remove('disabled')
+  Raffler.dom.btnChosenConfirmNo.removeAttribute('disabled')
+  Raffler.dom.btnChosenConfirmNo.classList.remove('disabled')
+
+  Raffler.__debugDisableTimerStart()
+  Raffler.__debugDisableTimerStop()
+}
+
 // get list of other existing NebyooApps for sidebar
 Raffler._getNebyooApps = async function () {
   const response = await fetch(NEBYOOAPPS_SOURCE_URL)
