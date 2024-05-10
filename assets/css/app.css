@@ -1257,6 +1257,7 @@ section#init-raffler-cycle {
           text-align: center;
         }
           #main-content .main-container #results-wrapper #results-header h3 {
+            color: var(--gray-vvlight);
             font-size: 2.5rem;
             margin: 0;
             text-transform: uppercase;

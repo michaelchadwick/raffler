@@ -153,6 +153,8 @@ Raffler._initItemsArr = async function () {
 
       Raffler.dom.settings.itemsAvailable.value += `${item}\n`
     })
+
+    Raffler._refreshResultsCount()
   }
   // next, check local data file
   else if (Raffler.config.dataFilePath !== '') {
@@ -810,7 +812,7 @@ Raffler._resetCountdown = async function () {
   Raffler.dom.body.classList = ''
   Raffler.dom.itemsCycle.classList = ''
 
-  Raffler.dom.resultsContent.innerText = ''
+  Raffler.dom.resultsList.innerText = ''
   Raffler.dom.resultsWrapper.style.display = 'none'
 
   Raffler.countdownTimer.startCountdown = false

@@ -55,14 +55,14 @@ Raffler._refreshItemsChosenDisplay = function () {
       let ordinal = 1
       let itemsChosen = []
 
-      Raffler.dom.resultsContent.innerText = ''
+      Raffler.dom.resultsList.innerText = ''
       Raffler.dom.resultsWrapper.style.display = 'block'
 
       Object.values(lsItemsChosen).forEach((val) => {
         const li = document.createElement('li')
 
         li.innerHTML = ordinal++ + '. ' + val
-        Raffler.dom.resultsContent.prepend(li)
+        Raffler.dom.resultsList.prepend(li)
 
         itemsChosen.push(val)
       })

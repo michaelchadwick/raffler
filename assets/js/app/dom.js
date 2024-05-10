@@ -17,8 +17,8 @@ Raffler.dom = {
   btnChosenConfirmNo: document.getElementById('button-confirm-no'),
   btnExportResults: document.getElementById('button-export-results'),
   resultsWrapper: document.getElementById('results-wrapper'),
-  resultsCount: document.querySelector('#results-wrapper h3 span'),
-  resultsContent: document.querySelector('#results-wrapper div ul'),
+  resultsCount: document.querySelector('#results-count'),
+  resultsList: document.querySelector('#results-list ul'),
   chosenConfirm: document.getElementById('chosen-confirm'),
   footer: document.querySelector('.footer-container'),
 }
