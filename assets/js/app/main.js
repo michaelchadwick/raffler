@@ -137,14 +137,17 @@ Raffler._initCycleText = function () {
     Raffler.dom.itemsCycleEmpty.style.display = 'block'
   }
 }
-// fill in-memory itemsArr with server JSON
+// fill in-memory itemsArr with data in order of importance
+// 1. [localStorage] - previous data; if empty, skip
+// 2. [local JSON] - custom user config; if empty, skip
+// 3. [] - no previous data or custom user config
 Raffler._initItemsArr = async function () {
   Raffler._notify(`_initItemsArr(): '${Raffler.config.dataFilePath}'`, 'notice')
 
   // check localStorage first
   const lsItemsAvail = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY)
 
-  if (lsItemsAvail) {
+  if (lsItemsAvail?.length) {
     lsItemsAvail.forEach((item) => {
       Raffler.config.itemsArr.push(item)
 
