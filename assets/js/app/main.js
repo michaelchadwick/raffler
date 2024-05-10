@@ -111,6 +111,20 @@ Raffler.initApp = async function () {
   Raffler._attachEventListeners()
 }
 
+// reset everything to default state
+Raffler._resetApp = async function () {
+  await Raffler._loadItemsArrFromLocalStorage()
+
+  Raffler._loadInMemoryItemsAvailable()
+  Raffler._loadLocalStorageResultsCount()
+  Raffler._debugRefreshValues()
+
+  Raffler.config.lastItemChosen = ''
+  Raffler.config.timesRun = 0
+
+  Raffler._notify('Raffler resetApp()', 'notice')
+}
+
 /*************************************************************************
  * _private methods (called from other functions) *
  *************************************************************************/
@@ -629,7 +643,7 @@ Raffler._continueRaffling = function () {
   }
 }
 
-// handy combo shortcut of methods to reset application
+// reset countdown as if no items were ever chosen
 Raffler._resetCountdown = async function () {
   Raffler._clearItemsChosen()
 
@@ -661,20 +675,9 @@ Raffler._resetCountdown = async function () {
 
   Raffler.dom.btnPickWinner.focus()
 
-  Raffler._notify('Raffler resetApp()', 'notice')
+  Raffler._notify('Raffler resetCountdown()', 'notice')
 }
-Raffler._resetApp = async function () {
-  await Raffler._loadItemsArrFromLocalStorage()
 
-  Raffler.config.lastItemChosen = ''
-  Raffler.config.timesRun = 0
-
-  Raffler._loadInMemoryItemsAvailable()
-  Raffler._loadLocalStorageResultsCount()
-  Raffler._debugRefreshValues()
-
-  Raffler._notify('Raffler resetApp()', 'notice')
-}
 
 // attach event handlers to buttons and such
 Raffler._attachEventListeners = function () {
