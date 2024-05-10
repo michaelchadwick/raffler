@@ -44,7 +44,7 @@ Raffler._refreshItemsAvailableDisplay = function () {
   Raffler.dom.settings.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
   Raffler.dom.settings.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
 
-  Raffler._notify('refreshAvailableItems: display updated', 'notice')
+  Raffler._notify('_refreshItemsAvailableDisplay: display updated', 'notice')
 }
 // localStorage Chosen Items > UI
 Raffler._refreshItemsChosenDisplay = function () {

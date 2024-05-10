@@ -112,33 +112,6 @@ Raffler.initApp = async function() {
   Raffler._attachEventListeners()
 }
 
-Raffler.queueAudio = async function (soundId) {
-  if (typeof Raffler._currentAudioPlaying == 'undefined') {
-    Raffler._currentAudioPlaying = null
-  }
-
-  if (Raffler._currentAudioPlaying == null) {
-    Raffler._currentAudioPlaying = soundId
-    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔈'
-
-    Raffler._notify(
-      `queueAudio(): no audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`
-    )
-
-    await Raffler._playAudio(soundId)
-
-    // Raffler._notify(`queueAudio(): audio concluded`)
-
-    Raffler._currentAudioPlaying = null
-
-    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
-  } else {
-    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
-
-    Raffler._notify('queueAudio(): cannot play sound, because audio is already playing')
-  }
-}
-
 /*************************************************************************
  * _private methods (called from other functions) *
  *************************************************************************/
@@ -247,7 +220,7 @@ Raffler._loadLocalConfig = async function () {
     if (data.dataFilePath !== '') {
       Raffler.config.dataFilePath = data.dataFilePath
 
-      await Raffler._initItemsArr()
+      Raffler._initItemsArr()
 
       Raffler._initCycleText()
     }
@@ -566,7 +539,7 @@ Raffler.countdownTimer = Raffler._timer(function () {
         Raffler.dom.body.classList.add('level4')
 
         if (Raffler.settings.sound.victory) {
-          Raffler.queueAudio('victory')
+          Raffler._queueAudio('victory')
 
           // Raffler.myAudioWorker.postMessage({
           //   command: 'playAudio',
@@ -617,7 +590,7 @@ Raffler.countdownTimer = Raffler._timer(function () {
     if (Raffler.settings.sound.countdown) {
       // only trigger the countdown sound once
       if (this.interval == 25) {
-        Raffler.queueAudio('countdown')
+        Raffler._queueAudio('countdown')
       }
 
       // Raffler.myAudioWorker.postMessage({
@@ -700,7 +673,7 @@ Raffler._pickAWinner = async function () {
     Raffler.dom.body.classList.add('level4')
 
     if (Raffler.settings.sound.victory) {
-      Raffler.queueAudio('victory')
+      Raffler._queueAudio('victory')
 
       // Raffler.myAudioWorker.postMessage({
       //   command: 'playAudio',
@@ -826,19 +799,7 @@ Raffler._continueRaffling = function () {
 }
 
 // handy combo shortcut of methods to reset application
-Raffler._resetApp = function () {
-  Raffler._initItemsArr()
-
-  Raffler.config.lastItemChosen = ''
-  Raffler.config.timesRun = 0
-
-  Raffler._refreshItemsAvailableDisplay()
-  Raffler._refreshResultsCount()
-  Raffler._debugRefreshValues()
-
-  Raffler._notify('Raffler reset', 'notice')
-}
-Raffler._resetCountdown = function () {
+Raffler._resetCountdown = async function () {
   Raffler._clearItemsChosen()
 
   Raffler.config.timesRun = 0
@@ -865,6 +826,18 @@ Raffler._resetCountdown = function () {
   Raffler._timerStart()
 
   Raffler.dom.btnPickWinner.focus()
+}
+Raffler._resetApp = async function () {
+  Raffler._initItemsArr()
+
+  Raffler.config.lastItemChosen = ''
+  Raffler.config.timesRun = 0
+
+  Raffler._refreshItemsAvailableDisplay()
+  Raffler._refreshResultsCount()
+  Raffler._debugRefreshValues()
+
+  Raffler._notify('Raffler reset', 'notice')
 }
 
 // attach event handlers to buttons and such
@@ -909,10 +882,10 @@ Raffler._attachEventListeners = function () {
 
   // debug settings
   Raffler.dom.settings.debug.btnTestSoundCountdown.addEventListener('click', () => {
-    Raffler.queueAudio('countdown')
+    Raffler._queueAudio('countdown')
   })
   Raffler.dom.settings.debug.btnTestSoundVictory.addEventListener('click', () => {
-    Raffler.queueAudio('victory')
+    Raffler._queueAudio('victory')
   })
   Raffler.dom.settings.debug.btnTimerStart.addEventListener('click', () => {
     if (Raffler.dom.settings.debug.btnTimerStart.getAttribute('disabled') !== 'true') {
@@ -1011,42 +984,6 @@ Raffler._attachEventListeners = function () {
 /*************************************************************************
  * _private __helper methods *
  *************************************************************************/
-
-// encode user entries html
-Raffler.__sanitize = function(newEntry) {
-  Object.values(newEntry).forEach((val) => {
-    newEntry.val = val.replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/""/g, '&quot;')
-  })
-
-  return newEntry
-}
-
-// check if User Items are valid before syncing
-Raffler.__userItemsValid = function(items) {
-  let userItems = items.split('\n').filter(item => item != '')
-
-  if (userItems.length) {
-    if (userItems.every(item => item.split(',').length == 2)) {
-      return true
-    } else {
-      return false
-    }
-  } else {
-    return false
-  }
-}
-
-Raffler.__shuffleArray = function(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1))
-    var temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
-}
 
 Raffler.__disablePickWinnerButton = function() {
   Raffler.dom.body.className = ''

@@ -151,6 +151,33 @@ async function playFromFetch(url) {
   }
 }
 
+Raffler._queueAudio = async function (soundId) {
+  if (typeof Raffler._currentAudioPlaying == 'undefined') {
+    Raffler._currentAudioPlaying = null
+  }
+
+  if (Raffler._currentAudioPlaying == null) {
+    Raffler._currentAudioPlaying = soundId
+    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔈'
+
+    Raffler._notify(
+      `queueAudio(): no audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`
+    )
+
+    await Raffler._playAudio(soundId)
+
+    // Raffler._notify(`_queueAudio(): audio concluded`)
+
+    Raffler._currentAudioPlaying = null
+
+    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
+  } else {
+    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
+
+    Raffler._notify('queueAudio(): cannot play sound, because audio is already playing')
+  }
+}
+
 // Add audio assets into cache.
 Raffler._initData = async function() {
   const path = RAFFLER_ASSET_DATA_PATH
