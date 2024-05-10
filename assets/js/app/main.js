@@ -220,7 +220,7 @@ Raffler._loadLocalConfig = async function () {
     if (data.dataFilePath !== '') {
       Raffler.config.dataFilePath = data.dataFilePath
 
-      Raffler._initItemsArr()
+      await Raffler._initItemsArr()
 
       Raffler._initCycleText()
     }
@@ -821,14 +821,14 @@ Raffler._resetCountdown = async function () {
 
   Raffler._debugRefreshValues()
 
-  Raffler._initItemsArr()
+  await Raffler._initItemsArr()
 
   Raffler._timerStart()
 
   Raffler.dom.btnPickWinner.focus()
 }
 Raffler._resetApp = async function () {
-  Raffler._initItemsArr()
+  await Raffler._initItemsArr()
 
   Raffler.config.lastItemChosen = ''
   Raffler.config.timesRun = 0
