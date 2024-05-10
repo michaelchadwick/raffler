@@ -10,5 +10,6 @@ assets/csv
 
 # configuration
 *.bak
-config/raffler_config.json
-config/raffler_data.json
+config
+!config/raffler_config.json.dist
+!config/raffler_data.json.dist
