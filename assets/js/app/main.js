@@ -316,15 +316,15 @@ Raffler._clearItemsChosen = function () {
 // remove previously chosen items from in-memory itemsArr
 Raffler._syncItemsChosenWithItemsArr = function () {
   try {
-    const items = Raffler.config.itemsArr
+    const unChosenItems = Raffler.config.itemsArr
     const chosenItems = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
     // if we've previously chosen items
     // we need to remove them from the raffle
-    if (chosenItems && chosenItems.length > 0) {
+    if (chosenItems?.length) {
       for (var i = 0; i < chosenItems.length; i++) {
-        for (var j = 0; j < items.length; j++) {
-          if (chosenItems[i].toUpperCase() === items[j].toUpperCase()) {
+        for (var j = 0; j < unChosenItems.length; j++) {
+          if (chosenItems[i].toUpperCase() === unChosenItems[j].toUpperCase()) {
             Raffler.config.itemsArr.splice(j, 1)[0] // eslint-disable-line
           }
         }
@@ -339,7 +339,7 @@ Raffler._syncItemsChosenWithItemsArr = function () {
     }
 
     // all items but one have been chosen on reload
-    if (items.length === 1) {
+    if (unChosenItems.length === 1) {
       Raffler._notify('only one item left!', 'notice')
 
       Raffler.countdownTimer.stop()
@@ -350,7 +350,7 @@ Raffler._syncItemsChosenWithItemsArr = function () {
     }
 
     // all items have been chosen on reload
-    if (items.length === 0) {
+    if (unChosenItems.length === 0 && chosenItems?.length) {
       Raffler._notify('no items left!', 'notice')
 
       Raffler.countdownTimer.stop()
