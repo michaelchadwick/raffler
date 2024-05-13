@@ -18,6 +18,7 @@
   --blue-primary:         #196177;
   --blue-primary-dark:    #114554;
   --blue-light:           #92e0ff;
+  --blue-light2:          #86cde9;
   --pink-light:           #f9a4ff;
   --pink-pale:            #fcd0ff;
 
@@ -508,6 +509,8 @@ header {
       #settings-panel-content .setting-row.debug {
         background-color: var(--pink-pale);
         display: flex;
+        margin-left: -10px;
+        margin-right: -10px;
         padding-left: 10px;
         padding-right: 10px;
       }
@@ -522,15 +525,20 @@ header {
         }
         #settings-panel-content .setting-row article {
           align-items: center;
+          background-color: var(--blue-light2);
           display: flex;
           justify-content: space-between;
         }
           #settings-panel-content .setting-row article .text {
-            padding: 0 8px 4px 4px;
+            border-left: 1px solid var(--gray-dark);
+            padding: 0 0 4px 8px;
           }
             #settings-panel-content .setting-row article .text .title {
               font-size: 16px;
             }
+          #settings-panel-content .setting-row article .control {
+            padding-right: 10px;
+          }
 
         #settings-panel-content .setting-row .text {
           padding: 8px 0;
