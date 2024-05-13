@@ -11,7 +11,7 @@ Raffler._getLocalStorageItem = function(lsKey) {
     return false
   }
 }
-Raffler._setLocalStorageItem = function(lsKey, obj) {
+Raffler._setLocalStorageItem = function (lsKey, obj) {
   try {
     localStorage.setItem(lsKey, JSON.stringify(obj))
   } catch (e) {
@@ -19,38 +19,142 @@ Raffler._setLocalStorageItem = function(lsKey, obj) {
     return false
   }
 }
-// Raffler._save = function() {
-//   Raffler._notify('_save()')
 
-//   try {
-//     localStorage.setItem(RAFFLER_SETTINGS_KEY, JSON.stringify(Raffler.settings))
-//     localStorage.setItem(RAFFLER_ITEMS_AVAIL_KEY, JSON.stringify(Raffler.config.itemsArr))
-//   } catch (e) {
-//     console.error('_save: ' + e)
-//     return false
-//   }
-// }
+// load configuration flags from URL query string
+Raffler._loadQueryString = function () {
+  const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+  })
 
-// localStorage Items Chosen count -> Results Count UI
-Raffler._loadLocalStorageResultsCount = function () {
+  // Raffler._notify(`_loadQueryString(${JSON.stringify(window.location.search)})`, 'notice')
+
+  if (params) {
+    Raffler.config.enableLocalConfig = params.local_config ? true : false
+  }
+}
+// load config from local json file, if querystring flag is true
+Raffler._loadLocalConfig = async function () {
+  Raffler._notify(`_loadLocalConfig()`, 'notice')
+
+  const config = await fetch(RAFFLER_LOCAL_CONFIG_FILE)
+
+  if (config) {
+    const data = await config.json()
+
+    if (data.logoFileLink !== '') {
+      Raffler.settings.logoFileLink = data.logoFileLink
+    }
+    if (data.logoFilePath !== '') {
+      Raffler.settings.logoFilePath = data.logoFilePath
+
+      const span = document.createElement('span')
+      span.innerText = 'at'
+
+      const link = document.createElement('a')
+      link.href = Raffler.settings.logoFileLink
+      link.target = '_blank'
+
+      const img = document.createElement('img')
+      img.id = 'logo'
+      img.src = Raffler.settings.logoFilePath
+
+      link.appendChild(img)
+
+      Raffler.dom.header.title.appendChild(span)
+      Raffler.dom.header.title.appendChild(link)
+    }
+  } else {
+    Raffler._notify(
+      `Local config not found at <code>${Raffler.config.configFilePath}</code>`,
+      'error',
+      true
+    )
+  }
+}
+
+// localStorage Items Chosen count -> UI -> Results Count
+Raffler._setResultsCountFromLocalStorage = function () {
   const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
   if (lsItemsChosen) {
     Raffler.dom.resultsCount.innerText = lsItemsChosen.length
   }
 }
-// inMemory Items Available -> Settings UI
-Raffler._loadInMemoryItemsAvailable = function () {
-  Raffler._notify('_loadInMemoryItemsAvailable: Items Available updating...', 'notice')
+// localStorage ? localStorage -> Raffler.config.itemsArr : []
+// 1. [localStorage] - previous data; if empty, skip
+// 2. [] - no previous data
+Raffler._setItemsArrFromLocalStorage = async function () {
+  Raffler._notify('_setItemsArrFromLocalStorage()', 'notice')
 
-  Raffler.dom.settings.itemsAvailable.value = ''
-  Raffler.dom.settings.itemsAvailable.value = Raffler.config.itemsArr.join('\n')
-  // Raffler.dom.settings.itemsAvailableCount.innerText = `(${Raffler.config.itemsArr.length})`
+  const lsItemsAvail = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY)
 
-  Raffler._notify('_loadInMemoryItemsAvailable: Items Available updated!', 'notice')
+  if (lsItemsAvail?.length) {
+    // console.log('-- resetting itemsArr...')
+    Raffler.config.itemsArr = []
+
+    // update settings UI
+    Raffler.dom.settings.itemsAvailable.value = ''
+
+    lsItemsAvail.forEach((item) => {
+      // set in-memory
+      Raffler.config.itemsArr.push(item)
+
+      // set settings UI
+      Raffler.dom.settings.itemsAvailable.value += `${item}\n`
+    })
+
+    // add Items Available to internal countdownTimer
+    Raffler._countdownTimer.items = Raffler.config.itemsArr
+    Raffler._setResultsCountFromLocalStorage()
+  }
+  // nothing saved, so no items, available or chosen, yet
+  else {
+    Raffler._notify('No localStorage data exists. Please add items in settings panel.', 'notice')
+
+    Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, [])
+
+    const currentVisibility = Raffler.dom.settingsPanel.style.display
+
+    if (currentVisibility == '' || currentVisibility == 'none') {
+      Raffler.dom.settingsPanel.style.display = 'block'
+      Raffler.dom.mainContent.classList.add('settings-panel-enabled')
+
+      Raffler._saveSettingToLocalStorage('showSettings', true)
+    }
+  }
+
+  Raffler._initCycleText()
 }
-// localStorage Chosen Items > Settings UI
-Raffler._loadLocalStorageItemsChosen = function () {
+// update internal model when Items Available textarea changes
+Raffler._setItemsArrFromItemsAvailable = function () {
+  // Raffler._notify(`_setItemsArrFromItemsAvailable()`, 'notice')
+
+  const items = Raffler.dom.settings.itemsAvailable.value.split('\n').filter((i) => i !== '')
+
+  // update Settings UI count
+  Raffler.dom.settings.itemsAvailableCount.innerText = `(${items.length})`
+
+  // update internal model
+  Raffler.config.itemsArr = items
+  Raffler._countdownTimer.items = Raffler.config.itemsArr
+
+  // save to local storage
+  Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, Raffler.config.itemsArr)
+
+  // update main section accordingly
+  Raffler._initCycleText()
+}
+// internal itemsArr Items Available -> UI -> Settings Panel
+Raffler._setItemsAvailableFromItemsArr = function () {
+  Raffler._notify('_setItemsAvailableFromItemsArr()', 'notice')
+  console.log('Raffler.config.itemsArr', Raffler.config.itemsArr)
+  const items = Raffler.config.itemsArr
+
+  Raffler.dom.settings.itemsAvailable.value = items.join('\n')
+  Raffler.dom.settings.itemsAvailableCount.innerText = `(${items.length})`
+}
+// localStorage Chosen Items > UI -> Settings Panel
+Raffler._setItemsChosenFromLocalStorage = function () {
   try {
     const lsItemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
 
@@ -73,18 +177,18 @@ Raffler._loadLocalStorageItemsChosen = function () {
       Raffler.dom.settings.itemsChosenCount.innerText = `(${itemsChosen.length})`
       Raffler.dom.settings.itemsChosen.value = itemsChosen.join('\n')
 
-      Raffler._notify('_loadLocalStorageItemsChosen: display updated', 'notice')
+      Raffler._notify('_setItemsChosenFromLocalStorage: display updated', 'notice')
     } else {
-      Raffler._notify('_loadLocalStorageItemsChosen: none to display', 'warning')
+      Raffler._notify('_setItemsChosenFromLocalStorage: none to display', 'warning')
     }
   } catch (e) {
-    Raffler._notify('_loadLocalStorageItemsChosen: ' + e, 'error')
+    Raffler._notify('_setItemsChosenFromLocalStorage: ' + e, 'error')
   }
 }
 
 // load app settings from LS
-Raffler._loadLocalStorageSettings = function () {
-  Raffler._notify(`_loadLocalStorageSettings()`, 'notice')
+Raffler._loadSettingsFromLocalStorage = function () {
+  Raffler._notify(`_loadSettingsFromLocalStorage()`, 'notice')
 
   const settings = localStorage.getItem(RAFFLER_SETTINGS_KEY)
 
@@ -133,7 +237,7 @@ Raffler._loadLocalStorageSettings = function () {
         if (setting) {
           setting.dataset.status = 'true'
 
-          Raffler._toggleSettingsShowDebug()
+          Raffler._toggleSettingsDebugVisibility()
         }
       }
 
@@ -154,7 +258,7 @@ Raffler._loadLocalStorageSettings = function () {
 
         // if true, toggle open panel
         if (lsSettings.showSettings) {
-          Raffler._toggleSettingsPanel()
+          Raffler._toggleSettingsPanelVisibility()
         }
       }
 
@@ -215,13 +319,13 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-allow-box-resize').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('allowBoxResize', true)
+        Raffler._saveSettingToLocalStorage('allowBoxResize', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-allow-box-resize').dataset.status = 'false'
 
         // save to code/LS
-        Raffler._saveSetting('allowBoxResize', false)
+        Raffler._saveSettingToLocalStorage('allowBoxResize', false)
       }
       break
     }
@@ -234,12 +338,12 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-allow-debug-notifications').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('allowDebugNotifications', true)
+        Raffler._saveSettingToLocalStorage('allowDebugNotifications', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-allow-debug-notifications').dataset.status = 'false'
 
-        Raffler._saveSetting('allowDebugNotifications', false)
+        Raffler._saveSettingToLocalStorage('allowDebugNotifications', false)
       }
       break
     }
@@ -252,7 +356,7 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-allow-visual-notifications').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('allowVisualNotifications', true)
+        Raffler._saveSettingToLocalStorage('allowVisualNotifications', true)
 
         Raffler.__debugToggleTestVisualNotices()
       } else {
@@ -260,7 +364,7 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-allow-visual-notifications').dataset.status =
           'false'
 
-        Raffler._saveSetting('allowVisualNotifications', false)
+        Raffler._saveSettingToLocalStorage('allowVisualNotifications', false)
 
         Raffler.__debugToggleTestVisualNotices()
       }
@@ -277,7 +381,7 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('settings-debug-container').classList.add('show')
 
         // save to code/LS
-        Raffler._saveSetting('showDebug', true)
+        Raffler._saveSettingToLocalStorage('showDebug', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-show-debug').dataset.status = 'false'
@@ -285,7 +389,7 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('settings-debug-container').classList.remove('show')
 
         // save to code/LS
-        Raffler._saveSetting('showDebug', false)
+        Raffler._saveSettingToLocalStorage('showDebug', false)
       }
       break
     }
@@ -299,14 +403,14 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('items-graph').classList.add('show')
 
         // save to code/LS
-        Raffler._saveSetting('showGraph', true)
+        Raffler._saveSettingToLocalStorage('showGraph', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-show-graph').dataset.status = 'false'
 
         document.getElementById('items-graph').classList.remove('show')
 
-        Raffler._saveSetting('showGraph', false)
+        Raffler._saveSettingToLocalStorage('showGraph', false)
       }
       break
     }
@@ -319,13 +423,13 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-sound-countdown').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('soundCountdown', true)
+        Raffler._saveSettingToLocalStorage('soundCountdown', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-sound-countdown').dataset.status = 'false'
 
         // save to code/LS
-        Raffler._saveSetting('soundCountdown', false)
+        Raffler._saveSettingToLocalStorage('soundCountdown', false)
       }
       break
     }
@@ -337,13 +441,13 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-sound-name').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('soundName', true)
+        Raffler._saveSettingToLocalStorage('soundName', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-sound-name').dataset.status = 'false'
 
         // save to code/LS
-        Raffler._saveSetting('soundName', false)
+        Raffler._saveSettingToLocalStorage('soundName', false)
       }
       break
     }
@@ -355,22 +459,20 @@ Raffler._changeAppSetting = function (setting, event = null) {
         document.getElementById('button-setting-sound-victory').dataset.status = 'true'
 
         // save to code/LS
-        Raffler._saveSetting('soundVictory', true)
+        Raffler._saveSettingToLocalStorage('soundVictory', true)
       } else {
         // update setting DOM
         document.getElementById('button-setting-sound-victory').dataset.status = 'false'
 
         // save to code/LS
-        Raffler._saveSetting('soundVictory', false)
+        Raffler._saveSettingToLocalStorage('soundVictory', false)
       }
       break
     }
   }
 }
 // save app setting to LS
-Raffler._saveSetting = function (setting, value) {
-  // console.log('saving setting to LS...', setting, value)
-
+Raffler._saveSettingToLocalStorage = function (setting, value) {
   var settings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
 
   if (settings) {
@@ -408,7 +510,7 @@ Raffler._addItemChosenToLocalStorage = function (lastChosenItem) {
     localItemsChosenObj.push(lastChosenItem)
 
     Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, localItemsChosenObj)
-    Raffler._loadInMemoryItemsAvailable()
+    Raffler._setItemsAvailableFromItemsArr()
 
     Raffler._notify(
       'addChosenItemToLocalStorage: ' + lastChosenItem.name + ' added to LS',
@@ -419,8 +521,65 @@ Raffler._addItemChosenToLocalStorage = function (lastChosenItem) {
   }
 }
 
+// remove previously chosen items from in-memory itemsArr
+Raffler._setItemsChosenFromItemsArr = function () {
+  try {
+    const itemsAvailable = Raffler.config.itemsArr
+    const itemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
+
+    // if we've previously chosen items
+    // we need to remove them from the raffle
+    if (itemsChosen?.length) {
+      for (var i = 0; i < itemsChosen.length; i++) {
+        for (var j = 0; j < itemsAvailable.length; j++) {
+          if (itemsChosen[i].toUpperCase() === itemsAvailable[j].toUpperCase()) {
+            Raffler.config.itemsArr.splice(j, 1)[0] // eslint-disable-line
+          }
+        }
+      }
+
+      Raffler._setItemsAvailableFromItemsArr()
+      Raffler._debugUpdateItemsGraph()
+
+      // Raffler._notify('_setItemsChosenFromItemsArr: synced', 'notice')
+    } else {
+      // Raffler._notify('_setItemsChosenFromItemsArr: none to sync', 'notice')
+    }
+
+    // all items but one have been chosen on reload
+    if (itemsAvailable.length === 1) {
+      Raffler._notify('only one item left!', 'notice')
+
+      Raffler._countdownTimer.stop()
+      Raffler.__disablePickWinnerButton()
+
+      Raffler.config.lastItemChosenConfirmed = true
+      Raffler._continueRaffling()
+    }
+
+    // all items have been chosen on reload
+    if (itemsAvailable.length === 0 && itemsChosen?.length) {
+      Raffler._notify('no items left!', 'notice')
+
+      Raffler._countdownTimer.stop()
+
+      Raffler.__disablePickWinnerButton()
+      Raffler.__debugDisableTimerStart()
+      Raffler.__debugDisableTimerStop()
+
+      Raffler.dom.body.classList.add('level4')
+      Raffler.dom.itemsCycle.innerHTML = "<div>:'(<br /><br />Nothing to raffle!</div>"
+      Raffler.dom.itemsCycle.classList.remove('stopped')
+
+      // Raffler._notify('_setItemsChosenFromItemsArr: all items chosen', 'warning')
+    }
+  } catch (e) {
+    Raffler._notify('_setItemsChosenFromItemsArr: ' + e, 'error')
+  }
+}
+
 // show/hide settings panel
-Raffler._toggleSettingsPanel = function () {
+Raffler._toggleSettingsPanelVisibility = function () {
   const currentVisibility = Raffler.dom.settingsPanel.style.display
 
   if (currentVisibility == '' || currentVisibility == 'none') {
@@ -430,7 +589,7 @@ Raffler._toggleSettingsPanel = function () {
     Raffler.dom.settingsPanel.style.display = 'block'
     Raffler.dom.mainContent.classList.add('settings-panel-enabled')
 
-    Raffler._saveSetting('showSettings', true)
+    Raffler._saveSettingToLocalStorage('showSettings', true)
   } else {
     // Raffler._notify('hiding settings panel', 'notice')
 
@@ -438,12 +597,11 @@ Raffler._toggleSettingsPanel = function () {
     Raffler.dom.settingsPanel.style.display = 'none'
     Raffler.dom.mainContent.classList.remove('settings-panel-enabled')
 
-    Raffler._saveSetting('showSettings', false)
+    Raffler._saveSettingToLocalStorage('showSettings', false)
   }
 }
-
 // show/hide extra debug settings options
-Raffler._toggleSettingsShowDebug = function () {
+Raffler._toggleSettingsDebugVisibility = function () {
   const currentVisibility = Raffler.dom.settings.debug.container.style.display
 
   if (currentVisibility == '' || currentVisibility == 'none') {
@@ -452,5 +610,81 @@ Raffler._toggleSettingsShowDebug = function () {
   } else {
     // hide it
     Raffler.dom.settings.debug.container.style.display = 'none'
+  }
+}
+
+// reset countdown as if no items were ever chosen
+Raffler._resetCountdown = async function () {
+  Raffler._notify('Raffler resetCountdown()', 'warning')
+
+  await Raffler.__undoItemsChosen()
+
+  // reset countdown to default
+  Raffler._countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL_RANGE
+  Raffler._countdownTimer.mult = RAFFLER_DEFAULT_MULTIPLY
+  Raffler._countdownTimer.stage = RAFFLER_STAGES.INIT
+  Raffler._countdownTimer.startCountdown = false
+
+  // reset main UI
+  Raffler.dom.body.classList = ''
+  Raffler.dom.itemsCycle.classList = ''
+  Raffler.dom.resultsList.innerText = ''
+  Raffler.dom.resultsWrapper.style.display = 'none'
+
+  // reset settings.debug
+  Raffler._debugRefreshValues()
+  // reset internal counter and GUI
+  Raffler.dom.settings.debug.timesRun.value = Raffler.config.timesRun = 0
+
+  if (!Raffler._countdownTimer.stopped) {
+    Raffler.dom.btnPickWinner.focus()
+    Raffler.__showPickWinnerButton()
+    Raffler.__enablePickWinnerButton()
+    Raffler._countdownTimer.start()
+    Raffler._timerStart()
+  }
+}
+
+// shortcut to put Raffler back to default state
+Raffler._resetAll = async function () {
+  Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, [])
+  Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, [])
+  Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, null)
+
+  Raffler.config.itemsArr = []
+  Raffler._countdownTimer.items = []
+
+  Raffler._resetApp()
+  Raffler._debugRefreshValues()
+  Raffler._debugUpdateItemsGraph()
+
+  Raffler._initCycleText()
+  Raffler._timerStop()
+}
+
+// reset raffler-chosen-items localStorage to nothing and update displays
+Raffler.__undoItemsChosen = async function () {
+  Raffler._notify('__undoItemsChosen(): starting...', 'warning')
+
+  try {
+    const allItems = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY).concat(
+      Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
+    )
+
+    // reset localStorage to defaults
+    Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, allItems)
+    Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, [])
+
+    // load inMemory config
+    await Raffler._setItemsArrFromLocalStorage()
+    console.log('Raffler.config.itemsArr', Raffler.config.itemsArr)
+    // load settings panel
+    Raffler._setItemsAvailableFromItemsArr()
+    Raffler.dom.settings.itemsChosen.value = ''
+    Raffler.dom.settings.itemsChosenCount.innerText = '(0)'
+
+    Raffler._notify('__undoItemsChosen(): success', 'warning')
+  } catch (e) {
+    Raffler._notify('__undoItemsChosen(): ' + e, 'error')
   }
 }

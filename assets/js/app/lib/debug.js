@@ -18,13 +18,15 @@ Raffler._initDebug = function () {
 Raffler._debugDisplayAppConfig = function () {
   const config = Raffler.config
   const settings = Raffler.settings
+  const timer = Raffler._countdownTimer
 
   let html = ''
 
   html += '<a name="config"></a>'
   html += `<h4>GLOBAL (ENV: ${Raffler.config.env})</h4>`
   html += '<h4>----------------------------</h4>'
-  html += '<h5><strong>CONFIG</strong> | <a href="#settings">SETTINGS</a></h5>'
+  html +=
+    '<h5><strong>CONFIG</strong> | <a href="#settings">SETTINGS</a> | <a href="#timer">TIMER</a></h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
@@ -71,7 +73,7 @@ Raffler._debugDisplayAppConfig = function () {
 
   html += '<h4>----------------------------</h4>'
   html += '<a name="settings"></a>'
-  html += '<h5><a href="#config">CONFIG</a> | SETTINGS</h5>'
+  html += '<h5><a href="#config">CONFIG</a> | SETTINGS | <a href="#timer">TIMER</a></h5>'
   html += '<h4>----------------------------</h4>'
 
   html += '<dl>'
@@ -110,6 +112,55 @@ Raffler._debugDisplayAppConfig = function () {
         var value = settings[key]
 
         html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+      }
+    })
+
+  html += '</dl>'
+
+  html += '<h4>----------------------------</h4>'
+  html += '<a name="timer"></a>'
+  html += '<h5><a href="#config">CONFIG</a> | <a href="#settings">SETTINGS</a> | TIMER</h5>'
+  html += '<h4>----------------------------</h4>'
+
+  html += '<dl>'
+
+  const timerSkipKeys = ['callback', 'loop', 'runLoop', 'start', 'stop']
+
+  Object.keys(timer)
+    .sort()
+    .forEach((key) => {
+      // skip some keys
+      if (!timerSkipKeys.includes(key)) {
+        // if value is an object, dig in
+        if (typeof settings[key] == 'object' && !Array.isArray(config[key]) && timer[key] != null) {
+          html += `<dd><code>${key}: {</code><dl>`
+
+          Object.keys(timer[key]).forEach((k) => {
+            var label = k
+            var value = timer[key][k]
+
+            if (Object.keys(value)) {
+              if (key == 'sound') {
+                Object.entries(value).forEach((key, val) => {
+                  Raffler._notify(`key: ${key}, val: ${val}`)
+                })
+              } else {
+                Raffler._notify(
+                  `found another object: key: ${key}, label: ${label}, value: ${value}`
+                )
+              }
+            } else {
+              html += `<dd><code>${label}:</code></dd><dt>${value.join(', ')}</dt>`
+            }
+          })
+
+          html += '</dl><code>}</code></dd>'
+        } else {
+          var label = key
+          var value = timer[key]
+
+          html += `<dd><code>${label}:</code></dd><dt>${value}</dt>`
+        }
       }
     })
 

@@ -16,9 +16,11 @@ Raffler._currentAudioPlaying = null
 
 // modal opening functions
 async function modalOpen(type) {
-  switch(type) {
+  switch (type) {
     case 'help':
-      this.myModal = new Modal('perm', 'How to use Raffler',
+      this.myModal = new Modal(
+        'perm',
+        'How to use Raffler',
         `
           <p>Pick something from a collection at random.</p>
 
@@ -42,26 +44,12 @@ async function modalOpen(type) {
       break
 
     case 'show-config':
-      this.myModal = new Modal('perm-debug', 'Raffler.config / Raffler.settings',
+      this.myModal = new Modal(
+        'perm-debug',
+        'Raffler.config/.settings/.timer',
         Raffler._debugDisplayAppConfig(),
         null,
         null
-      )
-      break
-
-    case 'reset-all':
-      this.myModal = new Modal('confirm', 'Are you sure you want to reset Raffler?',
-        'Note: all chosen AND user items will be lost.',
-        'Yes',
-        'No'
-      )
-      break
-
-    case 'user-items-reset':
-      this.myModal = new Modal('confirm', 'Are you sure you want to clear user-entered items?',
-        'DANGER!',
-        'Yes',
-        'No'
       )
       break
   }
@@ -82,7 +70,7 @@ Raffler.initApp = async function () {
   Raffler._loadQueryString()
 
   // load global settings
-  Raffler._loadLocalStorageSettings()
+  Raffler._loadSettingsFromLocalStorage()
 
   if (Raffler.config.enableLocalConfig) {
     await Raffler._loadLocalConfig()
@@ -95,8 +83,8 @@ Raffler.initApp = async function () {
   // if saved chosen items exist, add them to memory and display list
   if (Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)) {
     if (Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY).length) {
-      Raffler._syncItemsChosenWithItemsArr()
-      Raffler._loadLocalStorageItemsChosen()
+      Raffler._setItemsChosenFromItemsArr()
+      Raffler._setItemsChosenFromLocalStorage()
       Raffler.dom.resultsWrapper.style.display = 'block'
     }
   } else {
@@ -113,16 +101,17 @@ Raffler.initApp = async function () {
 
 // reset everything to default state
 Raffler._resetApp = async function () {
-  await Raffler._loadItemsArrFromLocalStorage()
+  await Raffler._setItemsArrFromLocalStorage()
+  Raffler._setItemsAvailableFromItemsArr()
 
-  Raffler._loadInMemoryItemsAvailable()
-  Raffler._loadLocalStorageResultsCount()
+  Raffler._setResultsCountFromLocalStorage()
   Raffler._debugRefreshValues()
 
+  // reset internal vars
   Raffler.config.lastItemChosen = ''
   Raffler.config.timesRun = 0
 
-  Raffler._notify('Raffler resetApp()', 'notice')
+  Raffler._notify('resetApp() finished', 'notice')
 }
 
 /*************************************************************************
@@ -150,101 +139,6 @@ Raffler._initCycleText = function () {
     Raffler.dom.itemsCycleEmpty.style.display = 'block'
   }
 }
-// fill in-memory itemsArr with data
-// 1. [localStorage] - previous data; if empty, skip
-// 2. [] - no previous data
-Raffler._loadItemsArrFromLocalStorage = async function () {
-  Raffler._notify(
-    `_loadItemsArrFromLocalStorage(): loading LS -> Raffler.config.itemsArr`,
-    'notice'
-  )
-
-  const lsItemsAvail = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY)
-
-  if (lsItemsAvail?.length) {
-    lsItemsAvail.forEach((item) => {
-      // set in-memory
-      Raffler.config.itemsArr.push(item)
-
-      // set settings UI
-      Raffler.dom.settings.itemsAvailable.value += `${item}\n`
-    })
-
-    Raffler._loadLocalStorageResultsCount()
-  }
-  // nothing saved, so no items, available or chosen, yet
-  else {
-    Raffler._notify('No localStorage data exists. Please add items in settings panel.', 'notice')
-
-    Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, [])
-
-    const currentVisibility = Raffler.dom.settingsPanel.style.display
-
-    if (currentVisibility == '' || currentVisibility == 'none') {
-      Raffler.dom.settingsPanel.style.display = 'block'
-      Raffler.dom.mainContent.classList.add('settings-panel-enabled')
-
-      Raffler._saveSetting('showSettings', true)
-    }
-  }
-
-  Raffler._notify(
-    `_loadItemsArrFromLocalStorage(): Raffler.config.itemsArr: ${Raffler.config.itemsArr}`,
-    'notice'
-  )
-}
-
-// load config from local json file, if querystring flag is true
-Raffler._loadLocalConfig = async function () {
-  Raffler._notify(`_loadLocalConfig()`, 'notice')
-
-  const config = await fetch(RAFFLER_LOCAL_CONFIG_FILE)
-
-  if (config) {
-    const data = await config.json()
-
-    if (data.logoFileLink !== '') {
-      Raffler.settings.logoFileLink = data.logoFileLink
-    }
-    if (data.logoFilePath !== '') {
-      Raffler.settings.logoFilePath = data.logoFilePath
-
-      const span = document.createElement('span')
-      span.innerText = 'at'
-
-      const link = document.createElement('a')
-      link.href = Raffler.settings.logoFileLink
-      link.target = '_blank'
-
-      const img = document.createElement('img')
-      img.id = 'logo'
-      img.src = Raffler.settings.logoFilePath
-
-      link.appendChild(img)
-
-      Raffler.dom.header.title.appendChild(span)
-      Raffler.dom.header.title.appendChild(link)
-    }
-  } else {
-    Raffler._notify(
-      `Local config not found at <code>${Raffler.config.configFilePath}</code>`,
-      'error',
-      true
-    )
-  }
-}
-// load configuration flags from URL query string
-Raffler._loadQueryString = function () {
-  const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  })
-
-  // Raffler._notify(`_loadQueryString(${JSON.stringify(window.location.search)})`, 'notice')
-
-  if (params) {
-    Raffler.config.enableLocalConfig = params.local_config ? true : false
-  }
-}
 
 // handle both clicks and touches outside of modals
 Raffler._handleClickTouch = function (event) {
@@ -267,102 +161,108 @@ Raffler._handleClickTouch = function (event) {
     }
   }
 }
-Raffler._handleStartButton = function () {
-  Raffler._notify('clicked on the start button')
+// user triggered "CLICK TO BEGIN RAFFLE!"
+Raffler._handleStartCycle = function () {
+  Raffler._notify('_handleStartCycle()')
 
   Raffler.__showPickWinnerButton()
   Raffler.__enablePickWinnerButton()
   Raffler._timerStart()
 }
+// user triggered "PICK A WINNER"
+Raffler._handlePickWinner = async function () {
+  Raffler._notify('PICKING A WINNER...', 'notice')
+  Raffler.__disablePickWinnerButton()
 
-// reset raffler-chosen-items localStorage to nothing and update displays
-Raffler._clearItemsChosen = function () {
-  try {
-    Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, [])
-
-    Raffler.dom.settings.itemsChosen.value = ''
-
-    Raffler._loadLocalStorageItemsChosen()
-
-    Raffler._notify('_clearItemsChosen(): reset', 'warning')
-  } catch (e) {
-    Raffler._notify('resetChosenItems: ' + e, 'error')
+  if (Raffler.settings.allowBoxResize) {
+    Raffler.dom.itemsCycle.className = ''
+  } else {
+    Raffler.dom.itemsCycle.className = ''
+    Raffler.dom.itemsCycle.classList.add('level4')
   }
-}
 
-// remove previously chosen items from in-memory itemsArr
-Raffler._syncItemsChosenWithItemsArr = function () {
-  try {
-    const itemsAvailable = Raffler.config.itemsArr
-    const itemsChosen = Raffler._getLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY)
+  // we got a choice
+  // start a countdown
+  if (Raffler.config.itemsArr.length > 1) {
+    Raffler.config.intervalRange = RAFFLER_DEFAULT_INTERVAL_RANGE
 
-    // if we've previously chosen items
-    // we need to remove them from the raffle
-    if (itemsChosen?.length) {
-      for (var i = 0; i < itemsChosen.length; i++) {
-        for (var j = 0; j < itemsAvailable.length; j++) {
-          if (itemsChosen[i].toUpperCase() === itemsAvailable[j].toUpperCase()) {
-            Raffler.config.itemsArr.splice(j, 1)[0] // eslint-disable-line
-          }
-        }
-      }
+    // console.log('_handlePickWinner: Raffler.config.intervalRange reset', Raffler.config.intervalRange)
 
-      Raffler._loadInMemoryItemsAvailable()
-      Raffler._debugUpdateItemsGraph()
+    Raffler.dom.settings.debug.stageValue.innerText = Raffler._countdownTimer.stage
 
-      // Raffler._notify('_syncItemsChosenWithItemsArr: synced', 'notice')
-    } else {
-      // Raffler._notify('_syncItemsChosenWithItemsArr: none to sync', 'notice')
-    }
+    Raffler._countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL_RANGE
 
-    // all items but one have been chosen on reload
-    if (itemsAvailable.length === 1) {
-      Raffler._notify('only one item left!', 'notice')
+    // console.log('_handlePickWinner: Raffler._countdownTimer.interval reset', Raffler._countdownTimer.interval)
 
-      Raffler._countdownTimer.stop()
-      Raffler.__disablePickWinnerButton()
-
-      Raffler.config.lastItemChosenConfirmed = true
-      Raffler._continueRaffling()
-    }
-
-    // all items have been chosen on reload
-    if (itemsAvailable.length === 0 && itemsChosen?.length) {
-      Raffler._notify('no items left!', 'notice')
-
-      Raffler._countdownTimer.stop()
-
-      Raffler.__disablePickWinnerButton()
-      Raffler.__debugDisableTimerStart()
-      Raffler.__debugDisableTimerStop()
-
-      Raffler.dom.body.classList.add('level4')
-      Raffler.dom.itemsCycle.innerHTML = "<div>:'(<br /><br />Nothing to raffle!</div>"
-      Raffler.dom.itemsCycle.classList.remove('stopped')
-
-      // Raffler._notify('_syncItemsChosenWithItemsArr: all items chosen', 'warning')
-    }
-  } catch (e) {
-    Raffler._notify('_syncItemsChosenWithItemsArr: ' + e, 'error')
+    Raffler._countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
+    Raffler._countdownTimer.stage = RAFFLER_STAGES.INIT
+    Raffler._countdownTimer.startCountdown = true
+    Raffler._countdownTimer.mult = 1
+    Raffler._countdownTimer.start()
   }
-}
+  // we got 1 choice, so no choice, no countdown
+  if (Raffler.config.itemsArr.length === 1) {
+    Raffler._notify(
+      'Only one item to raffle!<br /><strong>instant winner!</strong>',
+      'warning',
+      true
+    )
 
-// update internal model when Items Available textarea changes
-Raffler._updateItemsAvailable = function () {
-  const items = Raffler.dom.settings.itemsAvailable.value.split('\n').filter((i) => i !== '')
+    Raffler._timerStop()
 
-  // update count
-  Raffler.dom.settings.itemsAvailableCount.innerText = `(${items.length})`
+    // add lone item to items-cycle
+    let loneItemHTML = "<div class='item'>" + Raffler.config.itemsArr[0].name + '</div>'
 
-  // update internal model
-  Raffler.config.itemsArr = items
-  Raffler._countdownTimer.items = Raffler.config.itemsArr
+    Raffler.dom.itemsCycle.innerHTML = loneItemHTML
+    Raffler.dom.itemsCycle.classList.add('level4')
 
-  // save to local storage
-  Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, Raffler.config.itemsArr)
+    // grab lone item
+    Raffler.config.lastItemChosen = document.querySelector('div.item').innerText
 
-  // update main section accordingly
-  Raffler._initCycleText()
+    if (Raffler.settings.allowBoxResize) {
+      Raffler.dom.itemsCycle.className = ''
+    }
+
+    Raffler.dom.itemsCycle.className = ''
+    Raffler.dom.itemsCycle.classList.add('level-win')
+    Raffler.dom.body.classList.add('level4')
+
+    if (Raffler.settings.sound.victory) {
+      Raffler._queueAudio('victory')
+
+      // Raffler.myAudioWorker.postMessage({
+      //   command: 'playAudio',
+      //   data: 'victory'
+      // })
+    }
+
+    if (Raffler.settings.sound.name) {
+      Raffler._readName(Raffler.config.lastItemChosen)
+
+      // Raffler.myAudioWorker.postMessage({
+      //   command: 'readName',
+      //   data: Raffler.config.lastItemChosen
+      // })
+    }
+
+    Raffler._addItemChosenToLocalStorage(Raffler.config.lastItemChosen)
+    // add to list of chosen items and update displays
+    Raffler._setItemsChosenFromLocalStorage()
+    // update results count
+    Raffler._setResultsCountFromLocalStorage()
+
+    Raffler.config.itemsArr = []
+    Raffler._debugUpdateItemsGraph()
+    Raffler._setItemsAvailableFromItemsArr()
+
+    Raffler._notify(`Raffled successfully! '${Raffler.config.lastItemChosen}' chosen!`, 'success')
+
+    // increment counter of times run
+    Raffler.config.timesRun++
+    Raffler.dom.settings.debug.timesRun.innerText = Raffler.config.timesRun
+  }
+
+  Raffler._debugRefreshValues()
 }
 
 // timer object to keep track of countdown
@@ -447,7 +347,7 @@ Raffler._timerStart = function () {
   Raffler.__debugDisableTimerStart()
   Raffler.__debugEnableTimerStop()
 
-  Raffler._notify('Raffler._countdownTimer started', 'notice')
+  Raffler._notify('_timerStart() started', 'notice')
 }
 Raffler._timerStop = function () {
   Raffler._countdownTimer.stop()
@@ -459,102 +359,6 @@ Raffler._timerStop = function () {
   Raffler._notify('Raffler._countdownTimer stopped', 'notice')
 }
 
-// user interacted with the "PICK A WINNER" button
-Raffler._pickAWinner = async function () {
-  Raffler._notify('PICKING A WINNER...', 'notice')
-  Raffler.__disablePickWinnerButton()
-
-  if (Raffler.settings.allowBoxResize) {
-    Raffler.dom.itemsCycle.className = ''
-  } else {
-    Raffler.dom.itemsCycle.className = ''
-    Raffler.dom.itemsCycle.classList.add('level4')
-  }
-
-  // we got a choice
-  // start a countdown
-  if (Raffler.config.itemsArr.length > 1) {
-    Raffler.config.intervalRange = RAFFLER_DEFAULT_INTERVAL_RANGE
-
-    // console.log('_pickAWinner: Raffler.config.intervalRange reset', Raffler.config.intervalRange)
-
-    Raffler.dom.settings.debug.stageValue.innerText = Raffler._countdownTimer.stage
-
-    Raffler._countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL_RANGE
-
-    // console.log('_pickAWinner: Raffler._countdownTimer.interval reset', Raffler._countdownTimer.interval)
-
-    Raffler._countdownTimer.index = Math.floor(Math.random() * Raffler.config.itemsArr.length)
-    Raffler._countdownTimer.stage = RAFFLER_STAGES.INIT
-    Raffler._countdownTimer.startCountdown = true
-    Raffler._countdownTimer.mult = 1
-    Raffler._countdownTimer.start()
-  }
-  // we got 1 choice, so no choice, no countdown
-  if (Raffler.config.itemsArr.length === 1) {
-    Raffler._notify(
-      'Only one item to raffle!<br /><strong>instant winner!</strong>',
-      'warning',
-      true
-    )
-
-    Raffler._timerStop()
-
-    // add lone item to items-cycle
-    let loneItemHTML = "<div class='item'>" + Raffler.config.itemsArr[0].name + '</div>'
-
-    Raffler.dom.itemsCycle.innerHTML = loneItemHTML
-    Raffler.dom.itemsCycle.classList.add('level4')
-
-    // grab lone item
-    Raffler.config.lastItemChosen = document.querySelector('div.item').innerText
-
-    if (Raffler.settings.allowBoxResize) {
-      Raffler.dom.itemsCycle.className = ''
-    }
-
-    Raffler.dom.itemsCycle.className = ''
-    Raffler.dom.itemsCycle.classList.add('level-win')
-    Raffler.dom.body.classList.add('level4')
-
-    if (Raffler.settings.sound.victory) {
-      Raffler._queueAudio('victory')
-
-      // Raffler.myAudioWorker.postMessage({
-      //   command: 'playAudio',
-      //   data: 'victory'
-      // })
-    }
-
-    if (Raffler.settings.sound.name) {
-      Raffler._readName(Raffler.config.lastItemChosen)
-
-      // Raffler.myAudioWorker.postMessage({
-      //   command: 'readName',
-      //   data: Raffler.config.lastItemChosen
-      // })
-    }
-
-    Raffler._addItemChosenToLocalStorage(Raffler.config.lastItemChosen)
-    // add to list of chosen items and update displays
-    Raffler._loadLocalStorageItemsChosen()
-    // update results count
-    Raffler._loadLocalStorageResultsCount()
-
-    Raffler.config.itemsArr = []
-    Raffler._debugUpdateItemsGraph()
-    Raffler._loadInMemoryItemsAvailable()
-
-    Raffler._notify(`Raffled successfully! '${Raffler.config.lastItemChosen}' chosen!`, 'success')
-
-    // increment counter of times run
-    Raffler.config.timesRun++
-    Raffler.dom.settings.debug.timesRun.innerText = Raffler.config.timesRun
-  }
-
-  Raffler._debugRefreshValues()
-}
-
 // after confirming a winner or not, go back to raffling
 Raffler._continueRaffling = function () {
   // if we have confirmed, then take out of raffle
@@ -563,9 +367,9 @@ Raffler._continueRaffling = function () {
       // add chosen item to localStorage
       Raffler._addItemChosenToLocalStorage(Raffler.config.lastItemChosen)
       // add to list of chosen items and update displays
-      Raffler._loadLocalStorageItemsChosen()
+      Raffler._setItemsChosenFromLocalStorage()
       // update results count
-      Raffler._loadLocalStorageResultsCount()
+      Raffler._setResultsCountFromLocalStorage()
 
       const item = Raffler.config.lastItemChosen
       const items = Raffler.config.itemsArr
@@ -575,7 +379,7 @@ Raffler._continueRaffling = function () {
           items.splice(i, 1)
           Raffler._debugUpdateItemsGraph()
           Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, Raffler.config.itemsArr)
-          Raffler._loadInMemoryItemsAvailable()
+          Raffler._setItemsAvailableFromItemsArr()
           break
         }
       }
@@ -629,10 +433,10 @@ Raffler._continueRaffling = function () {
     const lastItem = Raffler.config.itemsArr[0]
 
     Raffler._addItemChosenToLocalStorage(lastItem)
-    Raffler._loadLocalStorageItemsChosen()
+    Raffler._setItemsChosenFromLocalStorage()
 
     Raffler.config.itemsArr = []
-    Raffler._loadInMemoryItemsAvailable()
+    Raffler._setItemsAvailableFromItemsArr()
 
     Raffler.dom.body.classList = 'level4'
     Raffler.dom.itemsCycle.classList.add('level-win')
@@ -641,181 +445,6 @@ Raffler._continueRaffling = function () {
 
     Raffler.__disablePickWinnerButton()
   }
-}
-
-// reset countdown as if no items were ever chosen
-Raffler._resetCountdown = async function () {
-  Raffler._clearItemsChosen()
-
-  await Raffler._loadItemsArrFromLocalStorage()
-
-  Raffler.config.timesRun = 0
-
-  Raffler.dom.body.classList = ''
-  Raffler.dom.itemsCycle.classList = ''
-
-  Raffler.dom.resultsList.innerText = ''
-  Raffler.dom.resultsWrapper.style.display = 'none'
-
-  Raffler._countdownTimer.startCountdown = false
-  Raffler._countdownTimer.interval = RAFFLER_DEFAULT_INTERVAL_RANGE
-  Raffler._countdownTimer.mult = RAFFLER_DEFAULT_MULTIPLY
-  Raffler._countdownTimer.stage = RAFFLER_STAGES.INIT
-  Raffler._countdownTimer.start()
-
-  Raffler.__showPickWinnerButton()
-  Raffler.__enablePickWinnerButton()
-
-  Raffler._loadInMemoryItemsAvailable()
-  Raffler._loadLocalStorageItemsChosen()
-  Raffler._loadLocalStorageResultsCount()
-  Raffler._debugRefreshValues()
-
-  Raffler._timerStart()
-
-  Raffler.dom.btnPickWinner.focus()
-
-  Raffler._notify('Raffler resetCountdown()', 'notice')
-}
-
-
-// attach event handlers to buttons and such
-Raffler._attachEventListeners = function () {
-  // top-left icons to open modals
-  Raffler.dom.header.btnNav.addEventListener('click', () => {
-    Raffler.dom.header.navOverlay.classList.toggle('show')
-  })
-  Raffler.dom.header.btnNavClose.addEventListener('click', () => {
-    Raffler.dom.navOverlay.classList.toggle('show')
-  })
-  Raffler.dom.header.btnHelp.addEventListener('click', () => {
-    modalOpen('help')
-  })
-  // local debug top-left icon
-  if (Raffler.config.env == 'local') {
-    if (Raffler.dom.header.debug.container) {
-      // ⚙ show current Raffler config
-      Raffler.dom.header.debug.btnShowConfig.addEventListener('click', () => {
-        modalOpen('show-config')
-      })
-    }
-  }
-
-  // top-right settings (gear) menu
-  Raffler.dom.header.btnSettings.addEventListener('click', () => {
-    Raffler._toggleSettingsPanel()
-  })
-  Raffler.dom.settings.btnSettingsPanelClose.addEventListener('click', () => {
-    Raffler._toggleSettingsPanel()
-  })
-
-  if (Raffler.dom.settings.btnShowDebugSettings) {
-    Raffler.dom.settings.btnShowDebugSettings.addEventListener('click', () => {
-      Raffler._toggleSettingsShowDebug()
-    })
-  }
-
-  Raffler.dom.settings.itemsAvailable.addEventListener('keyup', () => {
-    Raffler._updateItemsAvailable()
-  })
-
-  // debug settings
-  Raffler.dom.settings.debug.btnTestSoundCountdown.addEventListener('click', () => {
-    Raffler._queueAudio('countdown')
-  })
-  Raffler.dom.settings.debug.btnTestSoundVictory.addEventListener('click', () => {
-    Raffler._queueAudio('victory')
-  })
-  Raffler.dom.settings.debug.btnTimerStart.addEventListener('click', () => {
-    if (Raffler.dom.settings.debug.btnTimerStart.getAttribute('disabled') !== 'true') {
-      Raffler._notify('starting timer', 'notice')
-
-      Raffler.__showPickWinnerButton()
-      Raffler.__enablePickWinnerButton()
-      Raffler._timerStart()
-    }
-  })
-  Raffler.dom.settings.debug.btnTimerStop.addEventListener('click', () => {
-    if (Raffler.dom.settings.debug.btnTimerStop.getAttribute('disabled') !== 'true') {
-      Raffler._notify('stopping timer', 'notice')
-
-      Raffler._timerStop()
-    }
-  })
-
-  if (!Raffler.dom.settings.debug.btnResetCountdown.getAttribute('disabled')) {
-    Raffler.dom.settings.debug.btnResetCountdown.addEventListener('click', async () => {
-      const resetConfirm = new Modal(
-        'confirm',
-        'Are you sure you want to reset choices?',
-        'Note: all chosen items will be lost.',
-        'Yes',
-        'No'
-      )
-
-      try {
-        // wait for modal confirmation
-        const confirmed = await resetConfirm.question()
-
-        if (confirmed) {
-          Raffler._resetCountdown()
-        }
-      } catch (err) {
-        console.error('countdown reset failed', err)
-      }
-    })
-  }
-  if (!Raffler.dom.settings.debug.btnResetAll.getAttribute('disabled')) {
-    Raffler.dom.settings.debug.btnResetAll.addEventListener('click', async () => {
-      const resetConfirm = new Modal(
-        'confirm',
-        'Are you sure you want to reset everything?',
-        'Note: all chosen AND user items will be lost.',
-        'Yes',
-        'No'
-      )
-
-      try {
-        // wait for modal confirmation
-        const confirmed = await resetConfirm.question()
-
-        if (confirmed) {
-          Raffler._resetApp()
-        }
-      } catch (err) {
-        console.error('app reset failed', err)
-      }
-    })
-  }
-
-  // main raffling events
-  Raffler.dom.itemsCycleStart.addEventListener('click', () => {
-    Raffler._handleStartButton()
-  })
-  Raffler.dom.btnPickWinner.addEventListener('click', (e) => {
-    e.preventDefault()
-    if (!Raffler.dom.btnPickWinner.hasAttribute('disabled')) {
-      Raffler._pickAWinner()
-    }
-  })
-  Raffler.dom.btnChosenConfirmYes.addEventListener('click', () => {
-    Raffler.config.lastItemChosen = document.querySelector('div#items-cycle div.item').innerText
-
-    Raffler.config.lastItemChosenConfirmed = true
-
-    Raffler._continueRaffling()
-  })
-  Raffler.dom.btnChosenConfirmNo.addEventListener('click', () => {
-    Raffler.config.lastItemChosenConfirmed = false
-    Raffler._continueRaffling()
-  })
-  Raffler.dom.btnExportResults.addEventListener('click', (e) => {
-    // export.js
-    Raffler._exportResults()
-  })
-
-  window.addEventListener('click', Raffler._handleClickTouch)
-  window.addEventListener('touchend', Raffler._handleClickTouch)
 }
 
 // main timer instance for raffler cycler
@@ -953,6 +582,145 @@ Raffler._countdownTimer = Raffler._timer(function () {
     return newInterval
   }
 }, RAFFLER_DEFAULT_INTERVAL_RANGE)
+
+// attach event handlers to buttons and such
+Raffler._attachEventListeners = function () {
+  // top-left icons to open modals
+  Raffler.dom.header.btnNav.addEventListener('click', () => {
+    Raffler.dom.header.navOverlay.classList.toggle('show')
+  })
+  Raffler.dom.header.btnNavClose.addEventListener('click', () => {
+    Raffler.dom.navOverlay.classList.toggle('show')
+  })
+  Raffler.dom.header.btnHelp.addEventListener('click', () => {
+    modalOpen('help')
+  })
+  // local debug top-left icon
+  if (Raffler.config.env == 'local') {
+    if (Raffler.dom.header.debug.container) {
+      // ⚙ show current Raffler config
+      Raffler.dom.header.debug.btnShowConfig.addEventListener('click', () => {
+        modalOpen('show-config')
+      })
+    }
+  }
+
+  // top-right settings (gear) menu
+  Raffler.dom.header.btnSettings.addEventListener('click', () => {
+    Raffler._toggleSettingsPanelVisibility()
+  })
+  Raffler.dom.settings.btnSettingsPanelClose.addEventListener('click', () => {
+    Raffler._toggleSettingsPanelVisibility()
+  })
+
+  if (Raffler.dom.settings.btnShowDebugSettings) {
+    Raffler.dom.settings.btnShowDebugSettings.addEventListener('click', () => {
+      Raffler._toggleSettingsDebugVisibility()
+    })
+  }
+
+  Raffler.dom.settings.itemsAvailable.addEventListener('keyup', () => {
+    Raffler._setItemsArrFromItemsAvailable()
+  })
+
+  // debug settings
+  Raffler.dom.settings.debug.btnTestSoundCountdown.addEventListener('click', () => {
+    Raffler._queueAudio('countdown')
+  })
+  Raffler.dom.settings.debug.btnTestSoundVictory.addEventListener('click', () => {
+    Raffler._queueAudio('victory')
+  })
+  Raffler.dom.settings.debug.btnTimerStart.addEventListener('click', () => {
+    if (Raffler.dom.settings.debug.btnTimerStart.getAttribute('disabled') !== 'true') {
+      Raffler._notify('starting timer', 'notice')
+
+      Raffler.__showPickWinnerButton()
+      Raffler.__enablePickWinnerButton()
+      Raffler._timerStart()
+    }
+  })
+  Raffler.dom.settings.debug.btnTimerStop.addEventListener('click', () => {
+    if (Raffler.dom.settings.debug.btnTimerStop.getAttribute('disabled') !== 'true') {
+      Raffler._notify('stopping timer', 'notice')
+
+      Raffler._timerStop()
+    }
+  })
+
+  if (!Raffler.dom.settings.debug.btnUndoChoices.getAttribute('disabled')) {
+    Raffler.dom.settings.debug.btnUndoChoices.addEventListener('click', async () => {
+      const resetConfirm = new Modal(
+        'confirm',
+        'Are you sure you want to undo choices?',
+        'Note: all chosen items will be lost.',
+        'Yes',
+        'No'
+      )
+
+      try {
+        // wait for modal confirmation
+        const confirmed = await resetConfirm.question()
+
+        if (confirmed) {
+          Raffler._resetCountdown()
+        }
+      } catch (err) {
+        console.error('countdown reset failed', err)
+      }
+    })
+  }
+  if (!Raffler.dom.settings.debug.btnResetAll.getAttribute('disabled')) {
+    Raffler.dom.settings.debug.btnResetAll.addEventListener('click', async () => {
+      const resetConfirm = new Modal(
+        'confirm',
+        'Are you sure you want to reset everything?',
+        'Note: all chosen AND available items will be lost. All settings will be rest to default.',
+        'Yes',
+        'No'
+      )
+
+      try {
+        // wait for modal confirmation
+        const confirmed = await resetConfirm.question()
+
+        if (confirmed) {
+          Raffler._resetAll()
+        }
+      } catch (err) {
+        console.error('app reset failed', err)
+      }
+    })
+  }
+
+  // main raffling events
+  Raffler.dom.itemsCycleStart.addEventListener('click', () => {
+    Raffler._handleStartCycle()
+  })
+  Raffler.dom.btnPickWinner.addEventListener('click', (e) => {
+    e.preventDefault()
+    if (!Raffler.dom.btnPickWinner.hasAttribute('disabled')) {
+      Raffler._handlePickWinner()
+    }
+  })
+  Raffler.dom.btnChosenConfirmYes.addEventListener('click', () => {
+    Raffler.config.lastItemChosen = document.querySelector('div#items-cycle div.item').innerText
+
+    Raffler.config.lastItemChosenConfirmed = true
+
+    Raffler._continueRaffling()
+  })
+  Raffler.dom.btnChosenConfirmNo.addEventListener('click', () => {
+    Raffler.config.lastItemChosenConfirmed = false
+    Raffler._continueRaffling()
+  })
+  Raffler.dom.btnExportResults.addEventListener('click', (e) => {
+    // export.js
+    Raffler._exportResults()
+  })
+
+  window.addEventListener('click', Raffler._handleClickTouch)
+  window.addEventListener('touchend', Raffler._handleClickTouch)
+}
 
 /************************************************************************
  * START THE ENGINE *

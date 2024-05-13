@@ -70,6 +70,6 @@ Raffler.dom.settings.debug = {
   stageValue: document.getElementById('text-setting-stage-value'),
   intervalValue: document.getElementById('range-interval-value'),
   multiplyValue: document.getElementById('text-setting-multiply-value'),
-  btnResetCountdown: document.getElementById('button-reset-countdown'),
+  btnUndoChoices: document.getElementById('button-undo-choices'),
   btnResetAll: document.getElementById('button-reset-all'),
 }

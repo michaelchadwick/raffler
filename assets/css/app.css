@@ -29,8 +29,8 @@
   --raffle-level3:        #0095c3;
   --raffle-level4:        #00a8dd;
 
-  --danger:               #fc3434;
-  --danger-hover:         #ff4949;
+  --danger:               #a52020;
+  --danger-hover:         #c82222;
 
   --debug:                #715ec7;
   --debug-gray:           #8c85ae;
@@ -727,8 +727,11 @@ header {
       }
     }
   .button.danger {
+    align-items: center;
     background-color: var(--danger);
-    min-width: 100px;
+    display: flex;
+    justify-content: center;
+    min-width: 40px;
   }
     @media(hover:hover) {
       .button.danger:hover {

@@ -16,7 +16,7 @@ Raffler.__showPickWinnerButton = function () {
 }
 
 Raffler.__disableChosenConfirm = function () {
-  Raffler._notify('hiding confirmation question', 'notice')
+  // Raffler._notify('hiding confirmation question', 'notice')
 
   Raffler.dom.chosenConfirm.style.display = 'none'
 
