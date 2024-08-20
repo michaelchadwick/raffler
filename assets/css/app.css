@@ -561,6 +561,7 @@ header .menu-right #button-settings {
 #settings-panel-content .setting-row .text .description {
   color: #2b2b2b;
   font-size: 12px;
+  margin-left: 18px;
 }
 #settings-panel-content .setting-row .control {
   display: block;
@@ -571,6 +572,9 @@ header .menu-right #button-settings {
   list-style-type: none;
   margin-left: 20px;
   position: relative;
+}
+#settings-panel-content .setting-row .control > details summary::-webkit-details-marker {
+  display: none;
 }
 #settings-panel-content .setting-row .control details > summary:before,
 #settings-panel-content .setting-row .control details[open] > summary:before {
