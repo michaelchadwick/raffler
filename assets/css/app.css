@@ -561,7 +561,6 @@ header .menu-right #button-settings {
 #settings-panel-content .setting-row .text .description {
   color: #2b2b2b;
   font-size: 12px;
-  margin-left: 18px;
 }
 #settings-panel-content .setting-row .control {
   display: block;
