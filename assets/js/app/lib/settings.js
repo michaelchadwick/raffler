@@ -3,7 +3,7 @@
 /* global Raffler */
 
 // localStorage getter/setter
-Raffler._getLocalStorageItem = function(lsKey) {
+Raffler._getLocalStorageItem = function (lsKey) {
   try {
     return JSON.parse(localStorage.getItem(lsKey))
   } catch (e) {
@@ -147,7 +147,7 @@ Raffler._setItemsArrFromItemsAvailable = function () {
 // internal itemsArr Items Available -> UI -> Settings Panel
 Raffler._setItemsAvailableFromItemsArr = function () {
   Raffler._notify('_setItemsAvailableFromItemsArr()', 'notice')
-  console.log('Raffler.config.itemsArr', Raffler.config.itemsArr)
+
   const items = Raffler.config.itemsArr
 
   Raffler.dom.settings.itemsAvailable.value = items.join('\n')
@@ -677,7 +677,7 @@ Raffler.__undoItemsChosen = async function () {
 
     // load inMemory config
     await Raffler._setItemsArrFromLocalStorage()
-    console.log('Raffler.config.itemsArr', Raffler.config.itemsArr)
+
     // load settings panel
     Raffler._setItemsAvailableFromItemsArr()
     Raffler.dom.settings.itemsChosen.value = ''
