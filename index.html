@@ -88,7 +88,7 @@
       <div id="debug-buttons" class="debug">
         <nav class="ddmenu">
           <div class="ddgroup">
-            <button id="button-debug-dropdown" class="icon debug">
+            <button id="button-debug-dropdown" class="icon debug" aria-label="Debug">
               <i class="fa-solid fa-bug"></i>
             </button>
             <div class="ddsub">
@@ -124,13 +124,13 @@
 
       <div class="setting-row tall">
         <div class="text">
-          <div class="title toggle">Items Available <span id="items-available-count">(0)</span></div>
+          <div class="title toggle" id="items-available">Items Available <span id="items-available-count">(0)</span></div>
           <div class="description">Items available to be chosen. One item per line.</div>
         </div>
         <div class="control">
           <details open>
             <div class="container textarea">
-              <textarea id="items-available" spellcheck="false"></textarea>
+              <textarea id="items-available" spellcheck="false" aria-labelledby="items-available"></textarea>
             </div>
             <summary></summary>
           </details>
