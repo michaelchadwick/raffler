@@ -188,15 +188,17 @@ Raffler._setItemsChosenFromLocalStorage = function () {
 
 // load app settings from LS
 Raffler._loadSettingsFromLocalStorage = function () {
-  Raffler._notify(`_loadSettingsFromLocalStorage()`, 'notice')
-
   const settings = localStorage.getItem(RAFFLER_SETTINGS_KEY)
 
   if (settings) {
+    Raffler._notify(`_loadSettingsFromLocalStorage(): found existing`, 'notice')
+
     let setting = null
     const lsSettings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
 
     if (lsSettings) {
+      Raffler._notify(`_loadSettingsFromLocalStorage(): existing settings parsed successfully`, 'notice')
+
       if (lsSettings.allowBoxResize) {
         Raffler.settings.allowBoxResize = lsSettings.allowBoxResize
 
@@ -291,8 +293,15 @@ Raffler._loadSettingsFromLocalStorage = function () {
           setting.dataset.status = 'true'
         }
       }
+    } else {
+      Raffler._notify(`_loadSettingsFromLocalStorage(): could not parse existing settings; setting to defaults`, 'warning')
+
+      // if settings can't be parsed, weird stuff happened; set to already defaulted settings
+      Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, Raffler.settings)
     }
   } else {
+    Raffler._notify(`_loadSettingsFromLocalStorage(): no existing settings found; setting to defaults`, 'notice')
+
     // if no settings found in localStorage, then use already defaulted settings
     Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, Raffler.settings)
   }
@@ -308,6 +317,8 @@ Raffler._loadSettingsFromLocalStorage = function () {
 }
 // change app setting
 Raffler._changeAppSetting = function (setting, event = null) {
+  Raffler._notify(`changeAppSetting: ${setting}'`, 'notice')
+
   let st = null
 
   switch (setting) {
@@ -495,8 +506,12 @@ Raffler._saveSettingToLocalStorage = function (setting, value) {
         break
     }
 
+    Raffler._notify(`saving '${setting}:${value}' to localStorage`, 'notice')
+
     // save all settings to LS
     localStorage.setItem(RAFFLER_SETTINGS_KEY, JSON.stringify(settings))
+  } else {
+    Raffler._notify('could not get localStorage', 'error')
   }
 
   // console.log('!global setting saved!', Raffler.settings)
