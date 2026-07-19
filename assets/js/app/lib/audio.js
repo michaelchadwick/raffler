@@ -215,10 +215,11 @@ Raffler._playAudio = async function(soundId, format = 'wav') {
 // SpeechSynthesis API: read name on choice
 Raffler._readName = function(itemChosen = 'testing, 1..2..3') {
   const utterance = new SpeechSynthesisUtterance()
-  utterance.rate = 0.5
+  utterance.rate = 0.4
   utterance.text = typeof itemChosen == 'object' ? itemChosen.name : itemChosen
 
-  speechSynthesis.speak(utterance);
+  // add a slight delay so it waits for victory sound, if played
+  setTimeout(() => speechSynthesis.speak(utterance), 200);
 }
 
 // receive message from main thread if used as Web Worker
