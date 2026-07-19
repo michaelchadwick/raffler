@@ -197,7 +197,6 @@ Raffler._loadSettingsFromLocalStorage = function () {
     const lsSettings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
 
     if (lsSettings) {
-      console.log('lsSettings', lsSettings)
       Raffler._notify(`_loadSettingsFromLocalStorage(): existing settings parsed successfully`, 'notice')
 
       if (lsSettings.allowBoxResize) {
