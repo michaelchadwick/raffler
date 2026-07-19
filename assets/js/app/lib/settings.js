@@ -299,12 +299,14 @@ Raffler._loadSettingsFromLocalStorage = function () {
 
       // if settings can't be parsed, weird stuff happened; set to already defaulted settings
       Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, Raffler.settings)
+      Raffler._loadSettingsFromLocalStorage()
     }
   } else {
     Raffler._notify(`_loadSettingsFromLocalStorage(): no existing settings found; setting to defaults`, 'notice')
 
     // if no settings found in localStorage, then use already defaulted settings
     Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, Raffler.settings)
+    Raffler._loadSettingsFromLocalStorage()
   }
 
   // if we aren't doing the "resize as the raffle counts down" thing
