@@ -76,7 +76,7 @@ Raffler.initApp = async function () {
     await Raffler._loadLocalConfig()
   }
 
-  Raffler._resetApp()
+  await Raffler._resetApp()
   Raffler._debugRefreshValues()
   Raffler._debugUpdateItemsGraph()
 
@@ -101,6 +101,8 @@ Raffler.initApp = async function () {
 
 // reset everything to default state
 Raffler._resetApp = async function () {
+  Raffler._notify('_resetApp(): start...', 'warning')
+
   await Raffler._setItemsArrFromLocalStorage()
   Raffler._setItemsAvailableFromItemsArr()
 
@@ -111,7 +113,9 @@ Raffler._resetApp = async function () {
   Raffler.config.lastItemChosen = ''
   Raffler.config.timesRun = 0
 
-  Raffler._notify('resetApp() finished', 'notice')
+  Raffler._initCycleText()
+
+  Raffler._notify('..._resetApp(): done', 'notice')
 }
 
 /*************************************************************************
@@ -120,23 +124,37 @@ Raffler._resetApp = async function () {
 
 // initial message or link that will appear in the raffler before it is started
 Raffler._initCycleText = function () {
+  // Raffler._notify(`_initCycleText(): ${Raffler.config.itemsArr.length}`, 'warning')
+
+  // grabbing references here, instead of Raffler.dom, because they get re-created
+  const itemsCycleEmpty = document.getElementById('message-empty')
+  const itemsCycleLimit = document.getElementById('message-limit')
+  const itemsCycleStart = document.getElementById('message-start')
+
   if (Raffler.config.itemsArr.length) {
     if (Raffler.config.itemsArr.length > 1) {
-      Raffler.dom.itemsCycleEmpty.style.display = 'none'
-      Raffler.dom.itemsCycleLimit.style.display = 'none'
+      // Raffler._notify('_initCycleText(): more than 1 items, so let\'s go!')
 
-      Raffler.dom.itemsCycleStart.style.display = 'block'
+      itemsCycleEmpty.style.display = 'none'
+      itemsCycleLimit.style.display = 'none'
+
+      itemsCycleStart.style.display = 'block'
     } else {
-      Raffler.dom.itemsCycleEmpty.style.display = 'none'
-      Raffler.dom.itemsCycleStart.style.display = 'none'
+      // Raffler._notify('_initCycleText(): 1 or fewer items, so need to add more')
 
-      Raffler.dom.itemsCycleLimit.style.display = 'block'
+      itemsCycleEmpty.style.display = 'none'
+
+      itemsCycleLimit.style.display = 'block'
+
+      itemsCycleStart.style.display = 'none'
     }
   } else {
-    Raffler.dom.itemsCycleLimit.style.display = 'none'
-    Raffler.dom.itemsCycleStart.style.display = 'none'
+    // Raffler._notify('_initCycleText(): no items yet')
 
-    Raffler.dom.itemsCycleEmpty.style.display = 'block'
+    itemsCycleEmpty.style.display = 'block'
+
+    itemsCycleLimit.style.display = 'none'
+    itemsCycleStart.style.display = 'none'
   }
 }
 

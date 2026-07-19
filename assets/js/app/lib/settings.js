@@ -197,6 +197,7 @@ Raffler._loadSettingsFromLocalStorage = function () {
     const lsSettings = JSON.parse(localStorage.getItem(RAFFLER_SETTINGS_KEY))
 
     if (lsSettings) {
+      console.log('lsSettings', lsSettings)
       Raffler._notify(`_loadSettingsFromLocalStorage(): existing settings parsed successfully`, 'notice')
 
       if (lsSettings.allowBoxResize) {
@@ -630,7 +631,7 @@ Raffler._toggleSettingsDebugVisibility = function () {
 
 // reset countdown as if no items were ever chosen
 Raffler._resetCountdown = async function () {
-  Raffler._notify('Raffler resetCountdown()', 'warning')
+  Raffler._notify('_resetCountdown() start...', 'warning')
 
   await Raffler.__undoItemsChosen()
 
@@ -656,30 +657,60 @@ Raffler._resetCountdown = async function () {
     Raffler.__showPickWinnerButton()
     Raffler.__enablePickWinnerButton()
     Raffler._countdownTimer.start()
+    Raffler._initCycleText()
     Raffler._timerStart()
   }
+
+  Raffler._notify('..._resetCountdown() done', 'warning')
 }
 
 // shortcut to put Raffler back to default state
 Raffler._resetAll = async function () {
+  Raffler._notify('_resetAll() start...', 'warning')
+
+  // reset localStorage
   Raffler._setLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY, [])
   Raffler._setLocalStorageItem(RAFFLER_ITEMS_CHOSEN_KEY, [])
   Raffler._setLocalStorageItem(RAFFLER_SETTINGS_KEY, null)
 
+  // reset internal vars
   Raffler.config.itemsArr = []
   Raffler._countdownTimer.items = []
 
-  Raffler._resetApp()
+  // reset dom classes and text
+  Raffler.dom.body.classList = ''
+  Raffler.dom.itemsCycle.classList = ''
+  Raffler.dom.itemsCycle.innerHTML = `
+    <section id="init-raffler-cycle">
+      <a
+        href="#"
+        class="animate__animated animate__pulse animate__slow animate__delay-5s animate__infinite"
+        id="message-start"
+      >CLICK TO BEGIN RAFFLE!</a>
+      <span
+        id="message-limit"
+      >Add more than one item to raffle!</span>
+      <span
+        id="message-empty"
+      >Add some items to raffle!</span>
+    </section>
+  `
+  Raffler.dom.resultsList.innerText = ''
+  Raffler.dom.resultsWrapper.style.display = 'none'
+
+  await Raffler._resetApp()
   Raffler._debugRefreshValues()
   Raffler._debugUpdateItemsGraph()
 
   Raffler._initCycleText()
   Raffler._timerStop()
+
+  Raffler._notify('..._resetAll() done', 'warning')
 }
 
 // reset raffler-chosen-items localStorage to nothing and update displays
 Raffler.__undoItemsChosen = async function () {
-  Raffler._notify('__undoItemsChosen(): starting...', 'warning')
+  Raffler._notify('__undoItemsChosen(): start...', 'warning')
 
   try {
     const allItems = Raffler._getLocalStorageItem(RAFFLER_ITEMS_AVAIL_KEY).concat(
@@ -698,8 +729,8 @@ Raffler.__undoItemsChosen = async function () {
     Raffler.dom.settings.itemsChosen.value = ''
     Raffler.dom.settings.itemsChosenCount.innerText = '(0)'
 
-    Raffler._notify('__undoItemsChosen(): success', 'warning')
+    Raffler._notify('...__undoItemsChosen(): success', 'notice')
   } catch (e) {
-    Raffler._notify('__undoItemsChosen(): ' + e, 'error')
+    Raffler._notify('...__undoItemsChosen(): ' + e, 'error')
   }
 }
