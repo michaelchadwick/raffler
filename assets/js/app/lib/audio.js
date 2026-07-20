@@ -215,9 +215,26 @@ Raffler._playAudio = async function(soundId, format = 'wav') {
 // SpeechSynthesis API: read name on choice
 Raffler._readName = function(itemChosen = 'testing, 1..2..3') {
   const utterance = new SpeechSynthesisUtterance()
+  utterance.lang = 'en'
   utterance.rate = 0.4
   utterance.volume = 0.5
   utterance.text = typeof itemChosen == 'object' ? itemChosen.name : itemChosen
+
+  // try to set voice to specific one
+  const voices = window.speechSynthesis.getVoices()
+
+  console.log('voices', voices)
+
+  if (voices.length) {
+    const voiceName = 'Samantha'
+    const voiceObj = voices.filter((voice) => voice.name == voiceName)[0]
+
+    console.log('voiceObj', voiceObj)
+
+    if (voiceObj) {
+      utterance.voice = voiceObj
+    }
+  }
 
   // add a slight delay so it waits for victory sound, if played
   setTimeout(() => {
