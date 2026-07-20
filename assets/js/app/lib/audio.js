@@ -223,13 +223,9 @@ Raffler._readName = function(itemChosen = 'testing, 1..2..3') {
   // try to set voice to specific one
   const voices = window.speechSynthesis.getVoices()
 
-  console.log('voices', voices)
-
   if (voices.length) {
     const voiceName = 'Samantha'
     const voiceObj = voices.filter((voice) => voice.name == voiceName)[0]
-
-    console.log('voiceObj', voiceObj)
 
     if (voiceObj) {
       utterance.voice = voiceObj
