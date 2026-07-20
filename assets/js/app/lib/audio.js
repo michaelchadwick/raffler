@@ -53,7 +53,7 @@ async function deleteOldCaches(currentCache) {
 
 // Use CacheStorage to check cache.
 async function playFromCache(url) {
-  Raffler._notify(`playFromCache(${url})`)
+  // Raffler._notify(`playFromCache(${url})`)
 
   const context = new AudioContext()
   const gainNode = context.createGain()
@@ -73,6 +73,7 @@ async function playFromCache(url) {
 
   source.onended = function() {
     Raffler._notify(`playFromCache(${url}) source ended`)
+    Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
     Raffler._currentAudioPlaying = null
 
     // context.suspend()
@@ -102,7 +103,7 @@ async function playFromCache(url) {
 
 // Use direct fetch(url).
 async function playFromFetch(url) {
-  Raffler._notify(`playFromFetch(${url})`)
+  // Raffler._notify(`playFromFetch(${url})`)
 
   const context = new AudioContext()
   const gainNode = context.createGain()
@@ -122,6 +123,7 @@ async function playFromFetch(url) {
 
   source.onended = function() {
     Raffler._notify(`playFromFetch(${url}) source ended`)
+    Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
     Raffler._currentAudioPlaying = null
 
     // context.suspend()
@@ -152,28 +154,26 @@ async function playFromFetch(url) {
 }
 
 Raffler._queueAudio = async function (soundId) {
+  Raffler._notify(
+      `queueAudio(): attempting to play '${soundId}'`
+    )
+
   if (typeof Raffler._currentAudioPlaying == 'undefined') {
     Raffler._currentAudioPlaying = null
   }
 
-  if (Raffler._currentAudioPlaying == null) {
+  if (!Raffler._currentAudioPlaying) {
     Raffler._currentAudioPlaying = soundId
-    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔈'
+    Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔈'
 
     Raffler._notify(
-      `queueAudio(): no audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`
+      `queueAudio(): no current audio playing, so playing new sound: ${Raffler._currentAudioPlaying}`
     )
 
     await Raffler._playAudio(soundId)
 
     // Raffler._notify(`_queueAudio(): audio concluded`)
-
-    Raffler._currentAudioPlaying = null
-
-    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
   } else {
-    // Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
-
     Raffler._notify('queueAudio(): cannot play sound, because audio is already playing')
   }
 }
@@ -216,10 +216,24 @@ Raffler._playAudio = async function(soundId, format = 'wav') {
 Raffler._readName = function(itemChosen = 'testing, 1..2..3') {
   const utterance = new SpeechSynthesisUtterance()
   utterance.rate = 0.4
+  utterance.volume = 0.5
   utterance.text = typeof itemChosen == 'object' ? itemChosen.name : itemChosen
 
   // add a slight delay so it waits for victory sound, if played
-  setTimeout(() => speechSynthesis.speak(utterance), 200);
+  setTimeout(() => {
+    Raffler._notify(`_readName started`)
+    Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔈'
+    speechSynthesis.speak(utterance)
+  }, 300);
+
+  utterance.addEventListener('end', function() {
+    Raffler._notify(`_readName ended`)
+    Raffler.dom.settings.debug.spanAudioPlaying.innerHTML = '🔇'
+    Raffler._currentAudioPlaying = null
+
+    // context.suspend()
+    // console.log('context suspended', context)
+  })
 }
 
 // receive message from main thread if used as Web Worker

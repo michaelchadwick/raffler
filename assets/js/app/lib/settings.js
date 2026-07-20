@@ -319,7 +319,7 @@ Raffler._loadSettingsFromLocalStorage = function () {
 }
 // change app setting
 Raffler._changeAppSetting = function (setting, event = null) {
-  Raffler._notify(`changeAppSetting: ${setting}'`, 'notice')
+  Raffler._notify(`changeAppSetting: '${setting}:${event?.target.value || ''}'`, 'notice')
 
   let st = null
 

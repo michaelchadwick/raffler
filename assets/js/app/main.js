@@ -475,9 +475,16 @@ Raffler._countdownTimer = Raffler._timer(function () {
 
   // console.log('Raffler._timer interval', interval)
 
+  const bounds = {
+    level1: 150,
+    level2: 250,
+    level3: 325,
+    level4: 400
+  }
+
   if (this.startCountdown) {
     // slow down at a certain point
-    if (this.interval > 150 && this.interval <= 250) {
+    if (this.interval > bounds.level1 && this.interval <= bounds.level2) {
       this.stage = RAFFLER_STAGES.SLOWED
 
       Raffler.dom.settings.debug.stageValue.innerText = this.stage
@@ -491,7 +498,7 @@ Raffler._countdownTimer = Raffler._timer(function () {
     }
 
     // slow down more at a certain point
-    if (this.interval > 250 && this.interval <= 325) {
+    if (this.interval > bounds.level2 && this.interval <= bounds.level3) {
       this.stage = RAFFLER_STAGES.SLOWEST
 
       Raffler.dom.settings.debug.stageValue.innerText = this.stage
@@ -505,10 +512,10 @@ Raffler._countdownTimer = Raffler._timer(function () {
     }
 
     // finally, stop and pick an item!
-    if (this.interval > 325) {
+    if (this.interval > bounds.level3) {
       this.mult = RAFFLER_DEFAULT_MULTIPLY
 
-      if (this.interval > 350) {
+      if (this.interval > bounds.level4) {
         this.mult = this.mult++
       }
 

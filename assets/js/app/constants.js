@@ -40,7 +40,7 @@ const RAFFLER_DEFAULTS = {
     logoFilePath: '',
     lastItemChosen: null,
     lastItemChosenConfirmed: false,
-    lastInterval: 361,
+    lastInterval: 363,
     multiplyValue: RAFFLER_DEFAULT_MULTIPLY,
     stage: 0,
     timesRun: 0,
