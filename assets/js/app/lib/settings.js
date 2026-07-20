@@ -647,6 +647,8 @@ Raffler._resetCountdown = async function () {
   Raffler.dom.itemsCycle.classList = ''
   Raffler.dom.resultsList.innerText = ''
   Raffler.dom.resultsWrapper.style.display = 'none'
+  Raffler.dom.chosenConfirm.style.display = 'none'
+  Raffler.dom.pickWinnerContainer.style.display = 'none'
 
   // reset settings.debug
   Raffler._debugRefreshValues()
@@ -696,8 +698,14 @@ Raffler._resetAll = async function () {
       >Add some items to raffle!</span>
     </section>
   `
+  // re-apply event listener after a reset
+  document.getElementById('message-start').addEventListener('click', () => {
+    Raffler._handleStartCycle()
+  })
   Raffler.dom.resultsList.innerText = ''
   Raffler.dom.resultsWrapper.style.display = 'none'
+  Raffler.dom.chosenConfirm.style.display = 'none'
+  Raffler.dom.pickWinnerContainer.style.display = 'none'
 
   await Raffler._resetApp()
   Raffler._debugRefreshValues()
