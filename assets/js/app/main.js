@@ -479,7 +479,7 @@ Raffler._countdownTimer = Raffler._timer(function () {
     level1: 150,
     level2: 250,
     level3: 325,
-    level4: 400
+    level4: 400,
   }
 
   if (this.startCountdown) {
@@ -618,7 +618,7 @@ Raffler._attachEventListeners = function () {
     Raffler.dom.header.navOverlay.classList.toggle('show')
   })
   Raffler.dom.header.btnNavClose.addEventListener('click', () => {
-    Raffler.dom.navOverlay.classList.toggle('show')
+    Raffler.dom.header.navOverlay.classList.toggle('show')
   })
   Raffler.dom.header.btnHelp.addEventListener('click', () => {
     modalOpen('help')
